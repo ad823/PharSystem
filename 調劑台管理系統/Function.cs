@@ -246,14 +246,14 @@ namespace 調劑台管理系統
                     {
                         orderClass.藥品名稱 = medClasses_buf[0].藥品名稱;
                         orderClass.劑量單位 = medClasses_buf[0].包裝單位;
-                        if (medClasses_buf[0].高價藥品.ToUpper() == true.ToString().ToUpper())
-                        {
-                            flag_檢查過帳 = true;
-                        }
-                        if (medClasses_buf[0].管制級別.StringIsEmpty() == false && medClasses_buf[0].管制級別 != "N")
-                        {
-                            flag_檢查過帳 = true;
-                        }
+                        //if (medClasses_buf[0].高價藥品.ToUpper() == true.ToString().ToUpper())
+                        //{
+                        //    flag_檢查過帳 = true;
+                        //}
+                        //if (medClasses_buf[0].管制級別.StringIsEmpty() == false && medClasses_buf[0].管制級別 != "N")
+                        //{
+                        //    flag_檢查過帳 = true;
+                        //}
                         list_取藥堆疊資料_buf = (from temp in list_堆疊資料
                                            where temp[(int)enum_取藥堆疊母資料.Order_GUID].ObjectToString() == orderClass.GUID
                                            where temp[(int)enum_取藥堆疊母資料.調劑台名稱].ObjectToString() == deviceName
@@ -271,6 +271,7 @@ namespace 調劑台管理系統
                                 if (medClasses_buf[0].管制級別 == "1" || medClasses_buf[0].管制級別 == "2" || medClasses_buf[0].管制級別 == "3")
                                 {
                                     takeMedicineStackClass.狀態 = enum_取藥堆疊母資料_狀態.未授權.GetEnumName();
+                                    orderClass.交易量 = "0";
                                 }
                             }
                         }

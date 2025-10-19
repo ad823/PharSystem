@@ -67,7 +67,6 @@ C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\bin\Release\Syste
 C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\bin\Release\System.ValueTuple.xml
 C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.AssemblyReference.cache
 C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CoreCompileInputs.cache
-C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
 C:\Users\Evan\source\repos\inventorySystem\HIS_DB_Lib\bin\Release\HIS_DB_Lib.dll.config
@@ -290,3 +289,4 @@ C:\Users\User'\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.cs
 C:\Users\User'\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\User'\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\User'\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
+C:\Users\Administrator\source\repos\inventorySystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CopyComplete

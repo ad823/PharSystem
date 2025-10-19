@@ -1552,7 +1552,7 @@ namespace 調劑台管理系統
                 this.rJ_Lable_Title.TextColor = Color.Black;
             }));
             Main_Form.commonSapceClasses = Main_Form.Function_取得共用區所有儲位();
-            $"{登入者姓名},登入成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+            //$"{登入者姓名},登入成功".PlayGooleVoiceAsync(Main_Form.API_Server);
 
             醫令條碼 = "";
         }

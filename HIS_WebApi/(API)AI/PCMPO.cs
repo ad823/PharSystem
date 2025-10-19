@@ -397,6 +397,8 @@ namespace HIS_WebApi
                 textVision.操作者姓名 = textVisionClasses[0].操作者姓名;
                 textVision.圖片 = textVisionClasses[0].圖片;
                 textVision.PRI_KEY = $"{textVision.驗收單號}_{textVision.單號}";
+                object[] update_text = textVision.ClassToSQL<textVisionClass, enum_textVision>();
+                sQLControl_textVision.UpdateByDefulteExtra(null, update_text);
                 //if (textVision.效期.StringIsEmpty())
                 //{
                 //    textVision.效期 = textVisionClasses[0].效期;
@@ -412,7 +414,7 @@ namespace HIS_WebApi
                 //        fileName = $"{DateTime.Now.ToString("yyyyMMdd")}{DateTime.Now.ToString("HHmmss")}.txt";
                 //        SavePic(base64, project);
                 //    }
-                   
+
 
                 //    returnData.Data = textVision;
                 //    Logger.Log(fileName, project, returnData.JsonSerializationt());
