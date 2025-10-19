@@ -421,7 +421,6 @@ namespace 調劑台管理系統
                 voice.SpeakOnTask("網路異常");
                 Dialog_錯誤提示 dialog_錯誤提示 = new Dialog_錯誤提示($"呼叫串接資料失敗!請檢查網路連線", 2000);
                 dialog_錯誤提示.ShowDialog();
-                //MyMessageBox.ShowDialog($"呼叫串接資料失敗!請檢查網路連線...");
                 return orderClasses;
             }
             returnData returnData = jsonString.JsonDeserializet<returnData>();
@@ -430,12 +429,14 @@ namespace 調劑台管理系統
                 voice.SpeakOnTask("藥單條碼錯誤");
                 Dialog_錯誤提示 dialog_錯誤提示 = new Dialog_錯誤提示($"藥單條碼錯誤:{jsonString}", 2000);
                 dialog_錯誤提示.ShowDialog();
-                //MyMessageBox.ShowDialog(jsonString);
                 return new List<OrderClass>();
             }
-            if(returnData.Code != 200)
+            if (returnData.Code == 100)
             {
-                //MyMessageBox.ShowDialog($"{returnData.Result}");
+                return new List<OrderClass>();
+            }
+            else if (returnData.Code != 200)
+            {
                 Dialog_錯誤提示 dialog_錯誤提示 = new Dialog_錯誤提示($"{returnData.Result}", 2000);
                 dialog_錯誤提示.ShowDialog();
                 return new List<OrderClass>();

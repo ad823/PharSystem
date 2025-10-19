@@ -159,8 +159,8 @@ namespace 調劑台管理系統
                 if (orderClasses.Count == 0)
                 {
                     Voice.MediaPlayAsync($@"{currentDirectory}\藥單無資料.wav");
-                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("藥單無資料", 1500);
-                    dialog_AlarmForm.ShowDialog();
+                    //Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("藥單無資料", 1500);
+                    //dialog_AlarmForm.ShowDialog();
                     return;
                 }
 
@@ -258,7 +258,7 @@ namespace 調劑台管理系統
                                            where temp[(int)enum_取藥堆疊母資料.Order_GUID].ObjectToString() == orderClass.GUID
                                            where temp[(int)enum_取藥堆疊母資料.調劑台名稱].ObjectToString() == deviceName
                                            select temp).ToList();
-                        if (list_取藥堆疊資料_buf.Count > 0 && flag_檢查過帳)
+                        if (list_取藥堆疊資料_buf.Count > 0)
                         {
                             flag_重複刷取++;
                             continue;
@@ -365,6 +365,7 @@ namespace 調劑台管理系統
                 if(flag_重複刷取 > 0)
                 {
                     Task.Run(new Action(delegate { $"有{flag_重複刷取}筆藥單重複刷取".PlayGooleVoiceAsync(Main_Form.API_Server); }));
+                    if (Main_Form.PLC_Device_藥單重複刷取開檢查.Bool) return;
                 }
             });
             List<Task> taskList = new List<Task>();
