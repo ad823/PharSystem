@@ -90,6 +90,8 @@ namespace HIS_DB_Lib
         實撥細節,
         [Description("備註,VARCHAR,300,NONE")]
         備註,
+        [Description("通知註記,VARCHAR,10,NONE")]
+        通知註記,
 
     }
     /// <summary>
@@ -237,6 +239,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("remarks")]
         public string 備註 { get; set; }
+        /// <summary>
+        /// 通知註記。
+        /// </summary>
+        [JsonPropertyName("notice")]
+        public string 通知註記 { get; set; }
         [JsonIgnore]
         private static readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
         {

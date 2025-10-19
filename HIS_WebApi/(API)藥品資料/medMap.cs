@@ -2790,6 +2790,102 @@ namespace HIS_WebApi._API_藥品資料
             }
 
         }
+        /// <summary>
+        /// 控制指定藥碼對應裝置之亮燈行為。
+        /// 依藥碼查詢對應的層架與庫存位置，
+        /// 系統會根據每個位置自動產生亮燈指令，
+        /// 並依裝置類型 (RowsLED / EPD) 執行亮燈控制。
+        /// </summary>
+        /// <remarks>
+        /// 一、<b>API 說明</b><br/>
+        /// 此 API 用於依藥碼 (<c>code</c>) 查找對應的燈條或電子標籤裝置，  
+        /// 並自動發送亮燈指令以輔助人員定位藥品存放位置。  
+        /// 支援以下裝置類型：  
+        /// - <b>RowsLED</b>：控制燈條中指定範圍 (start_num ~ end_num) 的燈號顏色。  
+        /// - <b>EPD 類型裝置</b>：控制整體亮燈顏色。  
+        /// 系統會依裝置類型自動建立或快取對應的控制物件。<br/><br/>
+        ///
+        /// 二、<b>串接 URL</b><br/>
+        /// /api/medMap/light_by_code_name_type<br/><br/>
+        ///
+        /// 三、<b>方法類別 (Method)</b><br/>
+        /// POST<br/><br/>
+        ///
+        /// 四、<b>JSON 傳入範例</b><br/>
+        /// <code>
+        /// {
+        ///   "Method": "light_by_code_name_type",
+        ///   "ValueAry": [
+        ///     "ServerName=MainDB",
+        ///     "ServerType=MySQL",
+        ///     "code=EPAR",
+        ///     "color=255,0,0",
+        ///     "lightness=0.9"
+        ///   ],
+        ///   "Data": {}
+        /// }
+        /// </code><br/>
+        ///
+        /// 五、<b>JSON 回傳範例 (成功回傳)</b><br/>
+        /// <code>
+        /// [
+        ///   {
+        ///     "Code": 200,
+        ///     "Method": "light_action",
+        ///     "Result": "裝置觸發成功 (IP:192.168.1.50)",
+        ///     "TimeTaken": "35ms"
+        ///   },
+        ///   {
+        ///     "Code": 200,
+        ///     "Method": "light_action",
+        ///     "Result": "裝置觸發成功 (IP:192.168.1.51)",
+        ///     "TimeTaken": "33ms"
+        ///   }
+        /// ]
+        /// </code><br/>
+        ///
+        /// 六、<b>JSON 錯誤回傳範例 (失敗回傳)</b><br/>
+        /// <code>
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "returnData.ValueAry錯誤"
+        /// }
+        /// </code>
+        /// <code>
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "Exception : 連線逾時"
+        /// }
+        /// </code><br/>
+        ///
+        /// 七、<b>輸入資料來源與參數說明</b><br/>
+        /// - <b>ServerName</b>：資料庫伺服器名稱 (必填)。<br/>
+        /// - <b>ServerType</b>：資料庫伺服器類型 (MySQL、Oracle...，必填)。<br/>
+        /// - <b>code</b>：藥碼，用於查詢層架與燈號資訊 (必填)。<br/>
+        /// - <b>color</b>：RGB 顏色字串 (格式 "R,G,B"，例如 "255,0,0" 代表紅色，必填)。<br/>
+        /// - <b>lightness</b>：亮度設定 (0~1，必填)。<br/>
+        ///
+        /// 八、<b>系統行為</b><br/>
+        /// 1. 依藥碼查詢對應之層架與燈條資料。<br/>
+        /// 2. 自動組出每個位置對應的控制命令字串：<br/>
+        ///    <c>ip=&lt;IP&gt;;start_num=&lt;起點&gt;;end_num=&lt;終點&gt;;color=&lt;顏色&gt;;lightness=&lt;亮度&gt;;device_type=&lt;裝置類型&gt;</c><br/>
+        /// 3. 並行呼叫 <c>/api/device_control/light_action</c>，批次控制所有裝置。<br/>
+        /// 4. 回傳所有控制結果陣列 (每個裝置對應一筆回傳)。<br/><br/>
+        ///
+        /// 九、<b>裝置類型說明</b><br/>
+        /// - RowsLED：分段控制指定範圍亮燈。<br/>
+        /// - EPDXXXX：整體亮燈控制。<br/><br/>
+        ///
+        /// 十、<b>前端建議實作</b><br/>
+        /// 前端應提供可調整輸入參數介面，包括：  
+        /// IP、顏色 (RGB 選擇器)、亮度 (0~1)、控制範圍 (start_num / end_num)、裝置類型 (RowsLED / EPD)。  
+        /// 呼叫完成後顯示回傳結果 (成功或錯誤訊息)。<br/><br/>
+        ///
+        /// 十一、<b>注意事項</b><br/>
+        /// - 若查無資料或參數不完整，系統將回傳 Code = -200。<br/>
+        /// - 若任何裝置觸發失敗，會顯示具體錯誤訊息 (例如連線逾時或 IP 無效)。<br/>
+        /// - 所有裝置呼叫皆為非同步並行執行。<br/>
+        /// </remarks>
         [HttpPost("light_by_code_name_type")]
         public async Task<string> light_by_code_name_type([FromBody] returnData returnData)
         {
@@ -2817,6 +2913,12 @@ namespace HIS_WebApi._API_藥品資料
                 
                 List<medMap_shelfClass> medMap_ShelfClasses = returnData_get_med_by_code_name_type.Data.ObjToClass<List<medMap_shelfClass>>();
                 List<string> list_light = new List<string>();
+                if (medMap_ShelfClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此藥碼:{code}";
+                    return returnData.JsonSerializationt();
+                }
                 foreach (var item in medMap_ShelfClasses)
                 {
                     string shelf_ip = item.燈條IP;

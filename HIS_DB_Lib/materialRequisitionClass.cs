@@ -56,7 +56,7 @@ namespace HIS_DB_Lib
         [Description("核撥時間,DATETIME,10,INDEX")]
         核撥時間,
         [Description("狀態,VARCHAR,20,NONE")]
-        狀態,
+        狀態
     }
     [EnumDescription("materialRequisition")]
     public enum enum_materialRequisition
@@ -125,6 +125,8 @@ namespace HIS_DB_Lib
         狀態,
         [Description("備註,VARCHAR,200,NONE")]
         備註,
+        [Description("通知註記,VARCHAR,10,NONE")]
+        通知註記,
     }
     public class materialRequisitionClass
     {
@@ -288,6 +290,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("remarks")]
         public string 備註 { get; set; }
+        /// <summary>
+        /// 通知註記。
+        /// </summary>
+        [JsonPropertyName("notice")]
+        public string 通知註記 { get; set; }
 
 
         [JsonIgnore]

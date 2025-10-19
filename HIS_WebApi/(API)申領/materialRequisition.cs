@@ -627,6 +627,71 @@ namespace HIS_WebApi
             }
         }
         /// <summary>
+        /// 修改通知註記。
+        /// </summary>
+        /// <remarks>
+        ///  --------------------------------------------<br/> 
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///        "GUID": "unique-guid",
+        ///        "notice": "True/False"
+        ///     }
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]</returns>
+        [HttpPost("update_notice")]
+        public string update_notice([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_notice";
+            try
+            {
+
+
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                materialRequisitionClass updatedData = returnData.Data.ObjToClass<materialRequisitionClass>();
+                if (updatedData == null || updatedData.GUID.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入資料異常!";
+                    return returnData.JsonSerializationt();
+                }
+
+                Table table = new Table(new enum_materialRequisition());
+                SQLControl sQLControl_materialRequisition = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
+
+                List<object[]> list_value = sQLControl_materialRequisition.GetRowsByDefult(null, (int)enum_materialRequisition.GUID, updatedData.GUID);
+                if (list_value.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無資料!";
+                    return returnData.JsonSerializationt();
+                }
+
+                materialRequisitionClass existingData = list_value[0].SQLToClass<materialRequisitionClass, enum_materialRequisition>();
+                existingData.通知註記 = updatedData.通知註記.StringToBool().ToString();
+                List<object[]> updatedListValue = new List<object[]> { existingData.ClassToSQL<materialRequisitionClass, enum_materialRequisition>() };
+                sQLControl_materialRequisition.UpdateByDefulteExtra(null, updatedListValue);
+
+                returnData.Code = 200;
+                returnData.Result = $"更新成功! 通知註記 : {updatedData.通知註記}";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Data = existingData;
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
+        /// <summary>
         /// 修改狀態為等待過帳。
         /// </summary>
         /// <remarks>
