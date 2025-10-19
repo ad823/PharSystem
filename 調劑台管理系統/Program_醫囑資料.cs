@@ -673,6 +673,7 @@ namespace 調劑台管理系統
                                         .ToList();
                     }
                 }
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
@@ -705,6 +706,8 @@ namespace 調劑台管理系統
                     List<object[]> list_value_buf = this.sqL_DataGridView_醫令資料.SQL_GetRows((int)enum_醫囑資料.GUID, GUID, false);
                     list_value.LockAdd(list_value_buf);
                 }
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.Write($"醫令資料搜尋共<{list_value.Count}>筆,耗時{myTimer.ToString()}ms\n");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
             }
@@ -725,7 +728,10 @@ namespace 調劑台管理系統
                 MyTimerBasic myTimerBasic = new MyTimerBasic(50000);
                 List<OrderClass> orderClasses = new List<OrderClass>();
                 orderClasses = OrderClass.get_by_PATCODE(API_Server, rJ_TextBox_醫令資料_搜尋_病歷號.Text);
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
+
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
                 {
@@ -749,6 +755,8 @@ namespace 調劑台管理系統
                 MyTimerBasic myTimerBasic = new MyTimerBasic(50000);
                 List<OrderClass> orderClasses = new List<OrderClass>();
                 orderClasses = OrderClass.get_by_drugname(API_Server, rJ_TextBox_醫令資料_搜尋_藥名.Text);
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
@@ -773,6 +781,8 @@ namespace 調劑台管理系統
                 MyTimerBasic myTimerBasic = new MyTimerBasic(50000);
                 List<OrderClass> orderClasses = new List<OrderClass>();
                 orderClasses = OrderClass.get_by_drugcode(API_Server, rJ_TextBox_醫令資料_搜尋_藥碼.Text);
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
@@ -797,6 +807,8 @@ namespace 調劑台管理系統
                 MyTimerBasic myTimerBasic = new MyTimerBasic(50000);
                 List<OrderClass> orderClasses = new List<OrderClass>();
                 orderClasses = OrderClass.get_by_ward(API_Server, rJ_TextBox_醫令資料_搜尋_病房號.Text);
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
@@ -821,6 +833,8 @@ namespace 調劑台管理系統
                 MyTimerBasic myTimerBasic = new MyTimerBasic(50000);
                 List<OrderClass> orderClasses = new List<OrderClass>();
                 orderClasses = OrderClass.get_by_MED_BAG_NUM(API_Server, rJ_TextBox_醫令資料_搜尋_領藥號.Text);
+                orderClasses = orderClasses.Where(x => x.藥局代碼 == myConfigClass.批次領藥篩選).ToList();
+
                 Console.WriteLine($"搜尋資料耗時{myTimerBasic.ToString()}");
                 this.sqL_DataGridView_醫令資料.RefreshGrid(orderClasses.ClassToSQL<OrderClass, enum_醫囑資料>());
                 if (orderClasses.Count == 0)
