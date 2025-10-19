@@ -37,6 +37,32 @@ namespace HIS_DB_Lib
         [Description("藥品碼,VARCHAR,20,INDEX")]
         藥品碼,
     }
+    public static class medGroupClassMethod
+    {
+        /// <summary>
+        /// 將 medGroupClass 內的 MedClasses 依「排列號」數值排序（由小到大）
+        /// </summary>
+        /// <param name="medGroup">目標群組</param>
+        /// <returns>排序後的 medGroupClass（原物件已更新）</returns>
+        public static medGroupClass SortByOrderNumber(this medGroupClass medGroup)
+        {
+            if (medGroup == null) return null;
+            if (medGroup.MedClasses == null || medGroup.MedClasses.Count == 0) return medGroup;
+
+            medGroup.MedClasses = medGroup.MedClasses
+                .OrderBy(e =>
+                {
+                    if (e == null) return int.MaxValue;
+                // 將排列號字串轉成數字排序
+                if (int.TryParse(e.排列號, out int orderNum))
+                        return orderNum;
+                    return int.MaxValue;
+                })
+                .ToList();
+
+            return medGroup;
+        }
+    }
     public class medGroupClass
     {
         [JsonPropertyName("GUID")]
@@ -170,6 +196,7 @@ namespace HIS_DB_Lib
 
             // ✅ 將回傳的資料轉型成 medGroupClass（單一筆）
             medGroupClass medGroup = returnData_out.Data.ObjToClass<medGroupClass>();
+            medGroup = medGroup.SortByOrderNumber();
             return (returnData_out.Code, returnData_out.Result, medGroup);
         }
 
