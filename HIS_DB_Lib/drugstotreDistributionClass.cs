@@ -332,7 +332,7 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             return;
         }
-        static public void update_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
+        static public returnData update_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
         {
             string url = $"{API_Server}/api/drugStotreDistribution/update_by_guid";
             string str_serverNames = "";
@@ -345,19 +345,10 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null)
-            {
-                return;
-            }
-            if (returnData_out.Data == null)
-            {
-                return;
-            }
-            if (returnData_out.Code != 200) return;
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
-            return;
+
+            return returnData_out;
+            
         }
         static public List<drugStotreDistributionClass> get_by_addedTime(string API_Server, DateTime st_datetime , DateTime end_datetime)
         {
@@ -377,7 +368,7 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData.Method}]:{returnData.Result}");
             return drugStotreDistributionClasses;
         }
-        static public void update_by_guid(string API_Server, string GUID)
+        static public returnData update_by_guid(string API_Server, string GUID)
         {
             string url = $"{API_Server}/api/drugStotreDistribution/get_by_guid";
             string str_serverNames = "";
@@ -390,19 +381,19 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null)
-            {
-                return;
-            }
-            if (returnData_out.Data == null)
-            {
-                return;
-            }
-            if (returnData_out.Code != 200) return;
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
-            return;
+
+            return returnData_out;
+            //if (returnData_out == null)
+            //{
+            //    return;
+            //}
+            //if (returnData_out.Data == null)
+            //{
+            //    return;
+            //}
+            //if (returnData_out.Code != 200) return;
+
         }
         static public byte[] download_excel_by_addedTime(string API_Server, DateTime st_datetime, DateTime end_datetime)
         {

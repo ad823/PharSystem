@@ -385,7 +385,7 @@ namespace HIS_DB_Lib
         /// </summary>
         /// <param name="API_Server">API 伺服器地址。</param>
         /// <param name="materialRequisitions">申領單列表。</param>
-        static public void update_by_guid(string API_Server, List<materialRequisitionClass> materialRequisitions)
+        static public returnData update_by_guid(string API_Server, List<materialRequisitionClass> materialRequisitions)
         {
             string url = $"{API_Server}/api/materialRequisition/update_by_guid";
 
@@ -396,13 +396,14 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null || returnData_out.Data == null || returnData_out.Code != 200)
-            {
-                return;
-            }
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+
+            return returnData_out;
+            //if (returnData_out == null || returnData_out.Data == null || returnData_out.Code != 200)
+            //{
+            //    return;
+            //}
+
         }
         /// <summary>
         /// 根據申領時間獲取申領單。

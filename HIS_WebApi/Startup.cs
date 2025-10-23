@@ -10,7 +10,6 @@ using Microsoft.OpenApi.Models; // 导入 OpenApiInfo 和 OpenApiContact 类
 using System;
 using System.IO;
 using System.Reflection;
-using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System.Configuration;
 using System.Text;
@@ -181,11 +180,11 @@ namespace HIS_WebApi
             {
                 //c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-            app.UseKnife4UI(c =>
-            {
-                c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "h.swagger.webapi v1");
-            });
+            //app.UseKnife4UI(c =>
+            //{
+            //    c.RoutePrefix = string.Empty;
+            //    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "h.swagger.webapi v1");
+            //});
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
