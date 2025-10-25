@@ -35,9 +35,9 @@ namespace ServerSettingForm
             this.rJ_TextBox_Port = new MyUI.RJ_TextBox();
             this.rJ_TextBox_Server = new MyUI.RJ_TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button_測試 = new System.Windows.Forms.Button();
             this.label_標題 = new System.Windows.Forms.Label();
+            this.button_測試 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +55,7 @@ namespace ServerSettingForm
             this.rJ_TextBox_Password.Multiline = false;
             this.rJ_TextBox_Password.Name = "rJ_TextBox_Password";
             this.rJ_TextBox_Password.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
-            this.rJ_TextBox_Password.PassWordChar = false;
+            this.rJ_TextBox_Password.PassWordChar = true;
             this.rJ_TextBox_Password.PlaceholderColor = System.Drawing.Color.DarkGray;
             this.rJ_TextBox_Password.PlaceholderText = "Password";
             this.rJ_TextBox_Password.ShowTouchPannel = false;
@@ -172,29 +172,6 @@ namespace ServerSettingForm
             this.panel1.Size = new System.Drawing.Size(173, 75);
             this.panel1.TabIndex = 18;
             // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("新細明體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label1.ForeColor = System.Drawing.SystemColors.Window;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(173, 31);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "SQL Server";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button_測試
-            // 
-            this.button_測試.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button_測試.Location = new System.Drawing.Point(133, 31);
-            this.button_測試.Name = "button_測試";
-            this.button_測試.Size = new System.Drawing.Size(40, 44);
-            this.button_測試.TabIndex = 23;
-            this.button_測試.Text = "測試";
-            this.button_測試.UseVisualStyleBackColor = true;
-            // 
             // label_標題
             // 
             this.label_標題.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -207,6 +184,29 @@ namespace ServerSettingForm
             this.label_標題.TabIndex = 24;
             this.label_標題.Text = "標題";
             this.label_標題.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button_測試
+            // 
+            this.button_測試.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button_測試.Location = new System.Drawing.Point(133, 31);
+            this.button_測試.Name = "button_測試";
+            this.button_測試.Size = new System.Drawing.Size(40, 44);
+            this.button_測試.TabIndex = 23;
+            this.button_測試.Text = "測試";
+            this.button_測試.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Font = new System.Drawing.Font("新細明體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.ForeColor = System.Drawing.SystemColors.Window;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(173, 31);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "SQL Server";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Panel_SQLContent
             // 

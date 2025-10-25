@@ -41,6 +41,7 @@ namespace ServerSettingForm
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button_中心叫號系統 = new System.Windows.Forms.Button();
             this.button_中藥調劑系統 = new System.Windows.Forms.Button();
+            this.button_FADC = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -130,6 +131,7 @@ namespace ServerSettingForm
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button_FADC);
             this.groupBox2.Controls.Add(this.button_中心叫號系統);
             this.groupBox2.Controls.Add(this.button_中藥調劑系統);
             this.groupBox2.Controls.Add(this.button_調劑台);
@@ -164,6 +166,16 @@ namespace ServerSettingForm
             this.button_中藥調劑系統.Text = "中藥調劑系統";
             this.button_中藥調劑系統.UseVisualStyleBackColor = true;
             // 
+            // button_FADC
+            // 
+            this.button_FADC.Font = new System.Drawing.Font("微軟正黑體", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.button_FADC.Location = new System.Drawing.Point(296, 217);
+            this.button_FADC.Name = "button_FADC";
+            this.button_FADC.Size = new System.Drawing.Size(284, 86);
+            this.button_FADC.TabIndex = 8;
+            this.button_FADC.Text = "FADC";
+            this.button_FADC.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -196,6 +208,7 @@ namespace ServerSettingForm
         private System.Windows.Forms.Button button_中藥調劑系統;
         private System.Windows.Forms.Button button_中心叫號系統;
         private System.Windows.Forms.Button button_設定;
+        private System.Windows.Forms.Button button_FADC;
     }
 }
 

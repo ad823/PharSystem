@@ -106,6 +106,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialog_FADC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog_FADC.Designer.cs">
+      <DependentUpon>Dialog_FADC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog_中藥調劑系統.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,6 +210,9 @@
     <Compile Include="Dialog_中心叫號系統.Designer.cs">
       <DependentUpon>Dialog_中心叫號系統.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Dialog_FADC.resx">
+      <DependentUpon>Dialog_FADC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog_中心叫號系統.resx">
       <DependentUpon>Dialog_中心叫號系統.cs</DependentUpon>
     </EmbeddedResource>

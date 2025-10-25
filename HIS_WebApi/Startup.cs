@@ -162,6 +162,7 @@ namespace HIS_WebApi
             app.UseRouting();
             app.UseCors("AllowSpecificOrigin");
 
+            app.UseSwaggerBasicAuth("hson@2717", "Hs0N@8283");     // ← 帳密驗證
             app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -180,13 +181,13 @@ namespace HIS_WebApi
             {
                 //c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-     
+          
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapSwagger("{documentName}/swagger.json");
             });
-
+     
 
         }
     }

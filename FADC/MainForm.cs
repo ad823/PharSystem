@@ -95,7 +95,7 @@ namespace FADC
         private void MainFrom_Load(object sender, EventArgs e)
         {
             H_Pannel_lib.Communication.ConsoleWrite = false;
-
+            MyMessageBox.音效 = false;
             MyMessageBox.form = this.FindForm();
 
             Net.DebugLog = false;
