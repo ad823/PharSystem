@@ -1927,10 +1927,8 @@ namespace HIS_WebApi
                 string 護理站 = returnData.ValueAry[1];
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 Task<List<bedStatusClass>> task_get_bed_status = get_bed_status(藥局, 護理站, ct);
-                Task<List<medGroupClass>> task_medGroupClasses = medGroup.get_all_group();
-
-                List<string> groupName = System.Enum.GetNames(typeof(藥品總量群組)).ToList();
-
+                Task<string> task_result = new medGroup().get_UDgroup_name(returnData);
+                
                 string tableName_patient_info = "patient_info";
                 string tableName_med_cpoe = "med_cpoe";
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, tableName_patient_info, UserName, Password, Port, SSLMode);
@@ -1965,24 +1963,28 @@ namespace HIS_WebApi
                 }
                 List<object[]> list_med_cpoe = await taskCpoe;
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
+                //取藥檔
+                List<string> Codes = sql_medCpoe.Select(temp => temp.藥碼).Distinct().ToList();
+                if (Codes.Count == 1) Codes[0] = Codes[0] + ",";
+                List<medClass> med_cloud = medClass.get_med_clouds_by_codes(APIServer, Codes);
+                Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
+                //分病人
                 Dictionary<string, List<medCpoeClass>> medCpoeDict = medCpoeClass.ToDictByMasterGUID(sql_medCpoe);
                 List<bedStatusClass> bedStatusClasses = await task_get_bed_status;
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                List<medGroupClass> medGroupClasses = await task_medGroupClasses;
-                if (medGroupClasses == null)
+                string result = await task_result;
+                returnData returnData_group = result.JsonDeserializet<returnData>();
+                if (returnData_group == null || returnData_group.Code != 200)
                 {
-                    returnData.Code = 200;
-                    returnData.TimeTaken = $"{myTimerBasic}";
+                    returnData.Code = -200;
+                    returnData.TimeTaken = $"{myTimerBasic.ToString()}  ";
                     returnData.Result = $"藥品群組取得失敗";
-                    return await returnData.JsonSerializationtAsync(true);
+                    return returnData.JsonSerializationt(true);
                 }
-                List<medGroupClass> medGroupClass_buff = new List<medGroupClass>();
-                foreach (var item in groupName)
-                {
-                    medGroupClass medGroup_buff = medGroupClasses.Where(m => m.名稱.Contains(item)).FirstOrDefault();
-                    if (medGroup_buff != null) medGroupClass_buff.Add(medGroup_buff);
-                }
+                List<medGroupClass> medGroupClass_buff = returnData_group.Data.ObjToClass<List<medGroupClass>>();
+               
+                
                 foreach (var item in sql_patinfo)
                 {
                     List<medCpoeClass> targetCpoe = medCpoeClass.GetByMasterGUID(medCpoeDict, item.GUID);
@@ -1991,6 +1993,7 @@ namespace HIS_WebApi
                     {
                         List<string> 藥品群組 = GetGroupNamesByCode(medGroupClass_buff, order.藥碼);
                         order.藥品群組 = 藥品群組;
+                        order.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, order.藥碼);
                     }
                     item.處方 = targetCpoe;
                     List<bedStatusClass> bedStatus_buff = bedStatusClass.GetByID(inputBedStatusDict, item.病歷號);
@@ -1998,7 +2001,7 @@ namespace HIS_WebApi
                     if (bedStatus != null) item.轉床狀態 = bedStatus;
                     if (item.處方 != null && item.處方.Count > 0) sql_patinfo_buff.Add(item);
                 }
-                //sql_patinfo_buff.Sort(new patientInfoClass.ICP_By_bedNum());
+
                 sql_patinfo_buff = sortByBedNum(sql_patinfo_buff);
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
@@ -2324,8 +2327,7 @@ namespace HIS_WebApi
                 string 護理站 = returnData.ValueAry[1];
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 Task<List<bedStatusClass>> task_get_bed_status = get_bed_status(藥局, 護理站, ct);
-                Task<List<medGroupClass>> task_medGroupClasses = medGroup.get_all_group();
-                List<string> groupName = System.Enum.GetNames(typeof(藥品總量群組)).ToList();
+                Task<string> task_result = new medGroup().get_UDgroup_name(returnData);
 
                 string tableName_patient_info = "patient_info";
                 string tableName_med_cpoe = "med_cpoe";
@@ -2363,25 +2365,28 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = await taskCpoe;
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
                 Dictionary<string, List<medCpoeClass>> medCpoeDict = medCpoeClass.ToDictByMasterGUID(sql_medCpoe);
+                //取藥檔
+                List<string> Codes = sql_medCpoe.Select(temp => temp.藥碼).Distinct().ToList();
+                if (Codes.Count == 1) Codes[0] = Codes[0] + ",";
+                List<medClass> med_cloud = medClass.get_med_clouds_by_codes(APIServer, Codes);
+                Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
+
                 List<bedStatusClass> bedStatusClasses = await task_get_bed_status;
 
 
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                List<medGroupClass> medGroupClasses = await task_medGroupClasses;
-                if (medGroupClasses == null)
+                string result = await task_result;
+                returnData returnData_group = result.JsonDeserializet<returnData>();
+                if (returnData_group == null || returnData_group.Code != 200)
                 {
-                    returnData.Code = 200;
-                    returnData.TimeTaken = $"{myTimerBasic}";
+                    returnData.Code = -200;
+                    returnData.TimeTaken = $"{myTimerBasic.ToString()}  ";
                     returnData.Result = $"藥品群組取得失敗";
-                    return await returnData.JsonSerializationtAsync(true);
+                    return returnData.JsonSerializationt(true);
                 }
-                List<medGroupClass> medGroupClass_buff = new List<medGroupClass>();
-                foreach (var item in groupName)
-                {
-                    medGroupClass medGroup_buff = medGroupClasses.Where(m => m.名稱.Contains(item)).FirstOrDefault();
-                    if (medGroup_buff != null) medGroupClass_buff.Add(medGroup_buff);
-                }
+                List<medGroupClass> medGroupClass_buff = returnData_group.Data.ObjToClass<List<medGroupClass>>();
+
                 foreach (var item in sql_patinfo)
                 {
                     List<medCpoeClass> targetCpoe = medCpoeClass.GetByMasterGUID(medCpoeDict, item.GUID);
@@ -2390,6 +2395,7 @@ namespace HIS_WebApi
                     {
                         List<string> 藥品群組 = GetGroupNamesByCode(medGroupClass_buff, order.藥碼);
                         order.藥品群組 = 藥品群組;
+                        order.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, order.藥碼);
                     }
                     item.處方 = targetCpoe;
                     List<bedStatusClass> bedStatus_buff = bedStatusClass.GetByID(inputBedStatusDict, item.病歷號);
