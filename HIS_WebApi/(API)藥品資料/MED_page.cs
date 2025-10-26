@@ -1028,6 +1028,8 @@ namespace HIS_WebApi
                         if (medClasses_src_buf[i].開檔狀態.StringIsEmpty() == false) medClass_update.開檔狀態 = medClasses_src_buf[i].開檔狀態;
                         if (medClasses_src_buf[i].儲位描述.StringIsEmpty() == false) medClass_update.儲位描述 = medClasses_src_buf[i].儲位描述;
                         if (medClasses_src_buf[i].備註.StringIsEmpty() == false) medClass_update.備註 = medClasses_src_buf[i].備註;
+                        if (medClasses_src_buf[i].藥品條碼2.StringIsEmpty() == false) medClass_update.藥品條碼2 = medClasses_src_buf[i].藥品條碼2;
+
 
                         medClasses_replace.Add(medClass_update);
                     }

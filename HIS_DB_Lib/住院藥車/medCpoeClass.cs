@@ -25,14 +25,6 @@ namespace HIS_DB_Lib
         更新時間,
         [Description("調劑狀態,VARCHAR,10,NONE")]
         調劑狀態,
-        [Description("藥品家族,VARCHAR,10,NONE")]
-        藥品家族,
-        [Description("針劑,VARCHAR,10,NONE")]
-        針劑,
-        [Description("口服,VARCHAR,10,NONE")]
-        口服,
-        [Description("冷儲,VARCHAR,10,NONE")]
-        冷儲,
         [Description("公藥,VARCHAR,10,NONE")]
         公藥,
         [Description("藥局,VARCHAR,10,INDEX")]
@@ -79,8 +71,8 @@ namespace HIS_DB_Lib
         處方醫師,
         [Description("處方醫師姓名,VARCHAR,10,NONE")]
         處方醫師姓名,
-        [Description("操作人員,VARCHAR,10,NONE")]
-        操作人員,
+        [Description("註記,VARCHAR,10,NONE")]
+        註記,
         [Description("大瓶點滴,VARCHAR,10,NONE")]
         大瓶點滴,
         [Description("LKFLAG,VARCHAR,10,NONE")]
@@ -97,10 +89,6 @@ namespace HIS_DB_Lib
         調劑異動,
         [Description("覆核狀態,VARCHAR,10,NONE")]
         覆核狀態,
-        [Description("藥局代碼,VARCHAR,10,NONE")]
-        藥局代碼,
-        [Description("藥局名稱,VARCHAR,10,NONE")]
-        藥局名稱,
         [Description("備註,VARCHAR,200,NONE")]
         備註,
     }
@@ -149,26 +137,6 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("dispens_status")]
         public string 調劑狀態 { get; set; }
-        /// <summary>
-        /// 藥品家族
-        /// </summary>
-        [JsonPropertyName("med_fam")]
-        public string 藥品家族 { get; set; }
-        /// <summary>
-        /// 針劑
-        /// </summary>
-        [JsonPropertyName("injection")]
-        public string 針劑 { get; set; }
-        /// <summary>
-        /// 口服
-        /// </summary>
-        [JsonPropertyName("oral")]
-        public string 口服 { get; set; }
-        /// <summary>
-        /// 冷儲
-        /// </summary>
-        [JsonPropertyName("ice")]
-        public string 冷儲 { get; set; }
         /// <summary>
         /// 公藥
         /// </summary>
@@ -285,10 +253,10 @@ namespace HIS_DB_Lib
         [JsonPropertyName("signam")]
         public string 處方醫師姓名 { get; set; }
         /// <summary>
-        /// 操作人員
+        /// 註記
         /// </summary>
-        [JsonPropertyName("luser")]
-        public string 操作人員 { get; set; }
+        [JsonPropertyName("remark")]
+        public string 註記 { get; set; }
         /// <summary>
         /// 大瓶點滴
         /// </summary>
@@ -329,16 +297,6 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("check_status")]
         public string 覆核狀態 { get; set; }
-        /// <summary>
-        /// 藥局代碼
-        /// </summary>
-        [JsonPropertyName("pharm_code")]
-        public string 藥局代碼 { get; set; }
-        /// <summary>
-        /// 藥局名稱
-        /// </summary>
-        [JsonPropertyName("pharm_name")]
-        public string 藥局名稱 { get; set; }
         /// <summary>
         /// 備註
         /// </summary>

@@ -137,6 +137,8 @@ namespace HIS_WebApi
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.加入時間] = DateTime.Now.ToDateTimeString_6();
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.報表生成時間] = DateTime.Now.ToDateTimeString_6();
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.撥發時間] = DateTime.MinValue.ToDateTimeString_6();
+                    list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.簽收時間] = DateTime.MinValue.ToDateTimeString_6();
+
                 }
 
                 sQLControl_drugstotreDistribution.AddRows(null, list_drugstotreDistributions);
@@ -385,6 +387,161 @@ namespace HIS_WebApi
 
                 returnData.Data = drugstotreDistributions;
                 returnData.Result = $"更新資料{GUID} 撥發量{實撥量}";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                Logger.Log($"drugstotreDistribution", $"[異常] {returnData.Result}");
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        /// <summary>
+        /// 更新撥補資料(簽收數量)
+        /// </summary>
+        /// <remarks>
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "ServerName" : "ds01",
+        ///     "ServerType" : "藥庫",
+        ///     "ValueAry": 
+        ///     [
+        ///         [drugStotreDistributionClass]
+        ///     },
+        ///     "ValueAry" : 
+        ///     [
+        ///     ]
+        ///     
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost("update_signedqty_by_guid")]
+        public string update_signedqty_by_guid(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "update_actqty_by_guid";
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[GUID,簽收量]";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[GUID,簽收量]";
+                    return returnData.JsonSerializationt(true);
+                }
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                string GUID = returnData.ValueAry[0];
+                string 簽收量 = returnData.ValueAry[1];
+
+                SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
+                List<object[]> list_drugstotreDistributions = sQLControl_drugstotreDistribution.GetRowsByLike(null, (int)enum_drugStotreDistribution.GUID, GUID);
+
+                if (list_drugstotreDistributions.Count() == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此GUID{GUID}";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (list_drugstotreDistributions[0][(int)enum_drugStotreDistribution.狀態].ToString() != "已過帳")
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"此GUID狀態為<{list_drugstotreDistributions[0][(int)enum_drugStotreDistribution.狀態]}> 不得更改簽收量";
+                    return returnData.JsonSerializationt(true);
+                }
+                list_drugstotreDistributions[0][(int)enum_drugStotreDistribution.簽收量] = 簽收量;
+                sQLControl_drugstotreDistribution.UpdateByDefulteExtra(null, list_drugstotreDistributions);
+                List<drugStotreDistributionClass> drugstotreDistributions = list_drugstotreDistributions.SQLToClass<drugStotreDistributionClass, enum_drugStotreDistribution>();
+
+                returnData.Data = drugstotreDistributions;
+                returnData.Result = $"更新資料{GUID} 簽收量{簽收量}";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                Logger.Log($"drugstotreDistribution", $"[異常] {returnData.Result}");
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        /// <summary>
+        /// 更新撥補資料(簽收數量)
+        /// </summary>
+        /// <remarks>
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "ServerName" : "ds01",
+        ///     "ServerType" : "藥庫",
+        ///     "ValueAry": 
+        ///     [
+        ///         ["GUID","True/False"]
+        ///     },
+        ///     "ValueAry" : 
+        ///     [
+        ///     ]
+        ///     
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <returns></returns>
+        [HttpPost("update_notice")]
+        public string update_notice(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "update_actqty_by_guid";
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[GUID,True/False]";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[GUID,True/False]";
+                    return returnData.JsonSerializationt(true);
+                }
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                string GUID = returnData.ValueAry[0];
+                string flag_notice = returnData.ValueAry[1];
+
+                SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
+                List<object[]> list_drugstotreDistributions = sQLControl_drugstotreDistribution.GetRowsByLike(null, (int)enum_drugStotreDistribution.GUID, GUID);
+
+                if (list_drugstotreDistributions.Count() == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此GUID{GUID}";
+                    return returnData.JsonSerializationt(true);
+                }
+                
+                list_drugstotreDistributions[0][(int)enum_drugStotreDistribution.通知註記] = flag_notice;
+                sQLControl_drugstotreDistribution.UpdateByDefulteExtra(null, list_drugstotreDistributions);
+                List<drugStotreDistributionClass> drugstotreDistributions = list_drugstotreDistributions.SQLToClass<drugStotreDistributionClass, enum_drugStotreDistribution>();
+
+                returnData.Data = drugstotreDistributions;
+                returnData.Result = $"更新資料{GUID} 通知註記{flag_notice}";
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Code = 200;
 

@@ -1,17 +1,18 @@
 {
-    "Data": [
-        {
-            "page_name": "medicine_cart",
-            "cht": "大瓶藥例外",
-            "name": "big_bottle_exception",
-            "value_type": "checkbox",
-            "option_str": "",
-            "value_db": "True"
-        },
+    "Data": [        
         {
             "page_name": "medicine_cart",
             "cht": "覆核_全選大瓶藥例外",
             "name": "check_big_bottle_exception",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "False"
+        },
+     
+        {
+            "page_name": "medicine_cart",
+            "cht": "覆核_全選註記藥例外",
+            "name": "check_remark_exception",
             "value_type": "checkbox",
             "option_str": "",
             "value_db": "False"
@@ -60,6 +61,14 @@
             "page_name": "medicine_cart",
             "cht": "調劑_全選大瓶藥例外",
             "name": "dispense_big_bottle_exception",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "True"
+        },
+        {
+            "page_name": "medicine_cart",
+            "cht": "調劑_全選註記藥例外",
+            "name": "dispense_remark_exception",
             "value_type": "checkbox",
             "option_str": "",
             "value_db": "True"
