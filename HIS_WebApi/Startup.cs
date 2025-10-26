@@ -160,9 +160,13 @@ namespace HIS_WebApi
             });
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors("AllowSpecificOrigin");
+
 
             app.UseSwaggerBasicAuth("hson@2717", "Hs0N@8283");     // ← 帳密驗證
+
+            app.UseCors("AllowSpecificOrigin");
+
+
             app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();

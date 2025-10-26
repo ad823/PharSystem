@@ -29,7 +29,7 @@ namespace ServerSettingForm
             Dialog_中藥調劑系統.form = this.FindForm();
             Dialog_中心叫號系統.form = this.FindForm();
             Dialog_設定.form = this.FindForm();
-
+            Dialog_FADC.form = this.FindForm();
 
             this.button_網頁.Click += Button_網頁_Click;
             this.button_調劑台.Click += Button_調劑台_Click;
@@ -39,8 +39,15 @@ namespace ServerSettingForm
             this.button_癌症備藥機.Click += Button_癌症備藥機_Click;
             this.button_中藥調劑系統.Click += Button_中藥調劑系統_Click;
             this.button_中心叫號系統.Click += Button_中心叫號系統_Click;
+            this.button_FADC.Click += Button_FADC_Click;
             this.button_設定.Click += Button_設定_Click;
 
+        }
+
+        private void Button_FADC_Click(object sender, EventArgs e)
+        {
+            Dialog_FADC dialog_FADC = new Dialog_FADC();
+            dialog_FADC.ShowDialog();
         }
 
         private void Button_設定_Click(object sender, EventArgs e)

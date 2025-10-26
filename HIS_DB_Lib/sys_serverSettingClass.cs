@@ -49,6 +49,7 @@ namespace HIS_DB_Lib
         傳送櫃,
         癌症備藥機,
         中心叫號系統,
+        FADC,
         更新資訊,
     }
     public enum enum_sys_serverSetting_ProgramType
