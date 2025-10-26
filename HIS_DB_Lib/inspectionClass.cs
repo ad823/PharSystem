@@ -35,6 +35,22 @@ namespace HIS_DB_Lib
         批號,
         效期
     }
+    public enum enum_驗收資料匯出
+    {
+        驗收單號,
+        請購單號,
+        請購項次,
+        藥碼,
+        藥名,
+        應收數量,
+        實收數量,
+        效期,
+        批號,
+        訂單時間,
+        預定交貨時間,
+        收貨時間,
+        操作人,
+    }
 
 
     [EnumDescription("inspection_creat")]
@@ -70,6 +86,8 @@ namespace HIS_DB_Lib
         Master_GUID,
         [Description("請購單號,VARCHAR,30,INDEX")]
         請購單號,
+        [Description("請購項次,VARCHAR,10,NONE")]
+        請購項次,
         [Description("驗收單號,VARCHAR,30,INDEX")]
         驗收單號,
         [Description("藥品碼,VARCHAR,20,INDEX")]
@@ -627,6 +645,8 @@ namespace HIS_DB_Lib
             public string Master_GUID { get; set; }
             [JsonPropertyName("PON")]
             public string 請購單號 { get; set; }
+            [JsonPropertyName("INDEX")]
+            public string 請購項次 { get; set; }
             [JsonPropertyName("IC_SN")]
             public string 驗收單號 { get; set; }
             [JsonPropertyName("CODE")]

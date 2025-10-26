@@ -56,7 +56,7 @@ namespace HIS_DB_Lib
         [Description("核撥時間,DATETIME,10,INDEX")]
         核撥時間,
         [Description("狀態,VARCHAR,20,NONE")]
-        狀態,
+        狀態
     }
     [EnumDescription("materialRequisition")]
     public enum enum_materialRequisition
@@ -69,8 +69,12 @@ namespace HIS_DB_Lib
         申領單號,
         [Description("藥碼,VARCHAR,50,INDEX")]
         藥碼,
+        [Description("料號,VARCHAR,50,INDEX")]
+        料號,
         [Description("藥名,VARCHAR,300,NONE")]
         藥名,
+        [Description("中文名,VARCHAR,300,NONE")]
+        中文名,
         [Description("包裝單位,VARCHAR,50,NONE")]
         包裝單位,
         [Description("包裝量,VARCHAR,10,NONE")]
@@ -87,6 +91,10 @@ namespace HIS_DB_Lib
         實撥量,
         [Description("實撥庫結存,VARCHAR,10,NONE")]
         實撥庫結存,
+        [Description("簽收量,VARCHAR,10,NONE")]
+        簽收量,
+        [Description("簽收庫結存,VARCHAR,10,NONE")]
+        簽收庫結存,
         [Description("申領單位,VARCHAR,10,NONE")]
         申領單位,
         [Description("申領人員,VARCHAR,50,NONE")]
@@ -103,6 +111,12 @@ namespace HIS_DB_Lib
         核撥人員ID,
         [Description("核撥時間,DATETIME,10,INDEX")]
         核撥時間,
+        [Description("簽收人員,VARCHAR,50,NONE")]
+        簽收人員,
+        [Description("簽收人員ID,VARCHAR,10,NONE")]
+        簽收人員ID,
+        [Description("簽收時間,DATETIME,10,INDEX")]
+        簽收時間,
         [Description("申領細節,VARCHAR,500,NONE")]
         申領細節,
         [Description("核撥細節,VARCHAR,500,NONE")]
@@ -111,6 +125,8 @@ namespace HIS_DB_Lib
         狀態,
         [Description("備註,VARCHAR,200,NONE")]
         備註,
+        [Description("通知註記,VARCHAR,10,NONE")]
+        通知註記,
     }
     public class materialRequisitionClass
     {
@@ -190,6 +206,16 @@ namespace HIS_DB_Lib
         [JsonPropertyName("actualStoreBalance")]
         public string 實撥庫結存 { get; set; }
         /// <summary>
+        /// 實撥量。
+        /// </summary>
+        [JsonPropertyName("signedQuantity")]
+        public string 簽收量 { get; set; }
+        /// <summary>
+        /// 實撥庫結存。
+        /// </summary>
+        [JsonPropertyName("signedStoreBalance")]
+        public string 簽收庫結存 { get; set; }
+        /// <summary>
         /// 申領單位。
         /// </summary>
         [JsonPropertyName("requestingUnit")]
@@ -230,6 +256,21 @@ namespace HIS_DB_Lib
         [JsonPropertyName("issueTime")]
         public string 核撥時間 { get; set; }
         /// <summary>
+        /// 簽收人員。
+        /// </summary>
+        [JsonPropertyName("signedPerson")]
+        public string 簽收人員 { get; set; }
+        /// <summary>
+        /// 簽收人員ID。
+        /// </summary>
+        [JsonPropertyName("signedPersonID")]
+        public string 簽收人員ID { get; set; }
+        /// <summary>
+        /// 簽收時間。
+        /// </summary>
+        [JsonPropertyName("signedTime")]
+        public string 簽收時間 { get; set; }
+        /// <summary>
         /// 申領細節。
         /// </summary>
         [JsonPropertyName("requestDetails")]
@@ -249,6 +290,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("remarks")]
         public string 備註 { get; set; }
+        /// <summary>
+        /// 通知註記。
+        /// </summary>
+        [JsonPropertyName("notice")]
+        public string 通知註記 { get; set; }
 
 
         [JsonIgnore]
@@ -339,7 +385,7 @@ namespace HIS_DB_Lib
         /// </summary>
         /// <param name="API_Server">API 伺服器地址。</param>
         /// <param name="materialRequisitions">申領單列表。</param>
-        static public void update_by_guid(string API_Server, List<materialRequisitionClass> materialRequisitions)
+        static public returnData update_by_guid(string API_Server, List<materialRequisitionClass> materialRequisitions)
         {
             string url = $"{API_Server}/api/materialRequisition/update_by_guid";
 
@@ -350,13 +396,14 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null || returnData_out.Data == null || returnData_out.Code != 200)
-            {
-                return;
-            }
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+
+            return returnData_out;
+            //if (returnData_out == null || returnData_out.Data == null || returnData_out.Code != 200)
+            //{
+            //    return;
+            //}
+
         }
         /// <summary>
         /// 根據申領時間獲取申領單。

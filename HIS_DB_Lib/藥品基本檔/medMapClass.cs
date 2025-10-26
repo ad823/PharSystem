@@ -46,6 +46,8 @@ namespace HIS_DB_Lib
         GUID,
         [Description("Master_GUID,VARCHAR,50,INDEX")]
         Master_GUID,
+        [Description("名稱,VARCHAR,20,NONE")]
+        名稱,
         [Description("位置,VARCHAR,10,NONE")]
         位置,
         [Description("type,VARCHAR,30,NONE")]
@@ -70,6 +72,8 @@ namespace HIS_DB_Lib
         高度,
         [Description("燈條IP,VARCHAR,20,NONE")]
         燈條IP,
+        [Description("device_type,VARCHAR,50,NONE")]
+        device_type,
         [Description("serverName,VARCHAR,20,NONE")]
         serverName,
         [Description("serverType,VARCHAR,20,NONE")]
@@ -129,6 +133,7 @@ namespace HIS_DB_Lib
         GUID,
         shelf_GUID,
         device_type,
+        device_Type1,
         位置,
         IP,
         燈條亮燈位置,
@@ -221,6 +226,11 @@ namespace HIS_DB_Lib
         [JsonPropertyName("Master_GUID")]
         public string Master_GUID { get; set; }
         /// <summary>
+        /// 名稱
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string 名稱 { get; set; }
+        /// <summary>
         /// 位置
         /// </summary>
         [JsonPropertyName("position")]
@@ -230,6 +240,7 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("type")]
         public string type { get; set; }
+        public string section_position { get; set; }
         public List<medMap_shelfClass> shelf { get; set; }
         public List<medMap_drawerClass> drawer { get; set; }
 
@@ -279,6 +290,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("ip_light")]
         public string 燈條IP { get; set; }
+        /// <summary>
+        /// 裝置類型
+        /// </summary>
+        [JsonPropertyName("device_type")]
+        public string device_type { get; set; }
         /// <summary>
         /// serverName
         /// </summary>
@@ -421,14 +437,7 @@ namespace HIS_DB_Lib
         /// </summary>
         [Description("shelf_GUID,VARCHAR,50,INDEX")]
         [JsonPropertyName("shelf_guid")]
-        public string Shelf_GUID { get; set; }
-
-        /// <summary>
-        /// 裝置類型 (例如 shelf、drawer、cabinet)
-        /// </summary>
-        [Description("device_type,VARCHAR,50,NONE")]
-        [JsonPropertyName("device_type")]
-        public string Device_Type { get; set; }
+        public string Shelf_GUID { get; set; }       
 
         /// <summary>
         /// 位置描述 (例如 上層第2層第3格)
@@ -443,6 +452,13 @@ namespace HIS_DB_Lib
         [Description("IP,VARCHAR,50,NONE")]
         [JsonPropertyName("ip")]
         public string IP { get; set; }
+
+        /// <summary>
+        /// 裝置類型 (例如 shelf、drawer、cabinet)
+        /// </summary>
+        [Description("device_type,VARCHAR,50,NONE")]
+        [JsonPropertyName("device_type")]
+        public string device_type { get; set; }
 
         /// <summary>
         /// 燈條亮燈位置 (LED Index)
@@ -491,7 +507,7 @@ namespace HIS_DB_Lib
         /// </summary>
         [Description("數量,VARCHAR,10,NONE")]
         [JsonPropertyName("qty")]
-        public double 數量 { get; set; }
+        public string 數量 { get; set; }
     }
 
     public static class medMapMethod
@@ -521,6 +537,33 @@ namespace HIS_DB_Lib
             else
             {
                 return new List<medMap_stockClass>();
+            }
+        }
+        static public Dictionary<string, List<medMap_shelfClass>> ToDictByMasterGUID(this List<medMap_shelfClass> shelfClasses)
+        {
+            Dictionary<string, List<medMap_shelfClass>> dictionary = new Dictionary<string, List<medMap_shelfClass>>();
+            foreach (var item in shelfClasses)
+            {
+                if (dictionary.TryGetValue(item.Master_GUID, out List<medMap_shelfClass> list))
+                {
+                    list.Add(item);
+                }
+                else
+                {
+                    dictionary[item.Master_GUID] = new List<medMap_shelfClass> { item };
+                }
+            }
+            return dictionary;
+        }
+        static public List<medMap_shelfClass> GetByMasterGUID(this Dictionary<string, List<medMap_shelfClass>> dict, string Master_GUID)
+        {
+            if (dict.TryGetValue(Master_GUID, out List<medMap_shelfClass> shelfClasses))
+            {
+                return shelfClasses;
+            }
+            else
+            {
+                return new List<medMap_shelfClass>();
             }
         }
 

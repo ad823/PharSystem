@@ -808,6 +808,17 @@ namespace HIS_DB_Lib
             List<DeviceBasic> deviceBasics = returnData_result.Data.ObjToClass<List<DeviceBasic>>();
             return deviceBasics;
         }
+        static public async Task<returnData> light_action(string API_Server, List<string> strings)
+        {
+            string url = $"{API_Server}/api/device_control/light_action";
+
+            returnData returnData = new returnData();
+            returnData.ValueAry = strings;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData =  json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
 
         /// <summary>
         /// 呼叫 API 以藥碼亮燈（只回傳是否成功）

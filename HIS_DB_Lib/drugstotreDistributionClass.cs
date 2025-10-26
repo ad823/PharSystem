@@ -60,6 +60,8 @@ namespace HIS_DB_Lib
         撥發量,
         [Description("實撥量,VARCHAR,20,NONE")]
         實撥量,
+        [Description("簽收量,VARCHAR,20,NONE")]
+        簽收量,
         [Description("來源庫結存,VARCHAR,20,NONE")]
         來源庫結存,
         [Description("目的庫結存,VARCHAR,20,NONE")]
@@ -72,6 +74,10 @@ namespace HIS_DB_Lib
         加入時間,
         [Description("撥發時間,DATETIME,20,INDEX")]
         撥發時間,
+        [Description("簽收人員,VARCHAR,50,NONE")]
+        簽收人員,
+        [Description("簽收時間,DATETIME,20,INDEX")]
+        簽收時間,
         [Description("報表名稱,VARCHAR,100,NONE")]
         報表名稱,
         [Description("報表生成時間,DATETIME,20,INDEX")]
@@ -84,6 +90,8 @@ namespace HIS_DB_Lib
         實撥細節,
         [Description("備註,VARCHAR,300,NONE")]
         備註,
+        [Description("通知註記,VARCHAR,10,NONE")]
+        通知註記,
 
     }
     /// <summary>
@@ -157,6 +165,11 @@ namespace HIS_DB_Lib
         [JsonPropertyName("actualIssuedQuantity")]
         public string 實撥量 { get; set; }
         /// <summary>
+        /// 簽收量。
+        /// </summary>
+        [JsonPropertyName("signedIssuedQuantity")]
+        public string 簽收量 { get; set; }
+        /// <summary>
         /// 來源庫結存。
         /// </summary>
         [JsonPropertyName("sourceStoreBalance")]
@@ -187,6 +200,31 @@ namespace HIS_DB_Lib
         [JsonPropertyName("issuanceTime")]
         public DateTime 撥發時間 { get; set; }
         /// <summary>
+        /// 簽收人員。
+        /// </summary>
+        [JsonPropertyName("signedPerson")]
+        public string 簽收人員 { get; set; }
+        /// <summary>
+        /// 簽收時間。
+        /// </summary>
+        [JsonPropertyName("signedTime")]
+        public DateTime 簽收時間 { get; set; }
+        /// <summary>
+        /// 報表名稱。
+        /// </summary>
+        [JsonPropertyName("reportName")]
+        public string 報表名稱 { get; set; }
+        /// <summary>
+        /// 報表生成時間。
+        /// </summary>
+        [JsonPropertyName("reportGenerationTime")]
+        public DateTime 報表生成時間 { get; set; }
+        /// <summary>
+        /// 狀態。
+        /// </summary>
+        [JsonPropertyName("state")]
+        public string 狀態 { get; set; }
+        /// <summary>
         /// 撥發細節
         /// </summary>
         [JsonPropertyName("issuedStocks_text")]
@@ -196,6 +234,16 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("actualIssuedStocks_text")]
         public string 實撥細節 { get; set; }
+        /// <summary>
+        /// 備註。
+        /// </summary>
+        [JsonPropertyName("remarks")]
+        public string 備註 { get; set; }
+        /// <summary>
+        /// 通知註記。
+        /// </summary>
+        [JsonPropertyName("notice")]
+        public string 通知註記 { get; set; }
         [JsonIgnore]
         private static readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -237,26 +285,10 @@ namespace HIS_DB_Lib
                 實撥細節 = JsonSerializer.Serialize(value, jsonSerializerOptions);
             }
         }
-        /// <summary>
-        /// 報表生成時間。
-        /// </summary>
-        [JsonPropertyName("reportGenerationTime")]
-        public DateTime 報表生成時間 { get; set; }
-        /// <summary>
-        /// 報表名稱。
-        /// </summary>
-        [JsonPropertyName("reportName")]
-        public string 報表名稱 { get; set; }
-        /// <summary>
-        /// 狀態。
-        /// </summary>
-        [JsonPropertyName("state")]
-        public string 狀態 { get; set; }
-        /// <summary>
-        /// 備註。
-        /// </summary>
-        [JsonPropertyName("remarks")]
-        public string 備註 { get; set; }
+        
+        
+        
+        
         
         static public SQLUI.Table init(string API_Server)
         {
@@ -300,7 +332,7 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             return;
         }
-        static public void update_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
+        static public returnData update_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
         {
             string url = $"{API_Server}/api/drugStotreDistribution/update_by_guid";
             string str_serverNames = "";
@@ -313,19 +345,10 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null)
-            {
-                return;
-            }
-            if (returnData_out.Data == null)
-            {
-                return;
-            }
-            if (returnData_out.Code != 200) return;
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
-            return;
+
+            return returnData_out;
+            
         }
         static public List<drugStotreDistributionClass> get_by_addedTime(string API_Server, DateTime st_datetime , DateTime end_datetime)
         {
@@ -345,7 +368,7 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData.Method}]:{returnData.Result}");
             return drugStotreDistributionClasses;
         }
-        static public void update_by_guid(string API_Server, string GUID)
+        static public returnData update_by_guid(string API_Server, string GUID)
         {
             string url = $"{API_Server}/api/drugStotreDistribution/get_by_guid";
             string str_serverNames = "";
@@ -358,19 +381,19 @@ namespace HIS_DB_Lib
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-
-            if (returnData_out == null)
-            {
-                return;
-            }
-            if (returnData_out.Data == null)
-            {
-                return;
-            }
-            if (returnData_out.Code != 200) return;
-
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
-            return;
+
+            return returnData_out;
+            //if (returnData_out == null)
+            //{
+            //    return;
+            //}
+            //if (returnData_out.Data == null)
+            //{
+            //    return;
+            //}
+            //if (returnData_out.Code != 200) return;
+
         }
         static public byte[] download_excel_by_addedTime(string API_Server, DateTime st_datetime, DateTime end_datetime)
         {
