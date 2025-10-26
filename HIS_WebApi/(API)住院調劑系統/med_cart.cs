@@ -1927,7 +1927,7 @@ namespace HIS_WebApi
                 string 護理站 = returnData.ValueAry[1];
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 Task<List<bedStatusClass>> task_get_bed_status = get_bed_status(藥局, 護理站, ct);
-                Task<string> task_result = new medGroup().get_UDgroup_name(returnData);
+                
                 
                 string tableName_patient_info = "patient_info";
                 string tableName_med_cpoe = "med_cpoe";
@@ -1973,18 +1973,19 @@ namespace HIS_WebApi
                 List<bedStatusClass> bedStatusClasses = await task_get_bed_status;
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                string result = await task_result;
-                returnData returnData_group = result.JsonDeserializet<returnData>();
-                if (returnData_group == null || returnData_group.Code != 200)
+                
+                
+                List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
+                if (medGroupClass_buff == null)
                 {
                     returnData.Code = -200;
                     returnData.TimeTaken = $"{myTimerBasic.ToString()}  ";
                     returnData.Result = $"藥品群組取得失敗";
                     return returnData.JsonSerializationt(true);
                 }
-                List<medGroupClass> medGroupClass_buff = returnData_group.Data.ObjToClass<List<medGroupClass>>();
-               
-                
+
+
+
                 foreach (var item in sql_patinfo)
                 {
                     List<medCpoeClass> targetCpoe = medCpoeClass.GetByMasterGUID(medCpoeDict, item.GUID);
@@ -2327,7 +2328,6 @@ namespace HIS_WebApi
                 string 護理站 = returnData.ValueAry[1];
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 Task<List<bedStatusClass>> task_get_bed_status = get_bed_status(藥局, 護理站, ct);
-                Task<string> task_result = new medGroup().get_UDgroup_name(returnData);
 
                 string tableName_patient_info = "patient_info";
                 string tableName_med_cpoe = "med_cpoe";
@@ -2376,16 +2376,15 @@ namespace HIS_WebApi
 
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                string result = await task_result;
-                returnData returnData_group = result.JsonDeserializet<returnData>();
-                if (returnData_group == null || returnData_group.Code != 200)
+                
+                List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
+                if (medGroupClass_buff == null)
                 {
                     returnData.Code = -200;
                     returnData.TimeTaken = $"{myTimerBasic.ToString()}  ";
                     returnData.Result = $"藥品群組取得失敗";
                     return returnData.JsonSerializationt(true);
                 }
-                List<medGroupClass> medGroupClass_buff = returnData_group.Data.ObjToClass<List<medGroupClass>>();
 
                 foreach (var item in sql_patinfo)
                 {
@@ -3974,13 +3973,7 @@ namespace HIS_WebApi
 
                 string 藥局 = returnData.ValueAry[0];
                 string 護理站 = returnData.ValueAry[1];
-
-
-                List<Task> tasks = new List<Task>();
-                List<medGroupClass> medGroupClass_buff = new List<medGroupClass>();
-                Task<List<medGroupClass>> task_medGroupClasses = medGroup.get_all_group();
-                List<string> groupName = System.Enum.GetNames(typeof(藥品總量群組)).ToList();
-
+                                             
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
 
@@ -4043,12 +4036,12 @@ namespace HIS_WebApi
                     }
                     medClassDict = medClass.CoverToDictionaryByCode(medClasses);
                 }
-                List<medGroupClass> medGroupClasses = await task_medGroupClasses;
-                foreach (var item in groupName)
-                {
-                    medGroupClass medGroup_buff = medGroupClasses.Where(m => m.名稱.Contains(item)).FirstOrDefault();
-                    if (medGroup_buff != null) medGroupClass_buff.Add(medGroup_buff);
-                }
+                List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
+                //foreach (var item in groupName)
+                //{
+                //    medGroupClass medGroup_buff = medGroupClasses.Where(m => m.名稱.Contains(item)).FirstOrDefault();
+                //    if (medGroup_buff != null) medGroupClass_buff.Add(medGroup_buff);
+                //}
 
                 MyTimerBasic myTimerBasic_藥品總量 = new MyTimerBasic();
                 List<medCpoeClass> medCpoeClasses = sql_medCpoe

@@ -1551,6 +1551,16 @@ namespace HIS_WebApi
             List<medGroupClass> medGroupClasses = returnData.Data.ObjToListClass<medGroupClass>();
             return medGroupClasses;
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        static public async Task<List<medGroupClass>> get_UDgroup()
+        {
+            returnData returnData = new returnData();
+            string result = await new medGroup().get_UDgroup(returnData);
+            returnData = result.JsonDeserializet<returnData>();
+            if (returnData == null || returnData.Code != 200) return new List<medGroupClass>();
+            List<medGroupClass> medGroupClasses = returnData.Data.ObjToListClass<medGroupClass>();
+            return medGroupClasses;
+        }
 
     }
 }
