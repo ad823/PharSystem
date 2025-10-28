@@ -1,1 +1,0 @@
-20240609-23:27:43 - [異常] Connection must be valid and open.
