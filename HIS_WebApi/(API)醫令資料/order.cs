@@ -1846,10 +1846,10 @@ namespace HIS_WebApi
                 if (array_priKey.Length < 3)
                 {
                     returnData.Code = -200;
-                    returnData.Result = $"PRI_KEY格式錯誤，應為 '開方時間(yyyyMMddHHmmss)-病歷號-科別'";
+                    returnData.Result = $"PRI_KEY格式錯誤，應為 '開方時間(yyyyMMddHHmmss)-病歷號'";
                     return returnData.JsonSerializationt();
                 }
-                string PRI_KEY = $"{array_priKey[0]}-{array_priKey[1]}-{array_priKey[2]}";
+                string PRI_KEY = $"{array_priKey[0]}-{array_priKey[1]}";
                 string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
 
                 command = $"SELECT * FROM {DB}.order_list " +
