@@ -174,7 +174,7 @@ namespace 調劑台管理系統
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"Exception : { ex.Message}");
+                Logger.Log($"Exception : {ex.Message}");
 
             }
             finally

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,10 +26,17 @@ namespace HIS_WebApi
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
         private string APIServer = Method.GetServerAPI("Main", "網頁", "API01");
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>> serverInfoTask
-        = new Lazy<Task<(string, string, string, string, uint)>>(() =>
-            Method.GetServerInfoAsync("Main", "網頁", "VM端")
-        );
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return (Server, DB, UserName, Password, Port);
+           });
+
         private static string tableName = "medunit";
         [HttpPost("init")]
         public string init()

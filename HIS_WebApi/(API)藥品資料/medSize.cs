@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,10 +25,17 @@ namespace HIS_WebApi
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
         private string APIServer = Method.GetServerAPI("Main", "網頁", "API01");
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>> serverInfoTask
-        = new Lazy<Task<(string, string, string, string, uint)>>(() =>
-            Method.GetServerInfoAsync("Main", "網頁", "VM端")
-        );
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+         serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+         {
+             var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+             if (string.IsNullOrWhiteSpace(Password))
+                 throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+             return (Server, DB, UserName, Password, Port);
+         });
+
         private static string tableName_medSize = "medsize";
         /// <summary>
         ///初始化藥品地圖資料庫
@@ -510,18 +518,7 @@ namespace HIS_WebApi
         ///   "Result": "依藥碼查詢&lt;1&gt;筆成功",
         ///   "Value": "",
         ///   "ValueAry": [ "EPAR" ],
-        ///   "TimeTaken": "72.182ms",
-        ///   "Token": "",
-        ///   "Server": "",
-        ///   "DbName": "",
-        ///   "TableName": "",
-        ///   "Port": 0,
-        ///   "UserName": "",
-        ///   "Password": "",
-        ///   "ServerType": "",
-        ///   "ServerName": "",
-        ///   "ServerContent": "",
-        ///   "RequestUrl": ""
+        ///   "TimeTaken": "72.182ms"
         /// }
         /// </code>
         ///

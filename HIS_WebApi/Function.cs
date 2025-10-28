@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using HIS_DB_Lib;
 using Basic;
+using System.Security;
 namespace HIS_WebApi
 {
 
@@ -21,6 +22,10 @@ namespace HIS_WebApi
             {
                 throw new Exception("找無Server資料");
             }
+            if (string.IsNullOrWhiteSpace(sys_serverSettingClass.Password))
+            {
+                throw new SecurityException("Password cannot be null or empty.");
+            }
             return (sys_serverSettingClass.Server, sys_serverSettingClass.DBName, sys_serverSettingClass.User, sys_serverSettingClass.Password, (uint)sys_serverSettingClass.Port.StringToInt32());
         }
         static public async Task<(string Server, string DB, string UserName, string Password, uint Port)> GetServerInfoAsync(string Name, string Type, string Content, CancellationToken ct = default)
@@ -30,6 +35,10 @@ namespace HIS_WebApi
             if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
             {
                 throw new Exception("找無Server資料");
+            }
+            if (string.IsNullOrWhiteSpace(sys_serverSettingClass[0].Password))
+            {
+                throw new SecurityException("Password cannot be null or empty.");
             }
             return (sys_serverSettingClass[0].Server, sys_serverSettingClass[0].DBName, sys_serverSettingClass[0].User, sys_serverSettingClass[0].Password, (uint)sys_serverSettingClass[0].Port.StringToInt32());
         }

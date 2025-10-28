@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,9 +19,15 @@ namespace HIS_WebApi
 
         public SwaggerBasicAuthMiddleware(RequestDelegate next, string username, string password)
         {
-            _next = next;
-            _username = username;
-            _password = password;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+
+            _username = !string.IsNullOrWhiteSpace(username)
+                ? username
+                : throw new SecurityException("Swagger username must not be empty.");
+
+            _password = !string.IsNullOrWhiteSpace(password)
+                ? password
+                : throw new SecurityException("Swagger password must not be empty.");
         }
 
         public async Task InvokeAsync(HttpContext context)

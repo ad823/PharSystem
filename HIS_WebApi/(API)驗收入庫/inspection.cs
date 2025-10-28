@@ -17,6 +17,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -34,10 +35,16 @@ namespace HIS_WebApi
     public class inspectionController : Controller
     {
         //private IHostingEnvironment _environment;
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>> serverInfoTask
-        = new Lazy<Task<(string, string, string, string, uint)>>(() =>
-            Method.GetServerInfoAsync("Main", "網頁", "VM端")
-        );
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+          serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+          {
+              var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+              if (string.IsNullOrWhiteSpace(Password))
+                  throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+              return (Server, DB, UserName, Password, Port);
+          });
         //public inspectionController(IHostingEnvironment env)
         //{
         //    _environment = env;
@@ -2156,114 +2163,7 @@ namespace HIS_WebApi
 
             return returnData.JsonSerializationt();
         }
-        /// <summary>
-        /// 新增單筆驗收藥品中的明細
-        /// </summary>
-        /// <remarks>
-        /// [必要輸入參數說明]<br/> 
-        ///  --------------------------------------------<br/> 
-        /// 以下為範例JSON範例
-        /// <code>
-        ///  {
-        ///    "Data": 
-        ///    {                 
-        ///       "Master_GUID": "13a6625b-b7b2-43b0-ba59-7c451a4912e0",
-        ///       "OP": "測試者",
-        ///       "END_QTY": "56"
-        ///    }
-        ///  }
-        /// </code>
-        /// </remarks>
-        /// <param name="returnData">共用傳遞資料結構</param>
-        /// <returns>[returnData.Data] :sub_content資料結構 </returns>
-        //[Route("sub_content_add")]
-        //[HttpPost]
-        //public string sub_content_add([FromBody] returnData returnData)
-        //{
-        //    MyTimer myTimer = new MyTimer();
-        //    myTimer.StartTickTime(50000);
-
-        //    List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-        //    sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
-        //    if (sys_serverSettingClasses.Count == 0)
-        //    {
-        //        returnData.Code = -200;
-        //        returnData.Result = $"找無Server資料!";
-        //        return returnData.JsonSerializationt();
-        //    }
-        //    string Server = sys_serverSettingClasses[0].Server;
-        //    string DB = sys_serverSettingClasses[0].DBName;
-        //    string UserName = sys_serverSettingClasses[0].User;
-        //    string Password = sys_serverSettingClasses[0].Password;
-        //    uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
-
-        //    SQLControl sQLControl_inspection_creat = new SQLControl(Server, DB, "inspection_creat", UserName, Password, Port, SSLMode);
-        //    SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, "inspection_content", UserName, Password, Port, SSLMode);
-        //    SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
-        //    List<object[]> list_inspection_content = sQLControl_inspection_content.GetAllRows(null);
-        //    List<object[]> list_inspection_content_buf = new List<object[]>();
-        //    List<object[]> list_add = new List<object[]>();
-        //    inspectionClass.sub_content sub_content = returnData.Data.ObjToClass<inspectionClass.sub_content>();
-        //    string Master_GUID = sub_content.Master_GUID;
-        //    list_inspection_content_buf = list_inspection_content.GetRows((int)enum_驗收內容.GUID, Master_GUID);
-        //    if (list_inspection_content_buf.Count == 0)
-        //    {
-        //        returnData.Code = -5;
-        //        returnData.TimeTaken = myTimer.ToString();
-        //        returnData.Result = $"找無資料!";
-        //        returnData.Method = "sub_content_add";
-        //        returnData.Data = null;
-        //        return returnData.JsonSerializationt();
-        //    }
-
-        //    object[] value = new object[new enum_驗收明細().GetLength()];
-        //    value[(int)enum_驗收明細.GUID] = Guid.NewGuid().ToString();
-        //    value[(int)enum_驗收明細.藥品碼] = list_inspection_content_buf[0][(int)enum_驗收內容.藥品碼];
-        //    value[(int)enum_驗收明細.料號] = list_inspection_content_buf[0][(int)enum_驗收內容.料號];
-        //    value[(int)enum_驗收明細.驗收單號] = list_inspection_content_buf[0][(int)enum_驗收內容.驗收單號];
-        //    value[(int)enum_驗收明細.藥品條碼1] = list_inspection_content_buf[0][(int)enum_驗收內容.藥品條碼1];
-        //    value[(int)enum_驗收明細.藥品條碼1] = list_inspection_content_buf[0][(int)enum_驗收內容.藥品條碼2];
-
-        //    value[(int)enum_驗收明細.Master_GUID] = Master_GUID;
-        //    value[(int)enum_驗收明細.效期] = sub_content.效期;
-        //    value[(int)enum_驗收明細.批號] = sub_content.批號;
-        //    value[(int)enum_驗收明細.實收數量] = sub_content.實收數量;
-        //    value[(int)enum_驗收明細.操作人] = sub_content.操作人;
-        //    value[(int)enum_驗收明細.操作時間] = DateTime.Now.ToDateTimeString();
-        //    value[(int)enum_驗收明細.狀態] = "未鎖定";
-
-        //    list_add.Add(value);
-
-        //    sQLControl_inspection_sub_content.AddRows(null, list_add);
-
-        //    inspectionClass.content content = new inspectionClass.content();
-        //    content.GUID = Master_GUID;
-        //    returnData.Data = content;
-        //    string json_content = content_get_by_content_GUID(returnData);
-        //    returnData = json_content.JsonDeserializet<returnData>();
-        //    if (returnData == null)
-        //    {
-        //        returnData.Code = -5;
-        //        returnData.TimeTaken = myTimer.ToString();
-        //        returnData.Result = $"搜尋content資料錯誤!";
-        //        returnData.Method = "sub_content_add";
-        //        returnData.Data = null;
-        //        return returnData.JsonSerializationt();
-        //    }
-        //    if (returnData.Code < 0)
-        //    {
-        //        returnData.TimeTaken = myTimer.ToString();
-        //        returnData.Method = "sub_content_add";
-        //        returnData.Data = null;
-        //        return returnData.JsonSerializationt();
-        //    }
-
-        //    returnData.Code = 200;
-        //    returnData.TimeTaken = myTimer.ToString();
-        //    returnData.Result = $"新增批效成功!";
-        //    returnData.Method = "sub_content_add";
-        //    return returnData.JsonSerializationt();
-        //}
+        
         /// <summary>
         /// 新增單筆驗收藥品中的明細
         /// </summary>

@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,10 +21,16 @@ namespace HIS_WebApi._API_系統
     public class settingPage : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>> serverInfoTask
-        = new Lazy<Task<(string, string, string, string, uint)>>(() =>
-            Method.GetServerInfoAsync("Main", "網頁", "VM端")
-        );
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+             serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+             {
+                 var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+                 if (string.IsNullOrWhiteSpace(Password))
+                     throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+                 return (Server, DB, UserName, Password, Port);
+             });
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "settingPageClass物件", typeof(settingPageClass))]
 
         [HttpPost("init_settingPage")]

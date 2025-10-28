@@ -607,7 +607,6 @@ namespace HIS_WebApi
                 SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
                 //inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
 
-                //sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 if (returnData.Value.StringIsEmpty())
                 {
                     returnData.Code = -200;
@@ -690,9 +689,7 @@ namespace HIS_WebApi
 
                 SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 
-                //inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
 
-                //sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 if (returnData.Value.StringIsEmpty())
                 {
                     returnData.Code = -200;
