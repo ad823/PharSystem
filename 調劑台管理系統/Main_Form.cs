@@ -1217,7 +1217,7 @@ namespace 調劑台管理系統
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"無法關閉 {processName} (PID: {process.Id})：{ex.Message}");
+                        Console.WriteLine($"無法關閉 {processName} (PID: {process.Id})");
                     }
                 }
             }

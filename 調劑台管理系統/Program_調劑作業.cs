@@ -224,7 +224,7 @@ namespace 調劑台管理系統
                                 }
                                 catch (Exception drawEx)
                                 {
-                                    Console.WriteLine($"[Row {e.RowIndex}] ❗圖片繪製失敗：{drawEx.Message}");
+                                    Console.WriteLine($"[Row {e.RowIndex}] ❗圖片繪製失敗");
                                 }
                             }
                             else

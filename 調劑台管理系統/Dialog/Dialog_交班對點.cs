@@ -174,7 +174,7 @@ namespace 調劑台管理系統
             }
             catch(Exception ex)
             {
-                Logger.Log($"Exception : {ex.Message}");
+                Logger.Log($"Exception 交班對點關閉抽屜時異常");
 
             }
             finally
