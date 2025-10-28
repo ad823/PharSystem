@@ -413,7 +413,7 @@ namespace HIS_WebApi._API_系統
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
-        [HttpPost("get_by_startendtime_changeMed")]
+        [HttpPost("get_by_startendtime_MedNotice")]
         public async Task<string> get_by_startendtime_changeMed([FromBody] returnData returnData, CancellationToken ct = default)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -427,7 +427,7 @@ namespace HIS_WebApi._API_系統
                 string command = @$"SELECT * FROM {DB}.{tableName}
                                     WHERE 公告開始時間 <= '{now}' 
                                     AND 公告結束時間 >= '{now}'
-                                    AND 主旨 IN('藥品替換');";
+                                    AND 主旨 IN('藥品通知');";
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command, ct);
                 List<controlpanelClass> bbsClasses = objects.SQLToClass<controlpanelClass, enum_controlpanel>();
                 bbsClasses.Sort(new controlpanelClass.ICP_By_ct_time());
@@ -568,8 +568,8 @@ namespace HIS_WebApi._API_系統
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
-        [HttpPost("get_changeMed")]
-        public async Task<string> get_changeMed([FromBody] returnData returnData, CancellationToken ct = default)
+        [HttpPost("get_MedNotice")]
+        public async Task<string> get_MedNotice([FromBody] returnData returnData, CancellationToken ct = default)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -577,7 +577,7 @@ namespace HIS_WebApi._API_系統
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl = new SQLControl(Server, DB, tableName, UserName, Password, Port, SSLMode);
                 string command = @$"SELECT * FROM {DB}.{tableName}
-                                    WHERE 主旨 IN ('藥品替換');";
+                                    WHERE 主旨 IN ('藥品通知');";
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command, ct);
                 List<controlpanelClass> bbsClasses = objects.SQLToClass<controlpanelClass, enum_controlpanel>();
                 bbsClasses.Sort(new controlpanelClass.ICP_By_ct_time());
@@ -585,7 +585,7 @@ namespace HIS_WebApi._API_系統
                 returnData.Code = 200;
                 returnData.Data = bbsClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "get_changeMed";
+                returnData.Method = "get_MedNotice";
                 returnData.Result = $"取得資料，共{bbsClasses.Count}筆!";
                 return await returnData.JsonSerializationtAsync(true);
             }
