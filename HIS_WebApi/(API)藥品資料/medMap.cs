@@ -2376,7 +2376,58 @@ namespace HIS_WebApi._API_藥品資料
             }
         }
         [HttpPost("update_stock")]
-        public async Task<string> update_medMap_stock([FromBody] returnData returnData)
+        public async Task<string> update_stock([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<medMap_stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<medMap_stockClass>>();
+                if (medMap_StockClasses == null)
+                {
+                    medMap_stockClass medMap_stock = returnData.Data.ObjToClass<medMap_stockClass>();
+                    if (medMap_stock == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤，須為medMap_stockClass";
+                        return returnData.JsonSerializationt();
+                    }
+                    medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
+                }
+
+                // DB 連線與資料表
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+
+                List<object[]> update = medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
+                // 回傳
+                returnData.Code = 200;
+                returnData.Data = medMap_StockClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "update_medMap_stock";
+                returnData.Result = $"儲位寫入成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        /// <summary>
+        /// 新增效期
+        /// </summary>
+        /// <param name="returnData"></param>
+        /// <returns></returns>
+        [HttpPost("stock_add_Validity_period")]
+        public async Task<string> stock_add_Validity_period([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
