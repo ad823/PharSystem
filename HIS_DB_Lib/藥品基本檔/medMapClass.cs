@@ -491,23 +491,25 @@ namespace HIS_DB_Lib
         /// <summary>
         /// 批號 (Lot Number)
         /// </summary>
-        [Description("批號,VARCHAR,100,NONE")]
         [JsonPropertyName("lot")]
-        public string 批號 { get; set; }
+        public List<string> 批號 { get; set; }
 
         /// <summary>
         /// 效期 (Expiry Date)
         /// </summary>
-        [Description("效期,DATETIME,10,NONE")]
         [JsonPropertyName("expiry_date")]
-        public string 效期 { get; set; }
+        public List<string> 效期 { get; set; }
 
         /// <summary>
         /// 數量 (Quantity)
         /// </summary>
-        [Description("數量,VARCHAR,10,NONE")]
         [JsonPropertyName("qty")]
-        public string 數量 { get; set; }
+        public List<string> 數量 { get; set; }
+        /// <summary>
+        /// Value (DeviceBasic)
+        /// </summary>
+        [Description("VARCHAR,1000,NONE")]
+        public string Value { get; set; }
     }
 
     public static class medMapMethod
