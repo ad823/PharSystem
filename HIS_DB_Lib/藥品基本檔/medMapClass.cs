@@ -25,18 +25,15 @@ namespace HIS_DB_Lib
         [Description("type,VARCHAR,30,NONE")]
         type
     }
-    [EnumDescription("medMap_section")]
     public enum enum_medMap_section
     {
-        [Description("GUID,VARCHAR,50,PRIMARY")]
         GUID,
-        [Description("Master_GUID,VARCHAR,50,INDEX")]
         Master_GUID,
-        [Description("位置,VARCHAR,10,NONE")]
+        名稱,
+        燈棒IP,
+        device_type,
         位置,
-        [Description("絕對位置,VARCHAR,20,NONE")]
         絕對位置,
-        [Description("type,VARCHAR,30,NONE")]
         type
     }
     [EnumDescription("medMap_sub_section")]
@@ -180,31 +177,57 @@ namespace HIS_DB_Lib
     /// <summary>
     /// 藥品地圖_子容器
     /// </summary>
+    [Description("medMap_section")]
     public class medMap_sectionClass
     {
         /// <summary>
         /// 唯一KEY
         /// </summary>
+        [Description("VARCHAR,50,PRIMARY")]
         [JsonPropertyName("GUID")]
         public string GUID { get; set; }
         /// <summary>
         /// Master_GUID
         /// </summary>
+        [Description("VARCHAR,50,INDEX")]
         [JsonPropertyName("Master_GUID")]
         public string Master_GUID { get; set; }
         /// <summary>
+        /// 名稱
+        /// </summary>
+        [Description("VARCHAR,50,NONE")]
+        
+        [JsonPropertyName("name")]
+        public string 名稱 { get; set; }
+        /// <summary>
+        /// 燈棒IP
+        /// </summary>
+        [Description("VARCHAR,10,NONE")]
+        
+        [JsonPropertyName("ip_light")]
+        public string 燈棒IP { get; set; }
+        /// <summary>
+        /// 裝置類型
+        /// </summary>
+        [Description("VARCHAR,10,NONE")]
+
+        public string device_type { get; set; }
+        /// <summary>
         /// 位置
         /// </summary>
+        [Description("VARCHAR,10,NONE")]
         [JsonPropertyName("position")]
         public string 位置 { get; set; }
         /// <summary>
         /// 絕對位置
         /// </summary>
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("absolute_position")]
         public string 絕對位置 { get; set; }
         /// <summary>
         /// 種類
         /// </summary>
+        [Description("type,VARCHAR,30,NONE")]
         [JsonPropertyName("type")]
         public string type { get; set; }
         public List<medMap_sub_sectionClass> sub_section { get; set; }
