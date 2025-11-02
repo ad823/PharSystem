@@ -39,7 +39,8 @@ namespace 調劑台管理系統
                 for (int k = 0; k < list_str.Count; k++)
                 {
                     Console.WriteLine($"刪除共用台資料,名稱 : {list_str[k]}");
-                    sQLControl.DeleteByDefult(null, (int)enum_取藥堆疊母資料.調劑台名稱, list_str[k]);
+                    List<object[]> var = sQLControl.GetRowsByDefult(null, (int)enum_取藥堆疊母資料.調劑台名稱, list_str[k]);
+                    sQLControl.DeleteExtra(null, var);
                 }            
                 for(int k = 0; k < list_堆疊母資料_add.Count; k++)
                 {
@@ -62,7 +63,8 @@ namespace 調劑台管理系統
                 table.Port = commonSapceClasses[i].sys_serverSettingClass.Port;
                 table.DBName = commonSapceClasses[i].sys_serverSettingClass.DBName;
                 sQLControl.Init(table);
-                sQLControl.DeleteByDefult(null, (int)enum_取藥堆疊母資料.調劑台名稱, deviceName);
+                List<object[]> list_value = sQLControl.GetRowsByDefult(null, (int)enum_取藥堆疊母資料.調劑台名稱, deviceName);
+                sQLControl.DeleteExtra(null, list_value);
               
             }
         }
