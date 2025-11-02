@@ -317,7 +317,7 @@ namespace HIS_WebApi._API_系統
                 string command = @$"SELECT * FROM {DB}.{tableName}
                                     WHERE 公告開始時間 <= '{now}' 
                                     AND 公告結束時間 >= '{now}'
-                                    AND 主旨 NOT IN('缺貨通知','藥品替換');";
+                                    AND 主旨 NOT IN('缺貨通知','藥品通知');";
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command,ct);
                 List<controlpanelClass> bbsClasses = objects.SQLToClass<controlpanelClass, enum_controlpanel>();
                 bbsClasses.Sort(new controlpanelClass.ICP_By_ct_time());

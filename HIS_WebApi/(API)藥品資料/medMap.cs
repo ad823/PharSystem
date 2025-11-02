@@ -2400,7 +2400,16 @@ namespace HIS_WebApi._API_藥品資料
                 foreach (var item in medMap_StockClasses)
                 {
                     item.GUID = Guid.NewGuid().ToString();
-                    //if (item.效期.StringIsEmpty()) item.效期 = dateTime.ToDateTimeString('-');
+                    string value = item.Value;
+                    for (int i = 0; i < item.效期.Count; i++)
+                    {
+                        if (item.效期.Count != item.批號.Count && item.效期.Count != item.數量.Count) continue;
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+
+                        deviceBasic.新增效期(item.效期[i], item.批號[i], item.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
                 }
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
@@ -2447,88 +2456,36 @@ namespace HIS_WebApi._API_藥品資料
                     }
                     medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
                 }
-
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
                 SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
-
-                List<object[]> update = medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                List<object[]> objects = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
+                List<medMap_stockClass> db_medMap_StockClasses = objects.SQLToClass<medMap_stockClass>();
+                foreach (var item in db_medMap_StockClasses)
+                {
+                    medMap_stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
+                    if (medMap_stock_buff == null) continue;
+                    if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
+                    if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
+                    if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
+                    if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
+                    if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
+                    if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
+                    if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
+                    if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
+                    if (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count) continue;
+                    for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
+                    {
+                        string value = item.Value;                        
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
+                }               
+                List<object[]> update = db_medMap_StockClasses.ClassToSQL<medMap_stockClass>();
                 await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
-                // 回傳
-                returnData.Code = 200;
-                returnData.Data = medMap_StockClasses;
-                returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "update_medMap_stock";
-                returnData.Result = $"儲位寫入成功!";
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception ex)
-            {
-                returnData.Code = -200;
-                returnData.Result = ex.Message;
-                return returnData.JsonSerializationt(true);
-            }
-        }
-        /// <summary>
-        /// 新增效期
-        /// </summary>
-        /// <param name="returnData"></param>
-        /// <returns></returns>
-        [HttpPost("stock_add_Validity_period")]
-        public async Task<string> stock_add_Validity_period([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            try
-            {
-                // 解析參數
-                string GetVal(string key) =>
-                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
-                    ?.Split('=')[1];
-                string GUID = GetVal("GUID") ?? "";
-                string 效期 = GetVal("expiry_date") ?? "";
-                string 批號 = GetVal("lot") ?? "";
-                string 庫存 = GetVal("qty") ?? "";
                 
-                if (GUID.StringIsEmpty())
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"GUID不得為空值";
-                    return returnData.JsonSerializationt();
-                }
-                if ((庫存.StringToDouble() == -1 && 庫存 != "00") || (庫存.StringToDouble() < 0 && 庫存 != "00")) 
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"庫存須為正整數";
-                    return returnData.JsonSerializationt();
-                }
-
-                if (效期.Check_Date_String() == false) 
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"效期日期格式錯誤";
-                    return returnData.JsonSerializationt();
-                }
-
-                // DB 連線與資料表
-                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
-
-                List<object[]> data = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, GUID);
-                List<medMap_stockClass> medMap_StockClasses = data.SQLToClass<medMap_stockClass>();
-                if (medMap_StockClasses.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"查無此GUID資料({GUID})";
-                    return returnData.JsonSerializationt();
-                }
-                string value = medMap_StockClasses[0].Value;
-                if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
-                DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-                deviceBasic.新增效期(效期, 批號, 庫存);
-                medMap_StockClasses[0].Value = deviceBasic.JsonSerializationt();
-                object[] update = medMap_StockClasses[0].ClassToSQL<medMap_stockClass>();
-                await sQLControl_medMap_stock.UpdateRowAsync(null, update);
-                // 回傳
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
@@ -2543,25 +2500,78 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
+
         /// <summary>
-        /// 修改庫存(批號)
+        /// 依指定 <c>GUID</c>，從該藥品庫存的 <c>Value</c>（<c>DeviceBasic</c> 序列化資料）中
+        /// 清除一筆指定效期（有效日期）的紀錄。
         /// </summary>
-        /// <param name="returnData"></param>
-        /// <returns></returns>
-        [HttpPost("stock_update_Validity_period")]
+        /// <remarks>
+        /// <example>
+        /// <code>
+        /// 請求（Request）Body：
+        /// {
+        ///   "ValueAry": [ "b9f6d6e2-3a9b-4f2e-8d56-7c0f1f0a1a23", "2026-12-31" ],
+        /// }
+        ///
+        /// 成功回應（Success, Code=200）：
+        /// {
+        ///   "Code": 200,
+        ///   "Result": "清除效期成功!",
+        ///   "Data": [
+        ///     {
+        ///       "GUID": "b9f6d6e2-3a9b-4f2e-8d56-7c0f1f0a1a23",
+        ///       "Value": "{...更新後的 DeviceBasic JSON...}",
+        ///       "...其他欄位..."
+        ///     }
+        ///   ],
+        ///   "TimeTaken": "00:00:00.123",
+        ///   "Method": "stock_deldte_Validity_period"
+        /// }
+        ///
+        /// 失敗回應（參數錯誤, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "ValueAry應為[\"GUID\",\"效期\"] ",
+        ///   "TimeTaken": "00:00:00.002"
+        /// }
+        ///
+        /// 失敗回應（GUID 不存在, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "查無此GUID資料(bad-guid)",
+        ///   "TimeTaken": "00:00:00.005"
+        /// }
+        ///
+        /// 失敗回應（效期格式不正確, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "效期日期格式錯誤",
+        ///   "TimeTaken": "00:00:00.003"
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        /// <param name="returnData">
+        /// 請求物件。<c>ValueAry</c> 必須為長度 2 的陣列：<c>["GUID","效期"]</c>。
+        /// </param>
+        /// <returns>
+        /// <c>returnData</c> 的 JSON 字串：成功 <c>Code=200</c> 並回傳更新後資料；失敗 <c>Code=-200</c> 並含錯誤訊息。
+        /// </returns>
+
+        [HttpPost("stock_deldte_Validity_period")]
         public async Task<string> stock_update_Validity_period([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
             {
-                // 解析參數
-                string GetVal(string key) =>
-                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
-                    ?.Split('=')[1];
-                string GUID = GetVal("GUID") ?? "";
-                string 效期 = GetVal("expiry_date") ?? "";
-                string 批號 = GetVal("lot") ?? "";
-                string 庫存 = GetVal("qty") ?? "";
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry應為[\"GUID\",\"效期\"] ";
+                    return returnData.JsonSerializationt();
+                }
+                string GUID = returnData.ValueAry[0];
+                string 效期 = returnData.ValueAry[1];
 
                 if (GUID.StringIsEmpty())
                 {
@@ -2569,13 +2579,7 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"GUID不得為空值";
                     return returnData.JsonSerializationt();
                 }
-                if ((庫存.StringToDouble() == -1 && 庫存 != "00") || (庫存.StringToDouble() < 0 && 庫存 != "00"))
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"庫存須為正整數";
-                    return returnData.JsonSerializationt();
-                }
-
+              
                 if (效期.Check_Date_String() == false)
                 {
                     returnData.Code = -200;
@@ -2598,15 +2602,15 @@ namespace HIS_WebApi._API_藥品資料
                 string value = medMap_StockClasses[0].Value;
                 if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
                 DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-                deviceBasic.效期庫存覆蓋(效期, 批號, 庫存);
+                deviceBasic.清除效期(效期);
                 medMap_StockClasses[0].Value = deviceBasic.JsonSerializationt();
                 object[] update = medMap_StockClasses[0].ClassToSQL<medMap_stockClass>();
                 await sQLControl_medMap_stock.UpdateRowAsync(null, update);
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "update_medMap_stock";
-                returnData.Result = $"儲位寫入成功!";
+                returnData.Method = "stock_deldte_Validity_period";
+                returnData.Result = $"清除效期成功!";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)

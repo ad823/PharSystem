@@ -358,7 +358,6 @@ C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\Hospi
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\Basic.dll
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\CallBackUI.dll
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\cjwdev.windowsapi.dll
-C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\CSkin.dll
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\DeltaMotor485.dll
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\DrawingClass.dll
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\bin\Debug\FontAwesome.Sharp.dll
