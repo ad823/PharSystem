@@ -20,6 +20,8 @@ namespace HIS_WebApi
     [ApiController]
     public class device_control : Controller
     {
+        public static string LabelRenderer_Url = "http://127.0.0.1:8700/render";
+
         private int rowsLED_port = 29001;
         private int EPD_port = 29000;
         public enum DeviceType
@@ -254,6 +256,7 @@ namespace HIS_WebApi
             }       
         }
 
+
         [Route("print_paper")]
         [HttpPost]
         public string print_paper(returnData returnData)
@@ -262,56 +265,51 @@ namespace HIS_WebApi
             {
                 returnData.Method = "print_paper";
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
+
+
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting("220.135.128.247");
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "儲位資料");
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料";
+                    return returnData.JsonSerializationt();
+                }
+
                 // 解析參數
                 string GetVal(string key) =>
                    returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
                     ?.Split('=')[1];
                 string ip = GetVal("ip") ?? "";
-                string start_num = GetVal("start_num") ?? "";
-                string end_num = GetVal("end_num") ?? "";
-                string color = GetVal("color") ?? "";
-                string lightness = GetVal("lightness") ?? "";
-                string device_type = GetVal("device_type") ?? "";
-                double _lightness = 0.9;
-                if (lightness.StringIsDouble()) _lightness = lightness.StringToDouble();
                 if (ip.Check_IP_Adress() == false)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"ip 檢核失敗";
                     return returnData.JsonSerializationt(true);
                 }
-                if (device_type.Contains("EPD420G") == true)
-                {
-                    UDP_Class uDP_Class = new UDP_Class(ip, EPD_port, false);
-                    Storage storage = storages.Where(x => x.IP == ip).FirstOrDefault();
-                    if (storage == null)
-                    {
-                        storage = new Storage(ip, EPD_port);
-                        storages.Add(storage);
-                    }
 
-                    bool flag = false;
-                    if (flag == false)
-                    {
-                        returnData.Code = -200;
-                        returnData.TimeTaken = myTimerBasic.ToString();
-                        returnData.Result = $"裝置觸發失敗";
-                        return returnData.JsonSerializationt(true);
-                    }
-                    else
-                    {
-                        returnData.Code = 200;
-                        returnData.TimeTaken = myTimerBasic.ToString();
-                        returnData.Result = $"裝置觸發成功";
-                        return returnData.JsonSerializationt(true);
-                    }
-                }
-                else
+                string tableName = "epd266_jsonstring";
+                string Server = sys_serverSettingClasses[0].Server;
+                string DB = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+
+                SQLControl sQLControl_device = new SQLControl(Server, DB, tableName, UserName, Password, Port, MySqlSslMode.None);
+                Storage storage = StorageMethod.SQL_GetStorageByIP(sQLControl_device, ip);
+
+                if (storage == null)
                 {
-                    returnData.Code = 200;
-                    returnData.Result = $"請傳入有效 device_type";
-                    return returnData.JsonSerializationt(true);
+                    returnData.Code = -200;
+                    returnData.Result = $"查無資料";
+                    return returnData.JsonSerializationt();
                 }
+                returnData.Data = storage;
+                string json_in = returnData.JsonSerializationt();
+                string json_out = Basic.Net.WEBApiPostJson(LabelRenderer_Url, json_in);
+
+                return returnData.JsonSerializationt(true);
+          
 
             }
             catch (Exception ex)

@@ -1058,9 +1058,11 @@ namespace HIS_WebApi
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        static public List<sys_serverSettingClass> GetAllServerSetting()
+        static public List<sys_serverSettingClass> GetAllServerSetting(string server = "")
         {
-            SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
+            string _server = Server;
+            if (server.StringIsEmpty() == false) _server = server;
+            SQLControl sQLControl = new SQLControl(_server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
             List<object[]> list_value = sQLControl.GetAllRows(null);
 
             List<sys_serverSettingClass> sys_serverSettingClasses = list_value.SQLToClass<sys_serverSettingClass, enum_sys_serverSetting>();
