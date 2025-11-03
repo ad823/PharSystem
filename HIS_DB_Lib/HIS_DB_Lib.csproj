@@ -154,6 +154,7 @@
     <Compile Include="系統\temperatureClass.cs" />
     <Compile Include="系統\webTrafficClass.cs" />
     <Compile Include="藥品基本檔\medClass.cs" />
+    <Compile Include="藥品基本檔\medClassifyClass.cs" />
     <Compile Include="藥品基本檔\medConfigClass.cs" />
     <Compile Include="藥品基本檔\medCouldClass.cs" />
     <Compile Include="藥品基本檔\medDrugstoreClass.cs" />
