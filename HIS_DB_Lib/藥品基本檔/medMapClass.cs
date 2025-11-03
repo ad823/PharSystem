@@ -329,7 +329,7 @@ namespace HIS_DB_Lib
         [JsonPropertyName("serverType")]
         public string serverType { get; set; }
         public List<medMap_boxClass> medMapBox { get; set; }
-        public List<medMap_stockClass> medMapStock { get; set; }
+        public List<stockClass> medMapStock { get; set; }
         public RowsLED rowsLED { get; set; }
 
     }
@@ -445,8 +445,8 @@ namespace HIS_DB_Lib
     /// 貨品表資料結構  
     /// 用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
     /// </summary>
-    [Description("medMap_stock")]
-    public class medMap_stockClass
+    [Description("stock")]
+    public class stockClass
     {
         /// <summary>
         /// 唯一識別碼 (GUID)
@@ -533,35 +533,44 @@ namespace HIS_DB_Lib
         /// </summary>
         [Description("VARCHAR,1000,NONE")]
         public string Value { get; set; }
+        /// <summary>
+        /// Classify_GUID
+        /// </summary>
+        [Description("VARCHAR,50,NONE")]
+        public string Classify_GUID { get; set; }
+        /// <summary>
+        /// Classify
+        /// </summary>
+        public medClassifyClass Classify { get; set; }
     }
 
     public static class medMapMethod
     {
-        static public Dictionary<string, List<medMap_stockClass>> ToDictByShelfGUID(this List<medMap_stockClass> stockClasses)
+        static public Dictionary<string, List<stockClass>> ToDictByShelfGUID(this List<stockClass> stockClasses)
         {
-            Dictionary<string, List<medMap_stockClass>> dictionary = new Dictionary<string, List<medMap_stockClass>>();
+            Dictionary<string, List<stockClass>> dictionary = new Dictionary<string, List<stockClass>>();
             foreach (var item in stockClasses)
             {
-                if (dictionary.TryGetValue(item.Shelf_GUID, out List<medMap_stockClass> list))
+                if (dictionary.TryGetValue(item.Shelf_GUID, out List<stockClass> list))
                 {
                     list.Add(item);
                 }
                 else
                 {
-                    dictionary[item.Shelf_GUID] = new List<medMap_stockClass> { item };
+                    dictionary[item.Shelf_GUID] = new List<stockClass> { item };
                 }
             }
             return dictionary;
         }
-        static public List<medMap_stockClass> GetByShelfGUID(this Dictionary<string, List<medMap_stockClass>> dict, string Shelf_GUID)
+        static public List<stockClass> GetByShelfGUID(this Dictionary<string, List<stockClass>> dict, string Shelf_GUID)
         {
-            if (dict.TryGetValue(Shelf_GUID, out List<medMap_stockClass> stockClasses))
+            if (dict.TryGetValue(Shelf_GUID, out List<stockClass> stockClasses))
             {
                 return stockClasses;
             }
             else
             {
-                return new List<medMap_stockClass>();
+                return new List<stockClass>();
             }
         }
         static public Dictionary<string, List<medMap_shelfClass>> ToDictByMasterGUID(this List<medMap_shelfClass> shelfClasses)

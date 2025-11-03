@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace HIS_DB_Lib
 {
+    public enum enum_medClassify
+    {
+        GUID,
+        分類名稱,
+        安全量天數,
+        基準量天數
+    }
     /// <summary>
     /// 藥品安全量/基準量分類 
     /// 用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
@@ -39,5 +46,8 @@ namespace HIS_DB_Lib
         [JsonPropertyName("standard_day")]
         public string 基準量天數 { get; set; }
 
+        
+
     }
+    
 }

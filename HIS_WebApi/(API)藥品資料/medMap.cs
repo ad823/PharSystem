@@ -1543,11 +1543,11 @@ namespace HIS_WebApi._API_藥品資料
                     returnData_get_stock_by_shelf_GUID.TimeTaken = myTimerBasic.ToString();
                     return returnData_get_stock_by_shelf_GUID.JsonSerializationt(true);
                 }
-                List<medMap_stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<medMap_stockClass>>();
-                Dictionary<string, List<medMap_stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
+                List<stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<stockClass>>();
+                Dictionary<string, List<stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
                 foreach (var item in medMap_shelfClass)
                 {
-                    List<medMap_stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
+                    List<stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
                     
                     item.medMapStock = medMap_stock;
                 }
@@ -1610,11 +1610,11 @@ namespace HIS_WebApi._API_藥品資料
                     returnData_get_stock_by_shelf_GUID.TimeTaken = myTimerBasic.ToString();
                     return returnData_get_stock_by_shelf_GUID.JsonSerializationt(true);
                 }
-                List<medMap_stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<medMap_stockClass>>();
-                Dictionary<string, List<medMap_stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
+                List<stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<stockClass>>();
+                Dictionary<string, List<stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
                 foreach (var item in medMap_ShelfClasses)
                 {
-                    List<medMap_stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
+                    List<stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
                     item.medMapStock = medMap_stock;
                 }
                 Dictionary<string, List<medMap_shelfClass>> dic_shelf = medMap_ShelfClasses.ToDictByMasterGUID();
@@ -2261,7 +2261,7 @@ namespace HIS_WebApi._API_藥品資料
         /// </summary>
         /// <remarks>
         /// 本 API 會：
-        /// 1. 驗證 <c>returnData.Data</c> 是否存在，並嘗試轉為 <c>List&lt;medMap_stockClass&gt;</c>；若失敗則再嘗試單筆 <c>medMap_stockClass</c>。  
+        /// 1. 驗證 <c>returnData.Data</c> 是否存在，並嘗試轉為 <c>List&lt;stockClass&gt;</c>；若失敗則再嘗試單筆 <c>stockClass</c>。  
         /// 2. 為每一筆資料自動產生 <c>GUID</c>。  
         /// 3. 以批次方式寫入資料表 <c>medMap_stock</c>。  
         ///
@@ -2272,7 +2272,7 @@ namespace HIS_WebApi._API_藥品資料
         ///
         /// 【常見驗證錯誤】
         /// - <c>returnData.Data</c> 為空。  
-        /// - <c>returnData.Data</c> 轉型失敗（非 <c>medMap_stockClass</c> / <c>List&lt;medMap_stockClass&gt;</c>）。  
+        /// - <c>returnData.Data</c> 轉型失敗（非 <c>stockClass</c> / <c>List&lt;stockClass&gt;</c>）。  
         /// - 必填欄位為空（例如 <c>Shelf_GUID</c>、<c>位置</c>、<c>藥碼</c>）。  
         ///
         /// 【單筆請求範例】
@@ -2289,7 +2289,7 @@ namespace HIS_WebApi._API_藥品資料
         ///   },
         ///   "Value": "",
         ///   "ValueAry": [],
-        ///   "TableName": "medMap_stock",
+        ///   "TableName": "stock",
         ///   "ServerName": "Main",
         ///   "ServerType": "網頁",
         ///   "TimeTaken": ""
@@ -2321,7 +2321,7 @@ namespace HIS_WebApi._API_藥品資料
         ///   ],
         ///   "Value": "",
         ///   "ValueAry": [],
-        ///   "TableName": "medMap_stock",
+        ///   "TableName": "stock",
         ///   "ServerName": "Main",
         ///   "ServerType": "網頁",
         ///   "TimeTaken": ""
@@ -2372,7 +2372,7 @@ namespace HIS_WebApi._API_藥品資料
         /// 備註：本 API 僅新增資料，不負責檢查 <c>位置</c> 重複或唯一性；若需要「同一 <c>Shelf_GUID</c> + <c>位置</c> 不可重複」之約束，請在資料庫層加上複合唯一鍵或在呼叫前先自檢。
         /// </remarks>
         /// <param name="returnData">
-        /// 請求包裝物件；其中 <c>Data</c> 可為 <c>medMap_stockClass</c>（單筆）或 <c>List&lt;medMap_stockClass&gt;</c>（多筆）。
+        /// 請求包裝物件；其中 <c>Data</c> 可為 <c>stockClass</c>（單筆）或 <c>List&lt;stockClass&gt;</c>（多筆）。
         /// </param>
         /// <returns>
         /// <para>JSON 字串；欄位說明：</para>
@@ -2396,17 +2396,17 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                List<medMap_stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<medMap_stockClass>>();
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
                 if (medMap_StockClasses == null)
                 {
-                    medMap_stockClass medMap_stock = returnData.Data.ObjToClass<medMap_stockClass>();
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
                     if (medMap_stock == null)
                     {
                         returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為medMap_stockClass";
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
                         return returnData.JsonSerializationt();
                     }
-                    medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
                 }
                 DateTime dateTime = DateTime.Now;
                 foreach (var item in medMap_StockClasses)
@@ -2425,9 +2425,9 @@ namespace HIS_WebApi._API_藥品資料
                 }
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
 
-                List<object[]> add = medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.AddRowsAsync(null, add);
                 // 回傳
                 returnData.Code = 200;
@@ -2456,36 +2456,38 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                List<medMap_stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<medMap_stockClass>>();
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
                 if (medMap_StockClasses == null)
                 {
-                    medMap_stockClass medMap_stock = returnData.Data.ObjToClass<medMap_stockClass>();
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
                     if (medMap_stock == null)
                     {
                         returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為medMap_stockClass";
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
                         return returnData.JsonSerializationt();
                     }
-                    medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
                 }
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> objects = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
-                List<medMap_stockClass> db_medMap_StockClasses = objects.SQLToClass<medMap_stockClass>();
+                List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
                 foreach (var item in db_medMap_StockClasses)
                 {
-                    medMap_stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
+                    stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
                     if (medMap_stock_buff == null) continue;
                     if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
                     if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
                     if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
                     if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
                     if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
+                    if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
+
                     if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
                     if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
                     if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
-                    if (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count) continue;
+                    if (medMap_stock_buff.效期 == null || medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count) continue;
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
                         string value = item.Value;                        
@@ -2495,11 +2497,11 @@ namespace HIS_WebApi._API_藥品資料
                         item.Value = deviceBasic.JsonSerializationt();
                     }
                 }               
-                List<object[]> update = db_medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
                 
                 returnData.Code = 200;
-                returnData.Data = medMap_StockClasses;
+                returnData.Data = db_medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "update_medMap_stock";
                 returnData.Result = $"儲位寫入成功!";
@@ -2571,7 +2573,7 @@ namespace HIS_WebApi._API_藥品資料
         /// </returns>
 
         [HttpPost("stock_deldte_Validity_period")]
-        public async Task<string> stock_update_Validity_period([FromBody] returnData returnData)
+        public async Task<string> stock_deldte_Validity_period([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -2601,10 +2603,10 @@ namespace HIS_WebApi._API_藥品資料
 
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
 
                 List<object[]> data = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, GUID);
-                List<medMap_stockClass> medMap_StockClasses = data.SQLToClass<medMap_stockClass>();
+                List<stockClass> medMap_StockClasses = data.SQLToClass<stockClass>();
                 if (medMap_StockClasses.Count == 0)
                 {
                     returnData.Code = -200;
@@ -2616,7 +2618,7 @@ namespace HIS_WebApi._API_藥品資料
                 DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
                 deviceBasic.清除效期(效期);
                 medMap_StockClasses[0].Value = deviceBasic.JsonSerializationt();
-                object[] update = medMap_StockClasses[0].ClassToSQL<medMap_stockClass>();
+                object[] update = medMap_StockClasses[0].ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.UpdateRowAsync(null, update);
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
@@ -2648,7 +2650,7 @@ namespace HIS_WebApi._API_藥品資料
 
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> delete = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, GUID);
 
                 if (delete.Count > 0) await sQLControl_medMap_stock.DeleteRowsAsync(null, delete);
@@ -2676,13 +2678,13 @@ namespace HIS_WebApi._API_藥品資料
         /// </param>
         /// <returns>
         /// 回傳以 <c>returnData.JsonSerializationt(true)</c> 序列化之 JSON 字串：
-        /// - <c>Code = 200</c> 代表成功，<c>Data</c> 內為 <c>medMap_stockClass</c> 陣列。<br/>
+        /// - <c>Code = 200</c> 代表成功，<c>Data</c> 內為 <c>stockClass</c> 陣列。<br/>
         /// - <c>Code = -200</c> 代表失敗，錯誤原因見 <c>Result</c>。
         /// </returns>
         /// <remarks>
         /// <para>
         /// 功能說明：從資料表 <c>medMap_stock</c> 讀取全部資料，並以陣列回傳。<br/>
-        /// 欄位說明（對應 <c>medMap_stockClass</c>）：<br/>
+        /// 欄位說明（對應 <c>stockClass</c>）：<br/>
         /// - <c>GUID</c>：唯一識別碼。<br/>
         /// - <c>shelf_guid</c>：層架 GUID。<br/>
         /// - <c>location</c>：位置座標字串（如 <c>"0,1"</c>；允許空字串）。<br/>
@@ -2788,17 +2790,17 @@ namespace HIS_WebApi._API_藥品資料
         /// </para>
         /// </remarks>
         [HttpPost("get_stock")]
-        public async Task<string> get_medMap_stock([FromBody] returnData returnData)
+        public async Task<string> get_stock([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
             {
 
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
 
                 List<object[]> rows = await sQLControl_medMap_stock.GetAllRowsAsync(null);
-                List<medMap_stockClass> medMap_StockClasses = rows.SQLToClass<medMap_stockClass>();
+                List<stockClass> medMap_StockClasses = rows.SQLToClass<stockClass>();
                 
                 medMap_StockClasses = get_stockInfo(medMap_StockClasses);
 
@@ -2838,9 +2840,9 @@ namespace HIS_WebApi._API_藥品資料
                 string[] shelf_GUID = returnData.ValueAry[0].Split(";").Distinct().ToArray();
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-                SQLControl sQLControl = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> objects = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medMap_stock.shelf_GUID, shelf_GUID);
-                List<medMap_stockClass> medMap_StockClasses = objects.SQLToClass<medMap_stockClass>();
+                List<stockClass> medMap_StockClasses = objects.SQLToClass<stockClass>();
                 medMap_StockClasses = get_stockInfo(medMap_StockClasses);
 
                 returnData.Code = 200;
@@ -2878,7 +2880,7 @@ namespace HIS_WebApi._API_藥品資料
                 string[] shelf_GUID = returnData.ValueAry[0].Split(";").Distinct().ToArray();
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-                SQLControl sQLControl = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> delete = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medMap_stock.shelf_GUID, shelf_GUID);
                 if (delete.Count > 0) await sQLControl.DeleteRowsAsync(null, delete);
 
@@ -2974,7 +2976,7 @@ namespace HIS_WebApi._API_藥品資料
                         if (sub_section.shelf == null || sub_section.shelf.Count == 0) continue;
                         foreach (var shelf in sub_section.shelf)
                         {
-                            List<medMap_stockClass> medMap_Stocks_buff = shelf.medMapStock.Where(x => x.藥碼 == 藥碼).ToList();
+                            List<stockClass> medMap_Stocks_buff = shelf.medMapStock.Where(x => x.藥碼 == 藥碼).ToList();
                             shelf.medMapStock = medMap_Stocks_buff;
                             if (medMap_Stocks_buff.Count > 0) medMap_ShelfClasses.Add(shelf);
                         }
@@ -3184,7 +3186,7 @@ namespace HIS_WebApi._API_藥品資料
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_drawer()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_box()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medSize()));
-            tables.Add(MethodClass.CheckCreatTable<medMap_stockClass>(sys_serverSettingClasses[0]));
+            tables.Add(MethodClass.CheckCreatTable<stockClass>(sys_serverSettingClasses[0]));
 
             return tables.JsonSerializationt(true);
         }
@@ -3273,8 +3275,9 @@ namespace HIS_WebApi._API_藥品資料
             returnData.ValueAry.Add(code);
             string result = await get_med_by_code_name_type(returnData);
             return await result.JsonDeserializetAsync<returnData>();
-        }             
-        private List<medMap_stockClass> get_stockInfo(List<medMap_stockClass> medMap_stockClasses)
+        }
+
+        private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
         {
             foreach (var stock in medMap_stockClasses)
             {
