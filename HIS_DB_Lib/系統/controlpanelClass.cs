@@ -103,6 +103,9 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("end_time")]
         public string 公告結束時間 { get; set; }
+        public string code { get; set; }
+        public string name { get; set; }
+
 
         public class ICP_By_ct_time : IComparer<controlpanelClass>
         {

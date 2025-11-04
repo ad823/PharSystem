@@ -1,6 +1,7 @@
 ﻿using Basic;
 using HIS_DB_Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using MySql.Data.MySqlClient;
 using NPOI.SS.Formula.Functions;
 using SQLUI;
@@ -392,7 +393,7 @@ namespace HIS_WebApi._API_系統
             }
         }
         /// <summary>
-        /// 取得公告時間區間內的資料(缺貨通知)
+        /// 取得公告時間區間內的資料(藥品通知)
         /// </summary>
         /// <remarks>
         /// <code>
@@ -431,7 +432,12 @@ namespace HIS_WebApi._API_系統
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command, ct);
                 List<controlpanelClass> bbsClasses = objects.SQLToClass<controlpanelClass, enum_controlpanel>();
                 bbsClasses.Sort(new controlpanelClass.ICP_By_ct_time());
-
+                foreach(var item in bbsClasses)
+                {
+                    List<string> value = item.內容.Split(";").ToList();
+                    item.name = value.Count >= 2 ? value[0] : "";
+                    item.code = value.Count >= 2 ? value[1] : "";
+                }
                 returnData.Code = 200;
                 returnData.Data = bbsClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();

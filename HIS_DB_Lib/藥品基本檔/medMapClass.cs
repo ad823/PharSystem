@@ -129,17 +129,13 @@ namespace HIS_DB_Lib
     {
         GUID,
         shelf_GUID,
-        device_type,
-        device_Type1,
         位置,
         IP,
+        device_type,
         燈條亮燈位置,
         藥碼,
         藥名,
         料號,
-        批號,
-        效期,
-        數量
     }
     /// <summary>
     /// 藥品地圖_父容器
@@ -542,6 +538,10 @@ namespace HIS_DB_Lib
         /// Classify
         /// </summary>
         public medClassifyClass Classify { get; set; }
+        /// <summary>
+        /// 雲端藥檔
+        /// </summary>
+        public medClass med_cloud { get; set; }
     }
 
     public static class medMapMethod
