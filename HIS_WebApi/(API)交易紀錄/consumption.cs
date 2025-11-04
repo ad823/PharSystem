@@ -19,6 +19,7 @@ using System.IO;
 using MyUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using System.Security;
 namespace HIS_WebApi
 {
     [Route("api/[controller]")]
@@ -27,7 +28,26 @@ namespace HIS_WebApi
     {
         static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return (Server, DB, UserName, Password, Port);
+           });
+        private static readonly Lazy<Task<sys_serverSettingClass>>
+           GetServerAsync = new Lazy<Task<sys_serverSettingClass>>(async () =>
+           {
+               sys_serverSettingClass sys_ServerSetting = await Method.GetServerAsync("Main", "網頁", "VM端");
+
+               if (sys_ServerSetting == null)
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return sys_ServerSetting;
+           });
         /// <summary>
         /// 取得庫存及消耗總量
         /// </summary>
@@ -792,6 +812,140 @@ namespace HIS_WebApi
                 return StatusCode(500, $"系統錯誤：{ex.Message}");
             }
 
+        }
+
+        [HttpPost("init")]
+        public async Task<string> init([FromBody] returnData returnData)
+        {
+            try
+            {
+                return await CheckCreatTable(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"{ex.Message}";
+                return returnData.JsonSerializationt();
+            }
+        }
+        [HttpPost("add")]
+        public async Task<string> add([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<consumptionClass> consumptionClasses = returnData.Data.ObjToClass<List<consumptionClass>>();
+                if (consumptionClasses == null)
+                {
+                    consumptionClass consumption = returnData.Data.ObjToClass<consumptionClass>();
+                    if (consumption == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"資料格式錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    consumptionClasses = new List<consumptionClass> { consumption };
+                }
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                List<consumptionClass> add = new List<consumptionClass>();
+                string time_now = DateTime.Now.ToDateTimeString();
+                foreach (var item in consumptionClasses)
+                {                  
+                    item.GUID = Guid.NewGuid().ToString();
+                    item.建立時間 = time_now;
+                    add.Add(item);
+                }
+                SQLControl sQLControl = new SQLControl(Server, DB, "consumption", UserName, Password, Port, SSLMode);
+
+                if (add.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"無有效資料可寫入!";
+                    return returnData.JsonSerializationt(true);
+                }
+                List<object[]> add_ = add.ClassToSQL<consumptionClass>();
+
+                await sQLControl.AddRowsAsync(null, add_);
+
+                returnData.Code = 200;
+                returnData.Data = add;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "add";
+                returnData.Result = $"建立成功，共{add.Count}筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        [HttpPost("get_by_start_end")]
+        public async Task<string> get_by_start_end([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry須包含[開始時間][結束時間]";
+                    return returnData.JsonSerializationt();
+                }
+                if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ServerName和ServerType不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                //if (returnData.ValueAry[0].Check_Date_String() || returnData.ValueAry[1].Check_Date_String())
+                //{
+                //    returnData.Code = -200;
+                //    returnData.Result = $"[開始時間][結束時間]格式錯誤";
+                //    return returnData.JsonSerializationt();
+                //}
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+
+                SQLControl sQLControl = new SQLControl(Server, DB, "consumption", UserName, Password, Port, SSLMode);
+                string command = $@"
+                    SELECT *
+                    FROM {DB}.consumption
+                    WHERE 建立時間 >= '{returnData.ValueAry[0]}' AND 建立時間 < '{returnData.ValueAry[1]}'";
+
+                List<object[]> objects = await sQLControl.WriteCommandAsync(command);
+                List<consumptionClass> medClassifies = objects.SQLToClass<consumptionClass>();
+
+
+                returnData.Code = 200;
+                returnData.Data = medClassifies;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_by_start_end";
+                returnData.Result = $"取得資料成功，共{medClassifies.Count}筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+
+                if (ex.Message == "Table 'dbvm.consumption' doesn't exist") init(returnData);
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+
+        private async Task<string> CheckCreatTable(returnData returnData)
+        {
+            sys_serverSettingClass sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+            List<Table> tables = new List<Table>();
+            tables.Add(MethodClass.CheckCreatTable<consumptionClass>(sys_ServerSettingClass));
+            return tables.JsonSerializationt(true);
         }
 
         public class ICP_交易記錄查詢 : IComparer<object[]>

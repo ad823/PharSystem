@@ -25,7 +25,7 @@ namespace HIS_DB_Lib
         /// <summary>
         /// GUID（唯一識別碼）
         /// </summary>
-        [Description("VARCHAR,50,INDEX")]
+        [Description("VARCHAR,50,PRIMARY")]
         public string GUID { get; set; }
         /// <summary>
         /// 分類名稱
