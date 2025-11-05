@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.35325.158
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "智能藥庫系統", "智能藥庫系統\智能藥庫系統.csproj", "{BAB61187-27DE-4337-ADF3-F84019E01A99}"
 EndProject
@@ -51,11 +51,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "智能RFID燒錄系統", "�
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "勤務傳送櫃", "勤務傳送櫃\勤務傳送櫃.csproj", "{8685E561-35B8-45D4-A21C-B465884C14FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_MQTT_Server", "batch_MQTT_Server\batch_MQTT_Server.csproj", "{78F6D9F8-3160-4BEB-B716-25E26EEE8C99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "batch_MQTT_Server", "batch_MQTT_Server\batch_MQTT_Server.csproj", "{78F6D9F8-3160-4BEB-B716-25E26EEE8C99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hcls_DB_Lib", "hcls_DB_Lib\hcls_DB_Lib.csproj", "{3C6256C8-CCD2-4BB1-9F74-182037EBC30C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FADC", "FADC\FADC.csproj", "{1C0C8311-C820-41DB-B4AE-F552024CA6B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_UDPlightRefrsh", "batch_UDPlightRefrsh\batch_UDPlightRefrsh.csproj", "{5A895251-0AAC-4DC0-8F91-68FE478C53C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +153,10 @@ Global
 		{1C0C8311-C820-41DB-B4AE-F552024CA6B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0C8311-C820-41DB-B4AE-F552024CA6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0C8311-C820-41DB-B4AE-F552024CA6B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A895251-0AAC-4DC0-8F91-68FE478C53C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A895251-0AAC-4DC0-8F91-68FE478C53C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A895251-0AAC-4DC0-8F91-68FE478C53C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A895251-0AAC-4DC0-8F91-68FE478C53C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
