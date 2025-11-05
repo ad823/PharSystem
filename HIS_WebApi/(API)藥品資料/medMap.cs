@@ -1514,8 +1514,8 @@ namespace HIS_WebApi._API_藥品資料
                 foreach (var item in medMap_shelfClass)
                 {
                     
-                    RowsLED rowsLED = deviceApiClass.GetRowsLED_ByIP(API_server, item.serverName, item.serverType, item.燈條IP);
-                    if (rowsLED != null) item.rowsLED = rowsLED;
+                    //RowsLED rowsLED = deviceApiClass.GetRowsLED_ByIP(API_server, item.serverName, item.serverType, item.燈條IP);
+                    //if (rowsLED != null) item.rowsLED = rowsLED;
                     
                    
                     returnData returnData_get_medMap_box_by_Master_GUID = await get_medMap_box_by_Master_GUID(item.GUID);

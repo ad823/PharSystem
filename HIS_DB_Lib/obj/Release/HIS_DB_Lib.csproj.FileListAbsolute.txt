@@ -67,7 +67,6 @@ C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\bin\Release\System.Thr
 C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\bin\Release\System.ValueTuple.xml
 C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.AssemblyReference.cache
 C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CoreCompileInputs.cache
-C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
 C:\Users\user\source\repos\PharSystem\HIS_DB_Lib\bin\Release\HIS_DB_Lib.dll.config
@@ -142,3 +141,4 @@ C:\Users\user\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.C
 C:\Users\user\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\user\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\user\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
+C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CopyComplete
