@@ -15,6 +15,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -32,6 +33,16 @@ namespace HIS_WebApi
     {
         static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
+        private static readonly Lazy<Task<sys_serverSettingClass>>
+          GetServerAsync = new Lazy<Task<sys_serverSettingClass>>(async () =>
+          {
+              sys_serverSettingClass sys_ServerSetting = await Method.GetServerAsync("Main", "網頁", "藥檔資料");
+
+              if (sys_ServerSetting == null)
+                  throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+              return sys_ServerSetting;
+          });
 
         /// <summary>
         /// 初始化資料庫
@@ -438,17 +449,10 @@ namespace HIS_WebApi
             returnData.RequestUrl = Method.GetRequestPath(HttpContext, includeQuery: false);
             try
             {
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料");
-                if (sys_serverSettingClasses_buf.Count == 0)
-                {
-                    if (sys_serverSettingClasses.Count == 0)
-                    {
-                        returnData.Code = -200;
-                        returnData.Result = $"找無Server資料!";
-                        return returnData.JsonSerializationt();
-                    }
-                }
+                sys_serverSettingClass sys_serverSettingClasses = await GetServerAsync.Value;
+
+                             
+                
                 if (returnData.ValueAry.Count != 1)
                 {
                     returnData.Code = -200;
@@ -457,7 +461,7 @@ namespace HIS_WebApi
                 }
 
                 string[] Codes = returnData.ValueAry[0].Split(",");
-                List<medClass> medClasses = Get_med_cloud(sys_serverSettingClasses_buf[0], Codes);
+                List<medClass> medClasses = Get_med_cloud(sys_serverSettingClasses, Codes);
                 if (medClasses == null)
                 {
                     returnData.Code = -200;
@@ -2803,7 +2807,7 @@ namespace HIS_WebApi
             try
             {
                 sys_serverSettingClass sys_serverSettingClasses = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "本地端");
-                sys_serverSettingClass sys_serverSettingClasses_med = await HIS_WebApi.Method.GetServerAsync("Main", "網頁", "藥檔資料");
+                sys_serverSettingClass sys_serverSettingClasses_med = await GetServerAsync.Value;
                 if (sys_serverSettingClasses == null || sys_serverSettingClasses_med == null)
                 {
                     returnData.Code = -200;
@@ -4228,7 +4232,9 @@ namespace HIS_WebApi
                 List<object[]> list_med = new List<object[]>();
 
                 string sqlList = string.Join(", ", Codes.Select(code => $"'{code}'"));
-                string command = $"select * from {DB}.{"medicine_page_cloud"} where UPPER({enum_雲端藥檔.藥品碼.GetEnumName()}) in ({sqlList});";
+                //string command = $"select * from {DB}.{"medicine_page_cloud"} where UPPER({enum_雲端藥檔.藥品碼.GetEnumName()}) in ({sqlList});";
+                string command = $"select * from {DB}.{"medicine_page_cloud"} where {enum_雲端藥檔.藥品碼.GetEnumName()} in ({sqlList});";
+
                 DataTable dataTable = sQLControl_med.WtrteCommandAndExecuteReader(command);
                 list_med = dataTable.DataTableToRowList();
 
@@ -4326,6 +4332,16 @@ namespace HIS_WebApi
                 string 藥品碼_1 = y[(int)enum_藥品資料_藥檔資料.藥品碼].ObjectToString();
                 return 藥品碼_0.CompareTo(藥品碼_1);
             }
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_med_clouds_by_codes(string[] codes)
+        {
+            returnData returnData = new returnData();
+            string code = string.Join(",", codes);
+            returnData.ValueAry.Add(code);
+            string result = await get_med_clouds_by_codes(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
         }
     }
 }

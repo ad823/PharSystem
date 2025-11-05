@@ -86,8 +86,7 @@
       <HintPath>..\0.DLL\DrawingClass.dll</HintPath>
     </Reference>
     <Reference Include="HIS_DB_Lib">
-      <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\inventorySystem\0.DLL\HIS_DB_Lib.dll</HintPath>
     </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>

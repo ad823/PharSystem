@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,16 @@ namespace HIS_WebApi._API_藥品資料
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
         static private string API_server = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return (Server, DB, UserName, Password, Port);
+           });
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "藥品地圖物件", typeof(medMapClass))]
 
 
@@ -581,6 +592,7 @@ namespace HIS_WebApi._API_藥品資料
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("update_medMap_section")]
+
         public async Task<string> update_medMap_section([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -610,7 +622,11 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_section_buff == null) continue;
                     if (medMap_section_buff.位置.StringIsEmpty() == false && medMap_section_buff.位置.Split(",").Count() == 2) item.位置 = medMap_section_buff.位置;
                     if (medMap_section_buff.絕對位置.StringIsEmpty() == false && medMap_section_buff.絕對位置.Split(",").Count() == 2) item.絕對位置 = medMap_section_buff.絕對位置;
-
+                    if (medMap_section_buff.Master_GUID.StringIsEmpty() == false) item.Master_GUID = medMap_section_buff.Master_GUID;
+                    if (medMap_section_buff.名稱.StringIsEmpty() == false) item.名稱 = medMap_section_buff.名稱;
+                    if (medMap_section_buff.燈棒IP.StringIsEmpty() == false) item.燈棒IP = medMap_section_buff.燈棒IP;
+                    if (medMap_section_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_section_buff.device_type;
+                    if (medMap_section_buff.type.StringIsEmpty() == false) item.type = medMap_section_buff.type;
                 }
 
                 List<object[]> update = medMaps_section.ClassToSQL<medMap_sectionClass, enum_medMap_section>();
@@ -734,6 +750,72 @@ namespace HIS_WebApi._API_藥品資料
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "get_section_by_GUID";
                 returnData.Result = $"取得子容器資料成功，共{medMap_sectionClass.Count}筆!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        [HttpPost("get_section_by_IP")]
+        public async Task<string> get_section_by_IP([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                if (returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry資料錯誤，須為 [\"IP\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string IP = returnData.ValueAry[0];
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                string command = @$"SELECT sec.*
+                    FROM dbvm.stock AS s
+                    JOIN dbvm.medmap_shelf AS sh
+                    ON sh.GUID = s.shelf_GUID
+                    JOIN dbvm.medmap_sub_section AS sub
+                    ON sub.GUID = sh.Master_GUID
+                    JOIN dbvm.medmap_section AS sec
+                    ON sec.GUID = sub.Master_GUID
+                    WHERE s.IP = '{IP}';";
+
+                SQLControl sQLControl = new SQLControl(Server, DB, "medMap_section", UserName, Password, Port, SSLMode);
+                List<object[]> objects = await sQLControl.WriteCommandAsync(command);
+                if (objects.Count == 0)
+                {
+                    command = @$"SELECT sec.*
+                    FROM dbvm.medmap_shelf AS sh
+                    JOIN dbvm.medmap_sub_section AS sub
+                    ON sub.GUID = sh.Master_GUID
+                    JOIN dbvm.medmap_section AS sec
+                    ON sec.GUID = sub.Master_GUID
+                    WHERE sh.燈條IP = '{IP}';";
+                    objects = await sQLControl.WriteCommandAsync(command);
+                    if (objects.Count == 0)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"查無對應SECTION";
+                        return returnData.JsonSerializationt();
+                    }
+                }
+                
+                medMap_sectionClass medMap_sectionClass = objects.SQLToClass<medMap_sectionClass>()[0];
+
+                returnData.Code = 200;
+                returnData.Data = medMap_sectionClass;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_section_by_GUID";
+                returnData.Result = $"取得子容器資料成功!";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
@@ -959,7 +1041,6 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
-
         /// <summary>
         /// 以GUID取得子容器資料
         /// </summary>
@@ -1131,7 +1212,6 @@ namespace HIS_WebApi._API_藥品資料
         /// <returns></returns>
         [HttpPost("add_medMap_shelf")]
         [HttpPost("add_shelf")]
-
         public async Task<string> add_shelf([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -1163,35 +1243,12 @@ namespace HIS_WebApi._API_藥品資料
 
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl_medMap_shelf = new SQLControl(Server, DB, "medMap_shelf", UserName, Password, Port, SSLMode);
-                //string commnand = @$"SELECT * FROM {DB}.medMap_section 
-                //                    WHERE Master_GUID = '{medMap_ShelfClass.Master_GUID}'
-                //                    AND 位置 = '{medMap_ShelfClass.位置}';";
-                //List<object[]> objects = await sQLControl_medMap_shelf.WriteCommandAsync(commnand);
-                //List<medMap_shelfClass> medMap_ShelfClasses = objects.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
-                //if(medMap_ShelfClasses.Count > 0)
-                //{                    
-                //    returnData.Code = -200;
-                //    returnData.Result = $"位置已重複!";
-                //    return returnData.JsonSerializationt();                    
-                //}
+               
 
                 List<object[]> add = medMap_ShelfClasses.ClassToSQL<medMap_shelfClass, enum_medMap_shelf>();
                 await sQLControl_medMap_shelf.AddRowsAsync(null, add);
 
-                //string guid = medMap_ShelfClasses.Select(x => x.GUID).ToArray();
-                //string guid = string.Join(";", medMap_ShelfClasses.Select(x => x.GUID).ToArray());
-                //returnData returnData_get_stock_by_shelf_GUID = await get_stock_by_shelf_GUID(guid);
-                //if (returnData_get_stock_by_shelf_GUID == null || returnData_get_stock_by_shelf_GUID.Data == null)
-                //{
-                //    returnData_get_stock_by_shelf_GUID.Method = "add_medMap_shelf";
-                //    returnData_get_stock_by_shelf_GUID.TimeTaken = myTimerBasic.ToString();
-                //    return returnData_get_stock_by_shelf_GUID.JsonSerializationt(true);
-                //}
-                //List<medMap_stockClass> medMap_StockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<medMap_stockClass>>();
-                //if (medMap_StockClasses.Count == 0)
-                //{
-
-                //}
+               
 
                 returnData.Code = 200;
                 returnData.Data = medMap_ShelfClasses;
@@ -1268,6 +1325,8 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_shelfClass_buff.高度.StringIsEmpty() == false) item.高度 = medMap_shelfClass_buff.高度;
                     if (medMap_shelfClass_buff.燈條IP.StringIsEmpty() == false) item.燈條IP = medMap_shelfClass_buff.燈條IP;
                     if (medMap_shelfClass_buff.名稱.StringIsEmpty() == false) item.名稱 = medMap_shelfClass_buff.名稱;
+                    if (medMap_shelfClass_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_shelfClass_buff.device_type;
+
 
                     if (medMap_shelfClass_buff.Master_GUID.StringIsEmpty() == false && medMap_shelfClass_buff.serverName.StringIsEmpty() == false && medMap_shelfClass_buff.serverType.StringIsEmpty() == false)
                     {
@@ -1407,6 +1466,7 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
+        
         /// <summary>
         /// 以Master_GUID取得層架資料
         /// </summary>
@@ -1454,8 +1514,8 @@ namespace HIS_WebApi._API_藥品資料
                 foreach (var item in medMap_shelfClass)
                 {
                     
-                    RowsLED rowsLED = deviceApiClass.GetRowsLED_ByIP(API_server, item.serverName, item.serverType, item.燈條IP);
-                    if (rowsLED != null) item.rowsLED = rowsLED;
+                    //RowsLED rowsLED = deviceApiClass.GetRowsLED_ByIP(API_server, item.serverName, item.serverType, item.燈條IP);
+                    //if (rowsLED != null) item.rowsLED = rowsLED;
                     
                    
                     returnData returnData_get_medMap_box_by_Master_GUID = await get_medMap_box_by_Master_GUID(item.GUID);
@@ -1483,11 +1543,11 @@ namespace HIS_WebApi._API_藥品資料
                     returnData_get_stock_by_shelf_GUID.TimeTaken = myTimerBasic.ToString();
                     return returnData_get_stock_by_shelf_GUID.JsonSerializationt(true);
                 }
-                List<medMap_stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<medMap_stockClass>>();
-                Dictionary<string, List<medMap_stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
+                List<stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<stockClass>>();
+                Dictionary<string, List<stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
                 foreach (var item in medMap_shelfClass)
                 {
-                    List<medMap_stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
+                    List<stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
                     
                     item.medMapStock = medMap_stock;
                 }
@@ -1550,11 +1610,11 @@ namespace HIS_WebApi._API_藥品資料
                     returnData_get_stock_by_shelf_GUID.TimeTaken = myTimerBasic.ToString();
                     return returnData_get_stock_by_shelf_GUID.JsonSerializationt(true);
                 }
-                List<medMap_stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<medMap_stockClass>>();
-                Dictionary<string, List<medMap_stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
+                List<stockClass> medMap_stockClasses = returnData_get_stock_by_shelf_GUID.Data.ObjToClass<List<stockClass>>();
+                Dictionary<string, List<stockClass>> dic_stock = medMap_stockClasses.ToDictByShelfGUID();
                 foreach (var item in medMap_ShelfClasses)
                 {
-                    List<medMap_stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
+                    List<stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
                     item.medMapStock = medMap_stock;
                 }
                 Dictionary<string, List<medMap_shelfClass>> dic_shelf = medMap_ShelfClasses.ToDictByMasterGUID();
@@ -2201,7 +2261,7 @@ namespace HIS_WebApi._API_藥品資料
         /// </summary>
         /// <remarks>
         /// 本 API 會：
-        /// 1. 驗證 <c>returnData.Data</c> 是否存在，並嘗試轉為 <c>List&lt;medMap_stockClass&gt;</c>；若失敗則再嘗試單筆 <c>medMap_stockClass</c>。  
+        /// 1. 驗證 <c>returnData.Data</c> 是否存在，並嘗試轉為 <c>List&lt;stockClass&gt;</c>；若失敗則再嘗試單筆 <c>stockClass</c>。  
         /// 2. 為每一筆資料自動產生 <c>GUID</c>。  
         /// 3. 以批次方式寫入資料表 <c>medMap_stock</c>。  
         ///
@@ -2212,7 +2272,7 @@ namespace HIS_WebApi._API_藥品資料
         ///
         /// 【常見驗證錯誤】
         /// - <c>returnData.Data</c> 為空。  
-        /// - <c>returnData.Data</c> 轉型失敗（非 <c>medMap_stockClass</c> / <c>List&lt;medMap_stockClass&gt;</c>）。  
+        /// - <c>returnData.Data</c> 轉型失敗（非 <c>stockClass</c> / <c>List&lt;stockClass&gt;</c>）。  
         /// - 必填欄位為空（例如 <c>Shelf_GUID</c>、<c>位置</c>、<c>藥碼</c>）。  
         ///
         /// 【單筆請求範例】
@@ -2229,7 +2289,7 @@ namespace HIS_WebApi._API_藥品資料
         ///   },
         ///   "Value": "",
         ///   "ValueAry": [],
-        ///   "TableName": "medMap_stock",
+        ///   "TableName": "stock",
         ///   "ServerName": "Main",
         ///   "ServerType": "網頁",
         ///   "TimeTaken": ""
@@ -2261,7 +2321,7 @@ namespace HIS_WebApi._API_藥品資料
         ///   ],
         ///   "Value": "",
         ///   "ValueAry": [],
-        ///   "TableName": "medMap_stock",
+        ///   "TableName": "stock",
         ///   "ServerName": "Main",
         ///   "ServerType": "網頁",
         ///   "TimeTaken": ""
@@ -2312,7 +2372,7 @@ namespace HIS_WebApi._API_藥品資料
         /// 備註：本 API 僅新增資料，不負責檢查 <c>位置</c> 重複或唯一性；若需要「同一 <c>Shelf_GUID</c> + <c>位置</c> 不可重複」之約束，請在資料庫層加上複合唯一鍵或在呼叫前先自檢。
         /// </remarks>
         /// <param name="returnData">
-        /// 請求包裝物件；其中 <c>Data</c> 可為 <c>medMap_stockClass</c>（單筆）或 <c>List&lt;medMap_stockClass&gt;</c>（多筆）。
+        /// 請求包裝物件；其中 <c>Data</c> 可為 <c>stockClass</c>（單筆）或 <c>List&lt;stockClass&gt;</c>（多筆）。
         /// </param>
         /// <returns>
         /// <para>JSON 字串；欄位說明：</para>
@@ -2336,29 +2396,38 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                List<medMap_stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<medMap_stockClass>>();
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
                 if (medMap_StockClasses == null)
                 {
-                    medMap_stockClass medMap_stock = returnData.Data.ObjToClass<medMap_stockClass>();
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
                     if (medMap_stock == null)
                     {
                         returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為medMap_stockClass";
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
                         return returnData.JsonSerializationt();
                     }
-                    medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
                 }
                 DateTime dateTime = DateTime.Now;
                 foreach (var item in medMap_StockClasses)
                 {
                     item.GUID = Guid.NewGuid().ToString();
-                    if (item.效期.StringIsEmpty()) item.效期 = dateTime.ToDateTimeString('-');
+                    string value = item.Value;
+                    for (int i = 0; i < item.效期.Count; i++)
+                    {
+                        if (item.效期.Count != item.批號.Count && item.效期.Count != item.數量.Count) continue;
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+
+                        deviceBasic.新增效期(item.效期[i], item.批號[i], item.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
                 }
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
 
-                List<object[]> add = medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.AddRowsAsync(null, add);
                 // 回傳
                 returnData.Code = 200;
@@ -2376,7 +2445,7 @@ namespace HIS_WebApi._API_藥品資料
             }
         }
         [HttpPost("update_stock")]
-        public async Task<string> update_medMap_stock([FromBody] returnData returnData)
+        public async Task<string> update_stock([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -2387,31 +2456,175 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                List<medMap_stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<medMap_stockClass>>();
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
                 if (medMap_StockClasses == null)
                 {
-                    medMap_stockClass medMap_stock = returnData.Data.ObjToClass<medMap_stockClass>();
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
                     if (medMap_stock == null)
                     {
                         returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為medMap_stockClass";
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
                         return returnData.JsonSerializationt();
                     }
-                    medMap_StockClasses = new List<medMap_stockClass>() { medMap_stock };
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
                 }
-
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+                List<object[]> objects = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
+                List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
+                foreach (var item in db_medMap_StockClasses)
+                {
+                    stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
+                    if (medMap_stock_buff == null) continue;
+                    if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
+                    if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
+                    if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
+                    if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
+                    if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
+                    if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
 
-                List<object[]> update = medMap_StockClasses.ClassToSQL<medMap_stockClass>();
+                    if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
+                    if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
+                    if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
+                    if (medMap_stock_buff.效期 == null || (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count)) continue;
+                    for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
+                    {
+                        string value = item.Value;                        
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
+                }               
+                List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
-                // 回傳
+                
                 returnData.Code = 200;
-                returnData.Data = medMap_StockClasses;
+                returnData.Data = db_medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "update_medMap_stock";
                 returnData.Result = $"儲位寫入成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+
+        /// <summary>
+        /// 依指定 <c>GUID</c>，從該藥品庫存的 <c>Value</c>（<c>DeviceBasic</c> 序列化資料）中
+        /// 清除一筆指定效期（有效日期）的紀錄。
+        /// </summary>
+        /// <remarks>
+        /// <example>
+        /// <code>
+        /// 請求（Request）Body：
+        /// {
+        ///   "ValueAry": [ "b9f6d6e2-3a9b-4f2e-8d56-7c0f1f0a1a23", "2026-12-31" ],
+        /// }
+        ///
+        /// 成功回應（Success, Code=200）：
+        /// {
+        ///   "Code": 200,
+        ///   "Result": "清除效期成功!",
+        ///   "Data": [
+        ///     {
+        ///       "GUID": "b9f6d6e2-3a9b-4f2e-8d56-7c0f1f0a1a23",
+        ///       "Value": "{...更新後的 DeviceBasic JSON...}",
+        ///       "...其他欄位..."
+        ///     }
+        ///   ],
+        ///   "TimeTaken": "00:00:00.123",
+        ///   "Method": "stock_deldte_Validity_period"
+        /// }
+        ///
+        /// 失敗回應（參數錯誤, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "ValueAry應為[\"GUID\",\"效期\"] ",
+        ///   "TimeTaken": "00:00:00.002"
+        /// }
+        ///
+        /// 失敗回應（GUID 不存在, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "查無此GUID資料(bad-guid)",
+        ///   "TimeTaken": "00:00:00.005"
+        /// }
+        ///
+        /// 失敗回應（效期格式不正確, Code=-200）：
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "效期日期格式錯誤",
+        ///   "TimeTaken": "00:00:00.003"
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        /// <param name="returnData">
+        /// 請求物件。<c>ValueAry</c> 必須為長度 2 的陣列：<c>["GUID","效期"]</c>。
+        /// </param>
+        /// <returns>
+        /// <c>returnData</c> 的 JSON 字串：成功 <c>Code=200</c> 並回傳更新後資料；失敗 <c>Code=-200</c> 並含錯誤訊息。
+        /// </returns>
+
+        [HttpPost("stock_deldte_Validity_period")]
+        public async Task<string> stock_deldte_Validity_period([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry應為[\"GUID\",\"效期\"] ";
+                    return returnData.JsonSerializationt();
+                }
+                string GUID = returnData.ValueAry[0];
+                string 效期 = returnData.ValueAry[1];
+
+                if (GUID.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"GUID不得為空值";
+                    return returnData.JsonSerializationt();
+                }
+              
+                if (效期.Check_Date_String() == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"效期日期格式錯誤";
+                    return returnData.JsonSerializationt();
+                }
+
+                // DB 連線與資料表
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+
+                List<object[]> data = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, GUID);
+                List<stockClass> medMap_StockClasses = data.SQLToClass<stockClass>();
+                if (medMap_StockClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此GUID資料({GUID})";
+                    return returnData.JsonSerializationt();
+                }
+                string value = medMap_StockClasses[0].Value;
+                if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                deviceBasic.清除效期(效期);
+                medMap_StockClasses[0].Value = deviceBasic.JsonSerializationt();
+                object[] update = medMap_StockClasses[0].ClassToSQL<stockClass>();
+                await sQLControl_medMap_stock.UpdateRowAsync(null, update);
+                returnData.Code = 200;
+                returnData.Data = medMap_StockClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "stock_deldte_Validity_period";
+                returnData.Result = $"清除效期成功!";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
@@ -2437,7 +2650,7 @@ namespace HIS_WebApi._API_藥品資料
 
                 // DB 連線與資料表
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> delete = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, GUID);
 
                 if (delete.Count > 0) await sQLControl_medMap_stock.DeleteRowsAsync(null, delete);
@@ -2465,13 +2678,13 @@ namespace HIS_WebApi._API_藥品資料
         /// </param>
         /// <returns>
         /// 回傳以 <c>returnData.JsonSerializationt(true)</c> 序列化之 JSON 字串：
-        /// - <c>Code = 200</c> 代表成功，<c>Data</c> 內為 <c>medMap_stockClass</c> 陣列。<br/>
+        /// - <c>Code = 200</c> 代表成功，<c>Data</c> 內為 <c>stockClass</c> 陣列。<br/>
         /// - <c>Code = -200</c> 代表失敗，錯誤原因見 <c>Result</c>。
         /// </returns>
         /// <remarks>
         /// <para>
         /// 功能說明：從資料表 <c>medMap_stock</c> 讀取全部資料，並以陣列回傳。<br/>
-        /// 欄位說明（對應 <c>medMap_stockClass</c>）：<br/>
+        /// 欄位說明（對應 <c>stockClass</c>）：<br/>
         /// - <c>GUID</c>：唯一識別碼。<br/>
         /// - <c>shelf_guid</c>：層架 GUID。<br/>
         /// - <c>location</c>：位置座標字串（如 <c>"0,1"</c>；允許空字串）。<br/>
@@ -2577,18 +2790,19 @@ namespace HIS_WebApi._API_藥品資料
         /// </para>
         /// </remarks>
         [HttpPost("get_stock")]
-        public async Task<string> get_medMap_stock([FromBody] returnData returnData)
+        public async Task<string> get_stock([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
             {
 
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
 
                 List<object[]> rows = await sQLControl_medMap_stock.GetAllRowsAsync(null);
-                List<medMap_stockClass> medMap_StockClasses = rows.SQLToClass<medMap_stockClass>();
-
+                List<stockClass> medMap_StockClasses = rows.SQLToClass<stockClass>();
+                
+                medMap_StockClasses = get_stockInfo(medMap_StockClasses);
 
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
@@ -2626,19 +2840,10 @@ namespace HIS_WebApi._API_藥品資料
                 string[] shelf_GUID = returnData.ValueAry[0].Split(";").Distinct().ToArray();
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-                SQLControl sQLControl = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> objects = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medMap_stock.shelf_GUID, shelf_GUID);
-                List<medMap_stockClass> medMap_StockClasses = objects.SQLToClass<medMap_stockClass>();
-                //List<Task> tasks = new List<Task>();
-                //foreach (var item in medMap_BoxClasses)
-                //{
-                //    tasks.Add(Task.Run(new Action(delegate
-                //    {
-                //        Storage storage = deviceApiClass.Get_EPD266_Storage_ByIP(API_server, item.serverName, item.serverType, item.藥盒IP);
-                //        if (storage != null) item.storage = storage;
-                //    })));
-                //}
-                //Task.WhenAll(tasks).Wait();
+                List<stockClass> medMap_StockClasses = objects.SQLToClass<stockClass>();
+                medMap_StockClasses = get_stockInfo(medMap_StockClasses);
 
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
@@ -2675,7 +2880,7 @@ namespace HIS_WebApi._API_藥品資料
                 string[] shelf_GUID = returnData.ValueAry[0].Split(";").Distinct().ToArray();
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-                SQLControl sQLControl = new SQLControl(Server, DB, "medMap_stock", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<object[]> delete = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medMap_stock.shelf_GUID, shelf_GUID);
                 if (delete.Count > 0) await sQLControl.DeleteRowsAsync(null, delete);
 
@@ -2771,7 +2976,7 @@ namespace HIS_WebApi._API_藥品資料
                         if (sub_section.shelf == null || sub_section.shelf.Count == 0) continue;
                         foreach (var shelf in sub_section.shelf)
                         {
-                            List<medMap_stockClass> medMap_Stocks_buff = shelf.medMapStock.Where(x => x.藥碼 == 藥碼).ToList();
+                            List<stockClass> medMap_Stocks_buff = shelf.medMapStock.Where(x => x.藥碼 == 藥碼).ToList();
                             shelf.medMapStock = medMap_Stocks_buff;
                             if (medMap_Stocks_buff.Count > 0) medMap_ShelfClasses.Add(shelf);
                         }
@@ -2974,13 +3179,14 @@ namespace HIS_WebApi._API_藥品資料
 
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap()));
-            tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_section()));
+            tables.Add(MethodClass.CheckCreatTable<medMap_sectionClass>(sys_serverSettingClasses[0]));
+            //tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_sub_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_shelf()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_drawer()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_box()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medSize()));
-            tables.Add(MethodClass.CheckCreatTable<medMap_stockClass>(sys_serverSettingClasses[0]));
+            tables.Add(MethodClass.CheckCreatTable<stockClass>(sys_serverSettingClasses[0]));
 
             return tables.JsonSerializationt(true);
         }
@@ -3053,6 +3259,14 @@ namespace HIS_WebApi._API_藥品資料
             string result = await get_section_by_GUID(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_section_by_IP(string IP)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add(IP);
+            string result = await get_section_by_IP(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
         private async Task<returnData> get_med_by_code_name_type(string ServerName, string ServerType, string code)
         {
             returnData returnData = new returnData();
@@ -3062,7 +3276,21 @@ namespace HIS_WebApi._API_藥品資料
             string result = await get_med_by_code_name_type(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
-       
+
+        private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
+        {
+            foreach (var stock in medMap_stockClasses)
+            {
+                string value = stock.Value;
+                if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                stock.效期 = deviceBasic.List_Validity_period;
+                stock.數量 = deviceBasic.List_Inventory;
+                stock.批號 = deviceBasic.List_Lot_number;
+            }
+            return medMap_stockClasses;
+        }
+
     }
 
 }

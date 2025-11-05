@@ -21,6 +21,7 @@ namespace HIS_DB_Lib
     /// 藥品單位資料類別  
     /// 對應各層級單位（採購、撥補、調劑）及其換算關係。
     /// </summary>
+    [Description("medUnit")]
     public class medUnitClass   
     {
         /// <summary>

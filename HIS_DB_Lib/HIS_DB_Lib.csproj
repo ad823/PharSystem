@@ -128,6 +128,8 @@
     <Compile Include="住院藥車\nursingStationClass.cs" />
     <Compile Include="shiftClass.cs" />
     <Compile Include="住院藥車\patientInfoClass.cs" />
+    <Compile Include="儲位資訊\stockClass.cs" />
+    <Compile Include="儲位資訊\stockListClass.cs" />
     <Compile Include="化療排程\CMPM_StorageConfig_Class.cs" />
     <Compile Include="commonSpaceSetup.cs" />
     <Compile Include="computerConfigClass.cs" />
@@ -153,6 +155,7 @@
     <Compile Include="系統\temperatureClass.cs" />
     <Compile Include="系統\webTrafficClass.cs" />
     <Compile Include="藥品基本檔\medClass.cs" />
+    <Compile Include="藥品基本檔\medClassifyClass.cs" />
     <Compile Include="藥品基本檔\medConfigClass.cs" />
     <Compile Include="藥品基本檔\medCouldClass.cs" />
     <Compile Include="藥品基本檔\medDrugstoreClass.cs" />

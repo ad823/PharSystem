@@ -244,7 +244,6 @@ C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\AudioProcessingLibrary.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\MySql.Data.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\zxing.dll
-C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\CSkin.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\DrawingClass.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\PopupControl.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\SunnyUI.dll
@@ -252,12 +251,9 @@ C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\FontAwesome.Sharp.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\MeasureSystemUI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\MVSDKUI.dll
-C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\SLDUI.dll
-C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\LeadShineUI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\PortControlUI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\LightControlUI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\ZealTechUI.dll
-C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\HCGUI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\NPOI.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\Microsoft.Office.Interop.Excel.dll
 C:\Users\user\Source\Repos\PharSystem\batch_medpic_download_to_base64\bin\Debug\NPOI.OOXML.dll

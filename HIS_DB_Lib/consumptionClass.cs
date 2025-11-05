@@ -27,23 +27,35 @@ namespace HIS_DB_Lib
         [Description("庫存量,VARCHAR,20,NONE")]
         庫存量,
     }
-
+    [Description("consumption")]
     public class consumptionClass
     {
+        [Description("VARCHAR,50,PRIMARY")]
+        public string GUID { get; set; }
+        [Description("VARCHAR,20,INDEX")]
         [JsonPropertyName("CODE")]
         public string 藥碼 { get; set; }
+        [Description("VARCHAR,300,NONE")]
         [JsonPropertyName("NAME")]
         public string 藥名 { get; set; }
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("TYPE")]
         public string 類別 { get; set; }
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("CONSUMPTION")]
         public string 消耗量 { get; set; }
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("BALANCE")]
         public string 結存量 { get; set; }
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("DISPENSED")]
         public string 實調量 { get; set; }
+        [Description("VARCHAR,20,NONE")]
         [JsonPropertyName("STOCK")]
         public string 庫存量 { get; set; }
+        [Description("DATETIME,20,NONE")]
+        [JsonPropertyName("ADD_TIME")]
+        public string 建立時間 { get; set; }
 
         static public (int code, string result, List<consumptionClass>) serch_by_ST_END_full(
             string API_Server,
