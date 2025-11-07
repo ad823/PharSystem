@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HIS_DB_Lib;
 using H_Pannel_lib;
 using Basic;
 namespace batch_UDPlightRefrsh
@@ -39,13 +40,14 @@ namespace batch_UDPlightRefrsh
             public float dht_t { get => _dht_t; set => _dht_t = value; }
 
         }
-
+        static string API_Server = "http://127.0.0.1:4433";
         static UDP_Class uDP_Class;
         static void Main(string[] args)
         {
             uDP_Class = new UDP_Class("0.0.0.0", 30001, true);
             while (true)
             {
+                List<medMap_sectionClass> medMap_SectionClasses = medMap_sectionClass.get_sections(API_Server);
                 List<object[]> list_udp_rx = uDP_Class.List_UDP_Rx;
                 List<string> jsons = list_udp_rx.Select(x => x[(int)UDP_Class.UDP_Rx.Readline].ObjectToString()).ToList();
                 List<string> light_ip = new List<string>();

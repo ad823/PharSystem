@@ -28,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -37,6 +37,10 @@
   <ItemGroup>
     <Reference Include="Basic">
       <HintPath>..\0.DLL\Basic.dll</HintPath>
+    </Reference>
+    <Reference Include="HIS_DB_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
     </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
