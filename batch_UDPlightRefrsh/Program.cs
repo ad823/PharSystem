@@ -112,7 +112,13 @@ namespace batch_UDPlightRefrsh
                     }
                 }
 
-                Console.Clear();
+                // fix: 覆蓋式刷新避免閃爍
+                if (Console.CursorTop == 0)
+                {
+                    Console.Clear();
+                }
+                Console.SetCursorPosition(0, 0);
+
                 Console.WriteLine("===== UDP Light Status Refresh =====");
                 Console.WriteLine("Time: " + DateTime.Now.ToString("HH:mm:ss"));
                 Console.WriteLine("Received lights: " + jsons_lights.Count + " rows_led: " + jsons_rows_led.Count);
