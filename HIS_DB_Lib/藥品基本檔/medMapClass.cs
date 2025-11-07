@@ -234,7 +234,7 @@ namespace HIS_DB_Lib
             var (code, result, list) = get_sections_full(API_Server, serverName, serverType);
             return list;
         }
-        static public (int code, string result, List<medMap_sectionClass>) get_sections_full(string API_Server, string serverName = "", string serverType = "")
+        static public (int code, string result, List<medMap_sectionClass>) get_sections_full(string API_Server, string serverName = "", string serverType = "" , bool debug = false)
         {
             string url = $"{API_Server}/api/medMap/get_sections";
 
@@ -253,11 +253,39 @@ namespace HIS_DB_Lib
             {
                 return (0, "returnData_out.Data == null", null);
             }
-            Console.WriteLine($"{returnData_out}");
+            if(debug) Console.WriteLine($"{returnData_out}");
             List<medMap_sectionClass> datas = returnData_out.Data.ObjToClass<List<medMap_sectionClass>>();
             return (returnData_out.Code, returnData_out.Result, datas);
         }
+        static public medMap_sectionClass get_section_by_IP(string API_Server, string IP, string serverName = "", string serverType = "")
+        {
+            var (code, result, list) = get_section_by_IP_full(API_Server, serverName, serverType);
+            return list;
+        }
+        static public (int code, string result, medMap_sectionClass) get_section_by_IP_full(string API_Server, string IP, string serverName = "", string serverType = "", bool debug = false)
+        {
+            string url = $"{API_Server}/api/medMap/get_section_by_IP";
 
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add(IP);
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            if (returnData_out == null)
+            {
+                return (0, "returnData_out == null", null);
+            }
+            if (returnData_out.Data == null)
+            {
+                return (0, "returnData_out.Data == null", null);
+            }
+            if (debug) Console.WriteLine($"{returnData_out}");
+            medMap_sectionClass datas = returnData_out.Data.ObjToClass<medMap_sectionClass>();
+            return (returnData_out.Code, returnData_out.Result, datas);
+        }
     }
     /// <summary>
     /// 藥品地圖_子容器
