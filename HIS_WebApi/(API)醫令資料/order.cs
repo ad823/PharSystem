@@ -1978,6 +1978,10 @@ namespace HIS_WebApi
                     OrderClasses[i].GUID = Guid.NewGuid().ToString();
                     OrderClasses[i].產出時間 = DateTime.Now.ToDateTimeString_6();
                     OrderClasses[i].過帳時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].核對時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].發藥時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].領藥時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].就醫時間 = DateTime.MinValue.ToDateTimeString();
                     OrderClasses[i].狀態 = "未過帳";
  
                 }
