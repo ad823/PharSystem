@@ -1089,6 +1089,23 @@ namespace HIS_WebApi
             return sys_serverSettingClasses;
         }
         [ApiExplorerSettings(IgnoreApi = true)]
+        static public async Task<List<sys_serverSettingClass>> GetServerSettingasync(string Name, string Type)
+        {
+            try 
+            {
+                SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
+                string command = $"SELECT * FROM {DB}.ServerSetting WHERE 設備名稱 = '{Name}' AND 類別 = '{Type}' ;";
+                List<object[]> list_value = await sQLControl.WriteCommandAsync(command);
+                List<sys_serverSettingClass> sys_serverSettingClasses = list_value.SQLToClass<sys_serverSettingClass, enum_sys_serverSetting>();
+                return sys_serverSettingClasses;
+            }
+            catch 
+            {
+                return null;
+            }
+            
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<returnData> get_serversetting_by_department_type(string department_type)
         {
             returnData returnData = new returnData();

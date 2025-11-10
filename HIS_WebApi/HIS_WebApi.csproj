@@ -85,9 +85,6 @@
     <Reference Include="DrawingClass">
       <HintPath>0.DLL\DrawingClass.dll</HintPath>
     </Reference>
-    <Reference Include="HIS_DB_Lib">
-      <HintPath>..\..\inventorySystem\0.DLL\HIS_DB_Lib.dll</HintPath>
-    </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
       <Private>True</Private>
@@ -214,6 +211,10 @@
 
   <ItemGroup>
     <Folder Include="WebControllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HIS_DB_Lib\HIS_DB_Lib.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties libman_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

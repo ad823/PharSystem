@@ -25,7 +25,7 @@ namespace HIS_WebApi._API_藥品資料
     public class medMap : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        static private string API_server = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+        static private string API_server = "http://127.0.0.1:4433";
         private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
            serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
            {
@@ -2952,49 +2952,7 @@ namespace HIS_WebApi._API_藥品資料
             }
 
         }
-        [HttpPost("get_med_by_code_name_type")]
-        public async Task<string> get_med_by_code_name_type([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            try
-            {
-                if (returnData.ValueAry == null || returnData.ValueAry.Count != 3)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"returnData.ValueAry須為[\"設備名稱\", \"類別\", \"藥碼\"]";
-                    return returnData.JsonSerializationt();
-                }
-                string 藥碼 = returnData.ValueAry[2];
-                returnData returnData_get_medMap_by_name_type = await get_medMap_by_name_type(returnData.ValueAry[0], returnData.ValueAry[1]);
-                medMapClass medMapClass = returnData_get_medMap_by_name_type.Data.ObjToClass<medMapClass>();
-                List<medMap_shelfClass> medMap_ShelfClasses = new List<medMap_shelfClass>();
-                foreach (var item in medMapClass.medMap_Section)
-                {
-                    if (item.sub_section == null || item.sub_section.Count == 0) continue;
-                    foreach (var sub_section in item.sub_section)
-                    {
-                        if (sub_section.shelf == null || sub_section.shelf.Count == 0) continue;
-                        foreach (var shelf in sub_section.shelf)
-                        {
-                            List<stockClass> medMap_Stocks_buff = shelf.medMapStock.Where(x => x.藥碼 == 藥碼).ToList();
-                            shelf.medMapStock = medMap_Stocks_buff;
-                            if (medMap_Stocks_buff.Count > 0) medMap_ShelfClasses.Add(shelf);
-                        }
-
-                    }
-                }
-
-                returnData.Data = medMap_ShelfClasses;
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception ex)
-            {
-                returnData.Code = -200;
-                returnData.Result = ex.Message;
-                return returnData.JsonSerializationt(true);
-            }
-
-        }
+        
         /// <summary>
         /// 控制指定藥碼對應裝置之亮燈行為。
         /// 依藥碼查詢對應的層架與庫存位置，
@@ -3113,10 +3071,42 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.ValueAry錯誤";
                     return returnData.JsonSerializationt();
                 }
-                
-                returnData returnData_get_med_by_code_name_type = await get_med_by_code_name_type(ServerName, ServerType, code);
-                
-                List<medMap_shelfClass> medMap_ShelfClasses = returnData_get_med_by_code_name_type.Data.ObjToClass<List<medMap_shelfClass>>();
+               List<sys_serverSettingClass> serverSettingClasses = await HIS_WebApi.Method.GetListServerAsync(ServerName, ServerType);
+                if (serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料! ServerName:{ServerName} ServerType:{ServerType}";
+                    return returnData.JsonSerializationt();
+                }
+                sys_serverSettingClass serverSetting_儲位資料 = serverSettingClasses.FirstOrDefault(s => s.內容 == "儲位資料");
+                if (serverSetting_儲位資料 == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料(儲位資料)! ServerName:{ServerName} ServerType:{ServerType}";
+                    return returnData.JsonSerializationt();
+                }
+                sys_serverSettingClass serverSetting_一般資料 = serverSettingClasses.FirstOrDefault(s => s.內容 == "一般資料");
+                if (serverSetting_一般資料 == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料(一般資料)! ServerName:{ServerName} ServerType:{ServerType}";
+                    return returnData.JsonSerializationt();
+                }
+                string sql_command_shelf = @$"SELECT sh.*
+                    FROM {serverSetting_儲位資料.DBName}.stock AS s
+                    JOIN {serverSetting_一般資料.DBName}.medmap_shelf AS sh
+                    ON sh.GUID = s.shelf_GUID
+                    WHERE s.藥碼 = '{code}';";
+                string sql_command_stock = @$"SELECT * FROM {serverSetting_儲位資料.DBName}.stock WHERE 藥碼 = '{code}';";
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+
+                List<object[]> list_object = await sQLControl.WriteCommandAsync(sql_command_shelf);
+                List<medMap_shelfClass> medMap_ShelfClasses = list_object.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                List<object[]> list_object_stock = await sQLControl.WriteCommandAsync(sql_command_stock);
+                List<stockClass> medMap_StockClasses = list_object_stock.SQLToClass<stockClass, enum_medMap_stock>();
+
                 List<string> list_light = new List<string>();
                 if (medMap_ShelfClasses.Count == 0)
                 {
@@ -3132,6 +3122,7 @@ namespace HIS_WebApi._API_藥品資料
                     string stock_device_type = string.Empty;
                     string start = string.Empty;
                     string end = string.Empty;
+                    item.medMapStock = medMap_StockClasses;
                     if (item.medMapStock != null)
                     {
                         foreach (var med in item.medMapStock)
@@ -3267,16 +3258,7 @@ namespace HIS_WebApi._API_藥品資料
             string result = await get_section_by_IP(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
-        private async Task<returnData> get_med_by_code_name_type(string ServerName, string ServerType, string code)
-        {
-            returnData returnData = new returnData();
-            returnData.ValueAry.Add(ServerName);
-            returnData.ValueAry.Add(ServerType);
-            returnData.ValueAry.Add(code);
-            string result = await get_med_by_code_name_type(returnData);
-            return await result.JsonDeserializetAsync<returnData>();
-        }
-
+        
         private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
         {
             foreach (var stock in medMap_stockClasses)
