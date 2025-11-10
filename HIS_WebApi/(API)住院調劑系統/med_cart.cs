@@ -30,6 +30,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ubiety.Dns.Core;
 using static Basic.Net;
+using System.Text.RegularExpressions;
 
 
 
@@ -60,7 +61,7 @@ namespace HIS_WebApi
         = new Lazy<Task<settingPageClass>>(() =>
             new settingPage().get_by_page_name_cht("medicine_cart", "交車時間")
         );
-       
+
 
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "medCpoeClass物件", typeof(medCpoeClass))]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "patientInfoClass物件", typeof(patientInfoClass))]
@@ -581,7 +582,7 @@ namespace HIS_WebApi
                 DateTime 現在 = DateTime.Now;
 
                 DateTime 切帳_datetime = new DateTime(現在.Year, 現在.Month, 現在.Day, 切帳時間.Hours, 切帳時間.Minutes, 0);
-       
+
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
 
                 (string StartTime, string Endtime) = GetToday();
@@ -1132,7 +1133,7 @@ namespace HIS_WebApi
             {
                 string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
 
-             
+
                 (string Server, string DB, string UserName, string Password, uint Port) = Method.GetServerInfo("Main", "網頁", "VM端");
 
                 List<medCpoeRecClass> input_medCpoe_rec = returnData.Data.ObjToClass<List<medCpoeRecClass>>();
@@ -1163,7 +1164,7 @@ namespace HIS_WebApi
                     .GroupBy(item => item.序號)                // 以序號分組
                     .Select(g => g.First())                    // 每組取第一筆
                     .ToList();
-                    foreach(var item in result)
+                    foreach (var item in result)
                     {
                         item.GUID = Guid.NewGuid().ToString();
                     }
@@ -1467,7 +1468,7 @@ namespace HIS_WebApi
                 }
                 List<object[]> list_med_cpoe = await taskCpoe;
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-               
+
                 settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medicine_cart", "DC處方確認後取消顯示", ct);
                 if (settingPages == null)
                 {
@@ -1941,8 +1942,8 @@ namespace HIS_WebApi
                 string 護理站 = returnData.ValueAry[1];
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 Task<List<bedStatusClass>> task_get_bed_status = get_bed_status(藥局, 護理站, ct);
-                
-                
+
+
                 string tableName_patient_info = "patient_info";
                 string tableName_med_cpoe = "med_cpoe";
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, tableName_patient_info, UserName, Password, Port, SSLMode);
@@ -1987,8 +1988,8 @@ namespace HIS_WebApi
                 List<bedStatusClass> bedStatusClasses = await task_get_bed_status;
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                
-                
+
+
                 List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
                 if (medGroupClass_buff == null)
                 {
@@ -2390,7 +2391,7 @@ namespace HIS_WebApi
 
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
-                
+
                 List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
                 if (medGroupClass_buff == null)
                 {
@@ -3175,7 +3176,7 @@ namespace HIS_WebApi
                 //returnData returnData_refund = new returnData();
                 //returnData_debit = ExcuteTrade(returnData, debit_medcpoe, "系統領藥");
                 //returnData_refund = ExcuteTrade(returnData, refund_medcpoe, "系統退藥");
-              
+
                 Task.WhenAll(tasks).Wait();
 
                 returnData.Code = 200;
@@ -3191,7 +3192,7 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-       
+
         /// <summary>
         ///以GUID確認藥品調劑，針對整個藥車調劑(只能確認)
         /// </summary>
@@ -3322,13 +3323,13 @@ namespace HIS_WebApi
 
                 returnData returnData_debit = new returnData();
                 returnData returnData_refund = new returnData();
-               
+
 
                 Task<returnData>? debitTask = null;
                 Task<returnData>? refundTask = null;
                 string userName_ = returnData.UserName;
                 string serverName_ = returnData.ServerName;
-                if(userName_.StringIsEmpty() == false && serverName_.StringIsEmpty() == false)
+                if (userName_.StringIsEmpty() == false && serverName_.StringIsEmpty() == false)
                 {
                     if (debit_medcpoe.Count > 0) debitTask = Task.Run(() => debit(userName_, serverName_, debit_medcpoe));
                     if (refund_medcpoe.Count > 0) refundTask = Task.Run(() => refund(userName_, serverName_, refund_medcpoe));
@@ -3797,7 +3798,7 @@ namespace HIS_WebApi
                     returnData.Result = $"藥品群組取得失敗";
                     return returnData.JsonSerializationt(true);
                 }
-                
+
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic.ToString()}  ";
                 returnData.Data = medGroupClass_buff;
@@ -3847,7 +3848,7 @@ namespace HIS_WebApi
 
                 string 藥局 = returnData.ValueAry[0];
                 string 護理站 = returnData.ValueAry[1];
-                                             
+
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
 
@@ -3858,9 +3859,9 @@ namespace HIS_WebApi
                     returnData.Result = "設定取得失敗";
                     return returnData.JsonSerializationt(true);
                 }
-                
+
                 settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medicine_cart", "DC處方確認後取消顯示", ct);
-                if (settingPages == null )
+                if (settingPages == null)
                 {
                     returnData.Code = -200;
                     returnData.Result = "設定取得失敗";
@@ -4306,7 +4307,7 @@ namespace HIS_WebApi
                 string 操作人 = returnData.UserName;
                 string 調劑台 = returnData.ServerName;
                 returnData returnData_order = new order().get_by_pri_key(returnData.ValueAry[0]);
-                if(returnData_order == null || returnData_order.Code != 200)
+                if (returnData_order == null || returnData_order.Code != 200)
                 {
                     returnData.Code = -200;
                     returnData.Result = "取得order失敗";
@@ -4321,8 +4322,8 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 string API_Server = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
-                
-                
+
+
                 List<class_OutTakeMed_data> outTakeMed_Datas = new List<class_OutTakeMed_data>();
                 List<string> Codes = orderClasses.Select(temp => temp.藥品碼).Distinct().ToList();
                 if (Codes.Count == 1) Codes[0] = Codes[0] + ",";
@@ -4418,13 +4419,13 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 List<OrderClass> orderClasses = returnData_order.Data.ObjToClass<List<OrderClass>>();
-                orderClasses = orderClasses.Where(temp =>  temp.實際調劑量 == temp.交易量).ToList();
+                orderClasses = orderClasses.Where(temp => temp.實際調劑量 == temp.交易量).ToList();
                 if (orderClasses.Count == 0)
                 {
                     returnData.Code = -200;
                     returnData.Result = "order資料狀態不符";
                     return returnData.JsonSerializationt(true);
-                }                            
+                }
                 string API_Server = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
 
                 List<class_OutTakeMed_data> outTakeMed_Datas = new List<class_OutTakeMed_data>();
@@ -5022,9 +5023,9 @@ namespace HIS_WebApi
         }
         private async Task<(string StartTime, string Endtime)> GetTodayAsync(CancellationToken ct = default)
         {
-           
+
             settingPageClass settingPageClasses = await settingPageTask.Value;
-            if (settingPageClasses == null ) return ("", "");
+            if (settingPageClasses == null) return ("", "");
             string 交車 = settingPageClasses.設定值;
             if (TimeSpan.TryParse(交車, out TimeSpan 交車時間) == false)
             {
@@ -5444,72 +5445,122 @@ namespace HIS_WebApi
         {
             if (patientInfoClasses == null || patientInfoClasses.Count == 0) return patientInfoClasses;
 
-            // 過濾掉 null 項，避免後續存取屬性拋例外
             var list = patientInfoClasses.Where(p => p != null).ToList();
 
-            bool useUnderscore = list.Any(p => p.床號?.Contains('_') == true);
+            list = list
+                .Select(p =>
+                {
+                    var s = (p.床號 ?? "").Trim();
 
-            if (useUnderscore)
-            {
-                // 情況二：如 "31", "31_01", "31_02", "32"
-                list = list
-                    .Select(p =>
+                    // 解析：prefix(字母) + main(數字) + [-|_] + sub(數字) + tail(字母)
+                    // 允許只有部分片段存在
+                    // 範例匹配：A113-01、A113_01、A113-1RR、31-2RR、31、A12
+                    var m = Regex.Match(s, @"^\s*([A-Za-z]+)?(\d+)?(?:[-_]?(\d+))?([A-Za-z]+)?\s*$");
+
+                    string prefix = m.Success && m.Groups[1].Success ? m.Groups[1].Value : "";
+                    int main = m.Success && m.Groups[2].Success && int.TryParse(m.Groups[2].Value, out var mainNum) ? mainNum : int.MaxValue;
+
+                    // 無子號 => int.MinValue（讓無子號先排）；有子號但非數字在此 regex 不會發生
+                    int sub = m.Success && m.Groups[3].Success && int.TryParse(m.Groups[3].Value, out var subNum) ? subNum : int.MinValue;
+
+                    string tail = m.Success && m.Groups[4].Success ? m.Groups[4].Value : "";
+
+                    // 若完全不符合（極少數怪格式），用原字串尾招（排最後）
+                    if (!m.Success)
                     {
-                        var s = (p.床號 ?? "").Trim();
-                        var parts = s.Split('_', 2, StringSplitOptions.RemoveEmptyEntries);
+                        prefix = "~";             // 比任何 A-Z 晚
+                        main = int.MaxValue;
+                        sub = int.MaxValue;
+                        tail = s;
+                    }
 
-                        int main = TryInt(parts.ElementAtOrDefault(0), int.MaxValue);
-                        // 無子號 => int.MinValue，讓「無子號」排在有子號前
-                        int sub = (parts.Length > 1 && int.TryParse(parts[1].Trim(), out var n)) ? n : int.MinValue;
-
-                        return new { p, main, sub };
-                    })
-                    .OrderBy(k => k.main)
-                    .ThenBy(k => k.sub) // 31, 31_01, 31_02...
-                    .Select(k => k.p)
-                    .ToList();
-            }
-            else
-            {
-                // 情況一：如 "31", "31-1RR", "32"
-                list = list
-                    .Select(p =>
-                    {
-                        var s = (p.床號 ?? "").Trim();
-                        var parts = s.Split('-', 2, StringSplitOptions.RemoveEmptyEntries);
-
-                        int main = TryInt(parts.ElementAtOrDefault(0), int.MaxValue);
-
-                        // 右邊只取「前導數字」作為子號
-                        bool hasSub = parts.Length > 1;
-                        string right = hasSub ? parts[1].Trim() : "";
-                        int i = 0;
-                        while (i < right.Length && char.IsDigit(right[i])) i++;
-
-                        // 無子號 => int.MinValue（無子號先排）
-                        // 有子號但沒有前導數字（如 "RR"）=> int.MaxValue（排在有數字子號後面）
-                        int sub = !hasSub
-                            ? int.MinValue
-                            : (i > 0 && int.TryParse(right[..i], out var n) ? n : int.MaxValue);
-
-                        // 後綴（如 "RR"）作為第三鍵，確保穩定排序
-                        string tail = hasSub && i < right.Length ? right[i..] : "";
-
-                        return new { p, main, sub, tail };
-                    })
-                    .OrderBy(k => k.main)
-                    .ThenBy(k => k.sub)                          // 31 (Min) < 31-1RR (1)
-                    .ThenBy(k => k.tail, StringComparer.Ordinal) // 同主/子號時比後綴
-                    .Select(k => k.p)
-                    .ToList();
-            }
-
-            static int TryInt(string s, int fallback) =>
-                int.TryParse(s, out var n) ? n : fallback;
+                    return new { p, prefix, main, sub, tail, raw = s };
+                })
+                // 1) 先比病房/字母前綴（不分大小寫）
+                .OrderBy(k => k.prefix, StringComparer.OrdinalIgnoreCase)
+                // 2) 再比主號數字
+                .ThenBy(k => k.main)
+                // 3) 無子號 (Min) 在前，其次子號數字
+                .ThenBy(k => k.sub)
+                // 4) 同主/子號時，再比尾碼字母（如 31-1RR）
+                .ThenBy(k => k.tail, StringComparer.OrdinalIgnoreCase)
+                // 5) 最後保底：原字串，確保穩定性
+                .ThenBy(k => k.raw, StringComparer.Ordinal)
+                .Select(k => k.p)
+                .ToList();
 
             return list;
         }
-        private returnData debit(string UserName, string ServerName,List<medCpoeClass> medCpoeClasses)
+        //private List<patientInfoClass> sortByBedNum(List<patientInfoClass> patientInfoClasses)
+        //{
+        //    if (patientInfoClasses == null || patientInfoClasses.Count == 0) return patientInfoClasses;
+
+        //    // 過濾掉 null 項，避免後續存取屬性拋例外
+        //    var list = patientInfoClasses.Where(p => p != null).ToList();
+
+        //    bool useUnderscore = list.Any(p => p.床號?.Contains('_') == true);
+
+        //    if (useUnderscore)
+        //    {
+        //        // 情況二：如 "31", "31_01", "31_02", "32"
+        //        list = list
+        //            .Select(p =>
+        //            {
+        //                var s = (p.床號 ?? "").Trim();
+        //                var parts = s.Split('_', 2, StringSplitOptions.RemoveEmptyEntries);
+
+        //                int main = TryInt(parts.ElementAtOrDefault(0), int.MaxValue);
+        //                // 無子號 => int.MinValue，讓「無子號」排在有子號前
+        //                int sub = (parts.Length > 1 && int.TryParse(parts[1].Trim(), out var n)) ? n : int.MinValue;
+
+        //                return new { p, main, sub };
+        //            })
+        //            .OrderBy(k => k.main)
+        //            .ThenBy(k => k.sub) // 31, 31_01, 31_02...
+        //            .Select(k => k.p)
+        //            .ToList();
+        //    }
+        //    else
+        //    {
+        //        // 情況一：如 "31", "31-1RR", "32"
+        //        list = list
+        //            .Select(p =>
+        //            {
+        //                var s = (p.床號 ?? "").Trim();
+        //                var parts = s.Split('-', 2, StringSplitOptions.RemoveEmptyEntries);
+
+        //                int main = TryInt(parts.ElementAtOrDefault(0), int.MaxValue);
+
+        //                // 右邊只取「前導數字」作為子號
+        //                bool hasSub = parts.Length > 1;
+        //                string right = hasSub ? parts[1].Trim() : "";
+        //                int i = 0;
+        //                while (i < right.Length && char.IsDigit(right[i])) i++;
+
+        //                // 無子號 => int.MinValue（無子號先排）
+        //                // 有子號但沒有前導數字（如 "RR"）=> int.MaxValue（排在有數字子號後面）
+        //                int sub = !hasSub
+        //                    ? int.MinValue
+        //                    : (i > 0 && int.TryParse(right[..i], out var n) ? n : int.MaxValue);
+
+        //                // 後綴（如 "RR"）作為第三鍵，確保穩定排序
+        //                string tail = hasSub && i < right.Length ? right[i..] : "";
+
+        //                return new { p, main, sub, tail };
+        //            })
+        //            .OrderBy(k => k.main)
+        //            .ThenBy(k => k.sub)                          // 31 (Min) < 31-1RR (1)
+        //            .ThenBy(k => k.tail, StringComparer.Ordinal) // 同主/子號時比後綴
+        //            .Select(k => k.p)
+        //            .ToList();
+        //    }
+
+        //    static int TryInt(string s, int fallback) =>
+        //        int.TryParse(s, out var n) ? n : fallback;
+
+        //    return list;
+        //}
+        private returnData debit(string UserName, string ServerName, List<medCpoeClass> medCpoeClasses)
         {
             string cpoeGuid = string.Join(";", medCpoeClasses.Select(x => x.GUID).ToList());
             returnData returnData = new returnData();

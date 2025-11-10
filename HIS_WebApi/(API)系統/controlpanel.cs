@@ -184,6 +184,8 @@ namespace HIS_WebApi._API_系統
                 controlpanelClass bbs = objects[0].SQLToClass<controlpanelClass, enum_controlpanel>();
                 if (bbsClass_input.主旨.StringIsEmpty() == false && bbsClass_input.主旨 != bbs.主旨) bbs.主旨 = bbsClass_input.主旨;
                 if (bbsClass_input.內容.StringIsEmpty() == false && bbsClass_input.內容 != bbs.內容) bbs.內容 = bbsClass_input.內容;
+                if (bbsClass_input.備註.StringIsEmpty() == false && bbsClass_input.備註 != bbs.備註) bbs.備註 = bbsClass_input.備註;
+
                 if (bbsClass_input.重要程度.StringIsEmpty() == false && bbsClass_input.重要程度 != bbs.重要程度) bbs.重要程度 = bbsClass_input.重要程度;
                 if (bbsClass_input.建立人員科別.StringIsEmpty() == false && bbsClass_input.建立人員科別 != bbs.建立人員科別) bbs.建立人員科別 = bbsClass_input.建立人員科別;
                 if (bbsClass_input.建立人員姓名.StringIsEmpty() == false && bbsClass_input.建立人員姓名 != bbs.建立人員姓名) bbs.建立人員姓名 = bbsClass_input.建立人員姓名;
