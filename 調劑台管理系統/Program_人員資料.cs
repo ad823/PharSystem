@@ -469,82 +469,95 @@ namespace 調劑台管理系統
         }
         private void Function_人員資料_匯入()
         {
-            if (openFileDialog_LoadExcel.ShowDialog(this) == DialogResult.OK)
+            try
             {
-                this.Cursor = Cursors.WaitCursor;
-                DataTable dataTable = new DataTable();
-                string Extension = System.IO.Path.GetExtension(this.openFileDialog_LoadExcel.FileName);
+                List<object[]> list_SQL_Value_add = new List<object[]>();
+                List<object[]> list_SQL_Value_replace = new List<object[]>();
+                if (openFileDialog_LoadExcel.ShowDialog(this) == DialogResult.OK)
+                {
 
-                if (Extension == ".txt")
-                {
-                    dataTable = CSVHelper.LoadFile(this.openFileDialog_LoadExcel.FileName, 0, dataTable);
-                }
-                else if (Extension == ".xls" || Extension == ".xlsx")
-                {
-                    dataTable = MyOffice.ExcelClass.NPOI_LoadFile(this.openFileDialog_LoadExcel.FileName);
-                }
-                if(dataTable == null)
-                {
-                    MyMessageBox.ShowDialog("匯入失敗,請檢查是否檔案開啟中!");
-                    this.Cursor = Cursors.Default;
-                    return;
-                }
-                DataTable datatable_buf = dataTable.ReorderTable(new enum_人員資料_匯入());
-                if (datatable_buf == null)
-                {
-                    MyMessageBox.ShowDialog("匯入檔案,資料錯誤!");
-                    this.Cursor = Cursors.Default;
-                    return;
-                }
-                List<object[]> list_LoadValue = datatable_buf.DataTableToRowList();
-                List<object[]> list_SQL_Value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
-                List<object[]> list_Add = new List<object[]>();
-                List<object[]> list_Delete_ColumnName = new List<object[]>();
-                List<object[]> list_Delete_SerchValue = new List<object[]>();
-                List<string> list_Replace_SerchValue = new List<string>();
-                List<object[]> list_Replace_Value = new List<object[]>();
-                List<object[]> list_SQL_Value_buf = new List<object[]>();
+                    DataTable dataTable = new DataTable();
+                    string Extension = System.IO.Path.GetExtension(this.openFileDialog_LoadExcel.FileName);
 
-                for (int i = 0; i < list_LoadValue.Count; i++)
-                {
-                    object[] value_load = list_LoadValue[i];
-                    value_load = value_load.CopyRow(new enum_人員資料_匯入(), new enum_人員資料());
-                    if (!Function_人員資料_檢查內容(value_load).StringIsEmpty()) continue;
-
-                    string 性別 = value_load[(int)enum_人員資料.性別].ObjectToString();
-                    string 權限等級 = value_load[(int)enum_人員資料.權限等級].ObjectToString();
-                    if (!(性別 == "男" || 性別 == "女")) 性別 = "男";
-                    if (權限等級.StringToInt32() <= 0 || 權限等級.StringToInt32() > 20) 權限等級 = "01";
-                    value_load[(int)enum_人員資料.性別] = 性別;
-                    value_load[(int)enum_人員資料.權限等級] = 權限等級;
-
-                    list_SQL_Value_buf = list_SQL_Value.GetRows((int)enum_人員資料.ID, value_load[(int)enum_人員資料.ID].ObjectToString());
-                    if (list_SQL_Value_buf.Count > 0)
+                    if (Extension == ".txt")
                     {
-                        object[] value_SQL = list_SQL_Value_buf[0];
-                        value_load[(int)enum_人員資料.GUID] = value_SQL[(int)enum_人員資料.GUID];
-                        value_load[(int)enum_人員資料.顏色] = value_SQL[(int)enum_人員資料.顏色];
-                        value_load[(int)enum_人員資料.權限等級] = value_SQL[(int)enum_人員資料.權限等級];
-                        bool flag_Equal = value_load.IsEqual(value_SQL);
-                        if (!flag_Equal)
+                        dataTable = CSVHelper.LoadFile(this.openFileDialog_LoadExcel.FileName, 0, dataTable);
+                    }
+                    else if (Extension == ".xls" || Extension == ".xlsx")
+                    {
+                        dataTable = MyOffice.ExcelClass.NPOI_LoadFile(this.openFileDialog_LoadExcel.FileName);
+                    }
+                    if (dataTable == null)
+                    {
+                        MyMessageBox.ShowDialog("匯入失敗,請檢查是否檔案開啟中!");
+                        this.Cursor = Cursors.Default;
+                        return;
+                    }
+                    DataTable datatable_buf = dataTable.ReorderTable(new enum_人員資料_匯入());
+                    if (datatable_buf == null)
+                    {
+                        MyMessageBox.ShowDialog("匯入檔案,資料錯誤!");
+                        this.Cursor = Cursors.Default;
+                        return;
+                    }
+                    List<object[]> list_LoadValue = datatable_buf.DataTableToRowList();
+                    List<object[]> list_SQL_Value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+
+
+                    if (datatable_buf.Columns.Contains("ID") == false)
+                    {
+                        MyMessageBox.ShowDialog("載入資料未包含'人員ID'");
+                        return;
+                    }
+                    for (int i = 0; i < datatable_buf.Rows.Count; i++)
+                    {
+                        string ID = datatable_buf.Rows[i]["ID"].ToString();
+                        string 姓名 = (datatable_buf.Columns.Contains(enum_人員資料.姓名.GetEnumName())) ? datatable_buf.Rows[i]["姓名"].ToString() : "none";
+                        string 權限等級 = (datatable_buf.Columns.Contains(enum_人員資料.權限等級.GetEnumName())) ? datatable_buf.Rows[i]["權限等級"].ToString() : "none";
+                        string 性別 = (datatable_buf.Columns.Contains(enum_人員資料.性別.GetEnumName())) ? datatable_buf.Rows[i]["性別"].ToString() : "none";
+                        string 藥師證字號 = (datatable_buf.Columns.Contains(enum_人員資料.藥師證字號.GetEnumName())) ? datatable_buf.Rows[i]["藥師證字號"].ToString() : "none";
+                        if (!(性別 == "男" || 性別 == "女") && 性別 != "none") 性別 = "男";
+
+                        object[] obj = list_SQL_Value.Where(x => x[(int)enum_人員資料.ID].ObjectToString() == ID).FirstOrDefault();
+                        if (obj == null)
                         {
-                            list_Replace_SerchValue.Add(value_load[(int)enum_人員資料.GUID].ObjectToString());
-                            list_Replace_Value.Add(value_load);
+                            obj = new object[new enum_人員資料().GetLength()];
+                            obj[(int)enum_人員資料.GUID] = Guid.NewGuid().ToString();
+                            obj[(int)enum_人員資料.ID] = ID;
+                            if (姓名 != "none") obj[(int)enum_人員資料.姓名] = 姓名;
+                            if (權限等級 != "none") obj[(int)enum_人員資料.權限等級] = 權限等級;
+                            if (性別 != "none") obj[(int)enum_人員資料.性別] = 性別;
+                            if (藥師證字號 != "none") obj[(int)enum_人員資料.藥師證字號] = 藥師證字號;
+                            list_SQL_Value_add.Add(obj);
                         }
+                        else
+                        {
+                            if (姓名 != "none") obj[(int)enum_人員資料.姓名] = 姓名;
+                            if (權限等級 != "none") obj[(int)enum_人員資料.權限等級] = 權限等級;
+                            if (性別 != "none") obj[(int)enum_人員資料.性別] = 性別;
+                            if (藥師證字號 != "none") obj[(int)enum_人員資料.藥師證字號] = 藥師證字號;
+                            list_SQL_Value_replace.Add(obj);
+                        }
+
                     }
-                    else
-                    {
-                        value_load[(int)enum_人員資料.GUID] = Guid.NewGuid().ToString();
-                        list_Add.Add(value_load);
-                    }
+
+
+                    this.sqL_DataGridView_人員資料.SQL_AddRows(list_SQL_Value_add, false);
+                    this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_SQL_Value_replace, false);
+                    this.sqL_DataGridView_人員資料.SQL_GetAllRows(true);
+                    MyMessageBox.ShowDialog($"匯入完成,新增<{list_SQL_Value_add.Count}>筆,修改<{list_SQL_Value_replace.Count}>筆");
                 }
-                this.sqL_DataGridView_人員資料.SQL_AddRows(list_Add, false);
-                this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(enum_人員資料.GUID.GetEnumName(), list_Replace_SerchValue, list_Replace_Value, false);
-                this.sqL_DataGridView_人員資料.SQL_GetAllRows(true);
-                this.Cursor = Cursors.Default;
+              
             }
-            this.Cursor = Cursors.Default;
-            MyMessageBox.ShowDialog("匯入完成!");
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+          
         }
         private void Function_人員資料_管制抽屜開鎖權限_UI更新()
         {

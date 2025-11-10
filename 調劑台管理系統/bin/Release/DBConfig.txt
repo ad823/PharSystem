@@ -1,4 +1,4 @@
 {
-  "Name": "A7",
-  "Api_Server": "http://220.135.128.247:4433"
+  "Name": "ADC(ER)",
+  "Api_Server": "http://192.168.110.73:4433"
 }
