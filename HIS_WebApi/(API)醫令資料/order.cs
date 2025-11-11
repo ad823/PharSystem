@@ -212,7 +212,7 @@ namespace HIS_WebApi
                 List<object[]> list_value_buf = sQLControl_醫令資料.GetRowsByBetween(null, (int)enum_醫囑資料.開方日期, date_st.ToDateTimeString(), date_end.ToDateTimeString());
                 List<OrderClass> OrderClasses = list_value_buf.SQLToClass<OrderClass, enum_醫囑資料>();
 
-                OrderClasses.sort(OrderClassMethod.SortType.產出時間);
+                OrderClasses.sort(OrderClassMethod.SortType.開方日期);
 
                 returnData.Code = 200;
                 returnData.Result = $"取得西藥醫令!共<{OrderClasses.Count}>筆資料";
