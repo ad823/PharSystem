@@ -393,7 +393,7 @@ namespace HIS_WebApi._API_住院調劑系統
 
         private async Task<string> CheckCreatTable()
         {
-            List<sys_serverSettingClass> sys_serverSettingClasses = await ServerSettingController.GetAllServerSettingasync("Main", "網頁", "VM端");
+            List<sys_serverSettingClass> sys_serverSettingClasses = await ServerSettingController.GetServerSettingasync("Main", "網頁", "VM端");
             if (sys_serverSettingClasses.Count == 0)
             {
                 returnData returnData = new returnData();

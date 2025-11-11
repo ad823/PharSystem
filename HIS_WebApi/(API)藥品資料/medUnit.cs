@@ -221,7 +221,7 @@ namespace HIS_WebApi
                         {                            
                             medUnits_buff.單位類型 = medUnits[i].單位類型;
                             medUnits_buff.單位名稱 = medUnits[i].單位名稱;
-                            medUnits_buff.換算數量 = medUnits[i].換算數量;
+                            medUnits_buff.數量 = medUnits[i].數量;
                             medUnits_buff.排序順序 = medUnits[i].排序順序;
                             update_units.Add(medUnits_buff);
 

@@ -1078,7 +1078,7 @@ namespace HIS_WebApi
             return sys_serverSettingClasses;
         }
         [ApiExplorerSettings(IgnoreApi = true)]
-        static public async Task<List<sys_serverSettingClass>> GetAllServerSettingasync(string Name, string Type, string Content)
+        static public async Task<List<sys_serverSettingClass>> GetServerSettingasync(string Name, string Type, string Content)
         {
             SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
             string command = $"SELECT * FROM {DB}.ServerSetting WHERE 設備名稱 = '{Name}' AND 類別 = '{Type}' AND 內容 = '{Content}';";

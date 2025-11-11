@@ -4343,5 +4343,12 @@ namespace HIS_WebApi
             string result = await get_med_clouds_by_codes(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_med_cloud()
+        {
+            returnData returnData = new returnData();
+            string result = await get_med_cloud(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
     }
 }

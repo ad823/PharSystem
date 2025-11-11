@@ -55,9 +55,9 @@ namespace HIS_DB_Lib
         /// <summary>
         /// 與上層單位的換算數量（若無則為 null）
         /// </summary>
-        [Description("換算數量,VARCHAR,20,NONE")]
-        [JsonPropertyName("quantity_per_parent")]
-        public string 換算數量 { get; set; }
+        [Description("數量,VARCHAR,20,NONE")]
+        [JsonPropertyName("quantity")]
+        public string 數量 { get; set; }
 
         /// <summary>
         /// 排序順序（數字越小越前面）
@@ -65,6 +65,9 @@ namespace HIS_DB_Lib
         [Description("排序順序,VARCHAR,10,NONE")]
         [JsonPropertyName("sort_order")]
         public string 排序順序 { get; set; }
+        [Description("VARCHAR,10,NONE")]
+        [JsonPropertyName("conversion_rate")]
+        public string 換算比 { get; set; }
     }
     public static class medUnitClassMethod
     {

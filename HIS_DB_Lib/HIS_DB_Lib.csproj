@@ -202,7 +202,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\0.DLL"
-copy /Y "$(TargetDir)$(ProjectName).xml" "$(SolutionDir)\0.DLL"</PostBuildEvent>
+copy /Y "$(TargetDir)$(ProjectName).xml" "$(SolutionDir)\0.DLL"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\HIS_WebApi\0.DLL"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
