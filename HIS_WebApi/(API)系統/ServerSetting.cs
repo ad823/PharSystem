@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Basic;
+using HIS_DB_Lib;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using SQLUI;
-using Basic;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
-using HIS_DB_Lib;
+using System.Data;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 namespace HIS_WebApi
 {
     [Route("api/[controller]")]
@@ -1078,6 +1079,17 @@ namespace HIS_WebApi
             return sys_serverSettingClasses;
         }
         [ApiExplorerSettings(IgnoreApi = true)]
+        static public  sys_serverSettingClass GetServerSetting(string Name, string Type, string Content)
+        {
+            SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
+            string command = $"SELECT * FROM {DB}.ServerSetting WHERE 設備名稱 = '{Name}' AND 類別 = '{Type}' AND 內容 = '{Content}';";
+            DataTable dataTable = sQLControl.WtrteCommandAndExecuteReader(command);
+
+            List<object[]> list_= dataTable.DataTableToRowList();
+            sys_serverSettingClass sys_serverSettingClasses = list_.SQLToClass<sys_serverSettingClass, enum_sys_serverSetting>().FirstOrDefault();
+            return sys_serverSettingClasses;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
         static public async Task<List<sys_serverSettingClass>> GetServerSettingasync(string Name, string Type, string Content)
         {
             SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
@@ -1104,6 +1116,23 @@ namespace HIS_WebApi
                 return null;
             }
             
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        static public async Task<List<sys_serverSettingClass>> GetServerSettingByTypeasync( string Type, string Content)
+        {
+            try
+            {
+                SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
+                string command = $"SELECT * FROM {DB}.ServerSetting WHERE 類別 = '{Type}'  AND 內容 = '{Content}';";
+                List<object[]> list_value = await sQLControl.WriteCommandAsync(command);
+                List<sys_serverSettingClass> sys_serverSettingClasses = list_value.SQLToClass<sys_serverSettingClass, enum_sys_serverSetting>();
+                return sys_serverSettingClasses;
+            }
+            catch
+            {
+                return null;
+            }
+
         }
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<returnData> get_serversetting_by_department_type(string department_type)

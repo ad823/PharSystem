@@ -51,6 +51,13 @@ namespace HIS_DB_Lib
         收貨時間,
         操作人,
     }
+    public enum enum_採購資料匯出
+    {
+        藥碼,
+        料號,
+        藥名,
+        採購數量
+    }
 
 
     [EnumDescription("inspection_creat")]

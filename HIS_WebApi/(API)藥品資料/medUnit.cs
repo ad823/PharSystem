@@ -25,7 +25,7 @@ namespace HIS_WebApi
     public class medUnit : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        private string APIServer = Method.GetServerAPI("Main", "網頁", "API01");
+        private string APIServer = "http://127.0.0.1:4433";
         private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
            serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
            {
@@ -441,7 +441,7 @@ namespace HIS_WebApi
                     return await returnData.JsonSerializationtAsync(true);
                 }
                 string code = returnData.ValueAry[0];
-                returnData returnData_med_page = await new MED_pageController().get_by_code(code);
+                returnData returnData_med_page = await new MED_pageController().get_by_code(code, "Main", "網頁");
                 if (returnData_med_page == null || returnData_med_page.Code != 200)
                 {
                     returnData.Code = -200;
@@ -473,7 +473,59 @@ namespace HIS_WebApi
             }
             
         }
+        /// <summary>
+        /// 依 <c>Med_GUID</c> 查詢藥品單位資訊。
+        /// </summary>
+        /// <remarks>
+        /// 此 API 會：
+        /// 1. 從傳入的 <c>returnData.ValueAry</c> 取得欲查詢的 <c>Med_GUID</c>。  
+        /// 2. 若傳入多筆以分號 (<c>;</c>) 分隔，可一次查詢多個 <c>Med_GUID</c>。  
+        /// 3. 回傳符合條件的所有藥品單位資料。  
+        ///
+        /// <example>
+        /// <code>
+        /// POST /api/medUnit/get_all
+        /// {
+        /// }
+        /// </code>        
+        /// </example>
+        /// </remarks>
+        [HttpPost("get_all")]
+        public async Task<string> get_all([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                
 
+                // 3️⃣ 取得連線資訊
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl = new SQLControl(Server, DB, tableName, UserName, Password, Port, SSLMode);
+
+                // 4️⃣ 查詢資料
+                List<object[]> rows = await sQLControl.GetAllRowsAsync(null);
+                List<medUnitClass> medUnitClasses = rows.SQLToClass<medUnitClass>();
+
+                // 5️⃣ 排序（依 Med_GUID、排序順序）
+                medUnitClasses = medUnitClasses
+                    .OrderBy(m => m.Med_GUID)
+                    .ThenBy(m => m.排序順序)
+                    .ToList();
+
+                // 6️⃣ 組回傳
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = medUnitClasses;
+                returnData.Result = $"依Med_GUID查詢<{medUnitClasses.Count}>筆成功";
+                return await returnData.JsonSerializationtAsync(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
 
         private string CheckCreatTable()
         {
@@ -491,13 +543,19 @@ namespace HIS_WebApi
             tables.Add(MethodClass.CheckCreatTable<medUnitClass>(sys_serverSettingClasses[0]));
             return tables.JsonSerializationt(true);
         }
-        [ApiExplorerSettings(IgnoreApi = true)]
         private async Task<returnData> get_by_Med_GUID(string med_guid)
         {
             returnData returnData = new returnData();
             returnData.ValueAry.Add(med_guid);
 
             string result = await get_by_Med_GUID(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_all()
+        {
+            returnData returnData = new returnData();
+            string result = await get_all(returnData);
             return result.JsonDeserializet<returnData>();
         }
     }

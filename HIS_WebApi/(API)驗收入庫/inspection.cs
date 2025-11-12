@@ -2786,7 +2786,9 @@ namespace HIS_WebApi
         [HttpPost]
         public async Task<ActionResult> download_excel_by_IC_SN([FromBody] returnData returnData)
         {
-            string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_download");
+            List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_download");
+            string VM_API = string.Empty;
+            if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
             if (VM_API.StringIsEmpty() == false)
             {
                 string json_in = returnData.JsonSerializationt();
@@ -2894,7 +2896,9 @@ namespace HIS_WebApi
         {
             try
             {
-                string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_download");
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_download");
+                string VM_API = string.Empty;
+                if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
@@ -2972,6 +2976,51 @@ namespace HIS_WebApi
                 }
                 System.Data.DataTable dataTable = objects.ToDataTable(new enum_驗收資料匯出());
                 //dataTable = dataTable.ReorderTable(new enum_med_cpoe_export());
+
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xls_command = "application/vnd.ms-excel";
+                byte[] excelData = MyOffice.ExcelClass.NPOI_GetBytes(dataTable, Excel_Type.xlsx);
+                Stream stream = new MemoryStream(excelData);
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_驗收資料.xlsx"));
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        [HttpPost("download_purchaseExcel")]
+        public async Task<ActionResult> download_purchaseExcel([FromBody] returnData returnData)
+        {
+            try
+            {               
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+
+                List<inspectionClass.content> contents = returnData.Data.ObjToClass<List<inspectionClass.content>>();
+                if (contents == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+
+                List<object[]> objects = new List<object[]>();
+                foreach (var item in contents)
+                {
+                    object[] value = new object[new enum_採購資料匯出().GetLength()];
+                    value[(int)enum_採購資料匯出.藥碼] = item.藥品碼;
+                    value[(int)enum_採購資料匯出.料號] = item.料號;
+                    value[(int)enum_採購資料匯出.藥名] = item.藥品名稱;
+                    value[(int)enum_採購資料匯出.採購數量] = item.應收數量;
+                    objects.Add(value);
+
+                }
+                System.Data.DataTable dataTable = objects.ToDataTable(new enum_採購資料匯出());
 
                 string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 string xls_command = "application/vnd.ms-excel";
@@ -3131,7 +3180,9 @@ namespace HIS_WebApi
         [HttpPost]
         public async Task<string> excel_upload_extra([FromForm] IFormFile file)
         {
-            string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_upload");
+            List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_upload");
+            string VM_API = string.Empty;
+            if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
             if (VM_API.StringIsEmpty() == false)
             {
                 using (var client = new HttpClient())

@@ -1269,8 +1269,9 @@ namespace HIS_WebApi
         {
             try
             {
-                string VM_API = Method.GetServerAPI("Main", "網頁", "cdmi_excel_download_api");
-                Logger.Log("download_cdmis_datas_excel", returnData.JsonSerializationt(true));
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "cdmi_excel_download_api");
+                string VM_API = string.Empty;
+                if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();

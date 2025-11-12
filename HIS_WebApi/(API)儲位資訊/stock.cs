@@ -61,6 +61,8 @@ namespace HIS_WebApi
                     returnData_med_cloud.Result += "藥檔取得失敗";
                     return returnData_med_cloud.JsonSerializationt(true);
                 }
+                returnData returnData_med_unit = await new medUnit().get_all();
+
                 List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
                 Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
 
