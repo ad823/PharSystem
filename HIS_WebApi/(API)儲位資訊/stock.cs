@@ -62,13 +62,22 @@ namespace HIS_WebApi
                     return returnData_med_cloud.JsonSerializationt(true);
                 }
                 returnData returnData_med_unit = await new medUnit().get_all();
+                if (returnData_med_unit == null || returnData_med_unit.Code != 200)
+                {
+                    returnData_med_unit.Result += "藥品單位取得失敗";
+                    return returnData_med_unit.JsonSerializationt(true);
+                }
 
                 List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
                 Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
 
+                List<medUnitClass> medUnitClasses = returnData_med_unit.Data.ObjToClass<List<medUnitClass>>();
+                Dictionary<string, List<medUnitClass>> medUnitDict = medUnitClasses.ToDictByMedGuid();
+
+
                 string clssify_GUID = string.Join(";", stockClasses.Select(x => x.Classify_GUID).Distinct());
-                returnData returnData1_get_by_GUID = await new medClassify().get_by_GUID(clssify_GUID);
-                List<medClassifyClass> medClassifyClasses = returnData1_get_by_GUID.Data.ObjToClass<List<medClassifyClass>>();
+                returnData returnData_get_by_GUID = await new medClassify().get_by_GUID(clssify_GUID);
+                List<medClassifyClass> medClassifyClasses = returnData_get_by_GUID.Data.ObjToClass<List<medClassifyClass>>();
                 if (medClassifyClasses == null) medClassifyClasses = new List<medClassifyClass>();
                 List<List<stockClass>> groupedList = stockClasses
                     .GroupBy(s => s.Classify_GUID)  
@@ -82,6 +91,8 @@ namespace HIS_WebApi
                     foreach (var stock in list)
                     {
                         List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼);
+                        string med_GUID = medClasses.Count > 0 ? medClasses[0].GUID : "";
+                        List<medUnitClass> medUnits = medUnitDict.GetByMasterGUID(med_GUID);
                         string value = stock.Value;
                         if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
                         DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
@@ -92,6 +103,7 @@ namespace HIS_WebApi
                         stock.med_cloud = medClasses.Count > 0 ? medClasses[0] : null;
                         stock.藥名 = medClasses.Count > 0 ? medClasses[0].藥品名稱 : "";
                         stock.料號 = medClasses.Count > 0 ? medClasses[0].料號 : "";
+                        stock.med_unit = medUnits;
                     }
                 }
 
