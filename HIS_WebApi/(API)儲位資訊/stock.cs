@@ -67,13 +67,20 @@ namespace HIS_WebApi
                     returnData_med_unit.Result += "藥品單位取得失敗";
                     return returnData_med_unit.JsonSerializationt(true);
                 }
+                returnData returnData_content_get = await new inspectionController().content_get();
+                List<inspectionClass.content> contents = new List<inspectionClass.content>();
 
+                if (returnData_med_unit != null || returnData_med_unit.Code == 200)
+                {
+                    contents = returnData_content_get.Data.ObjToClass<List<inspectionClass.content>>();
+                }
                 List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
                 Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
 
                 List<medUnitClass> medUnitClasses = returnData_med_unit.Data.ObjToClass<List<medUnitClass>>();
                 Dictionary<string, List<medUnitClass>> medUnitDict = medUnitClasses.ToDictByMedGuid();
 
+                Dictionary<string, List<inspectionClass.content>> contentDict = contents.ToDictByCode();
 
                 string clssify_GUID = string.Join(";", stockClasses.Select(x => x.Classify_GUID).Distinct());
                 returnData returnData_get_by_GUID = await new medClassify().get_by_GUID(clssify_GUID);

@@ -895,6 +895,78 @@ namespace HIS_WebApi
             }
 
         }
+        [HttpPost("content_get")]
+        public async Task<string> content_get([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimerBasic myTimerBasic = new MyTimerBasic();
+                
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                string tableName_inspection_content = "inspection_content";
+                string tableName_inspection_sub_content = "inspection_sub_content";
+
+                SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, tableName_inspection_content, UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
+
+                string command = @"
+                    SELECT c.*
+                    FROM dbvm.inspection_content c
+                    WHERE 
+                        NOT EXISTS (
+                            SELECT 1
+                            FROM dbvm.inspection_sub_content s1
+                            WHERE s1.Master_GUID = c.GUID
+                        )
+                        OR
+                        EXISTS (
+                            SELECT 1
+                            FROM dbvm.inspection_sub_content s2
+                            WHERE s2.Master_GUID = c.GUID
+                              AND DATE(s2.操作時間) = CURDATE()
+                        );";
+
+
+                List<object[]> list_inspection_content = await sQLControl_inspection_content.WriteCommandAsync(command);
+                List<inspectionClass.content> contents = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
+                if (contents.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此資料!";
+                    return returnData.JsonSerializationt(true);
+                }
+                List<string> guids = contents.Select(x => x.GUID).ToList();
+                string command_sub_content = $"SELECT * FROM dbvm.{tableName_inspection_sub_content} WHERE Master_GUID IN @guidList";
+                object param_sub_content = new { guidList = guids };
+                List<object[]> list_inspection_sub_content = await sQLControl_inspection_sub_content.WriteCommandAsync(command_sub_content, param_sub_content);
+                List<inspectionClass.sub_content> sub_Contents = list_inspection_sub_content.SQLToClass<inspectionClass.sub_content, enum_驗收明細>();
+
+                if (sub_Contents.Count > 0)
+                {
+                    Dictionary<string, List<inspectionClass.sub_content>> dic = sub_Contents.ToDictByMasterGUID();
+                    foreach (var item in contents)
+                    {
+                        List<inspectionClass.sub_content> subs = dic.GetByMasterGUID(item.GUID);
+                        item.Sub_content = subs;
+                    }
+                }
+
+                returnData.Data = contents;
+                returnData.Code = 200;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Result = $"資料，共{contents.Count}筆";
+                returnData.Method = "content_get_by_addTime";
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt(true);
+            }
+
+        }
         [HttpPost("content_get_by_sub_content_addTime")]
         public async Task<string> content_get_by_sub_content_addTime([FromBody] returnData returnData)
         {
@@ -3678,5 +3750,12 @@ namespace HIS_WebApi
             string result = await sub_contents_get_by_code(returnData);
             return result.JsonDeserializet<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> content_get()
+        {
+            returnData returnData = new returnData();
+            string result = await content_get(returnData);
+            return result.JsonDeserializet<returnData>();
+        }     
     }
 }
