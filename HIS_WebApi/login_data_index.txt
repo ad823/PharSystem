@@ -960,9 +960,9 @@
     {
       "GUID": "99de7e3c-1f34-40ff-a5a7-6d7cc31af40d",
       "index": "126",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "權限設定",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
