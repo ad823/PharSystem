@@ -35,9 +35,11 @@ namespace FADC
 
             private bool controlMode = false;
             private string servoZ_Com = "COM1";
+            private string board_IP = "";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
+            public string Board_IP { get => board_IP; set => board_IP = value; }
         }
         private void LoadMyConfig()
         {

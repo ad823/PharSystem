@@ -1,4 +1,5 @@
 ﻿using Basic;
+using H_Pannel_lib;
 using MinasA6DLL;
 using MyUI;
 using System;
@@ -14,6 +15,15 @@ namespace FADC
 {
     public partial class MainForm : Form
     {
+        public enum enunm_InOutBoard
+        {
+            ServerPower = 3,
+            輸送帶反轉 = 4,
+            輸送帶正轉 = 5,
+            輸送帶前進 = 6,
+            輸送帶後退 = 7,
+        }
+
         public static PLC_Device PLC_Device_Z軸馬達位置 = new PLC_Device("D4000");
         public static PLC_Device PLC_Device_Z軸馬達速度 = new PLC_Device("D4001");
         public static PLC_Device PLC_Device_Z軸馬達加速度 = new PLC_Device("D4002");
@@ -74,14 +84,12 @@ namespace FADC
             plC_RJ_Button_Z軸回零.MouseDownEvent += PlC_RJ_Button_Z軸回零_MouseDownEvent;
             plC_RJ_Button_Z軸Alarm.MouseDownEvent += PlC_RJ_Button_Z軸Alarm_MouseDownEvent;
 
-            plC_RJ_Button1_Z軸停止.MouseDownEvent += PlC_RJ_Button1_Z軸停止_MouseDownEvent;
+            plC_RJ_Button_Z軸停止.MouseDownEvent += PlC_RJ_Button_Z軸停止_MouseDownEvent;
             plC_RJ_Button_Z軸上升.MouseDownEvent += PlC_RJ_Button_Z軸上升_MouseDownEvent;
             plC_RJ_Button_Z軸下降.MouseDownEvent += PlC_RJ_Button_Z軸下降_MouseDownEvent;
 
             this.plC_UI_Init.Add_Method(sub_Program_PLC);
         }
-
- 
         public void sub_Program_PLC()
         {
             if (flag_minasA6_isOpen == true)
@@ -162,9 +170,14 @@ namespace FADC
                 sub_Program_Z軸移動到第四層();
                 sub_Program_Z軸移動到第五層();
                 sub_Program_Z軸移動到頂層();
+
+                sub_Program_輸送帶正轉();
+                sub_Program_輸送帶反轉();
+                sub_Program_輸送帶前進();
+                sub_Program_輸送帶後退();
+
             }
         }
-
 
         #region PLC_Z軸絕對位置移動
         PLC_Device PLC_Device_Z軸絕對位置移動 = new PLC_Device("S1000");
@@ -632,26 +645,320 @@ namespace FADC
 
 
         #endregion
+
+        #region PLC_輸送帶正轉
+        public static PLC_Device PLC_Device_輸送帶正轉 = new PLC_Device("S2000");
+        public static PLC_Device PLC_Device_輸送帶正轉時間 = new PLC_Device("D2000");
+        MyTimerBasic MyTimerBasic_輸送帶正轉_檢查延遲 = new MyTimerBasic();
+        Task Task_輸送帶正轉;
+        MyTimer MyTimer_輸送帶正轉_結束延遲 = new MyTimer();
+        int cnt_Program_輸送帶正轉 = 65534;
+        void sub_Program_輸送帶正轉()
+        {
+            if (cnt_Program_輸送帶正轉 == 65534)
+            {
+                this.MyTimer_輸送帶正轉_結束延遲.StartTickTime(10000);
+                PLC_Device_輸送帶正轉.SetComment("PLC_輸送帶正轉");
+                PLC_Device_輸送帶正轉.Bool = false;
+                cnt_Program_輸送帶正轉 = 65535;
+            }
+            if (cnt_Program_輸送帶正轉 == 65535) cnt_Program_輸送帶正轉 = 1;
+            if (cnt_Program_輸送帶正轉 == 1) cnt_Program_輸送帶正轉_檢查按下(ref cnt_Program_輸送帶正轉);
+            if (cnt_Program_輸送帶正轉 == 2) cnt_Program_輸送帶正轉_初始化(ref cnt_Program_輸送帶正轉);
+            if (cnt_Program_輸送帶正轉 == 3) cnt_Program_輸送帶正轉_開始移動(ref cnt_Program_輸送帶正轉);
+            if (cnt_Program_輸送帶正轉 == 4) cnt_Program_輸送帶正轉_等待移動完成(ref cnt_Program_輸送帶正轉);
+            if (cnt_Program_輸送帶正轉 == 5) cnt_Program_輸送帶正轉 = 65500;
+            if (cnt_Program_輸送帶正轉 > 1) cnt_Program_輸送帶正轉_檢查放開(ref cnt_Program_輸送帶正轉);
+
+            if (cnt_Program_輸送帶正轉 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_輸送帶正轉_結束延遲.TickStop();
+                this.MyTimer_輸送帶正轉_結束延遲.StartTickTime(10000);
+                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
+                PLC_Device_輸送帶正轉.Bool = false;
+                cnt_Program_輸送帶正轉 = 65535;
+            }
+        }
+        void cnt_Program_輸送帶正轉_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_輸送帶正轉.Bool) cnt++;
+        }
+        void cnt_Program_輸送帶正轉_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_輸送帶正轉.Bool) cnt = 65500;
+        }
+        void cnt_Program_輸送帶正轉_初始化(ref int cnt)
+        {
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_輸送帶正轉_開始移動(ref int cnt)
+        {
+            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, true);
+            MyTimerBasic_輸送帶正轉_檢查延遲.TickStop();
+            MyTimerBasic_輸送帶正轉_檢查延遲.StartTickTime(PLC_Device_輸送帶正轉時間.Value);
+            cnt++;
+        }
+        void cnt_Program_輸送帶正轉_等待移動完成(ref int cnt)
+        {
+            if (MyTimerBasic_輸送帶正轉_檢查延遲.IsTimeOut())
+            {
+                cnt++;
+            }
+        }
+
+
+
+
+
+
+        #endregion
+        #region PLC_輸送帶反轉
+        public static PLC_Device PLC_Device_輸送帶反轉 = new PLC_Device("S2001");
+        public static PLC_Device PLC_Device_輸送帶反轉時間 = new PLC_Device("D2001");
+        MyTimerBasic MyTimerBasic_輸送帶反轉_檢查延遲 = new MyTimerBasic();
+        Task Task_輸送帶反轉;
+        MyTimer MyTimer_輸送帶反轉_結束延遲 = new MyTimer();
+        int cnt_Program_輸送帶反轉 = 65534;
+        void sub_Program_輸送帶反轉()
+        {
+            if (cnt_Program_輸送帶反轉 == 65534)
+            {
+                this.MyTimer_輸送帶反轉_結束延遲.StartTickTime(10000);
+                PLC_Device_輸送帶反轉.SetComment("PLC_輸送帶反轉");
+                PLC_Device_輸送帶反轉.Bool = false;
+                cnt_Program_輸送帶反轉 = 65535;
+            }
+            if (cnt_Program_輸送帶反轉 == 65535) cnt_Program_輸送帶反轉 = 1;
+            if (cnt_Program_輸送帶反轉 == 1) cnt_Program_輸送帶反轉_檢查按下(ref cnt_Program_輸送帶反轉);
+            if (cnt_Program_輸送帶反轉 == 2) cnt_Program_輸送帶反轉_初始化(ref cnt_Program_輸送帶反轉);
+            if (cnt_Program_輸送帶反轉 == 3) cnt_Program_輸送帶反轉_開始移動(ref cnt_Program_輸送帶反轉);
+            if (cnt_Program_輸送帶反轉 == 4) cnt_Program_輸送帶反轉_等待移動完成(ref cnt_Program_輸送帶反轉);
+            if (cnt_Program_輸送帶反轉 == 5) cnt_Program_輸送帶反轉 = 65500;
+            if (cnt_Program_輸送帶反轉 > 1) cnt_Program_輸送帶反轉_檢查放開(ref cnt_Program_輸送帶反轉);
+
+            if (cnt_Program_輸送帶反轉 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_輸送帶反轉_結束延遲.TickStop();
+                this.MyTimer_輸送帶反轉_結束延遲.StartTickTime(10000);
+                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
+                PLC_Device_輸送帶反轉.Bool = false;
+                cnt_Program_輸送帶反轉 = 65535;
+            }
+        }
+        void cnt_Program_輸送帶反轉_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_輸送帶反轉.Bool) cnt++;
+        }
+        void cnt_Program_輸送帶反轉_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_輸送帶反轉.Bool) cnt = 65500;
+        }
+        void cnt_Program_輸送帶反轉_初始化(ref int cnt)
+        {
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_輸送帶反轉_開始移動(ref int cnt)
+        {
+            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, true);
+            MyTimerBasic_輸送帶反轉_檢查延遲.TickStop();
+            MyTimerBasic_輸送帶反轉_檢查延遲.StartTickTime(PLC_Device_輸送帶反轉時間.Value);
+            cnt++;
+        }
+        void cnt_Program_輸送帶反轉_等待移動完成(ref int cnt)
+        {
+            if (MyTimerBasic_輸送帶反轉_檢查延遲.IsTimeOut())
+            {
+                cnt++;
+            }
+        }
+
+
+
+
+
+
+        #endregion
+        #region PLC_輸送帶前進
+        public static PLC_Device PLC_Device_輸送帶前進 = new PLC_Device("S2003");
+        public static PLC_Device PLC_Device_輸送帶前進時間 = new PLC_Device("D2003");
+        MyTimerBasic MyTimerBasic_輸送帶前進_檢查延遲 = new MyTimerBasic();
+        Task Task_輸送帶前進;
+        MyTimer MyTimer_輸送帶前進_結束延遲 = new MyTimer();
+        int cnt_Program_輸送帶前進 = 65534;
+        void sub_Program_輸送帶前進()
+        {
+            if (cnt_Program_輸送帶前進 == 65534)
+            {
+                this.MyTimer_輸送帶前進_結束延遲.StartTickTime(10000);
+                PLC_Device_輸送帶前進.SetComment("PLC_輸送帶前進");
+                PLC_Device_輸送帶前進.Bool = false;
+                cnt_Program_輸送帶前進 = 65535;
+            }
+            if (cnt_Program_輸送帶前進 == 65535) cnt_Program_輸送帶前進 = 1;
+            if (cnt_Program_輸送帶前進 == 1) cnt_Program_輸送帶前進_檢查按下(ref cnt_Program_輸送帶前進);
+            if (cnt_Program_輸送帶前進 == 2) cnt_Program_輸送帶前進_初始化(ref cnt_Program_輸送帶前進);
+            if (cnt_Program_輸送帶前進 == 3) cnt_Program_輸送帶前進_開始移動(ref cnt_Program_輸送帶前進);
+            if (cnt_Program_輸送帶前進 == 4) cnt_Program_輸送帶前進_等待移動完成(ref cnt_Program_輸送帶前進);
+            if (cnt_Program_輸送帶前進 == 5) cnt_Program_輸送帶前進 = 65500;
+            if (cnt_Program_輸送帶前進 > 1) cnt_Program_輸送帶前進_檢查放開(ref cnt_Program_輸送帶前進);
+
+            if (cnt_Program_輸送帶前進 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_輸送帶前進_結束延遲.TickStop();
+                this.MyTimer_輸送帶前進_結束延遲.StartTickTime(10000);
+                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
+                PLC_Device_輸送帶前進.Bool = false;
+                cnt_Program_輸送帶前進 = 65535;
+            }
+        }
+        void cnt_Program_輸送帶前進_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool) cnt++;
+        }
+        void cnt_Program_輸送帶前進_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_輸送帶前進.Bool) cnt = 65500;
+        }
+        void cnt_Program_輸送帶前進_初始化(ref int cnt)
+        {
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_輸送帶前進_開始移動(ref int cnt)
+        {
+            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, true);
+            MyTimerBasic_輸送帶前進_檢查延遲.TickStop();
+            MyTimerBasic_輸送帶前進_檢查延遲.StartTickTime(PLC_Device_輸送帶前進時間.Value);
+            cnt++;
+        }
+        void cnt_Program_輸送帶前進_等待移動完成(ref int cnt)
+        {
+            if (MyTimerBasic_輸送帶前進_檢查延遲.IsTimeOut())
+            {
+                cnt++;
+            }
+        }
+
+
+
+
+
+
+        #endregion
+        #region PLC_輸送帶後退
+        public static PLC_Device PLC_Device_輸送帶後退 = new PLC_Device("S2004");
+        public static PLC_Device PLC_Device_輸送帶後退時間 = new PLC_Device("D2004");
+        MyTimerBasic MyTimerBasic_輸送帶後退_檢查延遲 = new MyTimerBasic();
+        Task Task_輸送帶後退;
+        MyTimer MyTimer_輸送帶後退_結束延遲 = new MyTimer();
+        int cnt_Program_輸送帶後退 = 65534;
+        void sub_Program_輸送帶後退()
+        {
+            if (cnt_Program_輸送帶後退 == 65534)
+            {
+                this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
+                PLC_Device_輸送帶後退.SetComment("PLC_輸送帶後退");
+                PLC_Device_輸送帶後退.Bool = false;
+                cnt_Program_輸送帶後退 = 65535;
+            }
+            if (cnt_Program_輸送帶後退 == 65535) cnt_Program_輸送帶後退 = 1;
+            if (cnt_Program_輸送帶後退 == 1) cnt_Program_輸送帶後退_檢查按下(ref cnt_Program_輸送帶後退);
+            if (cnt_Program_輸送帶後退 == 2) cnt_Program_輸送帶後退_初始化(ref cnt_Program_輸送帶後退);
+            if (cnt_Program_輸送帶後退 == 3) cnt_Program_輸送帶後退_開始移動(ref cnt_Program_輸送帶後退);
+            if (cnt_Program_輸送帶後退 == 4) cnt_Program_輸送帶後退_等待移動完成(ref cnt_Program_輸送帶後退);
+            if (cnt_Program_輸送帶後退 == 5) cnt_Program_輸送帶後退 = 65500;
+            if (cnt_Program_輸送帶後退 > 1) cnt_Program_輸送帶後退_檢查放開(ref cnt_Program_輸送帶後退);
+
+            if (cnt_Program_輸送帶後退 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_輸送帶後退_結束延遲.TickStop();
+                this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
+                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
+                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
+                PLC_Device_輸送帶後退.Bool = false;
+                cnt_Program_輸送帶後退 = 65535;
+            }
+        }
+        void cnt_Program_輸送帶後退_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_輸送帶後退.Bool) cnt++;
+        }
+        void cnt_Program_輸送帶後退_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_輸送帶後退.Bool) cnt = 65500;
+        }
+        void cnt_Program_輸送帶後退_初始化(ref int cnt)
+        {
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_輸送帶後退_開始移動(ref int cnt)
+        {
+            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
+            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, true);
+            MyTimerBasic_輸送帶後退_檢查延遲.TickStop();
+            MyTimerBasic_輸送帶後退_檢查延遲.StartTickTime(PLC_Device_輸送帶後退時間.Value);
+            cnt++;
+        }
+        void cnt_Program_輸送帶後退_等待移動完成(ref int cnt)
+        {
+            if (MyTimerBasic_輸送帶後退_檢查延遲.IsTimeOut())
+            {
+                cnt++;
+            }
+        }
+
+
+
+
+
+
+        #endregion
+
         private void PlC_RJ_Button_Z軸下降_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoJogNeg = true;
         }
-
         private void PlC_RJ_Button_Z軸上升_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoJogPos = true;
         }
-
-        private void PlC_RJ_Button1_Z軸停止_MouseDownEvent(MouseEventArgs mevent)
+        private void PlC_RJ_Button_Z軸停止_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoStop = true;
         }
-
         private void PlC_RJ_Button_Z軸回零_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoHome = true;
         }
-
         private void PlC_RJ_Button_Z軸激磁_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoOn = true;
