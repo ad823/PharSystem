@@ -83,10 +83,10 @@
       <HintPath>..\0.DLL\Basic.dll</HintPath>
     </Reference>
     <Reference Include="DrawingClass">
-      <HintPath>0.DLL\DrawingClass.dll</HintPath>
+      <HintPath>..\0.DLL\DrawingClass.dll</HintPath>
     </Reference>
     <Reference Include="HIS_DB_Lib">
-      <HintPath>..\..\inventorySystem\0.DLL\HIS_DB_Lib.dll</HintPath>
+      <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
     </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
@@ -102,13 +102,13 @@
       <HintPath>..\0.DLL\MyOffice.dll</HintPath>
     </Reference>
     <Reference Include="MySQL_Login">
-      <HintPath>0.DLL\MySQL_Login.dll</HintPath>
+      <HintPath>..\0.DLL\MySQL_Login.dll</HintPath>
     </Reference>
     <Reference Include="MyUI">
       <HintPath>..\0.DLL\MyUI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>0.DLL\NPOI.dll</HintPath>
+      <HintPath>..\0.DLL\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
       <HintPath>..\0.DLL\NPOI.OOXML.dll</HintPath>
@@ -120,10 +120,7 @@
       <HintPath>..\0.DLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="SQLUI">
-      <HintPath>0.DLL\SQLUI.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Management">
-      <HintPath>0.DLL\System.Management.dll</HintPath>
+      <HintPath>..\0.DLL\SQLUI.dll</HintPath>
     </Reference>
     <Reference Include="zxing">
       <HintPath>..\0.DLL\zxing.dll</HintPath>

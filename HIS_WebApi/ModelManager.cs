@@ -39,7 +39,7 @@ public class ModelManager
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError($"模型 {modelName} 初始化失敗: {ex.Message}");
+                        logger.LogError($"模型 {modelName} 初始化失敗");
                         throw;
                     }
                 }

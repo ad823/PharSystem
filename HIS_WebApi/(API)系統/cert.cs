@@ -14,7 +14,7 @@ using HIS_DB_Lib;
 using System.IO;
 namespace HIS_WebApi
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class cert : Controller
     {
@@ -39,9 +39,19 @@ namespace HIS_WebApi
         [HttpGet("lan")]
         public IActionResult GetCertificate_lan()
         {
-            var certPath = Path.Combine(Directory.GetCurrentDirectory(), currentDirectory, "certlm_lan.cer");
-            var certBytes = System.IO.File.ReadAllBytes(certPath);
-            return File(certBytes, "application/x-x509-ca-cert", "certlm_lan.cer");
+            try 
+            {
+                var certPath = Path.Combine(Directory.GetCurrentDirectory(), currentDirectory, "full_chain.cer");
+
+                var certBytes = System.IO.File.ReadAllBytes(certPath);
+                return File(certBytes, "application/x-x509-ca-cert", "full_chain.cer");
+            }
+            catch(Exception ex)
+            {
+                Logger.Log($"{ex.Message}");
+                return null;
+            }
+            
         }
     }
 }

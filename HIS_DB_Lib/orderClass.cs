@@ -79,6 +79,12 @@ namespace HIS_DB_Lib
         產出時間,
         [Description("過帳時間,DATETIME,20,INDEX")]
         過帳時間,
+        [Description("核對時間,DATETIME,20,INDEX")]
+        核對時間,
+        [Description("發藥時間,DATETIME,20,INDEX")]
+        發藥時間,
+        [Description("領藥時間,DATETIME,20,INDEX")]
+        領藥時間,
         [Description("就醫時間,DATETIME,20,INDEX")]
         就醫時間,
         [Description("藥師姓名,VARCHAR,50,INDEX")]
@@ -89,6 +95,10 @@ namespace HIS_DB_Lib
         核對姓名,
         [Description("核對ID,VARCHAR,15,INDEX")]
         核對ID,
+        [Description("發藥姓名,VARCHAR,50,INDEX")]
+        發藥姓名,
+        [Description("發藥ID,VARCHAR,15,INDEX")]
+        發藥ID,
         [Description("領藥姓名,VARCHAR,50,INDEX")]
         領藥姓名,
         [Description("領藥ID,VARCHAR,20,NONE")]
@@ -256,6 +266,21 @@ namespace HIS_DB_Lib
         [JsonPropertyName("POST_TIME")]
         public string 過帳時間 { get; set; }
         /// <summary>
+        /// 核對時間
+        /// </summary>
+        [JsonPropertyName("CHK_TIME")]
+        public string 核對時間 { get; set; }
+        /// <summary>
+        /// 發藥時間
+        /// </summary>
+        [JsonPropertyName("GIVE_TIME")]
+        public string 發藥時間 { get; set; }
+        /// <summary>
+        /// 領藥時間
+        /// </summary>
+        [JsonPropertyName("TAKE_TIME")]
+        public string 領藥時間 { get; set; }
+        /// <summary>
         /// 就醫時間
         /// </summary>
         [JsonPropertyName("VISITDT_TIME")]
@@ -280,6 +305,16 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("CHK_ID")]
         public string 核對ID { get; set; }
+        /// <summary>
+        /// 發藥姓名
+        /// </summary>
+        [JsonPropertyName("GIVER_NAME")]
+        public string 發藥姓名 { get; set; }
+        /// <summary>
+        /// 發藥ID
+        /// </summary>
+        [JsonPropertyName("GIVER_ID")]
+        public string 發藥ID { get; set; }
         /// <summary>
         /// 領藥姓名
         /// </summary>
@@ -823,6 +858,7 @@ namespace HIS_DB_Lib
             }
             Console.WriteLine($"{returnData_out}");
             List<OrderClass> orderClasses = returnData_out.Data.ObjToClass<List<OrderClass>>();
+            
             return (returnData_out.Code, returnData_out.Result, orderClasses);
         }
 

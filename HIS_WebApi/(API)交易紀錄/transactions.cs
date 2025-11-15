@@ -359,6 +359,10 @@ namespace HIS_WebApi
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl_trading.GetRowsByDefult(null, (int)enum_交易記錄查詢資料.藥品碼, returnData.Value);
+                for (int i = 0; i < list_value.Count; i++)
+                {
+                    if (list_value[i][(int)enum_交易記錄查詢資料.動作].ObjectToString() == "交班對點") list_value[i][(int)enum_交易記錄查詢資料.結存量] = list_value[i][(int)enum_交易記錄查詢資料.盤點量];
+                }
                 list_value.Sort(new ICP_交易記錄查詢());
                 List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                 returnData.Code = 200;
@@ -428,6 +432,10 @@ namespace HIS_WebApi
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl_trading.GetRowsByLike(null, (int)enum_交易記錄查詢資料.藥品名稱, $"%{returnData.Value}%");
+                for (int i = 0; i < list_value.Count; i++)
+                {
+                    if (list_value[i][(int)enum_交易記錄查詢資料.動作].ObjectToString() == "交班對點") list_value[i][(int)enum_交易記錄查詢資料.結存量] = list_value[i][(int)enum_交易記錄查詢資料.盤點量];
+                }
                 list_value.Sort(new ICP_交易記錄查詢());
                 List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                 returnData.Code = 200;
@@ -578,6 +586,10 @@ namespace HIS_WebApi
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl_trading.GetRowsByBetween(null, (int)enum_交易記錄查詢資料.操作時間, date_st.ToDateTimeString(), date_end.ToDateTimeString());
+                for (int i = 0; i < list_value.Count; i++)
+                {
+                    if (list_value[i][(int)enum_交易記錄查詢資料.動作].ObjectToString() == "交班對點") list_value[i][(int)enum_交易記錄查詢資料.結存量] = list_value[i][(int)enum_交易記錄查詢資料.盤點量];
+                }
                 list_value.Sort(new ICP_交易記錄查詢());
                 List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                 returnData.Code = 200;
@@ -659,6 +671,11 @@ namespace HIS_WebApi
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl_trading.GetRowsByBetween(null, (int)enum_交易記錄查詢資料.開方時間, date_st.ToDateTimeString(), date_end.ToDateTimeString());
+                for(int i = 0; i < list_value.Count; i++)
+                {
+                    if (list_value[i][(int)enum_交易記錄查詢資料.動作].ObjectToString() == "交班對點") list_value[i][(int)enum_交易記錄查詢資料.結存量] = list_value[i][(int)enum_交易記錄查詢資料.盤點量];
+                }
+
                 list_value.Sort(new ICP_交易記錄查詢());
                 List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                 returnData.Code = 200;
@@ -1848,6 +1865,7 @@ namespace HIS_WebApi
                         for (int i = 0; i < list_value_buf.Count; i++)
                         {
                             list_value_buf[i][(int)enum_交易記錄查詢資料.庫別] = serverName;
+                            if (list_value_buf[i][(int)enum_交易記錄查詢資料.動作].ObjectToString() == "交班對點") list_value_buf[i][(int)enum_交易記錄查詢資料.結存量] = list_value_buf[i][(int)enum_交易記錄查詢資料.盤點量];
                         }
                         list_value.LockAdd(list_value_buf);
 

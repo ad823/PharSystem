@@ -21,8 +21,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.10196")]
-[assembly: AssemblyFileVersion("1.0.25.10196")]
+[assembly: AssemblyVersion("1.0.25.11101")]
+[assembly: AssemblyFileVersion("1.0.25.11101")]
 namespace 調劑台管理系統
 {
 
@@ -1217,7 +1217,7 @@ namespace 調劑台管理系統
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"無法關閉 {processName} (PID: {process.Id})：{ex.Message}");
+                        Console.WriteLine($"無法關閉 {processName} (PID: {process.Id})");
                     }
                 }
             }

@@ -852,7 +852,10 @@ namespace HIS_WebApi
                     }
                     consumptionClasses = new List<consumptionClass> { consumption };
                 }
-                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                string ServerName = returnData.ServerName;
+                string ServerType = returnData.ServerType;
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(ServerName, ServerType, "儲位資料");
                 List<consumptionClass> add = new List<consumptionClass>();
                 string time_now = DateTime.Now.ToDateTimeString();
                 foreach (var item in consumptionClasses)
@@ -887,7 +890,7 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-        [HttpPost("get_by_start_end")]
+        [HttpPost("get_avg_by_start_end")]
         public async Task<string> get_by_start_end([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -920,14 +923,19 @@ namespace HIS_WebApi
                     WHERE 建立時間 >= '{returnData.ValueAry[0]}' AND 建立時間 < '{returnData.ValueAry[1]}'";
 
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command);
-                List<consumptionClass> medClassifies = objects.SQLToClass<consumptionClass>();
-
+                List<consumptionClass> consumption = objects.SQLToClass<consumptionClass>();
+                List<consumptionClass> avgConsumptions = consumption.GroupBy(c => c.藥碼)
+                    .Select(g => new consumptionClass
+                    {
+                        藥碼 = g.Key,
+                        平均消耗量 = g.Average(x => x.消耗量.StringToDouble()).ToString()
+                    }).ToList();
 
                 returnData.Code = 200;
-                returnData.Data = medClassifies;
+                returnData.Data = avgConsumptions;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "get_by_start_end";
-                returnData.Result = $"取得資料成功，共{medClassifies.Count}筆";
+                returnData.Result = $"取得資料成功，共{avgConsumptions.Count}筆";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)

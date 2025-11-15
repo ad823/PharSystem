@@ -74,6 +74,16 @@ namespace HIS_WebApi
             }
             return (sys_serverSettingClass[0]);
         }
+        static public async Task<List<sys_serverSettingClass>> GetListServerAsync(string Name, string Type, CancellationToken ct = default)
+        {
+            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetServerSettingasync(Name, Type);
+
+            if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
+            {
+                return new List<sys_serverSettingClass> ();
+            }
+            return (sys_serverSettingClass);
+        }
         /// <summary>
         /// 取得目前請求的相對路徑（可選是否包含查詢字串）。若非 HTTP 呼叫則回傳 "[InternalCall]"。
         /// </summary>
