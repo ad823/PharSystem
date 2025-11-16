@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\FontAwesome.Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="HIS_DB_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
+    </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
     </Reference>
@@ -55,6 +59,10 @@
     </Reference>
     <Reference Include="MinasA6DLL">
       <HintPath>..\0.DLL\MinasA6DLL.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="MyUI">
       <HintPath>..\0.DLL\MyUI.dll</HintPath>
@@ -109,6 +117,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Program_PLC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_儲位管理.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

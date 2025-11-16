@@ -37,7 +37,6 @@ namespace FADC
         public static PLC_Device PLC_Device_第五層位置 = new PLC_Device("D4015");
         public static PLC_Device PLC_Device_頂層位置 = new PLC_Device("D4020");
 
-
         public static PLC_Device PLC_Device_Z軸馬達歸零 = new PLC_Device("S100");
         public static PLC_Device PLC_Device_移動到第一層位置 = new PLC_Device("S1000");
         public static PLC_Device PLC_Device_移動到第二層位置 = new PLC_Device("S1001");
@@ -45,6 +44,20 @@ namespace FADC
         public static PLC_Device PLC_Device_移動到第四層位置 = new PLC_Device("S1003");
         public static PLC_Device PLC_Device_移動到第五層位置 = new PLC_Device("S1004");
         public static PLC_Device PLC_Device_移動到頂層位置 = new PLC_Device("S1010");
+
+        public static PLC_Device PLC_Device_輸送帶正轉 = new PLC_Device("S2000");
+        public static PLC_Device PLC_Device_輸送帶正轉時間 = new PLC_Device("D2000");
+        public static PLC_Device PLC_Device_輸送帶反轉 = new PLC_Device("S2001");
+        public static PLC_Device PLC_Device_輸送帶反轉時間 = new PLC_Device("D2001");
+
+        public static PLC_Device PLC_Device_輸送帶前進 = new PLC_Device("S2003");
+        public static PLC_Device PLC_Device_輸送帶前進時間 = new PLC_Device("D2003");
+        public static PLC_Device PLC_Device_輸送帶後退 = new PLC_Device("S2004");
+        public static PLC_Device PLC_Device_輸送帶後退時間 = new PLC_Device("D2004");
+
+        public static PLC_Device PLC_Device_出貨一次 = new PLC_Device("S3000");
+        public static PLC_Device PLC_Device_出貨一次_Z軸層數 = new PLC_Device("D3000");
+        public static string IP_出貨一次 = "";
 
         public static PLC_Device PLC_Device_Z軸馬達激磁 = new PLC_Device("Y10");
         public static PLC_Device PLC_Device_Z軸馬達激磁狀態 = new PLC_Device("Y11");
@@ -62,6 +75,7 @@ namespace FADC
         public bool flag_servoJogNeg = false;
         public byte deviceID = 1;
 
+        private MyThread myThread_PLC;
 
         public void Program_PLC()
         {
@@ -88,7 +102,11 @@ namespace FADC
             plC_RJ_Button_Z軸上升.MouseDownEvent += PlC_RJ_Button_Z軸上升_MouseDownEvent;
             plC_RJ_Button_Z軸下降.MouseDownEvent += PlC_RJ_Button_Z軸下降_MouseDownEvent;
 
-            this.plC_UI_Init.Add_Method(sub_Program_PLC);
+            myThread_PLC = new MyThread();
+            myThread_PLC.Add_Method(sub_Program_PLC);
+            myThread_PLC.SetSleepTime(1);
+            myThread_PLC.AutoRun(true);
+            myThread_PLC.Trigger();
         }
         public void sub_Program_PLC()
         {
@@ -96,72 +114,72 @@ namespace FADC
             {
                 try
                 {
+                    var servo = minasA6.GetServoStatus(deviceID);
+                    var ready = !minasA6.IsBusy(deviceID);
+                    var alarm = minasA6.GetServoAlarmStatus(deviceID);
 
+                    var limit = minasA6.GetLimitStatus(deviceID);
+
+                    int pos = minasA6.GetPosition(deviceID);
+
+                    PLC_Device_Z軸馬達位置.Value = pos;
+                    PLC_Device_Z軸馬達激磁.Bool = servo;
+                    PLC_Device_Z軸馬達激磁狀態.Bool = limit.Home;
+                    PLC_Device_Z軸Alarm.Bool = alarm;
+                    PLC_Device_Z軸Ready.Bool = ready;
+                    //lbPositive.BackColor = limit.Positive ? Color.Red : Color.Green;
+                    //lbNegative.BackColor = limit.Negative ? Color.Red : Color.Green;
+                    if (flag_servoClearAlarm)
+                    {
+                        flag_servoClearAlarm = false;
+                        if (PLC_Device_Z軸Alarm.Bool)
+                        {
+                            MyMessageBox.ShowDialog("Z軸警報解除");
+                        }
+                    }
+                    if (flag_servoOn)
+                    {
+                        if (PLC_Device_Z軸馬達激磁.Bool == false) minasA6.ServoOn(deviceID);
+                        else minasA6.ServoOff(deviceID);
+                        flag_servoOn = false;
+                    }
+                    if (flag_servoHome)
+                    {
+                        minasA6.Home(deviceID, HomeMode.HomeSensorZPhase);
+                        flag_servoHome = false;
+                    }
+                    if (flag_servoStop)
+                    {
+                        if (ready == false)
+                        {
+                            minasA6.S_Stop(deviceID);
+                        }
+                        flag_servoStop = false;
+                    }
+
+
+                    if (flag_servoJogPos)
+                    {
+                        if (ready == true)
+                        {
+                            minasA6.JogPositive(deviceID, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
+                        }
+                        flag_servoJogPos = false;
+                    }
+                    if (flag_servoJogNeg)
+                    {
+                        if (ready == true)
+                        {
+                            minasA6.JogNegative(deviceID, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
+                        }
+                        flag_servoJogNeg = false;
+                    }
                 }
                 catch(Exception ex)
                 {
                     Logger.Log("Z-erroe", $"Exception : {ex.Message}");
                 }
-                var servo = minasA6.GetServoStatus(deviceID);
-                var ready = !minasA6.IsBusy(deviceID);
-                var alarm = minasA6.GetServoAlarmStatus(deviceID);
-
-                var limit = minasA6.GetLimitStatus(deviceID);
-
-                int pos = minasA6.GetPosition(deviceID);
-
-                PLC_Device_Z軸馬達位置.Value = pos;
-                PLC_Device_Z軸馬達激磁.Bool = servo;
-                PLC_Device_Z軸馬達激磁狀態.Bool = limit.Home;
-                PLC_Device_Z軸Alarm.Bool = alarm;
-                PLC_Device_Z軸Ready.Bool = ready;
-                //lbPositive.BackColor = limit.Positive ? Color.Red : Color.Green;
-                //lbNegative.BackColor = limit.Negative ? Color.Red : Color.Green;
-                if (flag_servoClearAlarm)
-                {
-                    flag_servoClearAlarm = false;
-                    if (PLC_Device_Z軸Alarm.Bool)
-                    {          
-                        MyMessageBox.ShowDialog("Z軸警報解除");
-                    }
-                }
-                if (flag_servoOn)
-                {
-                    if (PLC_Device_Z軸馬達激磁.Bool == false) minasA6.ServoOn(deviceID);
-                    else minasA6.ServoOff(deviceID);
-                    flag_servoOn = false;
-                }
-                if(flag_servoHome)
-                {
-                    minasA6.Home(deviceID, HomeMode.HomeSensorZPhase);
-                    flag_servoHome = false;
-                }
-                if (flag_servoStop)
-                {
-                    if (ready == false)
-                    {
-                        minasA6.S_Stop(deviceID);                    
-                    }
-                    flag_servoStop = false;
-                }
-                   
                 
-                if(flag_servoJogPos)
-                {
-                    if (ready == true)
-                    {
-                        minasA6.JogPositive(deviceID, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
-                    }
-                    flag_servoJogPos = false;
-                }
-                if (flag_servoJogNeg)
-                {
-                    if (ready == true)
-                    {
-                        minasA6.JogNegative(deviceID, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
-                    }
-                    flag_servoJogNeg = false;
-                }
 
                 sub_Program_Z軸絕對位置移動();
                 sub_Program_Z軸移動到第一層();
@@ -175,9 +193,174 @@ namespace FADC
                 sub_Program_輸送帶反轉();
                 sub_Program_輸送帶前進();
                 sub_Program_輸送帶後退();
+                sub_Program_出貨一次();
 
             }
         }
+
+        #region PLC_出貨一次
+        MyTimerBasic MyTimerBasic_出貨一次_檢查延遲 = new MyTimerBasic();
+        Task Task_出貨一次;
+        MyTimer MyTimer_出貨一次_結束延遲 = new MyTimer();
+        int cnt_Program_出貨一次 = 65534;
+        void sub_Program_出貨一次()
+        {
+            if (cnt_Program_出貨一次 == 65534)
+            {
+                this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨一次.SetComment("PLC_出貨一次");
+                PLC_Device_出貨一次.Bool = false;
+                cnt_Program_出貨一次 = 65535;
+            }
+            if (cnt_Program_出貨一次 == 65535) cnt_Program_出貨一次 = 1;
+            if (cnt_Program_出貨一次 == 1) cnt_Program_出貨一次_檢查按下(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 2) cnt_Program_出貨一次_初始化(ref cnt_Program_出貨一次);
+    
+            if (cnt_Program_出貨一次 == 5) cnt_Program_出貨一次 = 65500;
+            if (cnt_Program_出貨一次 > 1) cnt_Program_出貨一次_檢查放開(ref cnt_Program_出貨一次);
+
+            if (cnt_Program_出貨一次 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_出貨一次_結束延遲.TickStop();
+                this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨一次.Bool = false;
+                cnt_Program_出貨一次 = 65535;
+            }
+        }
+        void cnt_Program_出貨一次_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_出貨一次.Bool) cnt++;
+        }
+        void cnt_Program_出貨一次_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_出貨一次.Bool) cnt = 65500;
+        }
+        void cnt_Program_出貨一次_初始化(ref int cnt)
+        {
+            if (IP_出貨一次.Check_IP_Adress() == false) return;
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨一次_等待輸送帶後退(ref int cnt)
+        {
+            if(PLC_Device_輸送帶後退.Bool == false)
+            {
+                PLC_Device_輸送帶後退.Bool = true;
+                cnt++;
+           }      
+        }
+        void cnt_Program_出貨一次_輸送帶後退完成(ref int cnt)
+        {
+            if (PLC_Device_輸送帶後退.Bool == false)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨一次_等待Z軸移動到層數(ref int cnt)
+        {
+            if (PLC_Device_出貨一次_Z軸層數.Value == 1)
+            {
+                if(PLC_Device_移動到第一層位置.Bool == false)
+                {
+                    PLC_Device_移動到第一層位置.Bool = true;
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 2)
+            {
+                if (PLC_Device_移動到第二層位置.Bool == false)
+                {
+                    PLC_Device_移動到第二層位置.Bool = true;
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 3)
+            {
+                if (PLC_Device_移動到第三層位置.Bool == false)
+                {
+                    PLC_Device_移動到第三層位置.Bool = true;
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 4)
+            {
+                if (PLC_Device_移動到第四層位置.Bool == false)
+                {
+                    PLC_Device_移動到第四層位置.Bool = true;
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 5)
+            {
+                if (PLC_Device_移動到第五層位置.Bool == false)
+                {
+                    PLC_Device_移動到第五層位置.Bool = true;
+                    cnt++;
+                }
+            }
+        }
+        void cnt_Program_出貨一次_Z軸移動到層數完成(ref int cnt)
+        {
+            if (PLC_Device_出貨一次_Z軸層數.Value == 1)
+            {
+                if (PLC_Device_移動到第一層位置.Bool == false)
+                {
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 2)
+            {
+                if (PLC_Device_移動到第二層位置.Bool == false)
+                {
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 3)
+            {
+                if (PLC_Device_移動到第三層位置.Bool == false)
+                {
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 4)
+            {
+                if (PLC_Device_移動到第四層位置.Bool == false)
+                {
+                    cnt++;
+                }
+            }
+            if (PLC_Device_出貨一次_Z軸層數.Value == 5)
+            {
+                if (PLC_Device_移動到第五層位置.Bool == false)
+                {
+                    cnt++;
+                }
+            }
+        }
+        void cnt_Program_出貨一次_等待輸送帶前進(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                PLC_Device_輸送帶前進.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨一次_輸送帶前進完成(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                cnt++;
+            }
+        }
+
+
+
+
+
+        #endregion
 
         #region PLC_Z軸絕對位置移動
         PLC_Device PLC_Device_Z軸絕對位置移動 = new PLC_Device("S1000");
@@ -647,8 +830,7 @@ namespace FADC
         #endregion
 
         #region PLC_輸送帶正轉
-        public static PLC_Device PLC_Device_輸送帶正轉 = new PLC_Device("S2000");
-        public static PLC_Device PLC_Device_輸送帶正轉時間 = new PLC_Device("D2000");
+
         MyTimerBasic MyTimerBasic_輸送帶正轉_檢查延遲 = new MyTimerBasic();
         Task Task_輸送帶正轉;
         MyTimer MyTimer_輸送帶正轉_結束延遲 = new MyTimer();
@@ -721,8 +903,7 @@ namespace FADC
 
         #endregion
         #region PLC_輸送帶反轉
-        public static PLC_Device PLC_Device_輸送帶反轉 = new PLC_Device("S2001");
-        public static PLC_Device PLC_Device_輸送帶反轉時間 = new PLC_Device("D2001");
+     
         MyTimerBasic MyTimerBasic_輸送帶反轉_檢查延遲 = new MyTimerBasic();
         Task Task_輸送帶反轉;
         MyTimer MyTimer_輸送帶反轉_結束延遲 = new MyTimer();
@@ -795,8 +976,7 @@ namespace FADC
 
         #endregion
         #region PLC_輸送帶前進
-        public static PLC_Device PLC_Device_輸送帶前進 = new PLC_Device("S2003");
-        public static PLC_Device PLC_Device_輸送帶前進時間 = new PLC_Device("D2003");
+      
         MyTimerBasic MyTimerBasic_輸送帶前進_檢查延遲 = new MyTimerBasic();
         Task Task_輸送帶前進;
         MyTimer MyTimer_輸送帶前進_結束延遲 = new MyTimer();
@@ -869,8 +1049,7 @@ namespace FADC
 
         #endregion
         #region PLC_輸送帶後退
-        public static PLC_Device PLC_Device_輸送帶後退 = new PLC_Device("S2004");
-        public static PLC_Device PLC_Device_輸送帶後退時間 = new PLC_Device("D2004");
+
         MyTimerBasic MyTimerBasic_輸送帶後退_檢查延遲 = new MyTimerBasic();
         Task Task_輸送帶後退;
         MyTimer MyTimer_輸送帶後退_結束延遲 = new MyTimer();
