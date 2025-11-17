@@ -490,7 +490,9 @@ namespace 調劑台管理系統
             if (device_Type == DeviceType.EPD266.GetEnumName() || device_Type == DeviceType.EPD266_lock.GetEnumName()
                 || device_Type == DeviceType.EPD290.GetEnumName() || device_Type == DeviceType.EPD290_lock.GetEnumName()
                 || device_Type == DeviceType.EPD420.GetEnumName() || device_Type == DeviceType.EPD420_lock.GetEnumName()
-                || device_Type == DeviceType.EPD213.GetEnumName() || device_Type == DeviceType.EPD213_lock.GetEnumName())
+                || device_Type == DeviceType.EPD213.GetEnumName() || device_Type == DeviceType.EPD213_lock.GetEnumName()
+                || device_Type == DeviceType.EPD420G.GetEnumName() || device_Type == DeviceType.EPD420G_lock.GetEnumName()
+                || device_Type == DeviceType.EPD360E.GetEnumName() || device_Type == DeviceType.EPD360E_lock.GetEnumName())
             {
                 Storage storage = List_EPD266_雲端資料.SortByIP(IP);
                 if (storage != null && storage.Speaker.StringIsEmpty() == false)
@@ -513,7 +515,9 @@ namespace 調劑台管理系統
 
                 }
             }
-            else if (device_Type == DeviceType.EPD583.GetEnumName() || device_Type == DeviceType.EPD583_lock.GetEnumName() || device_Type == DeviceType.EPD420_D.GetEnumName() || device_Type == DeviceType.EPD420_D_lock.GetEnumName())
+            else if (device_Type == DeviceType.EPD583.GetEnumName() || device_Type == DeviceType.EPD583_lock.GetEnumName() 
+                     || device_Type == DeviceType.EPD420_D.GetEnumName() || device_Type == DeviceType.EPD420_D_lock.GetEnumName()
+                     || device_Type == DeviceType.EPD730E.GetEnumName() || device_Type == DeviceType.EPD730E_lock.GetEnumName())
             {
                 Drawer drawer = List_EPD583_雲端資料.SortByIP(IP);
                 if (drawer != null && drawer.Speaker.StringIsEmpty() == false)
@@ -854,7 +858,8 @@ namespace 調劑台管理系統
 
             if (plC_CheckBox_面板於過帳後更新.Checked) Function_取藥堆疊資料_刷新面板(藥品碼);
             if (str_TYPE == DeviceType.EPD583.GetEnumName() || str_TYPE == DeviceType.EPD583_lock.GetEnumName()
-               || str_TYPE == DeviceType.EPD420_D.GetEnumName() || str_TYPE == DeviceType.EPD420_D_lock.GetEnumName())
+               || str_TYPE == DeviceType.EPD420_D.GetEnumName() || str_TYPE == DeviceType.EPD420_D_lock.GetEnumName()
+               || str_TYPE == DeviceType.EPD730E.GetEnumName() || str_TYPE == DeviceType.EPD730E_lock.GetEnumName())
             {
                 List<Box> boxes = List_EPD583_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < boxes.Count; i++)
@@ -934,7 +939,9 @@ namespace 調劑台管理系統
             else if (str_TYPE == DeviceType.EPD266.GetEnumName() || str_TYPE == DeviceType.EPD266_lock.GetEnumName()
                   || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName()
                   || str_TYPE == DeviceType.EPD420.GetEnumName() || str_TYPE == DeviceType.EPD420_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName())
+                  || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName()
+                  || str_TYPE == DeviceType.EPD420G.GetEnumName() || str_TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                  || str_TYPE == DeviceType.EPD360E.GetEnumName() || str_TYPE == DeviceType.EPD360E_lock.GetEnumName())
             {
                 Storage storage = List_EPD266_入賬資料.SortByIP(IP);
                 if (storage != null)
@@ -1143,6 +1150,8 @@ namespace 調劑台管理系統
                     if (Type == DeviceType.EPD213.GetEnumName() || Type == DeviceType.EPD213_lock.GetEnumName()) flag_可致能資料 = false;
                     if (Type == DeviceType.EPD420.GetEnumName() || Type == DeviceType.EPD420_lock.GetEnumName()) flag_可致能資料 = false;
                     if (Type == DeviceType.EPD1020.GetEnumName() || Type == DeviceType.EPD1020_lock.GetEnumName()) flag_可致能資料 = false;
+                    if (Type == DeviceType.EPD420G.GetEnumName() || Type == DeviceType.EPD420G_lock.GetEnumName()) flag_可致能資料 = false;
+                    if (Type == DeviceType.EPD360E.GetEnumName() || Type == DeviceType.EPD360E_lock.GetEnumName()) flag_可致能資料 = false;
                     if (Type == DeviceType.RowsLED.GetEnumName()) flag_可致能資料 = false;
                     if (Type == DeviceType.RFID_Device.GetEnumName()) flag_可致能資料 = false;
                 }
@@ -1432,7 +1441,9 @@ namespace 調劑台管理系統
 
                 if (device == null) continue;
 
-                if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock || device.DeviceType == DeviceType.EPD420_D || device.DeviceType == DeviceType.EPD420_D_lock)
+                if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                    || device.DeviceType == DeviceType.EPD420_D || device.DeviceType == DeviceType.EPD420_D_lock
+                    || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                 {
                     Box box = list_Device[i] as Box;
                     if (box != null)
@@ -1888,7 +1899,9 @@ namespace 調劑台管理系統
                             list_IP.Add(IP);
                         }
                     }
-                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock || device.DeviceType == DeviceType.EPD420_D || device.DeviceType == DeviceType.EPD420_D_lock)
+                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                        || device.DeviceType == DeviceType.EPD420_D || device.DeviceType == DeviceType.EPD420_D_lock
+                        || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                     {
                         taskList.Add(Task.Run(() =>
                         {
@@ -2271,7 +2284,9 @@ namespace 調劑台管理系統
                         if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
                             || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
                             || TYPE[k] == DeviceType.EPD420_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420.GetEnumName()
-                            || TYPE[k] == DeviceType.EPD213_lock.GetEnumName() || TYPE[k] == DeviceType.EPD213.GetEnumName())
+                            || TYPE[k] == DeviceType.EPD213_lock.GetEnumName() || TYPE[k] == DeviceType.EPD213.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD360E_lock.GetEnumName() || TYPE[k] == DeviceType.EPD360E.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420G.GetEnumName())
                         {
 
                             Storage storage = (Storage)values[k];
@@ -2305,7 +2320,9 @@ namespace 調劑台管理系統
                             }
 
                         }
-                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName() || TYPE[k] == DeviceType.EPD420_D.GetEnumName() || TYPE[k] == DeviceType.EPD420_D_lock.GetEnumName())
+                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420_D.GetEnumName() || TYPE[k] == DeviceType.EPD420_D_lock.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD730E.GetEnumName() || TYPE[k] == DeviceType.EPD730E_lock.GetEnumName())
                         {
                             Box box = (Box)values[k];
                             if (!IP.StringIsEmpty())
@@ -2522,7 +2539,9 @@ namespace 調劑台管理系統
                         if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
                             || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
                             || TYPE[k] == DeviceType.EPD420_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420.GetEnumName()
-                            || TYPE[k] == DeviceType.EPD213_lock.GetEnumName() || TYPE[k] == DeviceType.EPD213.GetEnumName())
+                            || TYPE[k] == DeviceType.EPD213_lock.GetEnumName() || TYPE[k] == DeviceType.EPD213.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420G.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD360E_lock.GetEnumName() || TYPE[k] == DeviceType.EPD360E.GetEnumName())
                         {
                             if (values[k] is Storage)
                             {
@@ -2565,7 +2584,9 @@ namespace 調劑台管理系統
                             break;
 
                         }
-                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName() || TYPE[k] == DeviceType.EPD420_D.GetEnumName() || TYPE[k] == DeviceType.EPD420_D_lock.GetEnumName())
+                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420_D.GetEnumName() || TYPE[k] == DeviceType.EPD420_D_lock.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD730E.GetEnumName() || TYPE[k] == DeviceType.EPD730E_lock.GetEnumName())
                         {
 
                             Box box = (Box)values[k];
@@ -2915,7 +2936,7 @@ namespace 調劑台管理系統
                                   select temp).ToList();
                 if (list_已亮燈藥碼_buf.Count != 0) continue;
 
-                if (Type.Contains("EPD583")) Function_儲位亮燈(new Main_Form.LightOn(藥品碼, color), ref list_lock_IP);
+                if (Type.Contains("EPD583") || Type.Contains("EPD730")) Function_儲位亮燈(new Main_Form.LightOn(藥品碼, color), ref list_lock_IP);
                 else if (Type == DeviceType.RFID_Device.GetEnumName())
                 {
                     RFIDClass rFIDClass = List_RFID_雲端資料.SortByIP(IP);
@@ -3337,6 +3358,7 @@ namespace 調劑台管理系統
                                      where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
                                      where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
                                          || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD213.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName()
                                      select value).ToList();
             taskList = new List<Task>();
             list_需更新資料 = new List<string[]>();
@@ -3472,6 +3494,7 @@ namespace 調劑台管理系統
                                      where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
                                      where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
                                      || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD213.GetEnumName()
+                                     || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName()
                                      select value).ToList();
             taskList = new List<Task>();
             list_需更新資料 = new List<string[]>();
@@ -3566,6 +3589,7 @@ namespace 調劑台管理系統
                                      where value[(int)enum_取藥堆疊子資料.流程作業完成].ObjectToString() == false.ToString()
                                      where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
                                      where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName()
+                                           || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E_lock.GetEnumName()
                                      select value).ToList();
 
             if (plC_CheckBox_同藥品全部亮燈.Bool)
