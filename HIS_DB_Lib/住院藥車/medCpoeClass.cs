@@ -99,14 +99,6 @@ namespace HIS_DB_Lib
         中文名,
         數量
     }
-    public enum 藥品總量群組
-    {
-        針劑,
-        大瓶藥,
-        冷藏,
-        口服,
-        外用
-    }
     /// <summary>
     /// medCpoeClass資料
     /// </summary>
@@ -297,6 +289,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("check_status")]
         public string 覆核狀態 { get; set; }
+        /// <summary>
+        /// 簽收狀態
+        /// </summary>
+        [JsonPropertyName("signed_status")]
+        public string 簽收狀態 { get; set; }
         /// <summary>
         /// 備註
         /// </summary>
@@ -644,5 +641,6 @@ namespace HIS_DB_Lib
         [JsonPropertyName("server_type")]
         public string ServerType { get; set; }
     }
+    
 
 }

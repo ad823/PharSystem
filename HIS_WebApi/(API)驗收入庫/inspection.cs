@@ -561,7 +561,7 @@ namespace HIS_WebApi
                 string 驗收單號 = returnData.ValueAry[0];
                 string 請購單號 = returnData.ValueAry[1];
 
-                List<object[]> list_inspection_content = sQLControl_inspection_content.GetRowsByDefult(null, (int)enum_驗收單號.驗收單號, 驗收單號);
+                List<object[]> list_inspection_content = sQLControl_inspection_content.GetRowsByDefult(null, (int)enum_驗收內容.驗收單號, 驗收單號);
                 List<inspectionClass.content> contents = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
                 if (contents.Count == 0)
                 {

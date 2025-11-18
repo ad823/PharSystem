@@ -124,6 +124,7 @@
     <Compile Include="DrugHFTagClass.cs" />
     <Compile Include="lockerAccessClass.cs" />
     <Compile Include="loggerClass.cs" />
+    <Compile Include="住院藥車\med_carlogClass.cs" />
     <Compile Include="住院藥車\nearMissClass.cs" />
     <Compile Include="住院藥車\nursingStationClass.cs" />
     <Compile Include="shiftClass.cs" />
