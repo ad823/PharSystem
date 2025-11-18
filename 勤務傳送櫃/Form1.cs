@@ -217,7 +217,10 @@ namespace 勤務傳送櫃
         }
         private Bitmap StorageUI_EPD_266_Get_Storage_bmpChangeEvent(Storage storage)
         {
-            Bitmap bitmap = new Bitmap(296, 152);
+            Bitmap bitmap = null;
+            if (storage.DeviceType == DeviceType.EPD266 || storage.DeviceType == DeviceType.EPD266_lock) bitmap = new Bitmap(296, 152);
+            else if (storage.DeviceType == DeviceType.EPD290 || storage.DeviceType == DeviceType.EPD290_lock) bitmap = new Bitmap(296, 128);
+
             int Pannel_Width = bitmap.Width;
             int Pannel_Height = bitmap.Height;
             using (Graphics g = Graphics.FromImage(bitmap))
@@ -245,27 +248,9 @@ namespace 勤務傳送櫃
                     g.DrawString(ip, new Font("微軟正黑體", 8, FontStyle.Bold), new SolidBrush(storage.Name_ForeColor), (Pannel_Width - size_IP.Width), (Pannel_Height - size_IP.Height));
                 }
             }
-            Bitmap bitmap_buf = null;
-            if (storage.DeviceType == DeviceType.EPD266 || storage.DeviceType == DeviceType.EPD266_lock)
-            {
-                bitmap_buf = Communication.ScaleImage(bitmap, 296, 152);
-                using (Graphics g_buf = Graphics.FromImage(bitmap_buf))
-                {
-               
-                }
 
-            }
-            if (storage.DeviceType == DeviceType.EPD290 || storage.DeviceType == DeviceType.EPD290_lock)
-            {
-                bitmap_buf = Communication.ScaleImage(bitmap, 296, 128);
-                using (Graphics g_buf = Graphics.FromImage(bitmap_buf))
-                {
-                
-                }
-            }
-            bitmap.Dispose();
-            bitmap = null;
-            return bitmap_buf;
+
+            return bitmap;
         }
         private void PlC_UI_Init_UI_Finished_Event()
         {
