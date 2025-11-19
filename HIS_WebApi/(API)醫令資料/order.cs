@@ -1808,6 +1808,9 @@ namespace HIS_WebApi
                         orderClass.展藥時間 = DateTime.MinValue.ToDateTimeString_6();
                         orderClass.狀態 = "未過帳";
                         orderClass.實際調劑量 = "0";
+                        if (orderClass.核對時間.StringIsEmpty()) orderClass.核對時間 = DateTime.MinValue.ToDateString();
+                        if (orderClass.領藥時間.StringIsEmpty()) orderClass.領藥時間 = DateTime.MinValue.ToDateString();
+                        if (orderClass.發藥時間.StringIsEmpty()) orderClass.發藥時間 = DateTime.MinValue.ToDateString();
                         //if(orderClass.備註.IndexOf("[NEW]") == -1) orderClass.備註 = $"[NEW]{orderClass.備註}";
                         //if(orderClass.備註.Contains("[NEW]") == false) orderClass.備註 = $"[NEW]{orderClass.備註}";
                         add_order_list.Add(orderClass);
@@ -1901,19 +1904,26 @@ namespace HIS_WebApi
                 string command = string.Empty;
 
                 string[] array_priKey = input_orderClass[0].PRI_KEY.Split("-");
-                if (array_priKey.Length < 3)
+                if (array_priKey.Length < 2)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"PRI_KEY格式錯誤，應為 '開方時間(yyyyMMddHHmmss)-病歷號'";
                     return returnData.JsonSerializationt();
                 }
+                input_orderClass = input_orderClass.OrderByDescending(x => x.開方日期).ToList();
+
+                //.Select(g => g.OrderByDescending(x => x.更新時間).First()).ToList();
+                int count_ = input_orderClass.Count;
                 string PRI_KEY = $"{array_priKey[0]}-{array_priKey[1]}";
-                string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                //string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                string start = input_orderClass[count_ - 1].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                string end = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+
 
                 command = $"SELECT * FROM {DB}.order_list " +
                     $"WHERE PRI_KEY like '{PRI_KEY}%' " +
-                    $" AND 開方日期 >= '{開方日期} 00:00:00'" +
-                    $" AND 開方日期 <= '{開方日期} 23:59:59';";
+                    $" AND 開方日期 >= '{start} 00:00:00'" +
+                    $" AND 開方日期 <= '{end} 23:59:59';";
 
 
                 DataTable dataTable = sQLControl_order_list.WtrteCommandAndExecuteReader(command);
@@ -1938,6 +1948,9 @@ namespace HIS_WebApi
                         if (item.就醫時間.StringIsEmpty()) item.就醫時間 = DateTime.Now.ToDateTimeString();
                         if (item.開方日期.StringIsEmpty()) item.開方日期 = DateTime.Now.ToDateTimeString();
                         item.狀態 = "未過帳";
+                        if (item.核對時間.StringIsEmpty()) item.核對時間 = DateTime.MinValue.ToDateString();
+                        if (item.領藥時間.StringIsEmpty()) item.領藥時間 = DateTime.MinValue.ToDateString();
+                        if (item.發藥時間.StringIsEmpty()) item.發藥時間 = DateTime.MinValue.ToDateString();
                         add_order_list.Add(item);
                     }
                     else
@@ -1947,11 +1960,10 @@ namespace HIS_WebApi
                     }
                 }
                 List<OrderClass> update_order_list = new List<OrderClass>();
-                List<OrderClass> dc_order = new List<OrderClass>();
 
 
                 List<string> list_priKey_buff = order_buff.Select(x => x.PRI_KEY).ToList();
-                dc_order = orderClasses.Where(x => list_priKey_buff.Contains(x.PRI_KEY) == false).ToList();
+                List<OrderClass> dc_order = orderClasses.Where(x => list_priKey_buff.Contains(x.PRI_KEY) == false).ToList();
                 foreach (var item in dc_order)
                 {
                     if (item.批序.Contains("[DC]")) continue;

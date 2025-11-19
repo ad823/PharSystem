@@ -609,6 +609,56 @@
             時間
             </summary>
         </member>
+        <member name="T:HIS_DB_Lib.med_carlogClass">
+            <summary>
+            藥車交車LOG
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.GUID">
+            <summary>
+            唯一識別碼 (GUID)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.藥局">
+            <summary>
+             藥局
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.護理站">
+            <summary>
+            護理站
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.傳送人員ID">
+            <summary>
+            傳送人員ID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.傳送人員姓名">
+            <summary>
+            傳送人員姓名
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.傳送時間">
+            <summary>
+            傳送時間
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.護理站人員ID">
+            <summary>
+            護理站人員ID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.護理站人員姓名">
+            <summary>
+            護理站人員姓名
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.med_carlogClass.護理站簽收時間">
+            <summary>
+            護理站簽收時間
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.nearMissClass.GUID">
             <summary>
             GUID
@@ -976,19 +1026,95 @@
             疾病說明
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.stockListClass.GUID">
+        <member name="T:HIS_DB_Lib.stockClass">
             <summary>
-            單位 GUID（唯一識別碼）
+            貨品表資料結構  
+            用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.stockListClass.stock_GUID">
+        <member name="P:HIS_DB_Lib.stockClass.GUID">
             <summary>
-            對應stock GUID
+            唯一識別碼 (GUID)
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.stockListClass.Value">
+        <member name="P:HIS_DB_Lib.stockClass.Shelf_GUID">
             <summary>
-            Value(deviceClass)
+            對應的層架 GUID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.位置">
+            <summary>
+            位置描述 (例如 上層第2層第3格)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.IP">
+            <summary>
+            裝置 IP 位址
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.device_type">
+            <summary>
+            裝置類型 (例如 shelf、drawer、cabinet)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.燈條亮燈位置">
+            <summary>
+            燈條亮燈位置 (LED Index)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.藥碼">
+            <summary>
+            藥品代碼
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.藥名">
+            <summary>
+            藥品名稱
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.料號">
+            <summary>
+            料號 (Material Number)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.批號">
+            <summary>
+            批號 (Lot Number)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.效期">
+            <summary>
+            效期 (Expiry Date)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.數量">
+            <summary>
+            數量 (Quantity)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.Value">
+            <summary>
+            Value (DeviceBasic)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.Classify_GUID">
+            <summary>
+            Classify_GUID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.Classify">
+            <summary>
+            Classify
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.med_cloud">
+            <summary>
+            雲端藥檔
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockClass.med_unit">
+            <summary>
+            藥品單位
             </summary>
         </member>
         <member name="M:HIS_DB_Lib.deviceApiClass.combine_drawer_boxes(System.String,System.String,System.String,H_Pannel_lib.Drawer,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
@@ -1680,6 +1806,11 @@
         <member name="P:HIS_DB_Lib.medCpoeClass.覆核狀態">
             <summary>
             覆核狀態
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medCpoeClass.簽收狀態">
+            <summary>
+            簽收狀態
             </summary>
         </member>
         <member name="P:HIS_DB_Lib.medCpoeClass.備註">
@@ -3530,92 +3661,6 @@
         <member name="P:HIS_DB_Lib.medMap_boxClass.serverType">
             <summary>
             serverType
-            </summary>
-        </member>
-        <member name="T:HIS_DB_Lib.stockClass">
-            <summary>
-            貨品表資料結構  
-            用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.GUID">
-            <summary>
-            唯一識別碼 (GUID)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.Shelf_GUID">
-            <summary>
-            對應的層架 GUID
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.位置">
-            <summary>
-            位置描述 (例如 上層第2層第3格)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.IP">
-            <summary>
-            裝置 IP 位址
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.device_type">
-            <summary>
-            裝置類型 (例如 shelf、drawer、cabinet)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.燈條亮燈位置">
-            <summary>
-            燈條亮燈位置 (LED Index)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.藥碼">
-            <summary>
-            藥品代碼
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.藥名">
-            <summary>
-            藥品名稱
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.料號">
-            <summary>
-            料號 (Material Number)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.批號">
-            <summary>
-            批號 (Lot Number)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.效期">
-            <summary>
-            效期 (Expiry Date)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.數量">
-            <summary>
-            數量 (Quantity)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.Value">
-            <summary>
-            Value (DeviceBasic)
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.Classify_GUID">
-            <summary>
-            Classify_GUID
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.Classify">
-            <summary>
-            Classify
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.stockClass.med_cloud">
-            <summary>
-            雲端藥檔
             </summary>
         </member>
         <member name="P:HIS_DB_Lib.medPicClass.GUID">
@@ -5480,7 +5525,7 @@
             單位名稱（例如：箱、盒、顆）
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.medUnitClass.換算數量">
+        <member name="P:HIS_DB_Lib.medUnitClass.數量">
             <summary>
             與上層單位的換算數量（若無則為 null）
             </summary>
