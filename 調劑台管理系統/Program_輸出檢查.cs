@@ -130,7 +130,9 @@ namespace 調劑台管理系統
                     else if (value_device is Drawer)
                     {
                         Drawer drawer = value_device as Drawer;
-                        if (drawer.DeviceType == DeviceType.EPD583 || drawer.DeviceType == DeviceType.EPD583_lock || drawer.DeviceType == DeviceType.EPD420_D || drawer.DeviceType == DeviceType.EPD420_D_lock)
+                        if (drawer.DeviceType == DeviceType.EPD583 || drawer.DeviceType == DeviceType.EPD583_lock 
+                            || drawer.DeviceType == DeviceType.EPD420_D || drawer.DeviceType == DeviceType.EPD420_D_lock
+                            || drawer.DeviceType == DeviceType.EPD730E || drawer.DeviceType == DeviceType.EPD730E_lock)
                         {
                             Console.WriteLine($"{IP},{Num},<抽屜關閉> {drawer.DeviceType.GetEnumName()} {DateTime.Now.ToDateTimeString()}");
                             if (plC_CheckBox_同藥品全部亮燈.Bool == false)
