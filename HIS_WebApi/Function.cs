@@ -30,7 +30,7 @@ namespace HIS_WebApi
         }
         static public async Task<(string Server, string DB, string UserName, string Password, uint Port)> GetServerInfoAsync(string Name, string Type, string Content, CancellationToken ct = default)
         {
-            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetAllServerSettingasync(Name, Type, Content);
+            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetServerSettingasync(Name, Type, Content);
 
             if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
             {
@@ -42,11 +42,9 @@ namespace HIS_WebApi
             }
             return (sys_serverSettingClass[0].Server, sys_serverSettingClass[0].DBName, sys_serverSettingClass[0].User, sys_serverSettingClass[0].Password, (uint)sys_serverSettingClass[0].Port.StringToInt32());
         }
-
         static public string GetServerAPI(string Name, string Type, string Content)
         {
-            List<sys_serverSettingClass> serverSetting = ServerSettingController.GetAllServerSetting();
-            sys_serverSettingClass sys_serverSettingClass = serverSetting.MyFind(Name, Type, Content).FirstOrDefault();
+            sys_serverSettingClass sys_serverSettingClass = ServerSettingController.GetServerSetting(Name, Type, Content);
             if (sys_serverSettingClass == null)
             {
                 return null;
@@ -54,9 +52,10 @@ namespace HIS_WebApi
             }
             return sys_serverSettingClass.Server;
         }
+        
         static public async Task<string> GetServerApiAsync(string Name, string Type, string Content, CancellationToken ct = default)
         {
-            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetAllServerSettingasync(Name, Type, Content);
+            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetServerSettingasync(Name, Type, Content);
 
             if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
             {
@@ -66,7 +65,7 @@ namespace HIS_WebApi
         }
         static public async Task<sys_serverSettingClass> GetServerAsync(string Name, string Type, string Content, CancellationToken ct = default)
         {
-            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetAllServerSettingasync(Name, Type, Content);
+            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetServerSettingasync(Name, Type, Content);
 
             if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
             {
@@ -81,6 +80,16 @@ namespace HIS_WebApi
             if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
             {
                 return new List<sys_serverSettingClass> ();
+            }
+            return (sys_serverSettingClass);
+        }
+        static public async Task<List<sys_serverSettingClass>> GetListServerByTypeAsync(string Type, string Content, CancellationToken ct = default)
+        {
+            List<sys_serverSettingClass> sys_serverSettingClass = await ServerSettingController.GetServerSettingByTypeasync(Type, Content);
+
+            if (sys_serverSettingClass == null || sys_serverSettingClass.Count == 0)
+            {
+                return new List<sys_serverSettingClass>();
             }
             return (sys_serverSettingClass);
         }

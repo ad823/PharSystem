@@ -232,7 +232,7 @@ namespace HIS_WebApi
                 }
 
                 // ✅ 非同步呼叫 POST_serch_consumption_by_ST_END
-                string json = await Task.Run(() => POST_serch_consumption_by_ST_END(returnData));
+                string json = await POST_serch_consumption_by_ST_END(returnData);
                 returnData = json.JsonDeserializet<returnData>();
 
                 if (returnData.Code != 200) return null;
@@ -370,7 +370,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為[consumption]陣列結構</returns>
         [Route("serch_datas_by_ST_END")]
         [HttpPost]
-        public string POST_serch_datas_by_ST_END([FromBody] returnData returnData)
+        public async Task<string> POST_serch_datas_by_ST_END([FromBody] returnData returnData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -402,8 +402,8 @@ namespace HIS_WebApi
                     returnData.Result = "輸入日期格式錯誤!";
                     return returnData.JsonSerializationt();
                 }
-                起始時間 = 起始時間.StringToDateTime().GetStartDate().ToDateTimeString();
-                結束時間 = 結束時間.StringToDateTime().GetEndDate().ToDateTimeString();
+                //起始時間 = 起始時間.StringToDateTime().GetStartDate().ToDateTimeString();
+                //結束時間 = 結束時間.StringToDateTime().GetEndDate().ToDateTimeString();
                 DateTime date_st = 起始時間.StringToDateTime();
                 DateTime date_end = 結束時間.StringToDateTime();
 
@@ -420,71 +420,84 @@ namespace HIS_WebApi
                 {
                     string serverName = ServerNames[i];
                     string serverType = ServerTypes[i];
-                    tasks.Add(Task.Run(new Action(delegate
+
+                    List<consumptionClass> consumptionClasses_ = new List<consumptionClass>();
+                    List<sys_serverSettingClass> _sys_serverSettingClasses = sys_serverSettingClasses.MyFind(serverName, serverType, "交易紀錄資料");
+                    if (_sys_serverSettingClasses.Count == 0) continue;
+                    string Server = _sys_serverSettingClasses[0].Server;
+                    string DB = _sys_serverSettingClasses[0].DBName;
+                    string UserName = _sys_serverSettingClasses[0].User;
+                    string Password = _sys_serverSettingClasses[0].Password;
+                    uint Port = (uint)_sys_serverSettingClasses[0].Port.StringToInt32();
+                    string TableName = "trading";
+                    SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+
+                    string sql = @$"
+                        SELECT 
+                            t2.藥品碼,
+                            t2.藥品名稱,
+                            IFNULL(t1.交易量, 0) AS 交易量,
+                            t2.結存量
+                        FROM (
+                            -- 統計交易量（只加總為數字的交易量）
+                            SELECT 藥品碼, 
+                                    SUM(
+                                        CASE 
+                                            WHEN 交易量 REGEXP '^-?[0-9]+(\\.[0-9]+)?$' THEN CAST(交易量 AS DECIMAL(20,6))
+                                            ELSE 0
+                                        END
+                                    ) AS 交易量
+                            FROM {DB}.trading
+                            WHERE 操作時間 BETWEEN '{起始時間}' AND '{結束時間}'
+                                AND 藥品碼 IS NOT NULL
+                                AND 藥品碼 <> ''
+                            GROUP BY 藥品碼
+                        ) t1
+                        RIGHT JOIN (
+                            -- 取每個藥品碼在 {結束時間} 前的最新一筆完整資料
+                            SELECT a.*
+                            FROM {DB}.trading a
+                            LEFT JOIN {DB}.trading b
+                                ON a.藥品碼 = b.藥品碼
+                                AND a.操作時間 < b.操作時間
+                                AND b.操作時間 <= '{結束時間}'
+                            WHERE a.操作時間 <= '{結束時間}'
+                                AND b.藥品碼 IS NULL
+                                AND a.藥品碼 IS NOT NULL
+                                AND a.藥品碼 <> ''
+                        ) t2 ON t1.藥品碼 = t2.藥品碼
+                    ";
+                    string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL OR 交易量 <> '');";
+                    List<object[]> value = await sQLControl_trading.WriteCommandAsync(command);
+                    List<transactionsClass> transactionsClasses = value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
+                    List<List<transactionsClass>> transactions = transactionsClasses.GroupBy(g => g.藥品碼).Select(s => s.ToList()).ToList();
+                    foreach (var item in transactions)
                     {
-                        List<consumptionClass> consumptionClasses = new List<consumptionClass>();
-                        List<sys_serverSettingClass> _sys_serverSettingClasses = sys_serverSettingClasses.MyFind(serverName, serverType, "交易紀錄資料");
-                        if (_sys_serverSettingClasses.Count == 0) return;
-                        string Server = _sys_serverSettingClasses[0].Server;
-                        string DB = _sys_serverSettingClasses[0].DBName;
-                        string UserName = _sys_serverSettingClasses[0].User;
-                        string Password = _sys_serverSettingClasses[0].Password;
-                        uint Port = (uint)_sys_serverSettingClasses[0].Port.StringToInt32();
-                        string TableName = "trading";
-                        SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+                        if (item[0].藥品碼.StringIsEmpty()) continue;
+                        consumptionClass consumptionClass = new consumptionClass();
+                        consumptionClass.藥碼 = item[0].藥品碼;
+                        consumptionClass.藥名 = item[0].藥品名稱;
+                        consumptionClass.庫存量 = item.OrderByDescending(x => x.操作時間).FirstOrDefault().結存量;
+                        consumptionClass.消耗量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
+                        consumptionClass.實調量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
+                        consumptionClasses_.Add(consumptionClass);
+                    }
+                    //System.Data.DataTable dataTable = sQLControl_trading.WtrteCommandAndExecuteReader(command);
+                    //foreach (System.Data.DataRow row in dataTable.Rows)
+                    //{
+                    //    consumptionClass consumptionClass = new consumptionClass();
+                    //    consumptionClass.藥碼 = row["藥品碼"].ToString();
+                    //    consumptionClass.藥名 = row["藥品名稱"].ToString();
+                    //    consumptionClass.庫存量 = row["結存量"].ToString();
+                    //    consumptionClass.消耗量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
+                    //    consumptionClass.實調量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
+                    //    consumptionClasses_.Add(consumptionClass);
+                    //}
 
-                        string sql = @$"
-                            SELECT 
-                                t2.藥品碼,
-                                t2.藥品名稱,
-                                IFNULL(t1.交易量, 0) AS 交易量,
-                                t2.結存量
-                            FROM (
-                                -- 統計交易量（只加總為數字的交易量）
-                                SELECT 藥品碼, 
-                                       SUM(
-                                           CASE 
-                                               WHEN 交易量 REGEXP '^-?[0-9]+(\\.[0-9]+)?$' THEN CAST(交易量 AS DECIMAL(20,6))
-                                               ELSE 0
-                                           END
-                                       ) AS 交易量
-                                FROM trading
-                                WHERE 操作時間 BETWEEN '{起始時間}' AND '{結束時間}'
-                                  AND 藥品碼 IS NOT NULL
-                                  AND 藥品碼 <> ''
-                                GROUP BY 藥品碼
-                            ) t1
-                            RIGHT JOIN (
-                                -- 取每個藥品碼在 {結束時間} 前的最新一筆完整資料
-                                SELECT a.*
-                                FROM trading a
-                                LEFT JOIN trading b
-                                  ON a.藥品碼 = b.藥品碼
-                                 AND a.操作時間 < b.操作時間
-                                 AND b.操作時間 <= '{結束時間}'
-                                WHERE a.操作時間 <= '{結束時間}'
-                                  AND b.藥品碼 IS NULL
-                                  AND a.藥品碼 IS NOT NULL
-                                  AND a.藥品碼 <> ''
-                            ) t2 ON t1.藥品碼 = t2.藥品碼
-                        ";
+                    list_consumptionClasses.Add(consumptionClasses_);
 
-                        System.Data.DataTable dataTable = sQLControl_trading.WtrteCommandAndExecuteReader(sql);
-                        foreach (System.Data.DataRow row in dataTable.Rows)
-                        {
-                            consumptionClass consumptionClass = new consumptionClass();
-                            consumptionClass.藥碼 = row["藥品碼"].ToString();
-                            consumptionClass.藥名 = row["藥品名稱"].ToString();
-                            consumptionClass.庫存量 = row["結存量"].ToString();
-                            consumptionClass.消耗量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
-                            consumptionClass.實調量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
-                            consumptionClasses.Add(consumptionClass);
-                        }
 
-                        list_consumptionClasses.Add(consumptionClasses);
 
-                     
-                    })));
                 }
                 Task.WhenAll(tasks).Wait();
                 sys_serverSettingClass sys_ServerSetting_order = sys_serverSettingClasses.myFind("Main", "網頁", "VM端");
@@ -510,9 +523,9 @@ namespace HIS_WebApi
                                                  select temp).ToList();
                         if (consumptionClasse_buf.Count > 0)
                         {
-                            consumptionClasse_buf[0].消耗量 = (consumptionClasse_buf[0].消耗量.StringToDouble() + value.消耗量.StringToDouble()).ToString();
-                            consumptionClasse_buf[0].實調量 = (consumptionClasse_buf[0].實調量.StringToDouble() + value.實調量.StringToDouble()).ToString();
-                            consumptionClasse_buf[0].庫存量 = (consumptionClasse_buf[0].庫存量.StringToDouble() + value.庫存量.StringToDouble()).ToString();
+                            consumptionClasse_buf[0].消耗量 = (consumptionClasse_buf[0].消耗量.StringToDouble() + value.消耗量.StringToDouble()).ToString("0.00");
+                            consumptionClasse_buf[0].實調量 = (consumptionClasse_buf[0].實調量.StringToDouble() + value.實調量.StringToDouble()).ToString("0.00");
+                            consumptionClasse_buf[0].庫存量 = (consumptionClasse_buf[0].庫存量.StringToDouble() + value.庫存量.StringToDouble()).ToString("0.00");
                         }
                         else
                         {
@@ -565,7 +578,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為[SheetClass]陣列結構</returns>
         [Route("get_datas_sheet_by_serch")]
         [HttpPost]
-        public string POST_get_datas_sheet_by_serch([FromBody] returnData returnData)
+        public async Task<string> POST_get_datas_sheet_by_serch([FromBody] returnData returnData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -590,7 +603,7 @@ namespace HIS_WebApi
                 string[] ServerTypes = returnData.ValueAry[3].Split(',');
 
 
-                string json = POST_serch_datas_by_ST_END(returnData);
+                string json = await POST_serch_datas_by_ST_END(returnData);
                 returnData = json.JsonDeserializet<returnData>();
 
                 if (returnData.Code != 200)
@@ -651,7 +664,7 @@ namespace HIS_WebApi
         [HttpGet]
         public async Task<ActionResult> get_download_datas_excel_by_serch(string value)
         {
-           
+
             try
             {
                 string[] date_strs = value.Split(',');
@@ -664,7 +677,7 @@ namespace HIS_WebApi
                 }
                 date_str_st = $"{date_str_st.Substring(0, 4)}-{date_str_st.Substring(4, 2)}-{date_str_st.Substring(6, 2)} {date_str_st.Substring(8, 2)}:{date_str_st.Substring(10, 2)}";
                 date_str_end = $"{date_str_end.Substring(0, 4)}-{date_str_end.Substring(4, 2)}-{date_str_end.Substring(6, 2)} {date_str_st.Substring(8, 2)}:{date_str_st.Substring(10, 2)}";
-                if(date_str_st.Check_Date_String() == false || date_str_end.Check_Date_String() == false)
+                if (date_str_st.Check_Date_String() == false || date_str_end.Check_Date_String() == false)
                 {
                     return BadRequest("輸入日期格式錯誤");
                 }
@@ -695,7 +708,7 @@ namespace HIS_WebApi
                 returnData.ValueAry.Add(dps_type);
                 return await Post_download_datas_excel_by_serch(returnData);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest("錯誤訊息：" + ex.Message);
             }
@@ -737,14 +750,14 @@ namespace HIS_WebApi
 
             try
             {
-
-                returnData = POST_serch_datas_by_ST_END(returnData).JsonDeserializet<returnData>();
+                string result = await POST_serch_datas_by_ST_END(returnData);
+                returnData = result.JsonDeserializet<returnData>();
                 if (returnData.Code != 200)
                 {
                     return null;
                 }
                 List<consumptionClass> consumptionClasses = returnData.Data.ObjToClass<List<consumptionClass>>();
-                List<object[]> list_value = consumptionClasses.ClassToSQL<consumptionClass , enum_consumption>();
+                List<object[]> list_value = consumptionClasses.ClassToSQL<consumptionClass, enum_consumption>();
                 System.Data.DataTable dataTable = list_value.ToDataTable(new enum_consumption());
 
                 string 起始時間 = returnData.ValueAry[0];
@@ -753,7 +766,7 @@ namespace HIS_WebApi
                 string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 string xls_command = "application/vnd.ms-excel";
                 dataTable.RemoveColumn(enum_consumption.結存量);
-                byte[] excelData = dataTable.NPOI_GetBytes( Excel_Type.xlsx);
+                byte[] excelData = dataTable.NPOI_GetBytes(Excel_Type.xlsx);
                 Stream stream = new MemoryStream(excelData);
                 return await Task.FromResult(File(stream, xlsx_command, $"{起始時間}_{結束時間}_消耗量表.xlsx"));
             }
@@ -791,7 +804,7 @@ namespace HIS_WebApi
                 MyTimer myTimer = new MyTimer();
                 myTimer.StartTickTime(50000);
                 List<consumptionClass> consumptionClasses = returnData.Data.ObjToClass<List<consumptionClass>>();
-                if(consumptionClasses == null)
+                if (consumptionClasses == null)
                 {
                     return BadRequest("returnData.Data不能是空的");
                 }

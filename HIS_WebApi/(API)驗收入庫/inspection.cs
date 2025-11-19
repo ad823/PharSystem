@@ -561,7 +561,7 @@ namespace HIS_WebApi
                 string 驗收單號 = returnData.ValueAry[0];
                 string 請購單號 = returnData.ValueAry[1];
 
-                List<object[]> list_inspection_content = sQLControl_inspection_content.GetRowsByDefult(null, (int)enum_驗收單號.驗收單號, 驗收單號);
+                List<object[]> list_inspection_content = sQLControl_inspection_content.GetRowsByDefult(null, (int)enum_驗收內容.驗收單號, 驗收單號);
                 List<inspectionClass.content> contents = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
                 if (contents.Count == 0)
                 {
@@ -883,6 +883,78 @@ namespace HIS_WebApi
                 returnData.Code = 200;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Result = $"此時間區域{開始時間}-{結束時間}資料，共{contents.Count}筆";
+                returnData.Method = "content_get_by_addTime";
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt(true);
+            }
+
+        }
+        [HttpPost("content_get")]
+        public async Task<string> content_get([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimerBasic myTimerBasic = new MyTimerBasic();
+                
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                string tableName_inspection_content = "inspection_content";
+                string tableName_inspection_sub_content = "inspection_sub_content";
+
+                SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, tableName_inspection_content, UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
+
+                string command = @"
+                    SELECT c.*
+                    FROM dbvm.inspection_content c
+                    WHERE 
+                        NOT EXISTS (
+                            SELECT 1
+                            FROM dbvm.inspection_sub_content s1
+                            WHERE s1.Master_GUID = c.GUID
+                        )
+                        OR
+                        EXISTS (
+                            SELECT 1
+                            FROM dbvm.inspection_sub_content s2
+                            WHERE s2.Master_GUID = c.GUID
+                              AND DATE(s2.操作時間) = CURDATE()
+                        );";
+
+
+                List<object[]> list_inspection_content = await sQLControl_inspection_content.WriteCommandAsync(command);
+                List<inspectionClass.content> contents = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
+                if (contents.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此資料!";
+                    return returnData.JsonSerializationt(true);
+                }
+                List<string> guids = contents.Select(x => x.GUID).ToList();
+                string command_sub_content = $"SELECT * FROM dbvm.{tableName_inspection_sub_content} WHERE Master_GUID IN @guidList";
+                object param_sub_content = new { guidList = guids };
+                List<object[]> list_inspection_sub_content = await sQLControl_inspection_sub_content.WriteCommandAsync(command_sub_content, param_sub_content);
+                List<inspectionClass.sub_content> sub_Contents = list_inspection_sub_content.SQLToClass<inspectionClass.sub_content, enum_驗收明細>();
+
+                if (sub_Contents.Count > 0)
+                {
+                    Dictionary<string, List<inspectionClass.sub_content>> dic = sub_Contents.ToDictByMasterGUID();
+                    foreach (var item in contents)
+                    {
+                        List<inspectionClass.sub_content> subs = dic.GetByMasterGUID(item.GUID);
+                        item.Sub_content = subs;
+                    }
+                }
+
+                returnData.Data = contents;
+                returnData.Code = 200;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Result = $"資料，共{contents.Count}筆";
                 returnData.Method = "content_get_by_addTime";
 
                 return returnData.JsonSerializationt(true);
@@ -2786,7 +2858,9 @@ namespace HIS_WebApi
         [HttpPost]
         public async Task<ActionResult> download_excel_by_IC_SN([FromBody] returnData returnData)
         {
-            string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_download");
+            List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_download");
+            string VM_API = string.Empty;
+            if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
             if (VM_API.StringIsEmpty() == false)
             {
                 string json_in = returnData.JsonSerializationt();
@@ -2894,7 +2968,9 @@ namespace HIS_WebApi
         {
             try
             {
-                string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_download");
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_download");
+                string VM_API = string.Empty;
+                if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
@@ -2972,6 +3048,51 @@ namespace HIS_WebApi
                 }
                 System.Data.DataTable dataTable = objects.ToDataTable(new enum_驗收資料匯出());
                 //dataTable = dataTable.ReorderTable(new enum_med_cpoe_export());
+
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xls_command = "application/vnd.ms-excel";
+                byte[] excelData = MyOffice.ExcelClass.NPOI_GetBytes(dataTable, Excel_Type.xlsx);
+                Stream stream = new MemoryStream(excelData);
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_驗收資料.xlsx"));
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        [HttpPost("download_purchaseExcel")]
+        public async Task<ActionResult> download_purchaseExcel([FromBody] returnData returnData)
+        {
+            try
+            {               
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+
+                List<inspectionClass.content> contents = returnData.Data.ObjToClass<List<inspectionClass.content>>();
+                if (contents == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+
+                List<object[]> objects = new List<object[]>();
+                foreach (var item in contents)
+                {
+                    object[] value = new object[new enum_採購資料匯出().GetLength()];
+                    value[(int)enum_採購資料匯出.藥碼] = item.藥品碼;
+                    value[(int)enum_採購資料匯出.料號] = item.料號;
+                    value[(int)enum_採購資料匯出.藥名] = item.藥品名稱;
+                    value[(int)enum_採購資料匯出.採購數量] = item.應收數量;
+                    objects.Add(value);
+
+                }
+                System.Data.DataTable dataTable = objects.ToDataTable(new enum_採購資料匯出());
 
                 string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 string xls_command = "application/vnd.ms-excel";
@@ -3131,7 +3252,9 @@ namespace HIS_WebApi
         [HttpPost]
         public async Task<string> excel_upload_extra([FromForm] IFormFile file)
         {
-            string VM_API = Method.GetServerAPI("DS01", "藥庫", "API_inspection_excel_upload");
+            List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_inspection_excel_upload");
+            string VM_API = string.Empty;
+            if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
             if (VM_API.StringIsEmpty() == false)
             {
                 using (var client = new HttpClient())
@@ -3627,5 +3750,12 @@ namespace HIS_WebApi
             string result = await sub_contents_get_by_code(returnData);
             return result.JsonDeserializet<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> content_get()
+        {
+            returnData returnData = new returnData();
+            string result = await content_get(returnData);
+            return result.JsonDeserializet<returnData>();
+        }     
     }
 }

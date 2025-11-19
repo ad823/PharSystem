@@ -116,7 +116,7 @@ namespace HIS_WebApi._API_藥品資料
                     return returnData.JsonSerializationt();
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
-                List<sys_serverSettingClass> sys_ServerSettingClasses = await ServerSettingController.GetAllServerSettingasync(設備名稱, 類別, "一般資料");
+                List<sys_serverSettingClass> sys_ServerSettingClasses = await ServerSettingController.GetServerSettingasync(設備名稱, 類別, "一般資料");
                 if (sys_ServerSettingClasses == null || sys_ServerSettingClasses.Count == 0)
                 {
                     returnData.Code = -200;
@@ -721,6 +721,80 @@ namespace HIS_WebApi._API_藥品資料
             }
         }
 
+        [HttpPost("get_sections")]
+        public async Task<string> get_sections([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry不得為空";
+                    return returnData.JsonSerializationt();
+                }
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                string command = @$"SELECT sec.*
+                    FROM dbvm.stock AS s
+                    JOIN dbvm.medmap_shelf AS sh
+                    ON sh.GUID = s.shelf_GUID
+                    JOIN dbvm.medmap_sub_section AS sub
+                    ON sub.GUID = sh.Master_GUID
+                    JOIN dbvm.medmap_section AS sec
+                    ON sec.GUID = sub.Master_GUID;";
+
+                SQLControl sQLControl_medMap_section = new SQLControl(Server, DB, "medMap_section", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medmap_sub_section = new SQLControl(Server, DB, "medmap_sub_section", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medMap_shelfClass = new SQLControl(Server, DB, "medMap_shelfClass ", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_medmap_medmap_drawer = new SQLControl(Server, DB, "medmap_drawer", UserName, Password, Port, SSLMode);
+                List<object[]> objects_medMap_section = await sQLControl_medMap_section.WriteCommandAsync($"select * from dbvm.medMap_section limit 50000");
+                List<object[]> objects_medmap_sub_section = await sQLControl_medMap_section.WriteCommandAsync($"select * from dbvm.medmap_sub_section limit 50000");
+                List<object[]> objects_medMap_shelfClass = await sQLControl_medMap_section.WriteCommandAsync($"select * from dbvm.medmap_shelf limit 50000");
+                List<object[]> objects_medmap_drawer = await sQLControl_medMap_section.WriteCommandAsync($"select * from dbvm.medmap_drawer limit 50000");
+
+
+                List<medMap_sectionClass> medMap_SectionClasses = objects_medMap_section.SQLToClass<medMap_sectionClass>();
+                List<medMap_sub_sectionClass> medMap_Sub_SectionClasses = objects_medmap_sub_section.SQLToClass<medMap_sub_sectionClass, enum_medMap_sub_section>();
+                List<medMap_sub_sectionClass> medMap_Sub_SectionClasses_buf = new List<medMap_sub_sectionClass>();
+                List<medMap_shelfClass> medMap_ShelfClasses = objects_medMap_shelfClass.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                List<medMap_shelfClass> medMap_ShelfClasses_buf = new List<medMap_shelfClass>();
+                List<medMap_drawerClass> medMap_DrawerClasses = objects_medmap_drawer.SQLToClass<medMap_drawerClass, enum_medMap_drawer>();
+                List<medMap_drawerClass> medMap_DrawerClasses_buf = new List<medMap_drawerClass>();
+
+                foreach (medMap_sectionClass sectionClass in medMap_SectionClasses)
+                {
+                    string GUID = sectionClass.GUID;
+
+                    medMap_Sub_SectionClasses_buf = medMap_Sub_SectionClasses.Where(x => x.Master_GUID == GUID).Select(x => x).ToList();
+
+
+                    sectionClass.sub_section = medMap_Sub_SectionClasses_buf;
+
+                    for (int i = 0; i < sectionClass.sub_section.Count; i++)
+                    {
+                        GUID = sectionClass.sub_section[i].GUID;
+                        medMap_ShelfClasses_buf = medMap_ShelfClasses.Where(x => x.Master_GUID == GUID).Select(x => x).ToList();
+                        medMap_DrawerClasses_buf = medMap_DrawerClasses_buf.Where(x => x.Master_GUID == GUID).Select(x => x).ToList();
+                        sectionClass.sub_section[i].shelf = medMap_ShelfClasses_buf;
+                        sectionClass.sub_section[i].drawer = medMap_DrawerClasses_buf;
+                    }
+                }
+
+                returnData.Code = 200;
+                returnData.Data = medMap_SectionClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_sections";
+                returnData.Result = $"取得子容器資料成功,共<{medMap_SectionClasses.Count}>筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         [HttpPost("get_section_by_GUID")]
         public async Task<string> get_section_by_GUID([FromBody] returnData returnData)
         {
@@ -3258,7 +3332,7 @@ namespace HIS_WebApi._API_藥品資料
             string result = await get_section_by_IP(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
-        
+       
         private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
         {
             foreach (var stock in medMap_stockClasses)

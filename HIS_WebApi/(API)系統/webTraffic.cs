@@ -20,7 +20,7 @@ namespace HIS_WebApi._API_系統
     public class webTraffic : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        static string API_Server = Method.GetServerAPI("Main", "網頁", "API01");
+        static string API_Server = "http://127.0.0.1:4433";
 
         [HttpPost("init")]
         public string init()

@@ -1,27 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
-using MyOffice;
-using NPOI;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
-using MyUI;
+﻿using Basic;
 using H_Pannel_lib;
 using HIS_DB_Lib;
-using System.Text;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using MyUI;
+using NPOI;
+using NPOI.SS.Formula.Functions;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace HIS_WebApi
 {
@@ -1029,112 +1030,98 @@ namespace HIS_WebApi
             return returnData.JsonSerializationt(true);
         }
         /// <summary>
-        /// 創建盤點單(自動填入盤點單號)
+        /// 創建驗收單(自動填入驗收單號)
         /// </summary>
         /// <remarks>
         /// [必要輸入參數說明]<br/> 
-        ///  1.[returnData.Value] : 盤點單名稱 <br/> 
+        ///  1.[returnData.Value] : 驗收單名稱 <br/> 
         ///  --------------------------------------------<br/> 
         /// 以下為範例JSON範例
         /// <code>
-        ///  {
-        ///    "Data": 
-        ///    {                 
-        ///        "IC_NAME": "測試盤點",
-        ///        "CT": "",
-        ///        "NOTE": "",
-        ///        "Contents": 
-        ///         [
-        ///            {
-        ///                "CODE": "220302IHYA",
-        ///                "SKDIACODE": "",
-        ///                "CHT_NAME": "Hyaluronate Sodium",
-        ///                "NAME": "(申報)Hyalgan膝爾康 關節腔注射劑",
-        ///                "PAKAGE": "Syri",
-        ///                "BARCODE1": "",
-        ///                "BARCODE2": "[]",
-        ///                "START_QTY": "0",
-        ///                "END_QTY": "0",
-        ///                "ADD_TIME": "2023/10/30 20:41:53",
-        ///                "NOTE": "",
-        ///                "Sub_content": []
-        ///            },
-        ///            {
-        ///                "CODE": "220IHYA",
-        ///                "SKDIACODE": "",
-        ///                "CHT_NAME": "Hyaluronate Sodium",
-        ///                "NAME": "(申報)Hyalgan膝爾康 關節腔注射劑",
-        ///                "PAKAGE": "",
-        ///                "BARCODE1": "",
-        ///                "BARCODE2": "[]",
-        ///                "START_QTY": "0",
-        ///                "END_QTY": "0",
-        ///                "ADD_TIME": "2023/10/30 20:41:53",
-        ///                "NOTE": "",
-        ///                "Sub_content": []
-        ///             }
-        ///         ]       
-        ///     }
+        /// {
+        ///   "ValueAry": [
+        ///     "medGroup=大瓶藥;冷藏藥",
+        ///     "control=1;3", // N,1,2,3,4
+        ///     "medType=口服;針劑"
+        ///   ]
         /// }
         /// </code>
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
-        /// <returns>[returnData.Data]為盤點單結構</returns>
+        /// <returns>[returnData.Data]為驗收單結構</returns>
+
         [Route("creat_auto_add")]
         [HttpPost]
-        public string creat_auto_add([FromBody] returnData returnData)
+        public async Task<string> creat_auto_add([FromBody] returnData returnData)
         {
             try
             {
+                string GetVal(string key) =>
+                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                    ?.Split('=')[1];
+                string medGroup = GetVal("medGroup") ?? "";
+                string control = GetVal("control") ?? "";
+                string medType = GetVal("medType") ?? "";
                 GET_init(returnData);
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
-                if (sys_serverSettingClasses_buf.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料!";
-                    return returnData.JsonSerializationt();
-                }
-                string Server = sys_serverSettingClasses_buf[0].Server;
-                string DB = sys_serverSettingClasses_buf[0].DBName; 
-                string UserName = sys_serverSettingClasses_buf[0].User;
-                string Password = sys_serverSettingClasses_buf[0].Password;
-                uint Port = (uint)sys_serverSettingClasses_buf[0].Port.StringToInt32();
+                
+                
+                (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
+             
                 returnData returnData_GET_new_IC_SN = this.GET_new_IC_SN(returnData).JsonDeserializet<returnData>();
-                string str_IC_SN = returnData_GET_new_IC_SN.Value;
+                string str_IC_SN = returnData_GET_new_IC_SN.Value;               
 
-                MED_pageController mED_PageController = new MED_pageController();
-                returnData returnData_med = new returnData();
-                returnData_med.ServerName = returnData.ServerName;
-                returnData_med.ServerType = returnData.ServerType;
-                returnData_med.Server = Server;
-                returnData_med.DbName = DB;
-                returnData_med.TableName = "medicine_page_cloud";
-                returnData_med.Port = Port;
-                returnData_med.UserName = UserName;
-                returnData_med.Password = Password;
-
-                returnData_med = mED_PageController.get_by_apiserver(returnData_med).JsonDeserializet<returnData>();
-                List<medClass> medClasses = returnData_med.Data.ObjToListClass<medClass>();
-
-                deviceController deviceController = new deviceController();
-                sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "儲位資料");
-
-                //List<DeviceBasic> deviceBasics = deviceController.Function_Get_device(sys_serverSettingClasses_buf[0], returnData.TableName);
-
+                List<medClass> medClasses = new List<medClass>();
+                if (medGroup.StringIsEmpty() == false)
+                {
+                    returnData returnData_group = await new medGroup().get_groups_by_name(medGroup);
+                    if(returnData_group == null || returnData_group.Code != 200)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥品群組取得失敗";
+                        return returnData.JsonSerializationt();
+                    }
+                    List<medGroupClass>  medGroupClasses = returnData_group.Data.ObjToClass<List<medGroupClass>>();
+                    foreach(var medGroupClasses_buf in medGroupClasses)
+                    {
+                        if(medGroupClasses_buf.MedClasses != null && medGroupClasses_buf.MedClasses.Count > 0)
+                        {
+                            medClasses.AddRange(medGroupClasses_buf.MedClasses);
+                        }
+                    }
+                    medClasses = medClasses.GroupBy(x => x.GUID).Select(g => g.First()).ToList();
+                   
+                }
+                if(control.StringIsEmpty() == false)
+                {
+                    List<string> control_ = control.Split(';').ToList();
+                    if (medClasses == null || medClasses.Count == 0)
+                    {
+                        returnData returnData_med = await new MED_pageController().get_med_cloud();
+                        medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    }
+                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別)).ToList();
+                }
+                if (medType.StringIsEmpty() == false)
+                {
+                    List<string> medType_ = medType.Split(';').ToList();
+                    if (medClasses == null || medClasses.Count == 0)
+                    {
+                        returnData returnData_med = await new MED_pageController().get_med_cloud();
+                        medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    }
+                    medClasses = medClasses.Where(item => medType_.Contains(item.類別)).ToList();
+                }
+                if (medGroup.StringIsEmpty()　&& control.StringIsEmpty() && medType.StringIsEmpty() 　)
+                {
+                    returnData returnData_med = await new MED_pageController().get_med_cloud();
+                    medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                }
                 inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
                 creat.盤點單號 = str_IC_SN;
                 for (int i = 0; i < medClasses.Count; i++)
                 {
-                    //if (medClasses[i].開檔狀態.StringIsEmpty() == false)
-                    //{
-                    //    if (medClasses[i].開檔狀態 != enum_開檔狀態.開檔中.GetEnumName())
-                    //    {
-                    //        continue;
-                    //    }
-                    //}
-                     
+                                        
                     inventoryClass.content content = new inventoryClass.content();
                     content.藥品碼 = medClasses[i].藥品碼;
                     content.藥品名稱 = medClasses[i].藥品名稱;
@@ -1144,18 +1131,7 @@ namespace HIS_WebApi
                     content.藥品條碼2 = medClasses[i].藥品條碼2;
                     content.包裝單位 = medClasses[i].包裝單位;
                     content.理論值 = "0";
-                    //List<DeviceBasic> deviceBasic_buf = deviceBasics.SortByCode(content.藥品碼);
-                    //if (deviceBasic_buf.Count > 0)
-                    //{
-                    //    content.理論值 = deviceBasic_buf[0].Inventory;
-                    //    if (deviceBasic_buf[0].Inventory.StringToInt32() > 0)
-                    //    {
-
-                    //    }
-                    //}
-
-
-
+                  
                     creat.Contents.Add(content);
                 }
                 if (creat.Contents.Count == 0)

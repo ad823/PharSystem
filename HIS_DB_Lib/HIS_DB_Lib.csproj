@@ -130,12 +130,12 @@
     <Compile Include="DrugHFTagClass.cs" />
     <Compile Include="lockerAccessClass.cs" />
     <Compile Include="loggerClass.cs" />
+    <Compile Include="住院藥車\med_carlogClass.cs" />
     <Compile Include="住院藥車\nearMissClass.cs" />
     <Compile Include="住院藥車\nursingStationClass.cs" />
     <Compile Include="shiftClass.cs" />
     <Compile Include="住院藥車\patientInfoClass.cs" />
     <Compile Include="儲位資訊\stockClass.cs" />
-    <Compile Include="儲位資訊\stockListClass.cs" />
     <Compile Include="化療排程\CMPM_StorageConfig_Class.cs" />
     <Compile Include="commonSpaceSetup.cs" />
     <Compile Include="computerConfigClass.cs" />
@@ -208,7 +208,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\0.DLL"
-copy /Y "$(TargetDir)$(ProjectName).xml" "$(SolutionDir)\0.DLL"</PostBuildEvent>
+copy /Y "$(TargetDir)$(ProjectName).xml" "$(SolutionDir)\0.DLL"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\HIS_WebApi\0.DLL"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -51,6 +51,13 @@ namespace HIS_DB_Lib
         收貨時間,
         操作人,
     }
+    public enum enum_採購資料匯出
+    {
+        藥碼,
+        料號,
+        藥名,
+        採購數量
+    }
 
 
     [EnumDescription("inspection_creat")]
@@ -790,6 +797,34 @@ namespace HIS_DB_Lib
             else
             {
                 return new List<inspectionClass.sub_content>();
+            }
+        }
+
+        static public Dictionary<string, List<inspectionClass.content>> ToDictByCode(this List<inspectionClass.content> Contents)
+        {
+            Dictionary<string, List<inspectionClass.content>> dictionary = new Dictionary<string, List<inspectionClass.content>>();
+            foreach (var item in Contents)
+            {
+                if (dictionary.TryGetValue(item.藥品碼, out List<inspectionClass.content> list))
+                {
+                    list.Add(item);
+                }
+                else
+                {
+                    dictionary[item.藥品碼] = new List<inspectionClass.content> { item };
+                }
+            }
+            return dictionary;
+        }
+        static public List<inspectionClass.content> GetByCode(this Dictionary<string, List<inspectionClass.content>> dict, string code)
+        {
+            if (dict.TryGetValue(code, out List<inspectionClass.content> content))
+            {
+                return content;
+            }
+            else
+            {
+                return new List<inspectionClass.content>();
             }
         }
     }

@@ -4315,11 +4315,13 @@ namespace HIS_WebApi
             }
         }
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<returnData> get_by_code(string code)
+        public async Task<returnData> get_by_code(string code, string serverName, string serverType)
         {
             returnData returnData = new returnData();
-            returnData.Value = code;
+            returnData.Value = code;          
             returnData.TableName = "medicine_page_cloud";
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
             string result = get_by_code(returnData);
             return result.JsonDeserializet<returnData>();
         }
@@ -4341,6 +4343,13 @@ namespace HIS_WebApi
             string code = string.Join(",", codes);
             returnData.ValueAry.Add(code);
             string result = await get_med_clouds_by_codes(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_med_cloud()
+        {
+            returnData returnData = new returnData();
+            string result = await get_med_cloud(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
     }

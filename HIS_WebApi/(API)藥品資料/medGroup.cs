@@ -165,6 +165,51 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt();
             }
         }
+        [HttpPost("get_groups_by_name")]
+        public async Task<string> get_groups_by_name([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimer myTimer = new MyTimer();
+                myTimer.StartTickTime(50000);
+
+                sys_serverSettingClass sys_serverSettingClasses = await HIS_WebApi.Method.GetServerAsync("Main", "網頁", "VM端");
+                             
+                if (returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[群組名稱]";
+                    return returnData.JsonSerializationt(true);
+                }
+                string GUID = returnData.ValueAry[0];
+                List<medGroupClass> medGroupClass = await Function_Get_medGroupClass_ByName(sys_serverSettingClasses, returnData.ValueAry[0].Split(";").ToList());
+
+                if (medGroupClass == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無資料";
+                    return returnData.JsonSerializationt();
+                }
+                foreach(var group in medGroupClass)
+                {
+                    group.MedClasses.Sort(new medClass.ICP_By_name());
+                }
+                    
+                returnData.Code = 200;
+                returnData.Data = medGroupClass;
+                returnData.TimeTaken = myTimer.ToString();
+                returnData.Method = "get_group_by_name";
+                returnData.Result = $"取得藥品群組資料成功";
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
         [Route("get_all_group_header")]
         [HttpPost]
         public string POST_get_all_group_header([FromBody] returnData returnData)
@@ -1512,7 +1557,70 @@ namespace HIS_WebApi
 
             return group;
         }
+        static public async Task<List<medGroupClass>> Function_Get_medGroupClass_ByName(sys_serverSettingClass serverSetting, List<string> groupName)
+        {
+            // 建立資料庫連線
+            string Server = serverSetting.Server;
+            string DB = serverSetting.DBName;
+            string UserName = serverSetting.User;
+            string Password = serverSetting.Password;
+            uint Port = (uint)serverSetting.Port.StringToInt32();
 
+            var sQLControl_med_group = new SQLControl(Server, DB, "med_group", UserName, Password, Port, SSLMode);
+            var sQLControl_med_sub_group = new SQLControl(Server, DB, "med_sub_group", UserName, Password, Port, SSLMode);
+
+            // 查出符合名稱的 med_group（模糊比對，也可改成精確）
+            var list_med_group = await sQLControl_med_group.GetRowsByDefultAsync(null, (int)enum_medGroup.名稱, groupName.ToArray());
+            if (list_med_group.Count == 0) return null;
+
+            List<medGroupClass> group = list_med_group.SQLToClass<medGroupClass, enum_medGroup>(); // 取第一筆符合的群組
+            string[] guid = group.Select(x => x.GUID).Distinct().ToArray();
+            // 查出子藥品清單
+            var list_med_sub_group = await sQLControl_med_sub_group.GetRowsByDefultAsync(null, (int)enum_sub_medGroup.Master_GUID, guid);
+            var medClasses_raw = list_med_sub_group.SQLToClass<medClass, enum_sub_medGroup>();
+
+            // 雲端藥檔
+            var medClasses_cloud = MED_pageController.Get_med_cloud(serverSetting);
+            var dict_cloud = medClasses_cloud.ToDictionary(x => x.藥品碼, x => x);
+            
+
+            var resultMedClasses = new List<medClass>();
+            foreach (var med in medClasses_raw)
+            {
+                if (dict_cloud.TryGetValue(med.藥品碼, out var cloudMed))
+                {
+                    var medCopy = cloudMed.ShallowCopy(); // 若 cloud 資料有共用建議複製
+                    foreach (var prop in typeof(medClass).GetProperties())
+                    {
+                        var medValue = prop.GetValue(med);
+                        if (medValue != null)
+                        {
+                            prop.SetValue(medCopy, medValue);
+                        }
+                    }
+
+                    resultMedClasses.Add(medCopy);
+                    
+                }
+            }
+            
+            // 排序：依排列號數字 + 藥碼
+            foreach(var item in group)
+            {
+                List<medClass> med = resultMedClasses.Where(x => x.Master_GUID == item.GUID).ToList();
+                item.MedClasses = med
+               .OrderBy(m =>
+               {
+                   if (int.TryParse(m.排列號, out int index)) return index;
+                   return int.MaxValue;
+               })
+               .ThenBy(m => m.藥品碼)
+               .ToList();
+            }
+           
+
+            return group;
+        }
         static private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
         {
 
@@ -1560,6 +1668,15 @@ namespace HIS_WebApi
             if (returnData == null || returnData.Code != 200) return new List<medGroupClass>();
             List<medGroupClass> medGroupClasses = returnData.Data.ObjToListClass<medGroupClass>();
             return medGroupClasses;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_groups_by_name(string name)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add(name);
+            string result = await get_groups_by_name(returnData);
+            returnData = result.JsonDeserializet<returnData>();
+            return returnData;
         }
 
     }

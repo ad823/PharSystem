@@ -24,7 +24,6 @@ namespace HIS_WebApi
     public class medSize : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        private string APIServer = Method.GetServerAPI("Main", "網頁", "API01");
         private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
          serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
          {
