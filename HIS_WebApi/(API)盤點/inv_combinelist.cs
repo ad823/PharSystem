@@ -3127,7 +3127,7 @@ namespace HIS_WebApi
             List<object[]> list_value = new List<object[]>();
             System.Data.DataTable dataTable;
             SheetClass sheetClass;
-            Console.WriteLine($"取得creats {myTimer.ToString()}");
+            //Console.WriteLine($"取得creats {myTimer.ToString()}");
 
 
 
@@ -3377,7 +3377,7 @@ namespace HIS_WebApi
             List<object[]> list_value = new List<object[]>();
             System.Data.DataTable dataTable;
             SheetClass sheetClass;
-            Console.WriteLine($"取得creats {myTimer.ToString()}");
+            //Console.WriteLine($"取得creats {myTimer.ToString()}");
 
 
 
@@ -4002,7 +4002,7 @@ namespace HIS_WebApi
             List<object[]> list_value = new List<object[]>();
             System.Data.DataTable dataTable;
             SheetClass sheetClass;
-            Console.WriteLine($"取得creats {myTimer.ToString()}");
+            //Console.WriteLine($"取得creats {myTimer.ToString()}");
 
             for (int i = 0; i < contents.Count; i++)
             {
@@ -4023,7 +4023,7 @@ namespace HIS_WebApi
             sheetClass.Name = "盤點總表";
 
 
-            Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
+            //Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
 
             string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string xls_command = "application/vnd.ms-excel";

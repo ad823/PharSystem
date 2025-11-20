@@ -615,7 +615,7 @@ namespace HIS_WebApi
 
 
                 string loadText = Basic.MyFileStream.LoadFileAllText(@"./excel_consumption.txt", "utf-8");
-                Console.WriteLine($"取得creats {myTimer.ToString()}");
+                //Console.WriteLine($"取得creats {myTimer.ToString()}");
                 int row_max = 5000;
                 List<SheetClass> sheetClasses = new List<SheetClass>();
                 SheetClass sheetClass = loadText.JsonDeserializet<SheetClass>();
@@ -646,7 +646,7 @@ namespace HIS_WebApi
 
                     NumOfRow++;
                 }
-                Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
+                //Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
                 returnData.Code = 200;
                 returnData.Result = "Sheet取得成功!";
                 returnData.Data = sheetClasses;
