@@ -13,7 +13,6 @@ using System.Text.Json.Serialization;
 using System.ComponentModel;
 using System.Reflection;
 using System.Configuration;
-using IBM.Data.DB2.Core;
 using MyOffice;
 using NPOI;
 using Microsoft.AspNetCore.Http;

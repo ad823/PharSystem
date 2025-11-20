@@ -3677,7 +3677,7 @@ namespace HIS_WebApi
             {
                 SQLControl sQLControl_device = new SQLControl(Server, DBName, TableName, UserName, Password, Port, SSLMode);
                 deviceBasics = DeviceBasicMethod.SQL_GetAllDeviceSimple(sQLControl_device);
-                Console.WriteLine($"[{System.Reflection.MethodBase.GetCurrentMethod().Name}] 類別 : {sys_serverSettingClass.類別} , TableName {TableName} , {myTimerBasic.ToString()}");
+                //Console.WriteLine($"[{System.Reflection.MethodBase.GetCurrentMethod().Name}] 類別 : {sys_serverSettingClass.類別} , TableName {TableName} , {myTimerBasic.ToString()}");
             }
             return deviceBasics;
         }
@@ -3694,7 +3694,7 @@ namespace HIS_WebApi
             {
                 SQLControl sQLControl_device = new SQLControl(Server, DBName, TableName, UserName, Password, Port, SSLMode);
                 DeviceBasicMethod.SQL_ReplaceDeviceBasic(sQLControl_device , deviceBasics);
-                Console.WriteLine($"[{System.Reflection.MethodBase.GetCurrentMethod().Name}] 類別 : {sys_serverSettingClass.類別} , TableName {TableName} , {myTimerBasic.ToString()}");
+                //Console.WriteLine($"[{System.Reflection.MethodBase.GetCurrentMethod().Name}] 類別 : {sys_serverSettingClass.類別} , TableName {TableName} , {myTimerBasic.ToString()}");
             }
         }
         static private List<DeviceBasic> Function_Get_device(string IP, string DBName, string TableName, string UserName, string Password, uint Port)

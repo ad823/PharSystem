@@ -22,7 +22,6 @@ using HIS_DB_Lib;
 using System.Net;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp.Drawing;
 using MyOffice;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;

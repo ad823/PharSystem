@@ -1039,7 +1039,7 @@ namespace HIS_WebApi
 
 
                 string loadText = Basic.MyFileStream.LoadFileAllText(@"./excel_emg_tradding.txt", "utf-8");
-                Console.WriteLine($"取得creats {myTimer.ToString()}");
+                //Console.WriteLine($"取得creats {myTimer.ToString()}");
                 int row_max = 50;
                 List<SheetClass> sheetClasses = new List<SheetClass>();
                 SheetClass sheetClass = loadText.JsonDeserializet<SheetClass>();
@@ -1089,7 +1089,7 @@ namespace HIS_WebApi
                 }
 
 
-                Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
+                //Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
                 returnData.Code = 200;
                 returnData.Result = "Sheet取得成功!";
                 returnData.Data = sheetClasses;
@@ -1480,7 +1480,7 @@ namespace HIS_WebApi
                     }
 
                     string loadText = Basic.MyFileStream.LoadFileAllText(@"./excel_emg_tradding.txt", "utf-8");
-                    Console.WriteLine($"取得creats {myTimerBasic.ToString()}");
+                    //Console.WriteLine($"取得creats {myTimerBasic.ToString()}");
                     int row_max = 60000;
        
                     SheetClass sheetClass = loadText.JsonDeserializet<SheetClass>();
@@ -1697,7 +1697,7 @@ namespace HIS_WebApi
 
                     //Logger.Log("excel_emg_tradding", $"{sheetClass.JsonSerializationt(true)}");
 
-                    //Console.WriteLine($"取得creats {myTimerBasic.ToString()}");
+                    ////Console.WriteLine($"取得creats {myTimerBasic.ToString()}");
                     int row_max = 60000;
 
                     //SheetClass sheetClass = loadText.JsonDeserializet<SheetClass>();
