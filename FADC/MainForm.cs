@@ -22,7 +22,7 @@ using HIS_DB_Lib;
 [assembly: AssemblyFileVersion("1.0.0.0000")]
 namespace FADC
 {
-    public partial class MainForm : Form
+    public partial class Main_Form : Form
     {
         public static StorageUI_EPD_266 _storageUI_EPD_266 = null;
         public static RFID_UI _rfiD_UI = null;
@@ -187,7 +187,7 @@ namespace FADC
             }
         }
         #endregion
-        public MainForm()
+        public Main_Form()
         {
             InitializeComponent();
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -217,7 +217,7 @@ namespace FADC
             H_Pannel_lib.Communication.ConsoleWrite = false;
             MyMessageBox.音效 = false;
             MyMessageBox.form = this.FindForm();
-
+            LoadingForm.form = this.FindForm();
             Net.DebugLog = false;
             this.lowerMachine_Panel.Run();
 
@@ -232,6 +232,7 @@ namespace FADC
 
         private void PlC_UI_Init_UI_Finished_Event()
         {
+            
             this.WindowState = FormWindowState.Maximized;
             PLC_UI_Init.Set_PLC_ScreenPage(panel_Main, this.plC_ScreenPage_Main);
             PLC_UI_Init.Set_PLC_ScreenPage(panel_setting, this.plC_ScreenPage_setting);
@@ -353,12 +354,13 @@ namespace FADC
                 dBConfigClass.DB_tradding.UserName = sys_serverSettingClass.User;
                 dBConfigClass.DB_tradding.Password = sys_serverSettingClass.Password;
             }
-            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "API02");
-            if (sys_serverSettingClass != null)
-            {
-                dBConfigClass.Api_URL = sys_serverSettingClass.Server;
-                API_Server = sys_serverSettingClass.Server;
-            }
+            API_Server = dBConfigClass.Api_Server;
+            //sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "API02");
+            //if (sys_serverSettingClass != null)
+            //{
+            //    dBConfigClass.Api_URL = sys_serverSettingClass.Server;
+            //    API_Server = sys_serverSettingClass.Server;
+            //}
             sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_API");
             if (sys_serverSettingClass != null) dBConfigClass.OrderApiURL = sys_serverSettingClass.Server;
             sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_By_Code_API");

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace FADC
 {
-    public partial class MainForm : Form
+    public partial class Main_Form : Form
     {
         public enum enunm_InOutBoard
         {
