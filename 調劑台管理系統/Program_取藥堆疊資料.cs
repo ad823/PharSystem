@@ -3394,7 +3394,12 @@ namespace 調劑台管理系統
                                 {
                                     uDP_READ = this.storageUI_LCD_114.Get_UDP_READ(index_IP);
                                 }
-
+                                else
+                                {
+                                    list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                                    list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                                    list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
+                                }
                                 // 若在 LCD 讀取不到，則嘗試從 EPD 讀取
                                 if (uDP_READ == null)
                                 {

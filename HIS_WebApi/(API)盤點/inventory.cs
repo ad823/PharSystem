@@ -1089,7 +1089,7 @@ namespace HIS_WebApi
                             medClasses.AddRange(medGroupClasses_buf.MedClasses);
                         }
                     }
-                    medClasses = medClasses.GroupBy(x => x.GUID).Select(g => g.First()).ToList();
+                    medClasses = medClasses.Where(temp => temp.開檔狀態 != "關檔中").GroupBy(x => x.GUID).Select(g => g.First()).ToList();
                    
                 }
                 if(control.StringIsEmpty() == false)
@@ -1100,7 +1100,7 @@ namespace HIS_WebApi
                         returnData returnData_med = await new MED_pageController().get_med_cloud();
                         medClasses = returnData_med.Data.ObjToListClass<medClass>();
                     }
-                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別)).ToList();
+                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別) && item.開檔狀態 != "關檔中").ToList();
                 }
                 if (medType.StringIsEmpty() == false)
                 {
@@ -1110,7 +1110,7 @@ namespace HIS_WebApi
                         returnData returnData_med = await new MED_pageController().get_med_cloud();
                         medClasses = returnData_med.Data.ObjToListClass<medClass>();
                     }
-                    medClasses = medClasses.Where(item => medType_.Contains(item.類別)).ToList();
+                    medClasses = medClasses.Where(item => medType_.Contains(item.類別) && item.開檔狀態 != "關檔中").ToList();
                 }
                 if (medGroup.StringIsEmpty()　&& control.StringIsEmpty() && medType.StringIsEmpty() 　)
                 {

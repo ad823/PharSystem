@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Basic;
+using HIS_DB_Lib;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.InteropServices; // Marshal.Copy
+using System.Text.Json;
+using System.Threading.Tasks;
 using ZXing;
 using ZXing.SkiaSharp; // 來自 ZXing.Net.Bindings.SkiaSharp
-using Basic;
-using System.Runtime.InteropServices; // Marshal.Copy
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using HIS_DB_Lib;
-using System.Text.Json;
 
 namespace HIS_WebApi
 {
@@ -20,7 +21,7 @@ namespace HIS_WebApi
     public class barcode : ControllerBase
     {
 
-        [HttpPost]
+        [HttpPost("barcode")]
         public async Task<string> Decode([FromForm] IFormFile file)
         {
             try
@@ -100,6 +101,8 @@ namespace HIS_WebApi
             }
             catch (Exception ex)
             {
+                Logger.Log(ex.ToString());
+                Logger.Log(ex.InnerException?.ToString());
                 return JsonSerializer.Serialize(new
                 {
                     results = new[]
@@ -278,6 +281,80 @@ namespace HIS_WebApi
                 rd.TimeTaken = timer.ToString();
                 return rd.JsonSerializationt();
             }
+        }
+
+
+        [HttpPost]
+        public async Task<string> excel_upload_extra([FromForm] IFormFile file)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                using (var form = new MultipartFormDataContent())
+                {
+                    // 把 IFormFile 轉成 StreamContent
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var fileContent = new StreamContent(stream);
+                        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType ?? "application/octet-stream");
+
+                        // 加入到 multipart form，name 要和 API 預期的欄位名一致
+                        form.Add(fileContent, "file", file.FileName);
+
+                        // 發送 POST 請求
+                        var response = await client.PostAsync("http://127.0.0.1:3100/barcode", form);
+                        response.EnsureSuccessStatusCode();
+
+                        // 讀取回應內容
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"{ex.Message}");
+                return null;
+            }
+
+
+
+        }
+        [HttpPost("pill_counter")]
+        public async Task<string> pill_counter([FromForm] IFormFile file)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                using (var form = new MultipartFormDataContent())
+                {
+                    // 把 IFormFile 轉成 StreamContent
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var fileContent = new StreamContent(stream);
+                        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType ?? "application/octet-stream");
+
+                        // 加入到 multipart form，name 要和 API 預期的欄位名一致
+                        form.Add(fileContent, "file", file.FileName);
+
+                        // 發送 POST 請求
+                        var response = await client.PostAsync("http://127.0.0.1:3100/pill_counter", form);
+                        response.EnsureSuccessStatusCode();
+
+                        // 讀取回應內容
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"{ex.Message}");
+                return null;
+            }
+
+
+
         }
 
         // ================= DTO（若已定義可刪） =================
