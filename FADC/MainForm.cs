@@ -29,6 +29,7 @@ namespace FADC
 
         public static string API_Server = "http://127.0.0.1:4433";
         public static string ServerName = "";
+        public static string ServerType = "";
         public static string Order_URL = "";
         public static string OrderByCodeApi_URL = "";
 
@@ -241,6 +242,7 @@ namespace FADC
             LoadDBConfig();
             ApiServerSetting();
 
+            Program_人員資料_Init();
             Program_儲位管理_Init();
             Program_PLC();
         }
@@ -295,6 +297,7 @@ namespace FADC
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
             HIS_DB_Lib.sys_serverSettingClass sys_serverSettingClass;
             ServerName = Name;
+            ServerType = enum_sys_serverSetting_Type.FADC.GetEnumName();
             sys_serverSettingClass = sys_serverSettingClasses.MyFind(Name, enum_sys_serverSetting_Type.FADC, basicName);
             List<string> DPS_Names = (from temp in sys_serverSettingClasses
                                       where temp.類別 == enum_sys_serverSetting_Type.FADC.GetEnumName()
