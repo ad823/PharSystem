@@ -95,24 +95,58 @@ namespace FADC
             this.sqL_DataGridView_人員資料.DataGridRefreshEvent += SqL_DataGridView_人員資料_DataGridRefreshEvent;
             this.sqL_DataGridView_人員資料.RowDoubleClickEvent += SqL_DataGridView_人員資料_RowDoubleClickEvent;
             this.sqL_DataGridView_人員資料.MouseDown += SqL_DataGridView_人員資料_MouseDown;
-            //this.sqL_DataGridView_人員資料.RefreshGrid(Function_人員資料_取得人員資料().ClassToSQL<personPageClass, enum_人員資料>());
+            this.sqL_DataGridView_人員資料.RefreshGrid(Function_人員資料_取得人員資料().ClassToSQL<personPageClass, enum_人員資料>());
+
+            this.plC_RJ_Button_人員資料_匯出.MouseDownEvent += PlC_RJ_Button_人員資料_匯出_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_匯入.MouseDownEvent += PlC_RJ_Button_人員資料_匯入_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_登錄.MouseDownEvent += PlC_RJ_Button_人員資料_登錄_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_刪除.MouseDownEvent += PlC_RJ_Button_人員資料_刪除_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_清除內容.MouseDownEvent += PlC_RJ_Button_人員資料_清除內容_MouseDownEvent;
+
+            this.plC_RJ_Button_人員資料_資料查詢_ID.MouseDownEvent += PlC_RJ_Button_人員資料_資料查詢_ID_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_資料查詢_姓名.MouseDownEvent += PlC_RJ_Button_人員資料_資料查詢_姓名_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_資料查詢_卡號.MouseDownEvent += PlC_RJ_Button_人員資料_資料查詢_卡號_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_資料查詢_一維條碼.MouseDownEvent += PlC_RJ_Button_人員資料_資料查詢_一維條碼_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_顯示全部.MouseDownEvent += PlC_RJ_Button_人員資料_顯示全部_MouseDownEvent;
+
+            this.plC_RJ_Button_人員資料_RFID註冊.MouseDownEvent += PlC_RJ_Button_人員資料_RFID註冊_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_條碼註冊.MouseDownEvent += PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent;
+            this.plC_UI_Init.Add_Method(this.sub_Program_人員資料);
+
 
         }
+        bool flag_人員資料_權限管理_頁面更新 = false;
+        private void sub_Program_人員資料()
+        {
+         
+            if (this.plC_ScreenPage_Main.PageText == "人員資料" )
+            {
+                if (!this.flag_人員資料_權限管理_頁面更新)
+                {
+  
+                    this.Invoke(new Action(delegate
+                    {
+                        PLC_Device pLC_Device = new PLC_Device("S39014");
+                        this.sqL_DataGridView_人員資料.RefreshGrid(Function_人員資料_取得人員資料().ClassToSQL<personPageClass, enum_人員資料>());
+                        this.comboBox_人員資料_權限等級.Enabled = pLC_Device.Bool;
+                    }));
+                    this.flag_人員資料_權限管理_頁面更新 = true;
+                }
+            }
+            else
+            {
+                this.flag_人員資料_權限管理_頁面更新 = false;
+            }
+            //this.sub_Program_人員資料_接收設備資料();
+        }
+
         #region Function
         private List<personPageClass> Function_人員資料_取得人員資料()
         {
             List<personPageClass> personPageClasses = new List<personPageClass>();
-            string url = $"{dBConfigClass.Api_URL}/api/person_page/";
-            returnData returnData = new returnData(url);
-            returnData.ServerType = enum_sys_serverSetting_Type.調劑台.GetEnumName();
-            returnData.ServerName = $"{dBConfigClass.Name}";
-            string json = returnData.ApiPostJson();
-            if (returnData.ResultData == null)
-            {
-                MyMessageBox.ShowDialog("取得人員資料失敗!");
-                return personPageClasses;
-            }
-            personPageClasses = returnData.ResultData.Data.ObjToListClass<personPageClass>();
+
+            personPageClasses =  personPageClass.get_all(API_Server);
+
             return personPageClasses;
         }
         private string Function_人員資料_檢查內容(object[] value)
@@ -327,7 +361,7 @@ namespace FADC
         private void Function_登入權限資料_取得權限(List<PermissionsClass> Permissions)
         {
             Permissions = (from temp in Permissions
-                           where temp.類別.Contains("調劑台")
+                           where temp.類別.Contains("FADC")
                            select temp).ToList();
             for (int i = 0; i < Permissions.Count; i++)
             {
@@ -458,6 +492,190 @@ namespace FADC
                         }
                     }
                 }
+            }
+        }
+
+        private void PlC_RJ_Button_人員資料_刪除_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Invoke(new Action(delegate
+            {
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Checked_RowsValues();
+
+                DialogResult Result = MyMessageBox.ShowDialog($"是否刪除選取欄位資料,共<{list_value.Count}>筆?", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel);
+                if (Result == System.Windows.Forms.DialogResult.Yes)
+                {
+
+                    this.sqL_DataGridView_人員資料.SQL_DeleteExtra(list_value, true);
+                }
+            }));
+        }
+        private void PlC_RJ_Button_人員資料_登錄_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Invoke(new Action(delegate
+            {
+                this.Function_人員資料_登錄資料();
+            }));
+        }
+        private void PlC_RJ_Button_人員資料_匯入_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Invoke(new Action(delegate
+            {
+                this.Function_人員資料_匯入();
+            }));
+        }
+        private void PlC_RJ_Button_人員資料_匯出_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Invoke(new Action(delegate
+            {
+                this.Function_人員資料_匯出();
+            }));
+        }
+        private void PlC_RJ_Button_人員資料_清除內容_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Function_人員資料_清除內容();
+        }
+
+
+        private void PlC_RJ_Button_人員資料_資料查詢_一維條碼_MouseDownEvent(MouseEventArgs mevent)
+        {
+            if (rJ_TextBox_人員資料_資料查詢_一維條碼.Text.StringIsEmpty())
+            {
+                MyMessageBox.ShowDialog("搜尋條件空白!");
+                return;
+            }
+            string text = rJ_TextBox_人員資料_資料查詢_一維條碼.Text;
+            List<object[]> list_value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+            list_value = (from temp in list_value
+                          where temp[(int)enum_人員資料.一維條碼].ObjectToString().ToUpper().Contains(text.ToUpper())
+                          select temp).ToList();
+            if (list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("查無資料!");
+                return;
+            }
+            this.sqL_DataGridView_人員資料.RefreshGrid(list_value);
+        }
+        private void PlC_RJ_Button_人員資料_資料查詢_卡號_MouseDownEvent(MouseEventArgs mevent)
+        {
+            if (rJ_TextBox_人員資料_資料查詢_卡號.Text.StringIsEmpty())
+            {
+                MyMessageBox.ShowDialog("搜尋條件空白!");
+                return;
+            }
+            string text = rJ_TextBox_人員資料_資料查詢_卡號.Text;
+            List<object[]> list_value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+            list_value = (from temp in list_value
+                          where temp[(int)enum_人員資料.卡號].ObjectToString().ToUpper().Contains(text.ToUpper())
+                          select temp).ToList();
+            if (list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("查無資料!");
+                return;
+            }
+            this.sqL_DataGridView_人員資料.RefreshGrid(list_value);
+        }
+        private void PlC_RJ_Button_人員資料_資料查詢_姓名_MouseDownEvent(MouseEventArgs mevent)
+        {
+            if (rJ_TextBox_人員資料_資料查詢_姓名.Text.StringIsEmpty())
+            {
+                MyMessageBox.ShowDialog("搜尋條件空白!");
+                return;
+            }
+            string text = rJ_TextBox_人員資料_資料查詢_姓名.Text;
+            List<object[]> list_value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+            list_value = (from temp in list_value
+                          where temp[(int)enum_人員資料.姓名].ObjectToString().ToUpper().Contains(text.ToUpper())
+                          select temp).ToList();
+            if (list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("查無資料!");
+                return;
+            }
+            this.sqL_DataGridView_人員資料.RefreshGrid(list_value);
+        }
+        private void PlC_RJ_Button_人員資料_資料查詢_ID_MouseDownEvent(MouseEventArgs mevent)
+        {
+            if (rJ_TextBox_人員資料_資料查詢_ID.Text.StringIsEmpty())
+            {
+                MyMessageBox.ShowDialog("搜尋條件空白!");
+                return;
+            }
+            string text = rJ_TextBox_人員資料_資料查詢_ID.Text;
+
+            List<object[]> list_value = this.sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+            list_value = (from temp in list_value
+                          where temp[(int)enum_人員資料.ID].ObjectToString().ToUpper().Contains(text.ToUpper())
+                          select temp).ToList();
+
+            if (list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("查無資料!");
+                return;
+            }
+            this.sqL_DataGridView_人員資料.RefreshGrid(list_value);
+        }
+        private void PlC_RJ_Button_人員資料_顯示全部_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.sqL_DataGridView_人員資料.SQL_GetAllRows(true);
+        }
+        private void PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                Dialog_AlarmForm dialog_AlarmForm;
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                if (list_value.Count == 0)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                人員資料_BarCode = "";
+                Dialog_等待條碼刷入 dialog_等待條碼刷入 = new Dialog_等待條碼刷入();
+                if (dialog_等待條碼刷入.ShowDialog() != DialogResult.Yes) return;
+                string UID = dialog_等待條碼刷入.Value;
+
+                list_value[0][(int)enum_人員資料.一維條碼] = UID;
+                rJ_TextBox_人員資料_一維條碼.Text = UID;
+                this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
+                this.sqL_DataGridView_人員資料.ReplaceExtra(list_value[0], true);
+                dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
+                dialog_AlarmForm.ShowDialog();
+
+
+            }
+            finally
+            {
+
+            }
+        }
+        private void PlC_RJ_Button_人員資料_RFID註冊_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                Dialog_AlarmForm dialog_AlarmForm;
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                if (list_value.Count == 0)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                人員資料_UID = "";
+                Dialog_等待RFID感應 dialog_等待RFID感應 = new Dialog_等待RFID感應();
+                if (dialog_等待RFID感應.ShowDialog() != DialogResult.Yes) return;
+                string UID = dialog_等待RFID感應.Value;
+
+                list_value[0][(int)enum_人員資料.卡號] = UID;
+                this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
+                this.sqL_DataGridView_人員資料.ReplaceExtra(list_value[0], true);
+                dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
+                dialog_AlarmForm.ShowDialog();
+
+
+            }
+            finally
+            {
             }
         }
     }

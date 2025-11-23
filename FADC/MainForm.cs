@@ -36,7 +36,7 @@ namespace FADC
         public bool ControlMode = false;
         public static MinasA6 minasA6 = null;
         public static string currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
+        private string FormText = "";
 
         #region MyConfigClass
         private static string MyConfigFileName = $@"{currentDirectory}\MyConfig.txt";
@@ -47,10 +47,12 @@ namespace FADC
             private bool controlMode = false;
             private string servoZ_Com = "COM1";
             private string board_IP = "";
+            private string scanner01_COMPort = "COM2";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
             public string Board_IP { get => board_IP; set => board_IP = value; }
+            public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
         }
         private void LoadMyConfig()
         {
@@ -242,7 +244,11 @@ namespace FADC
             LoadDBConfig();
             ApiServerSetting();
 
+         
+            Program_Scanner_RS232_Init();
             Program_人員資料_Init();
+            Program_後台登入_Init();
+            Program_交易紀錄查詢_Init();   
             Program_儲位管理_Init();
             Program_PLC();
         }
