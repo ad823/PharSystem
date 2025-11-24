@@ -55,6 +55,7 @@ namespace HIS_WebApi
             else sQLControl.CheckAllColumnName(table, true);
             return table;
         }
+
         static public Table CheckCreatTable<T>(sys_serverSettingClass serverSettingClass)
         {
             Type typeFromHandle = typeof(T);

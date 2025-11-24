@@ -124,6 +124,8 @@
     <Compile Include="BasicClass.cs" />
     <Compile Include="batch_inventory_exportClass.cs" />
     <Compile Include="batch_inventory_importClass.cs" />
+    <Compile Include="化療處方\chemotherapyOrderClass.cs" />
+    <Compile Include="化療處方\chemotherapyOrderDayClass.cs" />
     <Compile Include="住院藥車\bedStatusClass.cs" />
     <Compile Include="drugStotreArea.cs" />
     <Compile Include="formularyClass.cs" />

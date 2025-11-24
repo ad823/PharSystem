@@ -207,20 +207,33 @@
     <Compile Include="Dialog\Dialog_等待RFID感應.Designer.cs">
       <DependentUpon>Dialog_等待RFID感應.cs</DependentUpon>
     </Compile>
-
     <Compile Include="Dialog\Dialog_等待條碼刷入.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialog\Dialog_等待條碼刷入.Designer.cs">
       <DependentUpon>Dialog_等待條碼刷入.cs</DependentUpon>
     </Compile>
-
     <Compile Include="Dialog\Dialog_輸入批號.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialog\Dialog_輸入批號.Designer.cs">
       <DependentUpon>Dialog_輸入批號.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\手輸領藥.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\手輸領藥1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon-for-searching-medicine-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\條碼感應1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\指紋辨識登入.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

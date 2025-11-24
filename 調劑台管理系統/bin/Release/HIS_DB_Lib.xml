@@ -5535,5 +5535,126 @@
             排序順序（數字越小越前面）
             </summary>
         </member>
+        <member name="T:chemotherapyOrderClass">
+            <summary>
+            化療處方資料 (Chemotherapy Order)
+            </summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.GUID">
+            <summary>唯一識別碼 (GUID)</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.BARCODE">
+            <summary>BARCODE</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.化療處方號">
+            <summary>化療處方號</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.化療處方流水號">
+            <summary>化療處方流水號</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.病歷號碼">
+            <summary>病歷號碼</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.處方日期">
+            <summary>處方日期</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.門診住院序號">
+            <summary>門診序號 / 住院號</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.處方來源">
+            <summary>處方來源 (1.門診 2.住院 3.急診)</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.類型_化療階段">
+            <summary>類型 (1.化療前 2.化療 3.化療後)</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.醫令順序流水號">
+            <summary>醫令順序流水號</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.開始執行日期">
+            <summary>開始執行日期</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.結束執行日期">
+            <summary>結束執行日期</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.化療處方名稱">
+            <summary>化療處方名稱</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.醫令代碼">
+            <summary>醫令代碼</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.醫令名稱">
+            <summary>醫令名稱</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.次劑量">
+            <summary>次劑量</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.頻率">
+            <summary>頻率</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.用藥途徑">
+            <summary>途徑</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.總量">
+            <summary>總量</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.是否自費">
+            <summary>是否自費 (Y/N)</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.流速">
+            <summary>流速</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.總時間分鐘">
+            <summary>總時間 (單位: 分鐘)</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.建立時間">
+            <summary>建立時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.更新時間">
+            <summary>更新時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderClass.每日紀錄">
+            <summary>每日詳細紀錄 (子表)</summary>
+        </member>
+        <member name="T:chemotherapyOrderDayClass">
+            <summary>
+            化療處方每日紀錄 (Chemotherapy Order Day Record)
+            </summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.GUID">
+            <summary>唯一識別碼 (GUID)</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.主表GUID">
+            <summary>主表化療處方 GUID (chemotherapy_orders.GUID)</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.第幾天">
+            <summary>第幾天 (1~15)</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.是否使用">
+            <summary>該日是否使用 (Y/N)</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.審核藥師">
+            <summary>審核藥師</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.審核時間">
+            <summary>審核時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.調劑藥師">
+            <summary>調劑藥師</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.調劑時間">
+            <summary>調劑時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.核對藥師">
+            <summary>核對藥師</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.核對時間">
+            <summary>核對時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.建立時間">
+            <summary>建立時間</summary>
+        </member>
+        <member name="P:chemotherapyOrderDayClass.更新時間">
+            <summary>更新時間</summary>
+        </member>
     </members>
 </doc>

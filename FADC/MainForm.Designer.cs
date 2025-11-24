@@ -56,6 +56,14 @@
             this.plC_RJ_ScreenButton143 = new MyUI.PLC_RJ_ScreenButton();
             this.plC_ScreenPage_Main = new MyUI.PLC_ScreenPage();
             this.調劑作業 = new System.Windows.Forms.TabPage();
+            this.rJ_Pannel24 = new MyUI.RJ_Pannel();
+            this.plC_RJ_Button_指紋登入 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_藥單條碼輸入 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_醫令檢索 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_手輸醫令 = new MyUI.PLC_RJ_Button();
+            this.panel112 = new System.Windows.Forms.Panel();
+            this.panel146 = new System.Windows.Forms.Panel();
+            this.plC_Date1 = new MyUI.PLC_Date();
             this.後台登入 = new System.Windows.Forms.TabPage();
             this.panel_主畫面登入 = new System.Windows.Forms.Panel();
             this.rJ_Lable_Title = new MyUI.RJ_Lable();
@@ -314,6 +322,9 @@
             this.panel134.SuspendLayout();
             this.panel129.SuspendLayout();
             this.plC_ScreenPage_Main.SuspendLayout();
+            this.調劑作業.SuspendLayout();
+            this.rJ_Pannel24.SuspendLayout();
+            this.panel112.SuspendLayout();
             this.後台登入.SuspendLayout();
             this.panel_主畫面登入.SuspendLayout();
             this.rJ_GroupBox_後台登入_帳密輸入.ContentsPanel.SuspendLayout();
@@ -1218,11 +1229,288 @@
             // 調劑作業
             // 
             this.調劑作業.BackColor = System.Drawing.Color.White;
+            this.調劑作業.Controls.Add(this.rJ_Pannel24);
             this.調劑作業.Location = new System.Drawing.Point(4, 25);
             this.調劑作業.Name = "調劑作業";
             this.調劑作業.Size = new System.Drawing.Size(1653, 1032);
             this.調劑作業.TabIndex = 0;
             this.調劑作業.Text = "調劑作業";
+            // 
+            // rJ_Pannel24
+            // 
+            this.rJ_Pannel24.BackColor = System.Drawing.Color.White;
+            this.rJ_Pannel24.BackgroundColor = System.Drawing.Color.Transparent;
+            this.rJ_Pannel24.BorderColor = System.Drawing.Color.DimGray;
+            this.rJ_Pannel24.BorderRadius = 8;
+            this.rJ_Pannel24.BorderSize = 2;
+            this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_指紋登入);
+            this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_藥單條碼輸入);
+            this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_醫令檢索);
+            this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_手輸醫令);
+            this.rJ_Pannel24.Controls.Add(this.panel112);
+            this.rJ_Pannel24.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rJ_Pannel24.ForeColor = System.Drawing.Color.White;
+            this.rJ_Pannel24.IsSelected = false;
+            this.rJ_Pannel24.Location = new System.Drawing.Point(0, 0);
+            this.rJ_Pannel24.Name = "rJ_Pannel24";
+            this.rJ_Pannel24.Padding = new System.Windows.Forms.Padding(10, 10, 10, 13);
+            this.rJ_Pannel24.ShadowColor = System.Drawing.Color.DimGray;
+            this.rJ_Pannel24.ShadowSize = 3;
+            this.rJ_Pannel24.Size = new System.Drawing.Size(1653, 125);
+            this.rJ_Pannel24.TabIndex = 11;
+            // 
+            // plC_RJ_Button_指紋登入
+            // 
+            this.plC_RJ_Button_指紋登入.AutoResetState = true;
+            this.plC_RJ_Button_指紋登入.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_指紋登入.Bool = false;
+            this.plC_RJ_Button_指紋登入.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_指紋登入.BorderRadius = 15;
+            this.plC_RJ_Button_指紋登入.BorderSize = 1;
+            this.plC_RJ_Button_指紋登入.but_press = false;
+            this.plC_RJ_Button_指紋登入.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_指紋登入.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_指紋登入.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_Button_指紋登入.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_指紋登入.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_指紋登入.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_指紋登入.GUID = "";
+            this.plC_RJ_Button_指紋登入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_指紋登入.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_指紋登入.Location = new System.Drawing.Point(316, 10);
+            this.plC_RJ_Button_指紋登入.Name = "plC_RJ_Button_指紋登入";
+            this.plC_RJ_Button_指紋登入.OFF_文字內容 = "指紋登入";
+            this.plC_RJ_Button_指紋登入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_指紋登入.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_指紋登入.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_指紋登入.ON_BorderSize = 1;
+            this.plC_RJ_Button_指紋登入.ON_文字內容 = "指紋登入";
+            this.plC_RJ_Button_指紋登入.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_指紋登入.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_指紋登入.ON_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_指紋登入.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_指紋登入.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_指紋登入.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_指紋登入.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_指紋登入.ShadowSize = 3;
+            this.plC_RJ_Button_指紋登入.ShowLoadingForm = false;
+            this.plC_RJ_Button_指紋登入.Size = new System.Drawing.Size(102, 102);
+            this.plC_RJ_Button_指紋登入.State = false;
+            this.plC_RJ_Button_指紋登入.TabIndex = 134;
+            this.plC_RJ_Button_指紋登入.Text = "指紋登入";
+            this.plC_RJ_Button_指紋登入.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_指紋登入.TextHeight = 35;
+            this.plC_RJ_Button_指紋登入.Texts = "指紋登入";
+            this.plC_RJ_Button_指紋登入.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_指紋登入.Visible = false;
+            this.plC_RJ_Button_指紋登入.字型鎖住 = false;
+            this.plC_RJ_Button_指紋登入.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_指紋登入.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_指紋登入.文字鎖住 = false;
+            this.plC_RJ_Button_指紋登入.背景圖片 = global::FADC.Properties.Resources.指紋辨識登入;
+            this.plC_RJ_Button_指紋登入.讀取位元反向 = false;
+            this.plC_RJ_Button_指紋登入.讀寫鎖住 = false;
+            this.plC_RJ_Button_指紋登入.音效 = true;
+            this.plC_RJ_Button_指紋登入.顯示 = false;
+            this.plC_RJ_Button_指紋登入.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_藥單條碼輸入
+            // 
+            this.plC_RJ_Button_藥單條碼輸入.AutoResetState = true;
+            this.plC_RJ_Button_藥單條碼輸入.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_藥單條碼輸入.Bool = false;
+            this.plC_RJ_Button_藥單條碼輸入.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_藥單條碼輸入.BorderRadius = 15;
+            this.plC_RJ_Button_藥單條碼輸入.BorderSize = 1;
+            this.plC_RJ_Button_藥單條碼輸入.but_press = false;
+            this.plC_RJ_Button_藥單條碼輸入.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_藥單條碼輸入.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_藥單條碼輸入.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_Button_藥單條碼輸入.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_藥單條碼輸入.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_藥單條碼輸入.Font = new System.Drawing.Font("微軟正黑體", 11F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_藥單條碼輸入.GUID = "";
+            this.plC_RJ_Button_藥單條碼輸入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_藥單條碼輸入.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_藥單條碼輸入.Location = new System.Drawing.Point(214, 10);
+            this.plC_RJ_Button_藥單條碼輸入.Name = "plC_RJ_Button_藥單條碼輸入";
+            this.plC_RJ_Button_藥單條碼輸入.OFF_文字內容 = "藥單條碼輸入";
+            this.plC_RJ_Button_藥單條碼輸入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 11F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_藥單條碼輸入.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_藥單條碼輸入.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_藥單條碼輸入.ON_BorderSize = 1;
+            this.plC_RJ_Button_藥單條碼輸入.ON_文字內容 = "藥單條碼輸入";
+            this.plC_RJ_Button_藥單條碼輸入.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 11F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_藥單條碼輸入.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_藥單條碼輸入.ON_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_藥單條碼輸入.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_藥單條碼輸入.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_藥單條碼輸入.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_藥單條碼輸入.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_藥單條碼輸入.ShadowSize = 3;
+            this.plC_RJ_Button_藥單條碼輸入.ShowLoadingForm = false;
+            this.plC_RJ_Button_藥單條碼輸入.Size = new System.Drawing.Size(102, 102);
+            this.plC_RJ_Button_藥單條碼輸入.State = false;
+            this.plC_RJ_Button_藥單條碼輸入.TabIndex = 132;
+            this.plC_RJ_Button_藥單條碼輸入.Text = "藥單條碼輸入";
+            this.plC_RJ_Button_藥單條碼輸入.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_藥單條碼輸入.TextHeight = 35;
+            this.plC_RJ_Button_藥單條碼輸入.Texts = "藥單條碼輸入";
+            this.plC_RJ_Button_藥單條碼輸入.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_藥單條碼輸入.Visible = false;
+            this.plC_RJ_Button_藥單條碼輸入.字型鎖住 = false;
+            this.plC_RJ_Button_藥單條碼輸入.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_藥單條碼輸入.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_藥單條碼輸入.文字鎖住 = false;
+            this.plC_RJ_Button_藥單條碼輸入.背景圖片 = global::FADC.Properties.Resources.條碼感應1;
+            this.plC_RJ_Button_藥單條碼輸入.致能讀取位置 = "S100";
+            this.plC_RJ_Button_藥單條碼輸入.讀取位元反向 = false;
+            this.plC_RJ_Button_藥單條碼輸入.讀寫鎖住 = false;
+            this.plC_RJ_Button_藥單條碼輸入.音效 = true;
+            this.plC_RJ_Button_藥單條碼輸入.顯示 = false;
+            this.plC_RJ_Button_藥單條碼輸入.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_醫令檢索
+            // 
+            this.plC_RJ_Button_醫令檢索.AutoResetState = true;
+            this.plC_RJ_Button_醫令檢索.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_醫令檢索.Bool = false;
+            this.plC_RJ_Button_醫令檢索.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_醫令檢索.BorderRadius = 15;
+            this.plC_RJ_Button_醫令檢索.BorderSize = 1;
+            this.plC_RJ_Button_醫令檢索.but_press = false;
+            this.plC_RJ_Button_醫令檢索.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_醫令檢索.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_醫令檢索.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_Button_醫令檢索.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_醫令檢索.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_醫令檢索.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_醫令檢索.GUID = "";
+            this.plC_RJ_Button_醫令檢索.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_醫令檢索.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_醫令檢索.Location = new System.Drawing.Point(112, 10);
+            this.plC_RJ_Button_醫令檢索.Name = "plC_RJ_Button_醫令檢索";
+            this.plC_RJ_Button_醫令檢索.OFF_文字內容 = "醫令檢索";
+            this.plC_RJ_Button_醫令檢索.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_醫令檢索.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_醫令檢索.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_醫令檢索.ON_BorderSize = 1;
+            this.plC_RJ_Button_醫令檢索.ON_文字內容 = "醫令檢索";
+            this.plC_RJ_Button_醫令檢索.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.plC_RJ_Button_醫令檢索.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_醫令檢索.ON_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_醫令檢索.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_醫令檢索.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_醫令檢索.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_醫令檢索.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_醫令檢索.ShadowSize = 3;
+            this.plC_RJ_Button_醫令檢索.ShowLoadingForm = false;
+            this.plC_RJ_Button_醫令檢索.Size = new System.Drawing.Size(102, 102);
+            this.plC_RJ_Button_醫令檢索.State = false;
+            this.plC_RJ_Button_醫令檢索.TabIndex = 131;
+            this.plC_RJ_Button_醫令檢索.Text = "醫令檢索";
+            this.plC_RJ_Button_醫令檢索.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_醫令檢索.TextHeight = 35;
+            this.plC_RJ_Button_醫令檢索.Texts = "醫令檢索";
+            this.plC_RJ_Button_醫令檢索.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_醫令檢索.Visible = false;
+            this.plC_RJ_Button_醫令檢索.字型鎖住 = false;
+            this.plC_RJ_Button_醫令檢索.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_醫令檢索.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_醫令檢索.文字鎖住 = false;
+            this.plC_RJ_Button_醫令檢索.背景圖片 = global::FADC.Properties.Resources.icon_for_searching_medicine_removebg_preview;
+            this.plC_RJ_Button_醫令檢索.致能讀取位置 = "S100";
+            this.plC_RJ_Button_醫令檢索.讀取位元反向 = false;
+            this.plC_RJ_Button_醫令檢索.讀寫鎖住 = false;
+            this.plC_RJ_Button_醫令檢索.音效 = true;
+            this.plC_RJ_Button_醫令檢索.顯示 = false;
+            this.plC_RJ_Button_醫令檢索.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_手輸醫令
+            // 
+            this.plC_RJ_Button_手輸醫令.AutoResetState = true;
+            this.plC_RJ_Button_手輸醫令.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_手輸醫令.Bool = false;
+            this.plC_RJ_Button_手輸醫令.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_手輸醫令.BorderRadius = 15;
+            this.plC_RJ_Button_手輸醫令.BorderSize = 1;
+            this.plC_RJ_Button_手輸醫令.but_press = false;
+            this.plC_RJ_Button_手輸醫令.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_手輸醫令.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_手輸醫令.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_Button_手輸醫令.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_手輸醫令.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_手輸醫令.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_手輸醫令.GUID = "";
+            this.plC_RJ_Button_手輸醫令.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_手輸醫令.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_手輸醫令.Location = new System.Drawing.Point(10, 10);
+            this.plC_RJ_Button_手輸醫令.Name = "plC_RJ_Button_手輸醫令";
+            this.plC_RJ_Button_手輸醫令.OFF_文字內容 = "手輸醫令";
+            this.plC_RJ_Button_手輸醫令.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_手輸醫令.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_手輸醫令.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_手輸醫令.ON_BorderSize = 1;
+            this.plC_RJ_Button_手輸醫令.ON_文字內容 = "手輸醫令";
+            this.plC_RJ_Button_手輸醫令.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_手輸醫令.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_手輸醫令.ON_背景顏色 = System.Drawing.Color.Linen;
+            this.plC_RJ_Button_手輸醫令.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_手輸醫令.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_手輸醫令.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_手輸醫令.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_手輸醫令.ShadowSize = 3;
+            this.plC_RJ_Button_手輸醫令.ShowLoadingForm = false;
+            this.plC_RJ_Button_手輸醫令.Size = new System.Drawing.Size(102, 102);
+            this.plC_RJ_Button_手輸醫令.State = false;
+            this.plC_RJ_Button_手輸醫令.TabIndex = 130;
+            this.plC_RJ_Button_手輸醫令.Text = "手輸醫令";
+            this.plC_RJ_Button_手輸醫令.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_手輸醫令.TextHeight = 35;
+            this.plC_RJ_Button_手輸醫令.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_手輸醫令.Visible = false;
+            this.plC_RJ_Button_手輸醫令.字型鎖住 = false;
+            this.plC_RJ_Button_手輸醫令.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_手輸醫令.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_手輸醫令.文字鎖住 = false;
+            this.plC_RJ_Button_手輸醫令.背景圖片 = global::FADC.Properties.Resources.手輸領藥;
+            this.plC_RJ_Button_手輸醫令.致能讀取位置 = "S100";
+            this.plC_RJ_Button_手輸醫令.讀取位元反向 = false;
+            this.plC_RJ_Button_手輸醫令.讀寫鎖住 = false;
+            this.plC_RJ_Button_手輸醫令.音效 = true;
+            this.plC_RJ_Button_手輸醫令.顯示 = false;
+            this.plC_RJ_Button_手輸醫令.顯示狀態 = false;
+            // 
+            // panel112
+            // 
+            this.panel112.Controls.Add(this.panel146);
+            this.panel112.Controls.Add(this.plC_Date1);
+            this.panel112.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel112.Location = new System.Drawing.Point(1393, 10);
+            this.panel112.Name = "panel112";
+            this.panel112.Size = new System.Drawing.Size(250, 102);
+            this.panel112.TabIndex = 129;
+            // 
+            // panel146
+            // 
+            this.panel146.BackColor = System.Drawing.Color.Transparent;
+            this.panel146.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel146.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel146.Location = new System.Drawing.Point(0, 55);
+            this.panel146.Name = "panel146";
+            this.panel146.Size = new System.Drawing.Size(250, 47);
+            this.panel146.TabIndex = 140;
+            // 
+            // plC_Date1
+            // 
+            this.plC_Date1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.plC_Date1.ForeColor = System.Drawing.Color.Black;
+            this.plC_Date1.Location = new System.Drawing.Point(7, 8);
+            this.plC_Date1.Margin = new System.Windows.Forms.Padding(4);
+            this.plC_Date1.Name = "plC_Date1";
+            this.plC_Date1.Size = new System.Drawing.Size(232, 42);
+            this.plC_Date1.TabIndex = 128;
+            this.plC_Date1.字體 = new System.Drawing.Font("標楷體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             // 
             // 後台登入
             // 
@@ -7641,6 +7929,9 @@
             this.panel134.ResumeLayout(false);
             this.panel129.ResumeLayout(false);
             this.plC_ScreenPage_Main.ResumeLayout(false);
+            this.調劑作業.ResumeLayout(false);
+            this.rJ_Pannel24.ResumeLayout(false);
+            this.panel112.ResumeLayout(false);
             this.後台登入.ResumeLayout(false);
             this.panel_主畫面登入.ResumeLayout(false);
             this.rJ_GroupBox_後台登入_帳密輸入.ContentsPanel.ResumeLayout(false);
@@ -7981,6 +8272,14 @@
         private MyUI.PLC_RJ_Button plC_RJ_Button_交易記錄查詢_選取資料刪除;
         private MyUI.PLC_RJ_Button plC_RJ_Button_交易記錄查詢_搜尋;
         private MyUI.PLC_RJ_Button plC_RJ_Button_儲位管理_儲位內容_儲位搜尋_藥碼搜尋;
+        private MyUI.RJ_Pannel rJ_Pannel24;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_指紋登入;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_藥單條碼輸入;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_醫令檢索;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_手輸醫令;
+        private System.Windows.Forms.Panel panel112;
+        private System.Windows.Forms.Panel panel146;
+        private MyUI.PLC_Date plC_Date1;
     }
 }
 
