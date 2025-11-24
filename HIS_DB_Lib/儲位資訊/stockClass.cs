@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Basic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -121,5 +122,30 @@ namespace HIS_DB_Lib
         /// 驗收項目
         /// </summary>
         public List<inspectionClass.content> content { get; set; }
+
+        static public returnData update(string API_Server, List<stockClass> stockClasses)
+        {
+            string url = $"{API_Server}/api/stock/update";
+
+            returnData returnData = new returnData();
+            returnData.Data = stockClasses;
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
+        static public returnData add(string API_Server, List<stockClass> stockClasses)
+        {
+            string url = $"{API_Server}/api/stock/add";
+
+            returnData returnData = new returnData();
+            returnData.Data = stockClasses;
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
     }
 }
