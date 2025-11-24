@@ -90,6 +90,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
+    <Reference Include="RFID_FX600lib">
+      <HintPath>..\0.DLL\RFID_FX600lib.dll</HintPath>
+    </Reference>
     <Reference Include="SQLUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\SQLUI.dll</HintPath>
@@ -145,6 +148,12 @@
     <Compile Include="Program_PLC.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Program_Scanner_RS232.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_交易紀錄查詢.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program_人員資料.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +199,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\指紋辨識註冊 .png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dialog\Dialog_等待RFID感應.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_等待RFID感應.Designer.cs">
+      <DependentUpon>Dialog_等待RFID感應.cs</DependentUpon>
+    </Compile>
+
+    <Compile Include="Dialog\Dialog_等待條碼刷入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_等待條碼刷入.Designer.cs">
+      <DependentUpon>Dialog_等待條碼刷入.cs</DependentUpon>
+    </Compile>
+
+    <Compile Include="Dialog\Dialog_輸入批號.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_輸入批號.Designer.cs">
+      <DependentUpon>Dialog_輸入批號.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

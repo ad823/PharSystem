@@ -1,5 +1,5 @@
 ﻿
-namespace 調劑台管理系統
+namespace FADC
 {
     partial class Dialog_輸入批號
     {

@@ -61,7 +61,95 @@ namespace FADC
                 return images;
             }
         }
+        static public void Function_從SQL取得儲位到本地資料()
+        {
 
-       
+            MyTimer myTimer = new MyTimer();
+            myTimer.StartTickTime(50000);
+            Console.WriteLine($"開始SQL讀取儲位資料到本地!");
+            List<Task> taskList = new List<Task>();
+     
+            taskList.Add(Task.Run(() =>
+            {
+                MyTimer myTimer1 = new MyTimer();
+                myTimer1.StartTickTime(50000);
+                List_EPD266_本地資料 = _storageUI_EPD_266.SQL_GetAllStorage();
+                Console.WriteLine($"讀取EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
+
+            }));
+          
+            List<Device> deviceBasics = new List<Device>();
+
+            Task allTask = Task.WhenAll(taskList);
+            allTask.Wait();
+
+
+            Console.WriteLine($"SQL讀取儲位資料到本地結束! 耗時 : {myTimer.GetTickTime().ToString("0.000")}");
+        }
+        static public List<object> Function_從SQL取得儲位到本地資料(string 藥品碼)
+        {
+            List<object> list_value = new List<object>();
+            List<Storage> storages = List_EPD266_本地資料.SortByCode(藥品碼);
+
+            for (int i = 0; i < storages.Count; i++)
+            {
+                Storage storage = _storageUI_EPD_266.SQL_GetStorage(storages[i]);
+                List_EPD266_本地資料.Add_NewStorage(storage);
+                list_value.Add(storage);
+            }
+          
+            return list_value;
+        }
+        static public double Function_從SQL取得庫存(string 藥品碼)
+        {
+            double 庫存 = 0;
+            List<object> list_value = Function_從SQL取得儲位到本地資料(藥品碼);
+            for (int i = 0; i < list_value.Count; i++)
+            {
+                if (list_value[i] is Device)
+                {
+                    Device device = list_value[i] as Device;
+                    if (device != null)
+                    {
+                        庫存 += device.Inventory.StringToDouble();
+                    }
+                }
+            }
+            return 庫存;
+        }
+
+        static public void Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作 enum_交易記錄查詢動作, string 操作人, string 備註)
+        {
+            if (操作人.StringIsEmpty()) return;
+            string GUID = Guid.NewGuid().ToString();
+            string 動作 = enum_交易記錄查詢動作.GetEnumName();
+            string 藥品碼 = "";
+            string 藥品名稱 = "";
+            string 藥袋序號 = "";
+            string 庫存量 = "";
+            string 交易量 = "";
+            string 結存量 = "";
+            string 病人姓名 = "";
+            string 病歷號 = "";
+            string 操作時間 = DateTime.Now.ToDateTimeString_6();
+            string 開方時間 = DateTime.Now.ToDateTimeString_6();
+            object[] value = new object[new enum_交易記錄查詢資料().GetLength()];
+            value[(int)enum_交易記錄查詢資料.GUID] = GUID;
+            value[(int)enum_交易記錄查詢資料.動作] = 動作;
+            value[(int)enum_交易記錄查詢資料.藥品碼] = 藥品碼;
+            value[(int)enum_交易記錄查詢資料.藥品名稱] = 藥品名稱;
+            value[(int)enum_交易記錄查詢資料.藥袋序號] = 藥袋序號;
+            value[(int)enum_交易記錄查詢資料.庫存量] = 庫存量;
+            value[(int)enum_交易記錄查詢資料.交易量] = 交易量;
+            value[(int)enum_交易記錄查詢資料.結存量] = 結存量;
+            value[(int)enum_交易記錄查詢資料.操作人] = 操作人;
+            value[(int)enum_交易記錄查詢資料.病人姓名] = 病人姓名;
+            value[(int)enum_交易記錄查詢資料.病歷號] = 病歷號;
+            value[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
+            value[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
+            value[(int)enum_交易記錄查詢資料.備註] = 備註;
+
+            transactionsClass.add(API_Server, value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>(), ServerName, ServerType);
+        }
     }
 }
