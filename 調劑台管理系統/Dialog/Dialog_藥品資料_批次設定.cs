@@ -281,8 +281,7 @@ namespace 調劑台管理系統
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                MyMessageBox.ShowDialog(ex.Message);
+                MyMessageBox.ShowDialog("設定失敗");
             }
             finally
             {

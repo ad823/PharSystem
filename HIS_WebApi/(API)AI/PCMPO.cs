@@ -2422,7 +2422,7 @@ namespace HIS_WebApi
             }
             catch (Exception ex)
             {
-                Logger.Log("PCMPO", $"儲存圖片發生錯誤: {ex.Message}");
+                Logger.Log("PCMPO", $"儲存圖片發生錯誤");
 
                 throw;
             }

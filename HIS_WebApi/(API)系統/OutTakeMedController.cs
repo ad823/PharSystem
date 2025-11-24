@@ -1168,7 +1168,7 @@ namespace HIS_WebApi
             List<object[]> list_EPD266 = sQLControl_EPD266_serialize.GetAllRows(null);
             List<object[]> list_RowsLED = sQLControl_RowsLED_serialize.GetAllRows(null);
             List<object[]> list_RFID_Device = sQLControl_RFID_Device_serialize.GetAllRows(null);
-            Console.WriteLine($"從SQL取得所有儲位資料,耗時{myTimer.ToString()}ms");
+            //Console.WriteLine($"從SQL取得所有儲位資料,耗時{myTimer.ToString()}ms");
             List<DeviceBasic> deviceBasics = new List<DeviceBasic>();
             List<DeviceBasic> deviceBasics_buf = new List<DeviceBasic>();
 
@@ -1177,7 +1177,7 @@ namespace HIS_WebApi
             if (list_EPD266.Count > 0) deviceBasics.LockAdd(StorageMethod.GetAllDeviceBasic(list_EPD266));
             if (list_RowsLED.Count > 0) deviceBasics.LockAdd(RowsLEDMethod.GetAllDeviceBasic(list_RowsLED));
             if (list_RFID_Device.Count > 0) deviceBasics.LockAdd(RFIDMethod.GetAllDeviceBasic(list_RFID_Device));
-            Console.WriteLine($"反編譯取得所有儲位資料,耗時{myTimer.ToString()}ms");
+            //Console.WriteLine($"反編譯取得所有儲位資料,耗時{myTimer.ToString()}ms");
             deviceBasics_buf = (from value in deviceBasics
                                 where value.Code.StringIsEmpty() == false
                                 select value).ToList();

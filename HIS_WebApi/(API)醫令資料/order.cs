@@ -72,27 +72,85 @@ namespace HIS_WebApi
             }
 
         }
+
         /// <summary>
-        /// 以開方時間取得西藥醫令
+        /// 依「開方日期區間」查詢醫令資料 (order_list)
         /// </summary>
         /// <remarks>
-        /// 以下為範例JSON範例
+        /// <para><b>功能說明</b></para>
+        /// 本 API 用於依開方日期（<c>開方日期</c>欄位）起迄時間查詢醫令資料，
+        /// 回傳醫令清單並依「產出時間」排序。
+        ///
+        /// <para><b>查詢條件</b></para>
+        /// <list type="bullet">
+        ///   <item><description><c>returnData.ValueAry[0]</c> = 起始日期</description></item>
+        ///   <item><description><c>returnData.ValueAry[1]</c> = 結束日期</description></item>
+        /// </list>
+        /// 日期格式須符合 <c>yyyy/MM/dd HH:mm:ss</c> or <c>yyyy-MM-dd HH:mm:ss</c>，
+        /// 或其他系統內 <c>Check_Date_String()</c> 支援格式。
+        ///
+        /// <para><b>Server 選擇邏輯</b></para>
+        /// 若未指定 <c>ServerName</c>/<c>ServerType</c>，會自動搜尋 <b>Main / 網頁 / VM端</b>。<br/>
+        /// 否則使用呼叫端指定的 <c>ServerName</c>、<c>ServerType</c>，資料表來源為 <b>醫囑資料</b>。
+        ///
+        /// <para><b>請求 JSON 範例</b></para>
         /// <code>
-        ///   {
-        ///     "Data": 
-        ///     {
-        ///  
-        ///     },
-        ///     "ValueAry" : 
-        ///     [
-        ///       "起始時間",
-        ///       "結束時間"
-        ///     ]
-        ///   }
+        /// {
+        ///   "ServerName": "Main",
+        ///   "ServerType": "網頁",
+        ///   "ValueAry": [
+        ///     "2025/01/01 00:00:00",
+        ///     "2025/01/02 23:59:59"
+        ///   ]
+        /// }
         /// </code>
+        ///
+        /// <para><b>成功回傳範例</b> (Code = 200)</para>
+        /// <code>
+        /// {
+        ///   "Code": 200,
+        ///   "Method": "get_by_rx_time_st_end",
+        ///   "Result": "取得西藥醫令!共<352筆>資料",
+        ///   "TimeTaken": "00:00:01.235",
+        ///   "Data": [
+        ///     { "PRI_KEY":"...", "藥品碼":"...", "病歷號":"...", ... }
+        ///   ]
+        /// }
+        /// </code>
+        ///
+        /// <para><b>錯誤代碼列表</b></para>
+        /// <list type="table">
+        ///   <listheader>
+        ///     <term>Code</term>
+        ///     <description>說明</description>
+        ///   </listheader>
+        ///   <item>
+        ///     <term>-5</term>
+        ///     <description>日期格式錯誤 (輸入格式不符合)</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>-200</term>
+        ///     <description>缺少參數 / 資料庫查詢失敗 / 例外錯誤</description>
+        ///   </item>
+        /// </list>
+        ///
+        /// <para><b>備註</b></para>
+        /// <list type="bullet">
+        ///   <item><description>回傳醫令資料為 <c>OrderClass</c> 清單</description></item>
+        ///   <item><description>依「產出時間」排序結果</description></item>
+        ///   <item><description>資料表：<c>order_list</c></description></item>
+        ///   <item><description>欄位對應 Enum：<c>enum_醫囑資料</c></description></item>
+        /// </list>
         /// </remarks>
-        /// <param name="returnData">共用傳遞資料結構</param>
-        /// <returns></returns>
+        /// <param name="returnData">
+        /// 必填欄位：
+        /// <list type="bullet">
+        ///   <item><description><c>ValueAry[0]</c> = 起始日期</description></item>
+        ///   <item><description><c>ValueAry[1]</c> = 結束日期</description></item>
+        /// </list>
+        /// 選填欄位：<c>ServerName</c>、<c>ServerType</c>
+        /// </param>
+        /// <returns>回傳 <c>returnData</c> JSON 字串，<c>Data</c> 為 <c>List&lt;OrderClass&gt;</c></returns>
         [Route("get_by_rx_time_st_end")]
         [HttpPost]
         public string POST_get_by_rx_time_st_end([FromBody] returnData returnData)
@@ -154,7 +212,7 @@ namespace HIS_WebApi
                 List<object[]> list_value_buf = sQLControl_醫令資料.GetRowsByBetween(null, (int)enum_醫囑資料.開方日期, date_st.ToDateTimeString(), date_end.ToDateTimeString());
                 List<OrderClass> OrderClasses = list_value_buf.SQLToClass<OrderClass, enum_醫囑資料>();
 
-                OrderClasses.sort(OrderClassMethod.SortType.產出時間);
+                OrderClasses.sort(OrderClassMethod.SortType.開方日期);
 
                 returnData.Code = 200;
                 returnData.Result = $"取得西藥醫令!共<{OrderClasses.Count}>筆資料";
@@ -1750,6 +1808,9 @@ namespace HIS_WebApi
                         orderClass.展藥時間 = DateTime.MinValue.ToDateTimeString_6();
                         orderClass.狀態 = "未過帳";
                         orderClass.實際調劑量 = "0";
+                        if (orderClass.核對時間.StringIsEmpty()) orderClass.核對時間 = DateTime.MinValue.ToDateString();
+                        if (orderClass.領藥時間.StringIsEmpty()) orderClass.領藥時間 = DateTime.MinValue.ToDateString();
+                        if (orderClass.發藥時間.StringIsEmpty()) orderClass.發藥時間 = DateTime.MinValue.ToDateString();
                         //if(orderClass.備註.IndexOf("[NEW]") == -1) orderClass.備註 = $"[NEW]{orderClass.備註}";
                         //if(orderClass.備註.Contains("[NEW]") == false) orderClass.備註 = $"[NEW]{orderClass.備註}";
                         add_order_list.Add(orderClass);
@@ -1843,19 +1904,26 @@ namespace HIS_WebApi
                 string command = string.Empty;
 
                 string[] array_priKey = input_orderClass[0].PRI_KEY.Split("-");
-                if (array_priKey.Length < 3)
+                if (array_priKey.Length < 2)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"PRI_KEY格式錯誤，應為 '開方時間(yyyyMMddHHmmss)-病歷號'";
                     return returnData.JsonSerializationt();
                 }
+                input_orderClass = input_orderClass.OrderByDescending(x => x.開方日期).ToList();
+
+                //.Select(g => g.OrderByDescending(x => x.更新時間).First()).ToList();
+                int count_ = input_orderClass.Count;
                 string PRI_KEY = $"{array_priKey[0]}-{array_priKey[1]}";
-                string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                //string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                string start = input_orderClass[count_ - 1].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                string end = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
+
 
                 command = $"SELECT * FROM {DB}.order_list " +
                     $"WHERE PRI_KEY like '{PRI_KEY}%' " +
-                    $" AND 開方日期 >= '{開方日期} 00:00:00'" +
-                    $" AND 開方日期 <= '{開方日期} 23:59:59';";
+                    $" AND 開方日期 >= '{start} 00:00:00'" +
+                    $" AND 開方日期 <= '{end} 23:59:59';";
 
 
                 DataTable dataTable = sQLControl_order_list.WtrteCommandAndExecuteReader(command);
@@ -1880,6 +1948,9 @@ namespace HIS_WebApi
                         if (item.就醫時間.StringIsEmpty()) item.就醫時間 = DateTime.Now.ToDateTimeString();
                         if (item.開方日期.StringIsEmpty()) item.開方日期 = DateTime.Now.ToDateTimeString();
                         item.狀態 = "未過帳";
+                        if (item.核對時間.StringIsEmpty()) item.核對時間 = DateTime.MinValue.ToDateString();
+                        if (item.領藥時間.StringIsEmpty()) item.領藥時間 = DateTime.MinValue.ToDateString();
+                        if (item.發藥時間.StringIsEmpty()) item.發藥時間 = DateTime.MinValue.ToDateString();
                         add_order_list.Add(item);
                     }
                     else
@@ -1889,11 +1960,10 @@ namespace HIS_WebApi
                     }
                 }
                 List<OrderClass> update_order_list = new List<OrderClass>();
-                List<OrderClass> dc_order = new List<OrderClass>();
 
 
                 List<string> list_priKey_buff = order_buff.Select(x => x.PRI_KEY).ToList();
-                dc_order = orderClasses.Where(x => list_priKey_buff.Contains(x.PRI_KEY) == false).ToList();
+                List<OrderClass> dc_order = orderClasses.Where(x => list_priKey_buff.Contains(x.PRI_KEY) == false).ToList();
                 foreach (var item in dc_order)
                 {
                     if (item.批序.Contains("[DC]")) continue;
@@ -1926,6 +1996,200 @@ namespace HIS_WebApi
 
             }
         }
+
+        /// <summary>
+        /// 更新醫令（order_list）之作業人員資訊 (核對 / 領藥 / 發藥)
+        /// </summary>
+        /// <remarks>
+        /// ## 🎯 用途  
+        /// 本 API 用於更新醫囑資料中三項工作流程的操作人紀錄：  
+        /// - ✅ **CHK**：核對作業  
+        /// - ✅ **TAKE**：領藥作業  
+        /// - ✅ **GIVE**：發藥作業  
+        ///
+        /// 系統會依據傳入的 `type` 寫入執行人員之帳號、姓名與時間戳記。
+        ///
+        /// ---
+        ///
+        /// ## 📥 Request JSON 範例
+        /// ```json
+        /// {
+        ///   "ValueAry": [
+        ///     "id=ph001",
+        ///     "name=王藥師",
+        ///     "type=CHK"
+        ///   ],
+        ///   "Data": [
+        ///     { "GUID": "41F4E5AC-2A6A-4E1B-AB77-5A1E753B1234" },
+        ///     { "GUID": "6DF8B200-937A-48AC-B84C-D022C3055678" }
+        ///   ]
+        /// }
+        /// ```
+        ///
+        /// ---
+        ///
+        /// ## 📤 Response JSON 範例
+        /// ✅ 成功
+        /// ```json
+        /// {
+        ///   "Code": 200,
+        ///   "Method": "update_order_list_CHK",
+        ///   "Result": "修正醫令成功,共2筆",
+        ///   "TimeTaken": "0.320s",
+        ///   "Data": [
+        ///     {
+        ///       "GUID": "41F4E5AC-2A6A-4E1B-AB77-5A1E753B1234",
+        ///       "核對ID": "ph001",
+        ///       "核對姓名": "王藥師",
+        ///       "核對時間": "2025-01-10 09:32:00"
+        ///     }
+        ///   ]
+        /// }
+        /// ```
+        ///
+        /// ❌ 失敗 (錯誤 type)
+        /// ```json
+        /// {
+        ///   "Code": -200,
+        ///   "Method": "update_order_list_CHK",
+        ///   "Result": "傳入type資料異常,應為'CHK','TAKE','GIVE'",
+        ///   "Data": [],
+        ///   "TimeTaken": "0.002s"
+        /// }
+        /// ```
+        ///
+        /// ---
+        ///
+        /// ## 📑 參數說明
+        /// | 參數 | 說明 | 備註 |
+        /// |---|---|---|
+        /// | id | 操作人員帳號/代號 | 必填 |
+        /// | name | 操作人姓名 | 必填 |
+        /// | type | CHK / TAKE / GIVE | 必填 |
+        /// | Data | GUID 清單 | 必填 |
+        ///
+        /// ---
+        ///
+        /// ## ⚙️ 系統行為
+        /// - 指定 `GUID` 逐筆查詢醫令資料  
+        /// - 依 `type` 寫入對應欄位  
+        /// - 自動帶入 `DateTime.Now` 為操作時間  
+        /// - 批次更新資料庫  
+        ///
+        /// ---
+        ///
+        /// ## 🛑 注意事項
+        /// - `type` 僅能為 **CHK / TAKE / GIVE**  
+        /// - `GUID` 必須存在於 `order_list` 資料表中  
+        /// - 若 `Data` 為空 → 拒絕執行  
+        /// - 時戳格式依後端 `ToDateTimeString()` 設定  
+        ///
+        /// ---
+        ///
+        /// ## 📦 資料來源資料表
+        ///- `order_list` (欄位對應 `enum_醫囑資料`)
+        ///
+        /// </remarks>
+        /// <param name="returnData">
+        /// 前端傳入之資料物件：
+        /// <br/>• `ValueAry`：包含 id / name / type  
+        /// <br/>• `Data`：需更新醫令之 GUID 清單
+        /// </param>
+        /// <returns>標準 returnData 結構，附更新後之醫令資料</returns>
+        [HttpPost("update_order_list_user")]
+        public string update_order_list_user([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_order_list_CHK";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+
+                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+
+                string GetVal(string key) =>
+                returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                ?.Split('=')[1];
+
+                string id = GetVal("id");
+                string name = GetVal("name");
+                string type = GetVal("type");
+
+                if(type != "CHK" && type != "TAKE" && type != "GIVE")
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入type資料異常,應為'CHK','TAKE','GIVE'";
+                    return returnData.JsonSerializationt();
+                }
+
+                if (id.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入id資料異常";
+                    return returnData.JsonSerializationt();
+                }
+                List<OrderClass> input_orderClass = returnData.Data.ObjToClass<List<OrderClass>>();
+                if (input_orderClass == null || input_orderClass.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入Data資料異常";
+                    return returnData.JsonSerializationt();
+                }
+
+                List<OrderClass> orderClasses_update = new List<OrderClass>();
+                SQLControl sQLControl_order_list = new SQLControl(Server, DB, "order_list", UserName, Password, Port, SSLMode);
+                string command = string.Empty;
+
+                foreach (var item in input_orderClass)
+                {
+                    string GUID = item.GUID;
+                    if (GUID.StringIsEmpty()) continue;
+                    object[] obj = sQLControl_order_list.GetRowsByDefult(null, (int)enum_醫囑資料.GUID, GUID).FirstOrDefault();
+                    if (obj == null) continue;
+                    OrderClass orderClass_db = obj.SQLToClass<OrderClass, enum_醫囑資料>();
+                    if(type == "CHK")
+                    {
+                        orderClass_db.核對ID = id;
+                        orderClass_db.核對姓名 = name;
+                        orderClass_db.核對時間 = DateTime.Now.ToDateTimeString();
+                    }
+                    else if(type == "TAKE")
+                    {
+                        orderClass_db.領藥ID = id;
+                        orderClass_db.領藥姓名 = name;
+                        orderClass_db.領藥時間 = DateTime.Now.ToDateTimeString();
+                    }
+                    else if(type == "GIVE")
+                    {
+                        orderClass_db.發藥ID = id;
+                        orderClass_db.發藥姓名 = name;
+                        orderClass_db.發藥時間 = DateTime.Now.ToDateTimeString();
+                    }
+                    if (orderClass_db.核對時間.StringIsEmpty()) orderClass_db.核對時間 = DateTime.MinValue.ToDateString();
+                    if (orderClass_db.領藥時間.StringIsEmpty()) orderClass_db.領藥時間 = DateTime.MinValue.ToDateString();
+                    if (orderClass_db.發藥時間.StringIsEmpty()) orderClass_db.發藥時間 = DateTime.MinValue.ToDateString();
+                    orderClasses_update.Add(orderClass_db);
+                }
+
+                   
+
+                if (orderClasses_update.Count > 0) sQLControl_order_list.UpdateByDefulteExtra(null, orderClasses_update.ClassToSQL<OrderClass,enum_醫囑資料>());
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = orderClasses_update;
+                returnData.Result = $"修正醫令成功,共<{orderClasses_update.Count}>筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+
+            }
+        }
+
         /// <summary>
         /// 新增西藥醫令
         /// </summary>
@@ -1978,6 +2242,10 @@ namespace HIS_WebApi
                     OrderClasses[i].GUID = Guid.NewGuid().ToString();
                     OrderClasses[i].產出時間 = DateTime.Now.ToDateTimeString_6();
                     OrderClasses[i].過帳時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].核對時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].發藥時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].領藥時間 = DateTime.MinValue.ToDateTimeString();
+                    OrderClasses[i].就醫時間 = DateTime.MinValue.ToDateTimeString();
                     OrderClasses[i].狀態 = "未過帳";
  
                 }

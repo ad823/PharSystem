@@ -103,6 +103,7 @@ namespace HIS_WebApi._API_系統
             }
             catch (Exception ex)
             {
+                if (ex.Message == "Exception : Index was outside the bounds of the array.") init();
                 returnData.Code = -200;
                 returnData.Result = $"Exception : {ex.Message}";
                 return returnData.JsonSerializationt(true);

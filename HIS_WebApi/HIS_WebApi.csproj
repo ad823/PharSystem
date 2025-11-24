@@ -59,20 +59,17 @@
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="EPPlus" Version="7.0.0" />
-    <PackageReference Include="IBM.Data.DB2.Core" Version="3.1.0.600" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Core" Version="2.3.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.20.1" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.20.1" />
     <PackageReference Include="MySql.Data" Version="8.0.29" />
-    <PackageReference Include="SixLabors.Fonts" Version="1.0.1" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.9" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.9" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.0" />
+    <PackageReference Include="ZXing.Net.Bindings.SkiaSharp" Version="0.16.22" />
   </ItemGroup>
 
   <ItemGroup>
@@ -83,7 +80,7 @@
       <HintPath>..\0.DLL\Basic.dll</HintPath>
     </Reference>
     <Reference Include="DrawingClass">
-      <HintPath>0.DLL\DrawingClass.dll</HintPath>
+      <HintPath>..\0.DLL\DrawingClass.dll</HintPath>
     </Reference>
     <Reference Include="HIS_DB_Lib">
       <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
@@ -102,13 +99,13 @@
       <HintPath>..\0.DLL\MyOffice.dll</HintPath>
     </Reference>
     <Reference Include="MySQL_Login">
-      <HintPath>0.DLL\MySQL_Login.dll</HintPath>
+      <HintPath>..\0.DLL\MySQL_Login.dll</HintPath>
     </Reference>
     <Reference Include="MyUI">
       <HintPath>..\0.DLL\MyUI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>0.DLL\NPOI.dll</HintPath>
+      <HintPath>..\0.DLL\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
       <HintPath>..\0.DLL\NPOI.OOXML.dll</HintPath>
@@ -120,10 +117,7 @@
       <HintPath>..\0.DLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="SQLUI">
-      <HintPath>0.DLL\SQLUI.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Management">
-      <HintPath>0.DLL\System.Management.dll</HintPath>
+      <HintPath>..\0.DLL\SQLUI.dll</HintPath>
     </Reference>
     <Reference Include="zxing">
       <HintPath>..\0.DLL\zxing.dll</HintPath>

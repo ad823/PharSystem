@@ -15,17 +15,28 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using SQLUI;
+using H_Pannel_lib;
+using HIS_DB_Lib;
 
 [assembly: AssemblyVersion("1.0.0.0000")]
-[assembly: AssemblyFileVersion("1.0.25.0000")]
+[assembly: AssemblyFileVersion("1.0.0.0000")]
 namespace FADC
 {
-    public partial class MainForm : Form
+    public partial class Main_Form : Form
     {
+        public static StorageUI_EPD_266 _storageUI_EPD_266 = null;
+        public static RFID_UI _rfiD_UI = null;
+
+        public static string API_Server = "http://127.0.0.1:4433";
+        public static string ServerName = "";
+        public static string ServerType = "";
+        public static string Order_URL = "";
+        public static string OrderByCodeApi_URL = "";
+
         public bool ControlMode = false;
         public static MinasA6 minasA6 = null;
         public static string currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
+        private string FormText = "";
 
         #region MyConfigClass
         private static string MyConfigFileName = $@"{currentDirectory}\MyConfig.txt";
@@ -35,9 +46,13 @@ namespace FADC
 
             private bool controlMode = false;
             private string servoZ_Com = "COM1";
+            private string board_IP = "";
+            private string scanner01_COMPort = "COM2";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
+            public string Board_IP { get => board_IP; set => board_IP = value; }
+            public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
         }
         private void LoadMyConfig()
         {
@@ -175,7 +190,7 @@ namespace FADC
             }
         }
         #endregion
-        public MainForm()
+        public Main_Form()
         {
             InitializeComponent();
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -205,7 +220,7 @@ namespace FADC
             H_Pannel_lib.Communication.ConsoleWrite = false;
             MyMessageBox.音效 = false;
             MyMessageBox.form = this.FindForm();
-
+            LoadingForm.form = this.FindForm();
             Net.DebugLog = false;
             this.lowerMachine_Panel.Run();
 
@@ -220,16 +235,24 @@ namespace FADC
 
         private void PlC_UI_Init_UI_Finished_Event()
         {
+            
             this.WindowState = FormWindowState.Maximized;
             PLC_UI_Init.Set_PLC_ScreenPage(panel_Main, this.plC_ScreenPage_Main);
+            PLC_UI_Init.Set_PLC_ScreenPage(panel_setting, this.plC_ScreenPage_setting);
 
             LoadMyConfig();
             LoadDBConfig();
+            ApiServerSetting();
 
+         
+            Program_Scanner_RS232_Init();
+            Program_人員資料_Init();
+            Program_後台登入_Init();
+            Program_交易紀錄查詢_Init();   
+            Program_儲位管理_Init();
             Program_PLC();
         }
     
-
        private void LoadcommandLineArgs()
         {
             string jsonstr = MyFileStream.LoadFileAllText($"{DBConfigFileName}");
@@ -251,6 +274,127 @@ namespace FADC
                     MyMessageBox.ShowDialog($"建立{DBConfigFileName}檔案失敗!");
                 }
                 return;
+            }
+        }
+        private void ApiServerSetting()
+        {
+
+            if (ControlMode)
+            {
+                this.ApiServerSetting(dBConfigClass.Name, "一般資料");
+            }
+            else
+            {
+                this.ApiServerSetting(dBConfigClass.Name, "一般資料(LAN)");
+            }
+
+        }
+        private void ApiServerSetting(string Name, string basicName)
+        {
+
+            string json_result = Basic.Net.WEBApiGet($"{dBConfigClass.Api_Server}/api/ServerSetting");
+            if (json_result.StringIsEmpty())
+            {
+                MyMessageBox.ShowDialog("API Server 連結失敗!");
+                return;
+            }
+            //Console.WriteLine(json_result);
+            returnData returnData = json_result.JsonDeserializet<returnData>();
+            List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
+            HIS_DB_Lib.sys_serverSettingClass sys_serverSettingClass;
+            ServerName = Name;
+            ServerType = enum_sys_serverSetting_Type.FADC.GetEnumName();
+            sys_serverSettingClass = sys_serverSettingClasses.MyFind(Name, enum_sys_serverSetting_Type.FADC, basicName);
+            List<string> DPS_Names = (from temp in sys_serverSettingClasses
+                                      where temp.類別 == enum_sys_serverSetting_Type.FADC.GetEnumName()
+                                      select temp.設備名稱).Distinct().ToList();
+
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_Basic.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_Basic.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_Basic.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_Basic.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_Basic.Password = sys_serverSettingClass.Password;
+            }
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "人員資料");
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_person_page.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_person_page.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_person_page.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_person_page.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_person_page.Password = sys_serverSettingClass.Password;
+
+            }
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "藥檔資料");
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_Medicine_Cloud.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_Medicine_Cloud.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_Medicine_Cloud.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_Medicine_Cloud.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_Medicine_Cloud.Password = sys_serverSettingClass.Password;
+            }
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "醫囑資料");
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_order_list.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_order_list.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_order_list.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_order_list.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_order_list.Password = sys_serverSettingClass.Password;
+            }
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "儲位資料");
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_storage.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_storage.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_storage.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_storage.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_storage.Password = sys_serverSettingClass.Password;
+            }
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "交易紀錄資料");
+            if (sys_serverSettingClass != null)
+            {
+                dBConfigClass.DB_tradding.IP = sys_serverSettingClass.Server;
+                dBConfigClass.DB_tradding.Port = (uint)(sys_serverSettingClass.Port.StringToInt32());
+                dBConfigClass.DB_tradding.DataBaseName = sys_serverSettingClass.DBName;
+                dBConfigClass.DB_tradding.UserName = sys_serverSettingClass.User;
+                dBConfigClass.DB_tradding.Password = sys_serverSettingClass.Password;
+            }
+            API_Server = dBConfigClass.Api_Server;
+            //sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "API02");
+            //if (sys_serverSettingClass != null)
+            //{
+            //    dBConfigClass.Api_URL = sys_serverSettingClass.Server;
+            //    API_Server = sys_serverSettingClass.Server;
+            //}
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_API");
+            if (sys_serverSettingClass != null) dBConfigClass.OrderApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_By_Code_API");
+            if (sys_serverSettingClass != null) dBConfigClass.OrderByCodeApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_upload_API");
+            if (sys_serverSettingClass != null) dBConfigClass.Order_upload_ApiURL = sys_serverSettingClass.Server;
+
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_By_MRN_API");
+            if (sys_serverSettingClass != null) dBConfigClass.Order_mrn_ApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Order_By_BAG_NUM_API");
+            if (sys_serverSettingClass != null) dBConfigClass.Order_bag_num_ApiURL = sys_serverSettingClass.Server;
+
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Med_API");
+            if (sys_serverSettingClass != null) dBConfigClass.MedApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.myFind(Name, "FADC", "Website");
+            if (sys_serverSettingClass != null) dBConfigClass.Web_URL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.myFind("Main", "網頁", "API_Login");
+            if (sys_serverSettingClass != null) dBConfigClass.Login_URL = sys_serverSettingClass.Server;
+
+
+            OrderByCodeApi_URL = dBConfigClass.OrderByCodeApiURL;
+            Order_URL = dBConfigClass.OrderApiURL;
+            if (OrderByCodeApi_URL.StringIsEmpty())
+            {
+                OrderByCodeApi_URL = Order_URL;
             }
         }
     }

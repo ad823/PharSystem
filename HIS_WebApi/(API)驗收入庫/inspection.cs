@@ -35,15 +35,15 @@ namespace HIS_WebApi
     public class inspectionController : Controller
     {
         //private IHostingEnvironment _environment;
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string pas, uint Port)>>
           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
           {
-              var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+              var (Server, DB, UserName, pas, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-              if (string.IsNullOrWhiteSpace(Password))
-                  throw new SecurityException("Database password cannot be null or empty (medUnit).");
+              if (string.IsNullOrWhiteSpace(pas))
+                  throw new SecurityException("Database pas cannot be null or empty (medUnit).");
 
-              return (Server, DB, UserName, Password, Port);
+              return (Server, DB, UserName, pas, Port);
           });
         //public inspectionController(IHostingEnvironment env)
         //{
@@ -2917,7 +2917,7 @@ namespace HIS_WebApi
             inspectionClass.creat creat = creats[0];
             List<SheetClass> sheetClasses = new List<SheetClass>();
             string loadText = Basic.MyFileStream.LoadFileAllText(@"./excel_inspection.txt", "utf-8");
-            Console.WriteLine($"取得creats {myTimer.ToString()}");
+            //Console.WriteLine($"取得creats {myTimer.ToString()}");
             SheetClass sheetClass = loadText.JsonDeserializet<SheetClass>();
             sheetClass.ReplaceCell(1, 1, $"{creat.驗收單號}");
             sheetClass.ReplaceCell(1, 5, $"{creat.建表人}");
@@ -2951,10 +2951,10 @@ namespace HIS_WebApi
 
                 NumOfRow += sub_num;
             }
-            Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
+            //Console.WriteLine($"寫入Sheet {myTimer.ToString()}");
 
             // sheetClass.NewCell_Webapi_Buffer_Caculate();
-            Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
+            //Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
 
             string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string xls_command = "application/vnd.ms-excel";

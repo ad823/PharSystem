@@ -72,28 +72,138 @@ namespace HIS_WebApi
             return GetPermissions(level.StringToInt32() ,"","").JsonSerializationt();
         }
         /// <summary>
-        /// 使用者登入並取得 session 資訊，
-        /// 可使用以下任一方式登入：帳號+認證資訊 / UID / BARCODE。
-        /// admin 帳號具有最高權限。
+        /// 使用者登入並建立/更新登入工作階段（session），
+        /// 支援三種登入方式：帳號+密碼（ID+Password） / UID（卡號） / BARCODE（一維條碼）。
+        /// admin 帳號具有最高權限（-1）。 
         /// </summary>
         /// <remarks>
-        ///  --------------------------------------------<br/> 
-        /// 以下為 JSON Body 範例
+        /// <para><b>路由</b>：POST /login</para>
+        /// <para><b>登入流程摘要</b>：</para>
+        /// <list type="number">
+        ///   <item>
+        ///     <description>解析資料庫連線組態（若 <c>ServerName</c>/<c>ServerType</c> 未提供，預設搜尋「Main / 網頁 / VM端」）。</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>若提供 <c>UID</c> 或 <c>BARCODE</c>，先以人員資料表查得對應 <c>ID</c> 與 <c>Password</c>。</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>驗證帳號是否存在與密碼是否正確；或比對是否為 admin（最高權限）。</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>於 <c>login_session</c> 建立或更新使用者的 session 記錄（GUID、verifyTime、loginTime 等）。</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>回傳 <c>sessionClass</c>（含人員名稱、單位、權限、顏色等），以及對應權限清單 <c>Permissions</c>。</description>
+        ///   </item>
+        /// </list>
+        ///
+        /// <para><b>Request Body 範例</b>（任一方式即可）：</para>
         /// <code>
         /// {
-        ///   "Data": 
-        ///   {
-        ///      "Account" : "",
-        ///      "Credential" : "",   // 使用者認證資訊（不可為明碼）
-        ///      "UID" : "",
-        ///      "BARCODE" : ""
+        ///   "ServerName": "Main",
+        ///   "ServerType": "網頁",
+        ///   "Data": {
+        ///     "ID": "pharm001",
+        ///     "Password": "******",
+        ///     "UID": "",
+        ///     "BARCODE": ""
         ///   }
         /// }
         /// </code>
+        /// <code>
+        /// {
+        ///   "Data": {
+        ///     "ID": "",
+        ///     "Password": "",
+        ///     "UID": "E2000017221101441890ABCD",
+        ///     "BARCODE": ""
+        ///   }
+        /// }
+        /// </code>
+        /// <code>
+        /// {
+        ///   "Data": {
+        ///     "ID": "",
+        ///     "Password": "",
+        ///     "UID": "",
+        ///     "BARCODE": "A123456789"
+        ///   }
+        /// }
+        /// </code>
+        ///
+        /// <para><b>成功回應範例</b>（<c>Code=200</c>）：</para>
+        /// <code>
+        /// {
+        ///   "Code": 200,
+        ///   "Method": "login",
+        ///   "Result": "登入成功!",
+        ///   "Data": {
+        ///     "GUID": "f3f5c3c1-2b1a-489b-9b7f-4b6b8b9f6a0e",
+        ///     "ID": "pharm001",
+        ///     "Password": "******",
+        ///     "Name": "王小藥",
+        ///     "Employer": "藥劑科",
+        ///     "verifyTime": "2025-11-10 09:35:12",
+        ///     "loginTime": "2025-11-10 09:35:12",
+        ///     "level": "2",
+        ///     "Color": "#FF9933",
+        ///     "license": "藥師證字號XXXXXX",
+        ///     "Permissions": [ "庫存查詢", "盤點作業", "交班對點" ]
+        ///   }
+        /// }
+        /// </code>
+        ///
+        /// <para><b>錯誤回應範例</b>：</para>
+        /// <list type="table">
+        ///   <listheader>
+        ///     <term>Code</term>
+        ///     <description>說明 / Result</description>
+        ///   </listheader>
+        ///   <item>
+        ///     <term>-1</term>
+        ///     <description>找無此帳號或透過 UID/BARCODE 找無資料（例如：<c>此UID找無資料!</c> / <c>此一維條碼找無資料!</c> / <c>找無此帳號!</c>）。</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>-2</term>
+        ///     <description>密碼錯誤（<c>密碼錯誤!</c>）。</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>-200</term>
+        ///     <description>系統或資料庫連線錯誤（含找無資料庫參數、例外訊息等）。</description>
+        ///   </item>
+        ///   <!-- 若未來啟用重複登入阻擋，可回覆：
+        ///   <item>
+        ///     <term>-3</term>
+        ///     <description>已登入帳號，需登出（<c>已登入帳號,需登出!</c>）。</description>
+        ///   </item>
+        ///   -->
+        /// </list>
+        ///
+        /// <para><b>資料表需求</b>：</para>
+        /// <list type="bullet">
+        ///   <item><description><c>person_page</c>：欄位需包含 <c>ID</c>、<c>密碼</c>、<c>姓名</c>、<c>單位</c>、<c>卡號(UID)</c>、<c>一維條碼(BARCODE)</c>、<c>權限等級</c>、<c>顏色</c>、<c>藥師證字號</c> 等。</description></item>
+        ///   <item><description><c>login_session</c>：欄位需包含 <c>GUID</c>、<c>ID</c>、<c>Name</c>、<c>Employer</c>、<c>verifyTime</c>、<c>loginTime</c> 等。</description></item>
+        /// </list>
+        ///
+        /// <para><b>安全性與實作建議</b>：</para>
+        /// <list type="bullet">
+        ///   <item><description>傳輸中的 <c>Password</c>（或 Credential）不應為明碼；建議使用雜湊（如 PBKDF2/BCrypt/Argon2）搭配 TLS。</description></item>
+        ///   <item><description>admin 最高權限建議以環境變數或安全儲存管理，避免硬編碼；或在正式環境停用此後門。</description></item>
+        ///   <item><description><c>GUID</c> 建議於每次驗證更新，以利稽核追蹤；若需單一登入（SSO/踢人機制），可在建立 session 前檢查舊紀錄並視需求拒絕或覆蓋。</description></item>
+        /// </list>
         /// </remarks>
-        /// <param name="returnData">共用傳遞資料結構</param>
-        /// <returns>[returnData.Data][sessionClass]</returns>
-
+        /// <param name="returnData">
+        ///  共用資料結構，<c>Data</c> 需包含以下任一組：
+        ///  <list type="bullet">
+        ///    <item><description><c>ID</c> + <c>Password</c></description></item>
+        ///    <item><description><c>UID</c>（系統將回填 <c>ID</c>/<c>Password</c> 後驗證）</description></item>
+        ///    <item><description><c>BARCODE</c>（系統將回填 <c>ID</c>/<c>Password</c> 後驗證）</description></item>
+        ///  </list>
+        ///  可選：<c>ServerName</c>、<c>ServerType</c> 決定 DB 連線來源。
+        /// </param>
+        /// <returns>
+        ///  JSON 字串：<c>returnData</c> 物件序列化結果。成功時 <c>Code=200</c> 並於 <c>Data</c> 回傳 <c>sessionClass</c>；失敗時回傳對應錯誤碼與訊息。
+        /// </returns>
         [Route("login")]
         [HttpPost]
         public string POST_login([FromBody] returnData returnData)

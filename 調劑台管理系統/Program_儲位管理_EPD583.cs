@@ -69,11 +69,12 @@ namespace 調劑台管理系統
             this.drawerUI_EPD_583.DrawerChangeEvent += DrawerUI_EPD_583_DrawerChangeEvent;
 
             SQLUI.Table table = new SQLUI.Table(new enum_儲位管理_EPD583_效期及庫存());
+            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.dataGridView.Font = new Font("微軟正黑體", 12);
             this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Init(table);
             this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnVisible(false, new enum_儲位管理_EPD583_效期及庫存().GetEnumNames());
-            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(200, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.效期);
-            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(150, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.批號);
-            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.庫存);
+            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.效期);
+            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.批號);
+            this.sqL_DataGridView_儲位管理_EPD583_儲位內容_效期及庫存.Set_ColumnWidth(80, DataGridViewContentAlignment.MiddleLeft, enum_儲位管理_EPD583_效期及庫存.庫存);
 
             table = new SQLUI.Table(new enum_儲位管理_EPD583_抽屜列表());
             this.sqL_DataGridView_儲位管理_EPD583_抽屜列表.Init(table);
@@ -110,8 +111,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_藥品學名字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_藥品學名字體更動_MouseDownEvent;
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_中文名稱字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_中文名稱字體更動_MouseDownEvent;
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_藥品碼字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_藥品碼字體更動_MouseDownEvent;
-            this.plC_RJ_Button_儲位管理_EPD583_儲位內容_藥品條碼字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_藥品條碼字體更動_MouseDownEvent;
-            this.plC_RJ_Button_儲位管理_EPD583_儲位內容_包裝單位字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_包裝單位字體更動_MouseDownEvent;
+
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_儲位名稱字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_儲位名稱字體更動_MouseDownEvent;
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_總庫存字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_總庫存字體更動_MouseDownEvent;
             this.plC_RJ_Button_儲位管理_EPD583_儲位內容_效期字體更動.MouseDownEvent += PlC_RJ_Button_儲位管理_EPD583_儲位內容_效期字體更動_MouseDownEvent;
@@ -499,8 +499,7 @@ namespace 調劑台管理系統
                     rJ_TextBox_儲位管理_EPD583_儲位內容_藥品學名.Text = Boxes[0].GetValue(Device.ValueName.藥品學名, Device.ValueType.Value).ObjectToString();
                     rJ_TextBox_儲位管理_EPD583_儲位內容_中文名稱.Text = Boxes[0].GetValue(Device.ValueName.藥品中文名稱, Device.ValueType.Value).ObjectToString();
                     rJ_TextBox_儲位管理_EPD583_儲位內容_藥品碼.Text = Boxes[0].GetValue(Device.ValueName.藥品碼, Device.ValueType.Value).ObjectToString();
-                    rJ_TextBox_儲位管理_EPD583_儲位內容_藥品條碼.Text = Boxes[0].GetValue(Device.ValueName.BarCode, Device.ValueType.Value).ObjectToString();
-                    rJ_TextBox_儲位管理_EPD583_儲位內容_包裝單位.Text = Boxes[0].GetValue(Device.ValueName.包裝單位, Device.ValueType.Value).ObjectToString();
+                   
                     rJ_TextBox_儲位管理_EPD583_儲位內容_儲位名稱.Text = Boxes[0].GetValue(Device.ValueName.儲位名稱, Device.ValueType.Value).ObjectToString();
                     rJ_TextBox_儲位管理_EPD583_儲位內容_總庫存.Text = Boxes[0].GetValue(Device.ValueName.庫存, Device.ValueType.Value).ObjectToString();
                     this.plC_CheckBox_儲位管理_EPD583_儲位內容_效期顯示.Checked = (bool)Boxes[0].GetValue(Device.ValueName.效期, Device.ValueType.Visable);

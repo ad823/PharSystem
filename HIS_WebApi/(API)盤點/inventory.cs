@@ -1089,7 +1089,7 @@ namespace HIS_WebApi
                             medClasses.AddRange(medGroupClasses_buf.MedClasses);
                         }
                     }
-                    medClasses = medClasses.GroupBy(x => x.GUID).Select(g => g.First()).ToList();
+                    medClasses = medClasses.Where(temp => temp.開檔狀態 != "關檔中").GroupBy(x => x.GUID).Select(g => g.First()).ToList();
                    
                 }
                 if(control.StringIsEmpty() == false)
@@ -1100,7 +1100,7 @@ namespace HIS_WebApi
                         returnData returnData_med = await new MED_pageController().get_med_cloud();
                         medClasses = returnData_med.Data.ObjToListClass<medClass>();
                     }
-                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別)).ToList();
+                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別) && item.開檔狀態 != "關檔中").ToList();
                 }
                 if (medType.StringIsEmpty() == false)
                 {
@@ -1110,7 +1110,7 @@ namespace HIS_WebApi
                         returnData returnData_med = await new MED_pageController().get_med_cloud();
                         medClasses = returnData_med.Data.ObjToListClass<medClass>();
                     }
-                    medClasses = medClasses.Where(item => medType_.Contains(item.類別)).ToList();
+                    medClasses = medClasses.Where(item => medType_.Contains(item.類別) && item.開檔狀態 != "關檔中").ToList();
                 }
                 if (medGroup.StringIsEmpty()　&& control.StringIsEmpty() && medType.StringIsEmpty() 　)
                 {
@@ -2434,7 +2434,7 @@ namespace HIS_WebApi
             List<SheetClass> sheetClasses = new List<SheetClass>();
             List<SheetTemp> sheetTemps = new List<SheetTemp>();
             List<SheetTemp> sheetTemps_buf = new List<SheetTemp>();
-            Console.WriteLine($"取得creats {myTimer.ToString()}");
+            //Console.WriteLine($"取得creats {myTimer.ToString()}");
             for (int i = 0; i < creat.Contents.Count; i++)
             {
                 if (creat.Contents[i].盤點量.StringToInt32() <= 0)
@@ -2488,7 +2488,7 @@ namespace HIS_WebApi
                 sheetClasses.Add(sheetClass);
             }
 
-            Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
+            //Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
 
             string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string xls_command = "application/vnd.ms-excel";

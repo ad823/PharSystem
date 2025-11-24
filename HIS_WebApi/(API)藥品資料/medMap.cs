@@ -26,15 +26,15 @@ namespace HIS_WebApi._API_藥品資料
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
         static private string API_server = "http://127.0.0.1:4433";
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string pas, uint Port)>>
            serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
            {
-               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+               var (Server, DB, UserName, pas, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-               if (string.IsNullOrWhiteSpace(Password))
-                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+               if (string.IsNullOrWhiteSpace(pas))
+                   throw new SecurityException("Database pas cannot be null or empty (medUnit).");
 
-               return (Server, DB, UserName, Password, Port);
+               return (Server, DB, UserName, pas, Port);
            });
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "藥品地圖物件", typeof(medMapClass))]
 

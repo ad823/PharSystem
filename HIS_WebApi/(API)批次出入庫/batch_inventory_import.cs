@@ -577,6 +577,10 @@ namespace HIS_WebApi
 
                 List<object[]> list_batch_Inventory_ImportClasses = sQLControl_batch_inventory_import.GetRowsByBetween(null, (int)enum_batch_inventory_import.建表時間, 起始時間, 結束時間);
                 List<batch_inventory_importClass> batch_Inventory_ImportClasses = list_batch_Inventory_ImportClasses.SQLToClass<batch_inventory_importClass, enum_batch_inventory_import>();
+                batch_Inventory_ImportClasses = batch_Inventory_ImportClasses
+                .OrderBy(x => x.藥碼)    // 或 .OrderBy(x => x.DrugCode)
+                .ToList();
+
                 returnData.Data = batch_Inventory_ImportClasses;
                 returnData.Result = $"取得批次入庫資料成功,共<{list_batch_Inventory_ImportClasses.Count}>筆資料";
                 returnData.TimeTaken = myTimerBasic.ToString();
@@ -659,6 +663,10 @@ namespace HIS_WebApi
 
                 List<object[]> list_batch_Inventory_ImportClasses = sQLControl_batch_inventory_import.GetRowsByBetween(null, (int)enum_batch_inventory_import.入庫時間, 起始時間, 結束時間);
                 List<batch_inventory_importClass> batch_Inventory_ImportClasses = list_batch_Inventory_ImportClasses.SQLToClass<batch_inventory_importClass, enum_batch_inventory_import>();
+                batch_Inventory_ImportClasses = batch_Inventory_ImportClasses
+                  .OrderBy(x => x.藥碼)    // 或 .OrderBy(x => x.DrugCode)
+                  .ToList();
+
                 returnData.Data = batch_Inventory_ImportClasses;
                 returnData.Result = $"取得批次入庫資料成功,共<{list_batch_Inventory_ImportClasses.Count}>筆資料";
                 returnData.TimeTaken = myTimerBasic.ToString();

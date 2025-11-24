@@ -16,19 +16,19 @@ namespace 調劑台管理系統
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main_Form());
-            //Basic.Screen.CloseConsole();
-            //mutex = new System.Threading.Mutex(true, "OnlyRun");
-            //if (mutex.WaitOne(0, false))
-            //{
-            //    Application.Run(new Main_Form());
-            //}
-            //else
-            //{
-            //    Application.Exit();
-            //}
+            mutex = new System.Threading.Mutex(true, "OnlyRun");
+            if (mutex.WaitOne(0, false))
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Main_Form());
+            }
+            else
+            {
+                Application.Exit();
+                return;
+            }
+            
         }
     }
 }

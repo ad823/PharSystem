@@ -239,7 +239,7 @@ namespace HIS_WebApi
             }
             catch(Exception e)
             {
-                Console.WriteLine($"Exception : {e.Message}");
+                //Console.WriteLine($"Exception : {e.Message}");
                 return null;
             }
             finally

@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\FontAwesome.Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="HIS_DB_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
+    </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
     </Reference>
@@ -56,8 +60,38 @@
     <Reference Include="MinasA6DLL">
       <HintPath>..\0.DLL\MinasA6DLL.dll</HintPath>
     </Reference>
+    <Reference Include="MyOffice, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\MyOffice.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySQL_Login">
+      <HintPath>..\0.DLL\MySQL_Login.dll</HintPath>
+    </Reference>
     <Reference Include="MyUI">
       <HintPath>..\0.DLL\MyUI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="RFID_FX600lib">
+      <HintPath>..\0.DLL\RFID_FX600lib.dll</HintPath>
     </Reference>
     <Reference Include="SQLUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -101,6 +135,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Function.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +146,21 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Program_PLC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_Scanner_RS232.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_交易紀錄查詢.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_人員資料.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_儲位管理.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_後台登入.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,6 +175,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -137,6 +190,37 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\條碼感應.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RFID感應.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\指紋辨識註冊 .png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dialog\Dialog_等待RFID感應.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_等待RFID感應.Designer.cs">
+      <DependentUpon>Dialog_等待RFID感應.cs</DependentUpon>
+    </Compile>
+
+    <Compile Include="Dialog\Dialog_等待條碼刷入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_等待條碼刷入.Designer.cs">
+      <DependentUpon>Dialog_等待條碼刷入.cs</DependentUpon>
+    </Compile>
+
+    <Compile Include="Dialog\Dialog_輸入批號.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_輸入批號.Designer.cs">
+      <DependentUpon>Dialog_輸入批號.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,7 @@ namespace batch_dps_medUpdate
 
         static void Main(string[] args)
         {
+            string med_cloud_update = Basic.Net.WEBApiGet($"http://127.0.0.1:4434/dbvm/bbcm");
             List<sys_serverSettingClass> sys_serverSettingClasses = sys_serverSettingClassMethod.WebApiGet(API_Server);
             List<sys_serverSettingClass> sys_serverSettingClasses_buf = (from value in sys_serverSettingClasses
                                                                  where value.類別 == "調劑台"
