@@ -521,6 +521,7 @@ namespace HIS_WebApi
             }
             catch (Exception ex)
             {
+                if (ex.Message == "Table 'dbvm.medunit' doesn't exist") init();
                 returnData.Code = -200;
                 returnData.Result = ex.Message;
                 return returnData.JsonSerializationt(true);

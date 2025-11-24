@@ -1117,6 +1117,11 @@
             藥品單位
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.stockClass.content">
+            <summary>
+            驗收項目
+            </summary>
+        </member>
         <member name="M:HIS_DB_Lib.deviceApiClass.combine_drawer_boxes(System.String,System.String,System.String,H_Pannel_lib.Drawer,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
             <summary>
             呼叫 API: 合併儲位 (CombineBoxes)

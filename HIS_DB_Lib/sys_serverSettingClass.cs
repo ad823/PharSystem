@@ -407,6 +407,26 @@ namespace HIS_DB_Lib
             List<string> strs = returnData_out.Data.ObjToClass<List<string>>();
             return strs;
         }
+        static public List<sys_serverSettingClass> get_name(string API_Server)
+        {
+            string url = $"{API_Server}/api/ServerSetting/get_name";
+
+            returnData returnData = new returnData();
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            if (returnData_out == null)
+            {
+                return null;
+            }
+            if (returnData_out.Data == null)
+            {
+                return null;
+            }
+            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            List<sys_serverSettingClass> strs = returnData_out.Data.ObjToClass<List<sys_serverSettingClass>>();
+            return strs;
+        }
         static public sys_serverSettingClass get_VM_Server(string API_Server)
         {
             string url = $"{API_Server}/api/ServerSetting/get_VM_Server";

@@ -122,12 +122,27 @@ namespace HIS_DB_Lib
         /// 驗收項目
         /// </summary>
         public List<inspectionClass.content> content { get; set; }
+        static public returnData get_stock(string API_Server, string serverName, string serverType)
+        {
+            string url = $"{API_Server}/api/stock/get_stock";
 
-        static public returnData update(string API_Server, List<stockClass> stockClasses)
+            returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
+        static public returnData update(string API_Server, string serverName, string serverType, List<stockClass> stockClasses)
         {
             string url = $"{API_Server}/api/stock/update";
 
             returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
             returnData.Data = stockClasses;
 
             string json_in = returnData.JsonSerializationt();
@@ -135,11 +150,13 @@ namespace HIS_DB_Lib
             returnData = json_out.JsonDeserializet<returnData>();
             return returnData;
         }
-        static public returnData add(string API_Server, List<stockClass> stockClasses)
+        static public returnData add(string API_Server, string serverName, string serverType, List<stockClass> stockClasses)
         {
             string url = $"{API_Server}/api/stock/add";
 
             returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
             returnData.Data = stockClasses;
 
             string json_in = returnData.JsonSerializationt();
@@ -147,5 +164,38 @@ namespace HIS_DB_Lib
             returnData = json_out.JsonDeserializet<returnData>();
             return returnData;
         }
+    }
+    public static class stockClassMethod
+    {
+        static public Dictionary<string, List<stockClass>> ToDictByCode(this List<stockClass> stockClasses)
+        {
+            Dictionary<string, List<stockClass>> dictionary = new Dictionary<string, List<stockClass>>();
+            foreach (var item in stockClasses)
+            {
+                if (dictionary.TryGetValue(item.藥碼, out List<stockClass> list))
+                {
+                    list.Add(item);
+                }
+                else
+                {
+                    dictionary[item.藥碼] = new List<stockClass> { item };
+                }
+            }
+            return dictionary;
+        }
+        static public List<stockClass> GetByCode(this Dictionary<string, List<stockClass>> dict, string code)
+        {
+            if (dict.TryGetValue(code, out List<stockClass> stockClasses))
+            {
+                return stockClasses;
+            }
+            else
+            {
+                return new List<stockClass>();
+            }
+        }
+
+
+
     }
 }

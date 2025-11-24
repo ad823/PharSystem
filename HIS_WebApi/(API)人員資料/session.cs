@@ -20,7 +20,7 @@ namespace HIS_WebApi
     public class sessionController : Controller
     {
         static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
-        static string API = Method.GetServerAPI("Main", "網頁", "API01");
+        static string API = "http://127.0.0.1:4433";
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
         /// <summary>
         /// 初始化資料庫
