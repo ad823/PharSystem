@@ -205,10 +205,10 @@ namespace batch_StackDataAccounting
             {
                 string 名稱 = list_value[i][(int)enum_commonSpaceSetup.共用區名稱].ObjectToString();
                 sys_serverSettingClasses_buf = (from temp in sys_serverSettingClasses
-                                            where temp.設備名稱 == 名稱
-                                            where temp.類別 == "調劑台"
-                                            where temp.內容 == "儲位資料"
-                                            select temp).ToList();
+                                                where temp.設備名稱 == 名稱
+                                                where temp.類別 == "調劑台"
+                                                where temp.內容 == "儲位資料"
+                                                select temp).ToList();
 
                 if (sys_serverSettingClasses_buf.Count > 0)
                 {
@@ -235,7 +235,7 @@ namespace batch_StackDataAccounting
 
         static public bool LoadDBConfig()
         {
-            string jsonstr = MyFileStream.LoadFileAllText($"{DBConfigFileName}");
+            string jsonstr = MyFileStream.LoadFileAllTextAuto($"{DBConfigFileName}");
             Console.WriteLine($"路徑 : {DBConfigFileName} 開始讀取");
             Console.WriteLine($"-------------------------------------------------------------------------");
             if (jsonstr.StringIsEmpty())
@@ -258,11 +258,11 @@ namespace batch_StackDataAccounting
                 jsonstr = Basic.Net.JsonSerializationt<DBConfigClass>(dBConfigClass, true);
                 List<string> list_jsonstring = new List<string>();
                 list_jsonstring.Add(jsonstr);
-                if (!MyFileStream.SaveFile($"{DBConfigFileName}", list_jsonstring))
-                {
-                    Console.WriteLine($"建立{DBConfigFileName}檔案失敗!");
-                    return false;
-                }
+                //if (!MyFileStream.SaveFile($"{DBConfigFileName}", list_jsonstring))
+                //{
+                //    Console.WriteLine($"建立{DBConfigFileName}檔案失敗!");
+                //    return false;
+                //}
 
             }
             return true;
@@ -364,7 +364,7 @@ namespace batch_StackDataAccounting
         }
         static private void LoadMyConfig()
         {
-            string jsonstr = MyFileStream.LoadFileAllText($"{MyConfigFileName}");
+            string jsonstr = MyFileStream.LoadFileAllTextAuto($"{MyConfigFileName}");
             if (jsonstr.StringIsEmpty())
             {
                 jsonstr = Basic.Net.JsonSerializationt<MyConfigClass>(new MyConfigClass(), true);
@@ -383,10 +383,10 @@ namespace batch_StackDataAccounting
                 jsonstr = Basic.Net.JsonSerializationt<MyConfigClass>(myConfigClass, true);
                 List<string> list_jsonstring = new List<string>();
                 list_jsonstring.Add(jsonstr);
-                if (!MyFileStream.SaveFile($"{MyConfigFileName}", list_jsonstring))
-                {
-                    MyMessageBox.ShowDialog($"建立{MyConfigFileName}檔案失敗!");
-                }
+                //if (!MyFileStream.SaveFile($"{MyConfigFileName}", list_jsonstring))
+                //{
+                //    MyMessageBox.ShowDialog($"建立{MyConfigFileName}檔案失敗!");
+                //}
 
             }
 
@@ -460,7 +460,7 @@ namespace batch_StackDataAccounting
                             {
                                 Function_儲位亮燈_層架亮燈(list_層架亮燈_IP);
                             }));
-                       
+
 
                             List<Task> taskList = new List<Task>();
                             for (int i = 0; i < lightOns_buf.Count; i++)
@@ -774,7 +774,7 @@ namespace batch_StackDataAccounting
         static MyThread MyThread_取藥堆疊資料_儲位亮燈;
         static public void Main(string[] args)
         {
-       
+
             LoadDBConfig();
             LoadMyConfig();
 
@@ -836,12 +836,12 @@ namespace batch_StackDataAccounting
             Console.WriteLine($"Pannel35_Port : {myConfigClass.Pannel35_Port} \n");
             Console.WriteLine($"RowsLED_Port : {myConfigClass.RowsLED_Port} \n");
 
-            drawerUI_EPD_583.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None , myConfigClass.EPD583_Port + 1000, myConfigClass.EPD583_Port);
+            drawerUI_EPD_583.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD583_Port + 1000, myConfigClass.EPD583_Port);
             storageUI_EPD_266.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD266_Port + 1000, myConfigClass.EPD266_Port);
             storageUI_WT32.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.Pannel35_Port + 1000, myConfigClass.Pannel35_Port);
             rowsLEDUI.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.RowsLED_Port + 1000, myConfigClass.RowsLED_Port);
 
-        
+
 
             Function_從SQL取得儲位到本地資料();
             Function_從SQL取得儲位到雲端資料();
@@ -869,7 +869,7 @@ namespace batch_StackDataAccounting
                     sub_Program_取藥堆疊資料_狀態更新();
                     sub_Program_取藥堆疊資料_流程作業檢查();
                     sub_Program_取藥堆疊資料_入賬檢查();
-                    Function_從SQL取得儲位到本地資料();
+                    //Function_從SQL取得儲位到本地資料();
                     System.Threading.Thread.Sleep(1);
                 }
 
@@ -906,7 +906,7 @@ namespace batch_StackDataAccounting
             }));
             while (true)
             {
-   
+
                 for (int i = 0; i < List_EPD583_本地資料.Count; i++)
                 {
                     Drawer drawer = List_EPD583_本地資料[i];
@@ -917,7 +917,7 @@ namespace batch_StackDataAccounting
                     bool flag_input = uDP_READ.Get_Input(0);
                     if (drawer.input != flag_input)
                     {
-                        if(flag_input)
+                        if (flag_input)
                         {
                             Console.WriteLine($"抽屜[{drawer.IP}]關閉");
                             drawer.LED_Bytes = DrawerUI_EPD_583.Get_Empty_LEDBytes();
@@ -925,9 +925,9 @@ namespace batch_StackDataAccounting
                             drawerUI_EPD_583.Set_LED_Clear_UDP(drawer);
                             drawer.SetAllBoxes_LightOff();
                             List_EPD583_本地資料.Add_NewDrawer(drawer);
-                   
+
                         }
-                      
+
                         drawer.input = flag_input;
                     }
                 }
@@ -937,10 +937,10 @@ namespace batch_StackDataAccounting
                 {
                     string IP = list_locker_table_value[i][(int)enum_lockerIndex.IP].ObjectToString();
 
-              
+
                     if (IP.Check_IP_Adress() == false) continue;
                     if (list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態].ObjectToString() != true.ToString()) continue;
-   
+
                     Drawer drawer = List_EPD583_本地資料.SortByIP(IP);
                     if (drawer == null) continue;
                     list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態] = false.ToString();
@@ -1456,7 +1456,7 @@ namespace batch_StackDataAccounting
         }
         static public List<object[]> Function_取得異動儲位資訊從雲端資料(string 藥品碼, int 異動量, string 效期)
         {
-            if(藥品碼.StringIsEmpty()) return new List<object[]>();
+            if (藥品碼.StringIsEmpty()) return new List<object[]>();
             List<object> 儲位 = new List<object>();
             List<string> 儲位_TYPE = new List<string>();
             Function_從雲端資料取得儲位(藥品碼, ref 儲位_TYPE, ref 儲位);
@@ -1932,7 +1932,7 @@ namespace batch_StackDataAccounting
 
             if (color == Color.Black)
             {
-                List<object[]> list_取藥堆疊母資料 = sQLControl_取藥堆疊母資料.GetRowsByDefult(null ,(int)enum_取藥堆疊母資料.藥品碼, 藥品碼);
+                List<object[]> list_取藥堆疊母資料 = sQLControl_取藥堆疊母資料.GetRowsByDefult(null, (int)enum_取藥堆疊母資料.藥品碼, 藥品碼);
 
                 list_取藥堆疊母資料 = (from temp in list_取藥堆疊母資料
                                 where temp[(int)enum_取藥堆疊母資料.藥品碼].ObjectToString() == 藥品碼
@@ -2150,7 +2150,7 @@ namespace batch_StackDataAccounting
                                 }
 
                             }
-                      
+
 
                         }));
 
@@ -2158,11 +2158,11 @@ namespace batch_StackDataAccounting
                     }
                     else if (device.DeviceType == DeviceType.Pannel35 || device.DeviceType == DeviceType.Pannel35_lock)
                     {
-                      
+
                     }
                     else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
                     {
-                       
+
                     }
                     else if (device.DeviceType == DeviceType.RowsLED)
                     {
@@ -2584,7 +2584,7 @@ namespace batch_StackDataAccounting
                 List<object[]> list_value_add = new List<object[]>();
                 List<object[]> list_value_replace = new List<object[]>();
                 if (list_value_buf.Count == 0) break;
-                sQLControl_取藥堆疊母資料.DeleteExtra(null ,list_value_buf);
+                sQLControl_取藥堆疊母資料.DeleteExtra(null, list_value_buf);
                 for (int i = 0; i < list_value_buf.Count; i++)
                 {
 
@@ -2678,7 +2678,7 @@ namespace batch_StackDataAccounting
                 value[(int)enum_取藥堆疊母資料.動作] = takeMedicineStackClasses[i].動作.GetEnumName();
                 value[(int)enum_取藥堆疊母資料.狀態] = takeMedicineStackClasses[i].狀態.GetEnumName();
 
-               
+
 
                 list_堆疊母資料_add.Add(value);
 
@@ -2725,10 +2725,10 @@ namespace batch_StackDataAccounting
                     commonSapceClasses.WriteTakeMedicineStack(list_堆疊母資料_add);
                 }));
 
-                sQLControl_取藥堆疊母資料.AddRows(null ,list_堆疊母資料_add);
+                sQLControl_取藥堆疊母資料.AddRows(null, list_堆疊母資料_add);
             }
 
-         
+
             Console.WriteLine($" 新增取藥資料 (耗時){myTimer_total.ToString()} ");
 
 
@@ -2943,7 +2943,7 @@ namespace batch_StackDataAccounting
                     list_取藥堆疊子資料_replace.Add(list_取藥堆疊子資料_buf[k]);
                 }
             }
-            if (list_取藥堆疊母資料_replace.Count > 0) sQLControl_取藥堆疊母資料.UpdateByDefulteExtra(null ,list_取藥堆疊母資料_replace);
+            if (list_取藥堆疊母資料_replace.Count > 0) sQLControl_取藥堆疊母資料.UpdateByDefulteExtra(null, list_取藥堆疊母資料_replace);
             if (list_取藥堆疊子資料_replace.Count > 0) sQLControl_取藥堆疊子資料.UpdateByDefulteExtra(null, list_取藥堆疊子資料_replace);
         }
 
@@ -2955,7 +2955,7 @@ namespace batch_StackDataAccounting
             List<Storage> storages = List_EPD266_雲端資料.SortByCode(藥品碼);
             List<Storage> pannels = List_Pannel35_雲端資料.SortByCode(藥品碼);
             List<RowsDevice> rowsDevices = List_RowsLED_雲端資料.SortByCode(藥品碼);
-     
+
             for (int i = 0; i < storages.Count; i++)
             {
                 Storage storage = storageUI_EPD_266.SQL_GetStorage(storages[i]);
@@ -3054,7 +3054,7 @@ namespace batch_StackDataAccounting
         }
         static public void cnt_Program_取藥堆疊資料_檢查資料_檢查新增資料(ref int cnt)
         {
-            List<object[]> list_value = sQLControl_取藥堆疊母資料.GetRowsByDefult(null ,(int)enum_取藥堆疊母資料.狀態, "新增資料");
+            List<object[]> list_value = sQLControl_取藥堆疊母資料.GetRowsByDefult(null, (int)enum_取藥堆疊母資料.狀態, "新增資料");
 
             if (list_value.Count > 0)
             {
@@ -3066,7 +3066,7 @@ namespace batch_StackDataAccounting
                     Function_取藥堆疊資料_刪除指定調劑台名稱母資料(names[i]);
                 }
 
-                sQLControl_取藥堆疊母資料.DeleteExtra(null,list_value);
+                sQLControl_取藥堆疊母資料.DeleteExtra(null, list_value);
                 Console.WriteLine($"刪除[新增資料]共<{list_value.Count}>筆");
                 List<takeMedicineStackClass> takeMedicineStackClasses = list_value.SQLToClass<takeMedicineStackClass, enum_取藥堆疊母資料>();
                 Function_取藥堆疊資料_新增母資料(takeMedicineStackClasses);
@@ -3412,8 +3412,8 @@ namespace batch_StackDataAccounting
         {
             list_取藥堆疊母資料 = sQLControl_取藥堆疊母資料.GetAllRows(null);
             list_取藥堆疊母資料 = (from temp in list_取藥堆疊母資料
-                                 where temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != "新增資料"
-                                 select temp).ToList();
+                            where temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != "新增資料"
+                            select temp).ToList();
             if (list_取藥堆疊母資料.Count > 0)
             {
                 var Code_LINQ = (from value in list_取藥堆疊母資料
@@ -4261,7 +4261,7 @@ namespace batch_StackDataAccounting
 
 
                 }
-                sQLControl_取藥堆疊子資料.UpdateByDefulteExtra(null ,list_取藥子堆疊資料_Replace);
+                sQLControl_取藥堆疊子資料.UpdateByDefulteExtra(null, list_取藥子堆疊資料_Replace);
                 MyTimer_取藥堆疊資料_流程作業檢查.TickStop();
                 MyTimer_取藥堆疊資料_流程作業檢查.StartTickTime(100);
 
@@ -4770,7 +4770,7 @@ namespace batch_StackDataAccounting
             {
 
                 Order_GUID = list_取藥堆疊母資料_ReplaceValue[i][(int)enum_取藥堆疊母資料.Order_GUID].ObjectToString();
-                List<object[]> list_value = sQLControl_醫令資料.GetRowsByDefult(null,(int)enum_醫囑資料.GUID, Order_GUID);
+                List<object[]> list_value = sQLControl_醫令資料.GetRowsByDefult(null, (int)enum_醫囑資料.GUID, Order_GUID);
 
                 操作人 = list_取藥堆疊母資料_ReplaceValue[i][(int)enum_取藥堆疊母資料.操作人].ObjectToString();
                 總異動量 = list_取藥堆疊母資料_ReplaceValue[i][(int)enum_取藥堆疊母資料.總異動量].ObjectToString().StringToDouble();
