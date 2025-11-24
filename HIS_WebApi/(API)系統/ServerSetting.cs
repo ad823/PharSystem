@@ -1153,6 +1153,15 @@ namespace HIS_WebApi
             string result = await get_by_GUID(returnData);
             returnData = result.JsonDeserializet<returnData>();
             return returnData;
-        } 
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_name()
+        {
+            returnData returnData = new returnData();
+            string result = get_name(returnData);
+            returnData = result.JsonDeserializet<returnData>();
+            return returnData;
+        }
+
     }
 }

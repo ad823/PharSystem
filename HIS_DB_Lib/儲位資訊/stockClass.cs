@@ -122,6 +122,9 @@ namespace HIS_DB_Lib
         /// 驗收項目
         /// </summary>
         public List<inspectionClass.content> content { get; set; }
+        public string serverName { get; set; }
+        public string serverType { get; set; }
+
         static public returnData get_stock(string API_Server, string serverName, string serverType)
         {
             string url = $"{API_Server}/api/stock/get_stock";
