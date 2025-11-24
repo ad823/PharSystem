@@ -98,6 +98,7 @@ namespace HIS_WebApi
                     foreach (var stock in list)
                     {
                         List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼);
+                        List<inspectionClass.content> contents_buff = contentDict.GetByCode(stock.藥碼);
                         string med_GUID = medClasses.Count > 0 ? medClasses[0].GUID : "";
                         List<medUnitClass> medUnits = medUnitDict.GetByMasterGUID(med_GUID);
                         string value = stock.Value;
@@ -111,6 +112,7 @@ namespace HIS_WebApi
                         stock.藥名 = medClasses.Count > 0 ? medClasses[0].藥品名稱 : "";
                         stock.料號 = medClasses.Count > 0 ? medClasses[0].料號 : "";
                         stock.med_unit = medUnits;
+                        stock.content = contents_buff;
                     }
                 }
 

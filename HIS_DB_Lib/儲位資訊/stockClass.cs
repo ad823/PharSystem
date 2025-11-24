@@ -117,5 +117,9 @@ namespace HIS_DB_Lib
         /// 藥品單位
         /// </summary>
         public List<medUnitClass> med_unit { get; set; }
+        /// <summary>
+        /// 驗收項目
+        /// </summary>
+        public List<inspectionClass.content> content { get; set; }
     }
 }
