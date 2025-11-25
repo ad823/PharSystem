@@ -284,7 +284,6 @@ C:\Users\Administrator\source\repos\ad823\PharSystem\HIS_DB_Lib\obj\Release\HIS_
 C:\Users\Administrator\source\repos\ad823\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\Administrator\source\repos\ad823\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\Administrator\source\repos\ad823\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
-C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\bin\Release\HIS_DB_Lib.dll.config
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\bin\Release\HIS_DB_Lib.xml
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\bin\Release\HIS_DB_Lib.dll
@@ -357,3 +356,4 @@ C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.C
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
+C:\Users\Administrator\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CopyComplete

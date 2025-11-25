@@ -2875,9 +2875,30 @@ namespace HIS_WebApi._API_藥品資料
 
                 List<object[]> rows = await sQLControl_medMap_stock.GetAllRowsAsync(null);
                 List<stockClass> medMap_StockClasses = rows.SQLToClass<stockClass>();
-                
-                medMap_StockClasses = get_stockInfo(medMap_StockClasses);
 
+                string[] code = medMap_StockClasses.Select(x => x.藥碼).Distinct().ToArray();
+                returnData returnData_med_cloud = await new MED_pageController().get_med_clouds_by_codes(code);
+                if (returnData_med_cloud == null || returnData_med_cloud.Code != 200)
+                {
+                    returnData_med_cloud.Result += "藥檔取得失敗";
+                    return returnData_med_cloud.JsonSerializationt(true);
+                }
+                List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
+                Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
+                foreach (var stock in medMap_StockClasses)
+                {
+                    List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼);
+                    
+                    string value = stock.Value;
+                    if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                    DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                    stock.效期 = deviceBasic.List_Validity_period;
+                    stock.數量 = deviceBasic.List_Inventory;
+                    stock.批號 = deviceBasic.List_Lot_number;
+                    stock.med_cloud = medClasses.Count > 0 ? medClasses[0] : null;
+                    stock.藥名 = medClasses.Count > 0 ? medClasses[0].藥品名稱 : "";
+                    stock.料號 = medClasses.Count > 0 ? medClasses[0].料號 : "";
+                }
                 returnData.Code = 200;
                 returnData.Data = medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();

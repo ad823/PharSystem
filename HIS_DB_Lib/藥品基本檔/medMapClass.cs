@@ -259,7 +259,7 @@ namespace HIS_DB_Lib
         }
         static public medMap_sectionClass get_section_by_IP(string API_Server, string IP, string serverName = "", string serverType = "")
         {
-            var (code, result, list) = get_section_by_IP_full(API_Server, serverName, serverType);
+            var (code, result, list) = get_section_by_IP_full(API_Server,IP , serverName, serverType);
             return list;
         }
         static public (int code, string result, medMap_sectionClass) get_section_by_IP_full(string API_Server, string IP, string serverName = "", string serverType = "", bool debug = false)
