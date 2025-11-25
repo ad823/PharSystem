@@ -71,7 +71,12 @@ namespace batch_UDPlightRefrsh
                 Dictionary<string, bool> ipLightStatus = new Dictionary<string, bool>();
                 foreach (var sectionClass in medMap_SectionClasses)
                 {
-                    ipLightStatus[sectionClass.燈棒IP] = false;
+                    if (sectionClass.燈棒IP.StringIsEmpty())
+                    {
+                        Console.WriteLine("無IP位址跳過");
+                        continue;
+                    }
+                    else ipLightStatus[sectionClass.燈棒IP] = false;
                 }
 
                 foreach (string json in jsons_rows_led)

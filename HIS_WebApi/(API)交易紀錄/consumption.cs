@@ -872,7 +872,7 @@ namespace HIS_WebApi
                 List<consumptionClass> add = new List<consumptionClass>();
                 string time_now = DateTime.Now.ToDateTimeString();
                 foreach (var item in consumptionClasses)
-                {                  
+                {
                     item.GUID = Guid.NewGuid().ToString();
                     item.建立時間 = time_now;
                     add.Add(item);
@@ -954,7 +954,7 @@ namespace HIS_WebApi
             catch (Exception ex)
             {
 
-                if (ex.Message == "Table 'dbvm.consumption' doesn't exist") init(returnData);
+                if (ex.Message.Contains("doesn't exist")) init(returnData);
                 returnData.Code = -200;
                 returnData.Result = ex.Message;
                 return returnData.JsonSerializationt(true);
