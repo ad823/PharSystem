@@ -874,7 +874,7 @@ namespace HIS_WebApi
                 foreach (var item in consumptionClasses)
                 {
                     item.GUID = Guid.NewGuid().ToString();
-                    item.建立時間 = time_now;
+                    if (item.建立時間.StringIsEmpty()) item.建立時間 = time_now;
                     add.Add(item);
                 }
                 SQLControl sQLControl = new SQLControl(Server, DB, "consumption", UserName, Password, Port, SSLMode);
