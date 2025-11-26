@@ -4471,6 +4471,11 @@
             撥發人員。
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.drugStotreDistributionClass.撥發人員ID">
+            <summary>
+            撥發人員ID。
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.drugStotreDistributionClass.撥發單位">
             <summary>
             撥發單位。

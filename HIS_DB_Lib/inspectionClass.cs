@@ -525,6 +525,18 @@ namespace HIS_DB_Lib
             //inspectionClass.content content = returnData_out.Data.ObjToClass<inspectionClass.content>();
             return returnData_out;
         }
+        static public returnData content_get_all(string API_Server)
+        {
+            string url = $"{API_Server}/api/inspection/content_get_all";
+            returnData returnData = new returnData();
+           
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            
+            return returnData_out;
+        }
+
         static public void sub_content_update(string API_Server, inspectionClass.sub_content sub_Content)
         {
             List<inspectionClass.sub_content> sub_Contents = new List<sub_content>();
