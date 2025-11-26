@@ -43,6 +43,16 @@ namespace HIS_WebApi
 
               return sys_ServerSetting;
           });
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
+
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return (Server, DB, UserName, Password, Port);
+           });
 
         /// <summary>
         /// 初始化資料庫
@@ -3793,18 +3803,14 @@ namespace HIS_WebApi
 
         [Route("serch_by_BarCode")]
         [HttpPost]
-        public string serch_by_BarCode([FromBody] returnData returnData)
+        public async Task<string> serch_by_BarCode([FromBody] returnData returnData)
         {
             try
             {
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
-                List<medClass> medClasses = returnData.Data.ObjToListClass<medClass>();
-                if (medClasses == null || medClasses.Count == 0)
-                {
-                    List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                    sys_serverSettingClass sys_serverSettingClasses_med = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料")[0];
-                    medClasses = Get_med_cloud(sys_serverSettingClasses_med);
-                }
+                
+                
+
 
                 returnData.Method = "serch_by_BarCode";
                 string BarCode = returnData.Value;
@@ -3814,30 +3820,70 @@ namespace HIS_WebApi
                     returnData.Result = "BarCode空白!";
                     return returnData.JsonSerializationt();
                 }
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl_med = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
+                string command = $@"
+                (
+                    -- 第一優先：完整比對藥品碼
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 藥品碼 = '{BarCode}'
+                )
 
-                List<medClass> medClasses_buf = new List<medClass>();
+                UNION ALL
+                (
+                    -- 第二優先：完整比對料號（只有當第一組沒資料時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 料號 = '{BarCode}'
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                )
 
-                for (int i = 0; i < medClasses.Count; i++)
-                {
-                    if (BarCode == medClasses[i].藥品碼)
-                    {
-                        medClasses_buf.Add(medClasses[i]);
-                        continue;
-                    }
-                    if (BarCode == medClasses[i].料號)
-                    {
-                        medClasses_buf.Add(medClasses[i]);
-                        continue;
-                    }
-                    foreach (string barcode in medClasses[i].Barcode)
-                    {
-                        if (barcode == BarCode)
-                        {
-                            medClasses_buf.Add(medClasses[i]);
-                            continue;
-                        }
-                    }
-                }
+                UNION ALL
+                (
+                    -- 第二優先：完整比對藥品條碼2（只有當第一組沒資料時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 藥品條碼2 like'%""{BarCode}""%' 
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                      )
+
+                )
+
+                UNION ALL
+                (
+                    -- 第三優先：模糊搜尋（但只有前兩者都沒有時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE (
+                         藥品名稱 LIKE '%{BarCode}%'
+                         OR 藥品學名 LIKE '%{BarCode}%'
+                    )
+                    AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                    )
+                    AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                    )
+                    AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品條碼2 like'%""{BarCode}""%' 
+                    )
+                )
+
+                LIMIT 10;  -- 依需求可調整
+                ";
+                List<object[]> value = await sQLControl_med.WriteCommandAsync(command);
+                //if (value.Count == 0)
+                //{
+                //    command = $"SELECT * FROM {DB}.medicine_page_cloud WHERE 藥品條碼2 like'%\"{BarCode}\"%' ";
+                //    value = await sQLControl_med.WriteCommandAsync(command);
+
+                //}
+                List<medClass> medClasses_buf = value.SQLToClass<medClass, enum_雲端藥檔>();
+
+
                 if (medClasses_buf.Count == 0)
                 {
                     returnData.Code = -200;

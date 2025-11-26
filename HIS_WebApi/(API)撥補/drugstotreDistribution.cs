@@ -51,6 +51,41 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugStotreDistributionClass))]
+        
+        [Route("barcode")]
+        [HttpPost]
+        public string barcode(string? barcode)
+        {
+            returnData returnData = new returnData();
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                POST_init(returnData);
+
+                string[] ary = barcode.Split(';');
+                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
+                drugstotreDistributions.藥碼 = ary.Length >= 2 ? ary[0] : "";
+                drugstotreDistributions.撥發量 = ary.Length >= 2 ? ary[1] : "";
+
+
+
+                returnData.Result = $"撥補資料讀取成功";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                returnData.Data = drugstotreDistributions;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                Logger.Log($"drugstotreDistribution", $"[異常] {returnData.Result}");
+                return returnData.JsonSerializationt(true);
+            }
+        }
         [HttpPost]
         public string POST_init([FromBody] returnData returnData)
         {

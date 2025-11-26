@@ -74,6 +74,40 @@ namespace HIS_WebApi
             }
 
         }
+        [Route("barcode")]
+        [HttpPost]
+        public string barcode(string? barcode)
+        {
+            returnData returnData = new returnData();
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                GET_init(returnData);
+
+                string[] ary = barcode.Split(';');
+                materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
+                materialRequisitionClass.藥碼 = ary.Length >= 2 ? ary[0] : "";
+                materialRequisitionClass.申領量 = ary.Length >= 2 ? ary[1] : "";
+
+
+
+                returnData.Result = $"申領資料讀取成功";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                returnData.Data = materialRequisitionClass;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                Logger.Log($"drugstotreDistribution", $"[異常] {returnData.Result}");
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         /// 新增資料
         /// </summary>

@@ -2589,7 +2589,12 @@ namespace HIS_WebApi
                     returnData returnData_new_IC_SN = GET_new_IC_SN(returnData).JsonDeserializet<returnData>();
                     if(IC_NAME.StringIsEmpty())
                     {
-                        IC_NAME = Path.GetFileNameWithoutExtension(file.FileName);
+                       
+                        if (file != null) IC_NAME = Path.GetFileNameWithoutExtension(file.FileName);
+                        else IC_NAME = "未命名盤點單";
+                        
+                        
+
                     }
                     creat.盤點名稱 = IC_NAME;
                     creat.盤點單號 = returnData_new_IC_SN.Value;
