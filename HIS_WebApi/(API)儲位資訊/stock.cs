@@ -267,6 +267,84 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("update_stock")]
+        public async Task<string> update_stock([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
+                if (medMap_StockClasses == null)
+                {
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
+                    if (medMap_stock == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
+                        return returnData.JsonSerializationt();
+                    }
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
+                }
+                // DB 連線與資料表
+                if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "ServerName or ServerType is null";
+                    return returnData.JsonSerializationt(true);
+                }
+                string ServerName = returnData.ServerName;
+                string ServerType = returnData.ServerType;
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+                SQLControl sQLControl_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+                List<object[]> objects = await sQLControl_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
+                List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
+                foreach (var item in db_medMap_StockClasses)
+                {
+                    stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
+                    if (medMap_stock_buff == null) continue;
+                    if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
+                    if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
+                    if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
+                    if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
+                    if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
+                    if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
+
+                    if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
+                    if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
+                    if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
+                    if (medMap_stock_buff.效期 == null || (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count)) continue;
+                    for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
+                    {
+                        string value = item.Value;
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
+                }
+                List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
+                await sQLControl_stock.UpdateRowsAsync(null, update);
+
+                returnData.Code = 200;
+                returnData.Data = db_medMap_StockClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "update_stock";
+                returnData.Result = $"儲位寫入成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
         {
             foreach (var stock in medMap_stockClasses)

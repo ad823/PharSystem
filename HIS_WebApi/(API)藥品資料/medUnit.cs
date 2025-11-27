@@ -223,6 +223,8 @@ namespace HIS_WebApi
                             medUnits_buff.單位名稱 = medUnits[i].單位名稱;
                             medUnits_buff.數量 = medUnits[i].數量;
                             medUnits_buff.排序順序 = medUnits[i].排序順序;
+                            medUnits_buff.換算比 = medUnits[i].換算比;
+
                             update_units.Add(medUnits_buff);
 
                         }
