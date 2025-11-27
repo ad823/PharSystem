@@ -699,8 +699,8 @@ namespace HIS_WebApi._API_藥品資料
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
                 SQLControl sQLControl_medMap_section = new SQLControl(Server, DB, "medMap_section", UserName, Password, Port, SSLMode);
-                
-               
+
+
                 List<object[]> delete = await sQLControl_medMap_section.GetRowsByDefultAsync(null, (int)enum_medMap_section.GUID, medMap_sectionClasses.Select(x => x.GUID).ToArray());
                 if (delete.Count > 0) await sQLControl_medMap_section.DeleteRowsAsync(null, delete);
 
@@ -765,16 +765,16 @@ namespace HIS_WebApi._API_藥品資料
                 List<medMap_sectionClass> medMap_sectionClass = objects.SQLToClass<medMap_sectionClass, enum_medMap_section>();
                 foreach (var item in medMap_sectionClass)
                 {
-                   
-                        string subSection = await get_medMap_sub_section_by_Master_GUID(item.GUID);
-                        returnData returnData_get_medMap_sub_section_by_Master_GUID = subSection.JsonDeserializet<returnData>();
-                        if (returnData_get_medMap_sub_section_by_Master_GUID.Code == 200)
-                        {
-                            List<medMap_sub_sectionClass> medMap_sub_sectionClass = returnData_get_medMap_sub_section_by_Master_GUID.Data.ObjToClass<List<medMap_sub_sectionClass>>();
-                            if (medMap_sub_sectionClass != null) item.sub_section = medMap_sub_sectionClass;
-                        }
-                        
-                 
+
+                    string subSection = await get_medMap_sub_section_by_Master_GUID(item.GUID);
+                    returnData returnData_get_medMap_sub_section_by_Master_GUID = subSection.JsonDeserializet<returnData>();
+                    if (returnData_get_medMap_sub_section_by_Master_GUID.Code == 200)
+                    {
+                        List<medMap_sub_sectionClass> medMap_sub_sectionClass = returnData_get_medMap_sub_section_by_Master_GUID.Data.ObjToClass<List<medMap_sub_sectionClass>>();
+                        if (medMap_sub_sectionClass != null) item.sub_section = medMap_sub_sectionClass;
+                    }
+
+
 
 
                 }
@@ -955,7 +955,7 @@ namespace HIS_WebApi._API_藥品資料
                         return returnData.JsonSerializationt();
                     }
                 }
-                
+
                 medMap_sectionClass medMap_sectionClass = objects.SQLToClass<medMap_sectionClass>()[0];
 
                 returnData.Code = 200;
@@ -1223,7 +1223,7 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                
+
                 List<medMap_sub_sectionClass> sub_section = returnData.Data.ObjToClass<List<medMap_sub_sectionClass>>();
                 if (sub_section == null || sub_section.Count == 0)
                 {
@@ -1364,22 +1364,22 @@ namespace HIS_WebApi._API_藥品資料
                 List<Task> tasks = new List<Task>();
                 foreach (var item in medMap_Sub_Sections)
                 {
-                    
-                        returnData returnData_get_medMap_shelf_by_Master_GUID = await get_medMap_shelf_by_Master_GUID(item.GUID);
-                        if (returnData_get_medMap_shelf_by_Master_GUID.Code == 200)
-                        {
-                            List<medMap_shelfClass> medMap_ShelfClasses = returnData_get_medMap_shelf_by_Master_GUID.Data.ObjToClass<List<medMap_shelfClass>>();
-                            if (medMap_ShelfClasses != null) item.shelf = medMap_ShelfClasses;
-                        }
-                       
-                    
-                    
-                        string shelf_jsonString = get_medMap_drawer_by_Master_GUID(item.GUID);
-                        returnData returnData_get_medMap_drawer_by_Master_GUID = shelf_jsonString.JsonDeserializet<returnData>();
-                        if (returnData_get_medMap_drawer_by_Master_GUID.Code != 200) returnData_get_medMap_drawer_by_Master_GUID.JsonSerializationt(true);
-                        List<medMap_drawerClass> medMap_drawerClasses = returnData_get_medMap_drawer_by_Master_GUID.Data.ObjToClass<List<medMap_drawerClass>>();
-                        if (medMap_drawerClasses != null) item.drawer = medMap_drawerClasses;
-                    
+
+                    returnData returnData_get_medMap_shelf_by_Master_GUID = await get_medMap_shelf_by_Master_GUID(item.GUID);
+                    if (returnData_get_medMap_shelf_by_Master_GUID.Code == 200)
+                    {
+                        List<medMap_shelfClass> medMap_ShelfClasses = returnData_get_medMap_shelf_by_Master_GUID.Data.ObjToClass<List<medMap_shelfClass>>();
+                        if (medMap_ShelfClasses != null) item.shelf = medMap_ShelfClasses;
+                    }
+
+
+
+                    string shelf_jsonString = get_medMap_drawer_by_Master_GUID(item.GUID);
+                    returnData returnData_get_medMap_drawer_by_Master_GUID = shelf_jsonString.JsonDeserializet<returnData>();
+                    if (returnData_get_medMap_drawer_by_Master_GUID.Code != 200) returnData_get_medMap_drawer_by_Master_GUID.JsonSerializationt(true);
+                    List<medMap_drawerClass> medMap_drawerClasses = returnData_get_medMap_drawer_by_Master_GUID.Data.ObjToClass<List<medMap_drawerClass>>();
+                    if (medMap_drawerClasses != null) item.drawer = medMap_drawerClasses;
+
 
                 }
                 Task.WhenAll(tasks).Wait();
@@ -1462,12 +1462,12 @@ namespace HIS_WebApi._API_藥品資料
 
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl_medMap_shelf = new SQLControl(Server, DB, "medMap_shelf", UserName, Password, Port, SSLMode);
-               
+
 
                 List<object[]> add = medMap_ShelfClasses.ClassToSQL<medMap_shelfClass, enum_medMap_shelf>();
                 await sQLControl_medMap_shelf.AddRowsAsync(null, add);
 
-               
+
 
                 returnData.Code = 200;
                 returnData.Data = medMap_ShelfClasses;
@@ -1607,13 +1607,13 @@ namespace HIS_WebApi._API_藥品資料
                 SQLControl sQLControl_shelf = new SQLControl(Server, DB, "medMap_shelf", UserName, Password, Port, SSLMode);
 
                 List<object[]> delete = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_ShelfClasses.Select(x => x.GUID).ToArray());
-                if (delete.Count > 0) 
+                if (delete.Count > 0)
                 {
                     await sQLControl_shelf.DeleteRowsAsync(null, delete);
                     await delete_box_by_Master_GUID(string.Join(";", medMap_ShelfClasses.Select(x => x.GUID).ToArray()));
                 }
-                
-             
+
+
                 returnData.Code = 200;
                 returnData.Data = null;
                 returnData.TimeTaken = myTimerBasic.ToString();
@@ -1700,7 +1700,7 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
-        
+
         /// <summary>
         /// 以Master_GUID取得層架資料
         /// </summary>
@@ -1747,16 +1747,16 @@ namespace HIS_WebApi._API_藥品資料
                 List<medMap_shelfClass> medMap_shelfClass = objects.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
                 foreach (var item in medMap_shelfClass)
                 {
-                    
+
                     //RowsLED rowsLED = deviceApiClass.GetRowsLED_ByIP(API_server, item.serverName, item.serverType, item.燈條IP);
                     //if (rowsLED != null) item.rowsLED = rowsLED;
-                    
-                   
+
+
                     returnData returnData_get_medMap_box_by_Master_GUID = await get_medMap_box_by_Master_GUID(item.GUID);
                     if (returnData_get_medMap_box_by_Master_GUID.Code != 200)
                     {
                         item.medMapBox = new List<medMap_boxClass>();
-                           
+
                     }
                     else
                     {
@@ -1764,7 +1764,7 @@ namespace HIS_WebApi._API_藥品資料
                         item.medMapBox = medMap_boxClassses;
                     }
 
-                    
+
 
 
                 }
@@ -1782,7 +1782,7 @@ namespace HIS_WebApi._API_藥品資料
                 foreach (var item in medMap_shelfClass)
                 {
                     List<stockClass> medMap_stock = dic_stock.GetByShelfGUID(item.GUID);
-                    
+
                     item.medMapStock = medMap_stock;
                 }
                 medMap_shelfClass = medMap_shelfClass
@@ -2864,16 +2864,16 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_stock_buff.效期 == null || (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count)) continue;
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
-                        string value = item.Value;                        
+                        string value = item.Value;
                         if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
                         DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
                         deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
                         item.Value = deviceBasic.JsonSerializationt();
                     }
-                }               
+                }
                 List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
-                
+
                 returnData.Code = 200;
                 returnData.Data = db_medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
@@ -2967,7 +2967,7 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"GUID不得為空值";
                     return returnData.JsonSerializationt();
                 }
-              
+
                 if (效期.Check_Date_String() == false)
                 {
                     returnData.Code = -200;
@@ -3188,7 +3188,7 @@ namespace HIS_WebApi._API_藥品資料
                 foreach (var stock in medMap_StockClasses)
                 {
                     List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼);
-                    
+
                     string value = stock.Value;
                     if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
                     DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
@@ -3347,7 +3347,7 @@ namespace HIS_WebApi._API_藥品資料
             }
 
         }
-        
+
         /// <summary>
         /// 控制指定藥碼對應裝置之亮燈行為。
         /// 依藥碼查詢對應的層架與庫存位置，
@@ -3459,19 +3459,26 @@ namespace HIS_WebApi._API_藥品資料
                 string color = GetVal("color") ?? "";
                 string lightness = GetVal("lightness") ?? "";
 
-                if (ServerName.StringIsEmpty() || ServerType.StringIsEmpty()|| code.StringIsEmpty() || color.StringIsEmpty()
+                if (ServerName.StringIsEmpty() || ServerType.StringIsEmpty() || code.StringIsEmpty() || color.StringIsEmpty()
                     || lightness.StringIsEmpty())
                 {
                     returnData.Code = -200;
                     returnData.Result = $"returnData.ValueAry錯誤";
                     return returnData.JsonSerializationt();
                 }
-               List<sys_serverSettingClass> serverSettingClasses = await HIS_WebApi.Method.GetListServerAsync(ServerName, ServerType);
+                List<sys_serverSettingClass> serverSettingClasses = await HIS_WebApi.Method.GetListServerAsync(ServerName, ServerType);
                 if (serverSettingClasses.Count == 0)
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料! ServerName:{ServerName} ServerType:{ServerType}";
-                    return returnData.JsonSerializationt();
+                    returnData returnData_server = await new ServerSettingController().get_name();
+                    if (returnData_server == null || returnData_server.Code != 200)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"找無Server資料! ServerName:{ServerName} ServerType:{ServerType}";
+                        return returnData.JsonSerializationt();
+                    }
+                    serverSettingClasses = returnData_server.Data.ObjToClass<List<sys_serverSettingClass>>();
+                    serverSettingClasses = serverSettingClasses.Where(x => x.類別 == ServerType).ToList();
+                    serverSettingClasses = await HIS_WebApi.Method.GetListServerAsync(serverSettingClasses[0].設備名稱, ServerType);
                 }
                 sys_serverSettingClass serverSetting_儲位資料 = serverSettingClasses.FirstOrDefault(s => s.內容 == "儲位資料");
                 if (serverSetting_儲位資料 == null)
@@ -3531,13 +3538,13 @@ namespace HIS_WebApi._API_藥品資料
                             list_light.Add(command);
                             list_light.Add(command_1);
                         }
-                    }                  
+                    }
                 }
                 List<Task<returnData>> tasks = new List<Task<returnData>>();
                 foreach (var light_ in list_light)
                 {
                     List<string> command_arry = light_.Split(";").ToList();
-                    Task<returnData> task  = deviceApiClass.light_action(API_server, command_arry);
+                    Task<returnData> task = deviceApiClass.light_action(API_server, command_arry);
                     tasks.Add(task);
                 }
                 returnData[] results = await Task.WhenAll(tasks);
@@ -3653,7 +3660,7 @@ namespace HIS_WebApi._API_藥品資料
             string result = await get_section_by_IP(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
-       
+
         private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
         {
             foreach (var stock in medMap_stockClasses)
