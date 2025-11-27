@@ -3831,7 +3831,7 @@ namespace HIS_WebApi
 
                 UNION ALL
                 (
-                    -- 第二優先：完整比對料號（只有當第一組沒資料時才有效）
+                    -- 第二優先：完整比對料號（只有當前面沒資料時才有效）
                     SELECT * FROM {DB}.medicine_page_cloud
                     WHERE 料號 = '{BarCode}'
                       AND NOT EXISTS (
@@ -3841,39 +3841,64 @@ namespace HIS_WebApi
 
                 UNION ALL
                 (
-                    -- 第二優先：完整比對藥品條碼2（只有當第一組沒資料時才有效）
+                    -- 第三優先：如果沒有完整比對 & BarCode 長度 > 4，改用藥品碼 / 料號前綴模糊搜尋
                     SELECT * FROM {DB}.medicine_page_cloud
-                    WHERE 藥品條碼2 like'%""{BarCode}""%' 
+                    WHERE CHAR_LENGTH('{BarCode}') > 4
+                      AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
                       AND NOT EXISTS (
                           SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
                       )
                       AND NOT EXISTS (
                           SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
                       )
-
                 )
 
                 UNION ALL
                 (
-                    -- 第三優先：模糊搜尋（但只有前兩者都沒有時才有效）
+                    -- 第四優先：完整比對藥品條碼2（只有當前面都沒資料時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 藥品條碼2 LIKE '%""{BarCode}""%' 
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE CHAR_LENGTH('{BarCode}') > 4
+                            AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
+                      )
+                )
+
+                UNION ALL
+                (
+                    -- 第五優先：模糊搜尋藥品名稱 / 學名（前面都沒資料才有效）
                     SELECT * FROM {DB}.medicine_page_cloud
                     WHERE (
                          藥品名稱 LIKE '%{BarCode}%'
                          OR 藥品學名 LIKE '%{BarCode}%'
                     )
-                    AND NOT EXISTS (
+                      AND NOT EXISTS (
                           SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
-                    )
-                    AND NOT EXISTS (
+                      )
+                      AND NOT EXISTS (
                           SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
-                    )
-                    AND NOT EXISTS (
-                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品條碼2 like'%""{BarCode}""%' 
-                    )
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE CHAR_LENGTH('{BarCode}') > 4
+                            AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE 藥品條碼2 LIKE '%""{BarCode}""%'
+                      )
                 )
 
-                LIMIT 10;  -- 依需求可調整
+                LIMIT 10;
                 ";
+
                 List<object[]> value = await sQLControl_med.WriteCommandAsync(command);
                 //if (value.Count == 0)
                 //{

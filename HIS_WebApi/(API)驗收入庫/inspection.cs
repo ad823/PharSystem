@@ -1333,8 +1333,8 @@ namespace HIS_WebApi
                 {
                     inspectionClass.content content_buff = content_sql.FirstOrDefault(x => x.Master_GUID == item.Master_GUID);
                     if (content_buff != null) continue;
-                    item.GUID = Guid.NewGuid().ToString();
-                    item.新增時間 = now;
+                    if (item.GUID.StringIsEmpty()) item.GUID = Guid.NewGuid().ToString();
+                    if (item.新增時間.StringIsEmpty()) item.新增時間 = now;
                     if (item.交貨時間.StringIsEmpty()) item.交貨時間 = now;
                     if (item.訂單時間.StringIsEmpty()) item.訂單時間 = now;
                     content_add.Add(item);
@@ -1918,6 +1918,7 @@ namespace HIS_WebApi
             SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
             if (returnData.Data == null)
             {
+              
                 returnData.Code = -5;
                 returnData.Result = $"Data資料長度錯誤!";
                 return returnData.JsonSerializationt();

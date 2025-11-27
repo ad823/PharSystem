@@ -302,7 +302,7 @@ namespace HIS_WebApi
                         form.Add(fileContent, "file", file.FileName);
 
                         // 發送 POST 請求
-                        var response = await client.PostAsync("http://127.0.0.1:3100/barcode", form);
+                        var response = await client.PostAsync("http://192.168.5.205:3100/barcode", form);
                         response.EnsureSuccessStatusCode();
 
                         // 讀取回應內容
@@ -338,7 +338,7 @@ namespace HIS_WebApi
                         form.Add(fileContent, "file", file.FileName);
 
                         // 發送 POST 請求
-                        var response = await client.PostAsync("http://127.0.0.1:3100/pill_counter", form);
+                        var response = await client.PostAsync("http://192.168.5.205:3100/pill_counter", form);
                         response.EnsureSuccessStatusCode();
 
                         // 讀取回應內容

@@ -261,6 +261,81 @@ namespace HIS_WebApi
             }
         }
         /// <summary>
+        /// 根據 GUID 獲取更新申領單。
+        /// </summary>
+        /// <remarks>
+        ///  --------------------------------------------<br/> 
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///        [materialRequisitionClass Ary]
+        ///     }
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]</returns>
+        [Route("delete_by_guid")]
+        [HttpPost]
+        public string delete_by_guid([FromBody] returnData returnData)
+        {
+
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_by_guid";
+            try
+            {
+                GET_init(returnData);
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料!";
+                    return returnData.JsonSerializationt();
+                }
+                string Server = sys_serverSettingClasses[0].Server;
+                string DB = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry資料錯誤";
+                    return returnData.JsonSerializationt();
+                }
+                Table table = new Table(new enum_materialRequisition());
+                SQLControl sQLControl_materialRequisition = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
+
+                string GUID = returnData.ValueAry[0];
+                List<object[]> list_value = sQLControl_materialRequisition.GetRowsByDefult(null, (int)enum_materialRequisition.GUID, GUID);
+                if (list_value.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此GUID({GUID})資料";
+                    return returnData.JsonSerializationt();
+                }
+
+
+
+                sQLControl_materialRequisition.DeleteExtra(null, list_value);
+                returnData.Code = 200;
+                returnData.Result = $"刪除申領資料共<{list_value.Count}>筆";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Data = list_value;
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+
+            }
+        }
+        /// <summary>
         /// 根據申領時間獲取申領單
         /// </summary>
         /// <remarks>

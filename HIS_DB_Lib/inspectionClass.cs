@@ -513,13 +513,18 @@ namespace HIS_DB_Lib
         }
         static public returnData returnData_sub_content_add(string API_Server, inspectionClass.sub_content sub_Content)
         {
+            List<inspectionClass.sub_content> sub_Contents = new List<sub_content>(){ sub_Content };
+            return sub_content_add(API_Server, sub_Contents);
+        }
+        static public returnData sub_content_add(string API_Server, List<inspectionClass.sub_content> sub_Content)
+        {
             string url = $"{API_Server}/api/inspection/sub_content_add";
             returnData returnData = new returnData();
             returnData.Data = sub_Content;
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
             returnData returnData_out = json_out.JsonDeserializet<returnData>();
-            
+
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
 
             //inspectionClass.content content = returnData_out.Data.ObjToClass<inspectionClass.content>();
