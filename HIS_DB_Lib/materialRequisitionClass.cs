@@ -616,11 +616,19 @@ namespace HIS_DB_Lib
         /// </returns>
         static public byte[] normal_voice_download(string API_Server)
         {
-            string url = $"{API_Server}/api/materialRequisition/normal_voice_download";
-            returnData returnData = new returnData();
-            string json_in = returnData.JsonSerializationt();
-            byte[] bytes = Basic.Net.WEBApiPostDownloaFile(url, json_in);
-            return bytes;
+            try
+            {
+                string url = $"{API_Server}/api/materialRequisition/normal_voice_download";
+                returnData returnData = new returnData();
+                string json_in = returnData.JsonSerializationt();
+                byte[] bytes = Basic.Net.WEBApiPostDownloaFile(url, json_in);
+                return bytes;
+            }
+            catch
+            {
+                return null;
+            }
+       
         }
         /// <summary>
         /// 上傳緊急申領語音檔案 (根據檔案路徑)
@@ -662,11 +670,19 @@ namespace HIS_DB_Lib
         /// </returns>
         static public byte[] emg_voice_download(string API_Server)
         {
-            string url = $"{API_Server}/api/materialRequisition/emg_voice_download";
-            returnData returnData = new returnData();
-            string json_in = returnData.JsonSerializationt();
-            byte[] bytes = Basic.Net.WEBApiPostDownloaFile(url, json_in);
-            return bytes;
+            try
+            {
+                string url = $"{API_Server}/api/materialRequisition/emg_voice_download";
+                returnData returnData = new returnData();
+                string json_in = returnData.JsonSerializationt();
+                byte[] bytes = Basic.Net.WEBApiPostDownloaFile(url, json_in);
+                return bytes;
+            }
+            catch
+            {
+                return null;
+            }
+          
         }
         /// <summary>
         /// 比較藥碼的比較器。

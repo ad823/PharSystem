@@ -40,9 +40,24 @@
     <Reference Include="Basic">
       <HintPath>..\0.DLL\Basic.dll</HintPath>
     </Reference>
+    <Reference Include="DPCtlUruNet, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\DPCtlUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DPUruNet, Version=1.0.0.1, Culture=neutral, PublicKeyToken=7f32ef930fec5e5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\DPUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="FingerprintLib, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\FingerprintLib.dll</HintPath>
+    </Reference>
     <Reference Include="FontAwesome.Sharp, Version=5.15.4.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\FontAwesome.Sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="FpMatchLib">
+      <HintPath>..\0.DLL\FpMatchLib.dll</HintPath>
     </Reference>
     <Reference Include="HIS_DB_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -135,6 +150,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.Designer.cs">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fingerMatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +188,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

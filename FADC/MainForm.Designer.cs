@@ -4943,9 +4943,9 @@
             this.plC_Button_人員資料_指紋註冊.AutoResetState = false;
             this.plC_Button_人員資料_指紋註冊.BackgroundColor = System.Drawing.Color.White;
             this.plC_Button_人員資料_指紋註冊.Bool = false;
-            this.plC_Button_人員資料_指紋註冊.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_Button_人員資料_指紋註冊.BorderColor = System.Drawing.Color.Black;
             this.plC_Button_人員資料_指紋註冊.BorderRadius = 10;
-            this.plC_Button_人員資料_指紋註冊.BorderSize = 0;
+            this.plC_Button_人員資料_指紋註冊.BorderSize = 1;
             this.plC_Button_人員資料_指紋註冊.but_press = false;
             this.plC_Button_人員資料_指紋註冊.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
             this.plC_Button_人員資料_指紋註冊.DisenableColor = System.Drawing.Color.Gray;
@@ -4972,7 +4972,7 @@
             this.plC_Button_人員資料_指紋註冊.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_Button_人員資料_指紋註冊.ShadowSize = 3;
             this.plC_Button_人員資料_指紋註冊.ShowLoadingForm = false;
-            this.plC_Button_人員資料_指紋註冊.Size = new System.Drawing.Size(106, 105);
+            this.plC_Button_人員資料_指紋註冊.Size = new System.Drawing.Size(92, 109);
             this.plC_Button_人員資料_指紋註冊.State = false;
             this.plC_Button_人員資料_指紋註冊.TabIndex = 136;
             this.plC_Button_人員資料_指紋註冊.Text = "指紋註冊";
@@ -4980,7 +4980,6 @@
             this.plC_Button_人員資料_指紋註冊.TextHeight = 30;
             this.plC_Button_人員資料_指紋註冊.Texts = "指紋註冊";
             this.plC_Button_人員資料_指紋註冊.UseVisualStyleBackColor = false;
-            this.plC_Button_人員資料_指紋註冊.Visible = false;
             this.plC_Button_人員資料_指紋註冊.字型鎖住 = false;
             this.plC_Button_人員資料_指紋註冊.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
             this.plC_Button_人員資料_指紋註冊.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
@@ -4997,9 +4996,9 @@
             this.plC_RJ_Button_人員資料_RFID註冊.AutoResetState = false;
             this.plC_RJ_Button_人員資料_RFID註冊.BackgroundColor = System.Drawing.Color.White;
             this.plC_RJ_Button_人員資料_RFID註冊.Bool = false;
-            this.plC_RJ_Button_人員資料_RFID註冊.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_人員資料_RFID註冊.BorderColor = System.Drawing.Color.Black;
             this.plC_RJ_Button_人員資料_RFID註冊.BorderRadius = 10;
-            this.plC_RJ_Button_人員資料_RFID註冊.BorderSize = 0;
+            this.plC_RJ_Button_人員資料_RFID註冊.BorderSize = 1;
             this.plC_RJ_Button_人員資料_RFID註冊.but_press = false;
             this.plC_RJ_Button_人員資料_RFID註冊.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
             this.plC_RJ_Button_人員資料_RFID註冊.DisenableColor = System.Drawing.Color.Gray;
@@ -5026,7 +5025,7 @@
             this.plC_RJ_Button_人員資料_RFID註冊.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_Button_人員資料_RFID註冊.ShadowSize = 3;
             this.plC_RJ_Button_人員資料_RFID註冊.ShowLoadingForm = false;
-            this.plC_RJ_Button_人員資料_RFID註冊.Size = new System.Drawing.Size(106, 105);
+            this.plC_RJ_Button_人員資料_RFID註冊.Size = new System.Drawing.Size(92, 109);
             this.plC_RJ_Button_人員資料_RFID註冊.State = false;
             this.plC_RJ_Button_人員資料_RFID註冊.TabIndex = 138;
             this.plC_RJ_Button_人員資料_RFID註冊.Text = "RFID註冊";
@@ -5050,9 +5049,9 @@
             this.plC_RJ_Button_人員資料_條碼註冊.AutoResetState = false;
             this.plC_RJ_Button_人員資料_條碼註冊.BackgroundColor = System.Drawing.Color.White;
             this.plC_RJ_Button_人員資料_條碼註冊.Bool = false;
-            this.plC_RJ_Button_人員資料_條碼註冊.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_人員資料_條碼註冊.BorderColor = System.Drawing.Color.Black;
             this.plC_RJ_Button_人員資料_條碼註冊.BorderRadius = 10;
-            this.plC_RJ_Button_人員資料_條碼註冊.BorderSize = 0;
+            this.plC_RJ_Button_人員資料_條碼註冊.BorderSize = 1;
             this.plC_RJ_Button_人員資料_條碼註冊.but_press = false;
             this.plC_RJ_Button_人員資料_條碼註冊.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
             this.plC_RJ_Button_人員資料_條碼註冊.DisenableColor = System.Drawing.Color.Gray;
@@ -5079,7 +5078,7 @@
             this.plC_RJ_Button_人員資料_條碼註冊.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_Button_人員資料_條碼註冊.ShadowSize = 3;
             this.plC_RJ_Button_人員資料_條碼註冊.ShowLoadingForm = false;
-            this.plC_RJ_Button_人員資料_條碼註冊.Size = new System.Drawing.Size(106, 105);
+            this.plC_RJ_Button_人員資料_條碼註冊.Size = new System.Drawing.Size(92, 109);
             this.plC_RJ_Button_人員資料_條碼註冊.State = false;
             this.plC_RJ_Button_人員資料_條碼註冊.TabIndex = 137;
             this.plC_RJ_Button_人員資料_條碼註冊.Text = "條碼註冊";

@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basic;
 using MyUI;
 using MinasA6DLL;
-using System.Text.Json;
-using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using FpMatchLib;
+
 
 [assembly: AssemblyVersion("1.0.0.0000")]
 [assembly: AssemblyFileVersion("1.0.0.0000")]
@@ -244,8 +241,9 @@ namespace FADC
             LoadDBConfig();
             ApiServerSetting();
 
-         
+  
             Program_Scanner_RS232_Init();
+            Program_fingerMatch_Init();
             Program_人員資料_Init();
             Program_後台登入_Init();
             Program_交易紀錄查詢_Init();   

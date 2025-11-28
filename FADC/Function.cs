@@ -147,6 +147,7 @@ namespace FADC
             value[(int)enum_交易記錄查詢資料.病歷號] = 病歷號;
             value[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
             value[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
+            value[(int)enum_交易記錄查詢資料.領用時間] = DateTime.MinValue.ToDateTimeString();
             value[(int)enum_交易記錄查詢資料.備註] = 備註;
 
             transactionsClass.add(API_Server, value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>(), ServerName, ServerType);

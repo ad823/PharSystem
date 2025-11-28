@@ -14,6 +14,7 @@ using System.Diagnostics;//記得取用 FileVersionInfo繼承
 using System.Reflection;//記得取用 Assembly繼承
 using MySQL_Login;
 using HIS_DB_Lib;
+using FingerprintLib;
 
 namespace FADC
 {
@@ -111,10 +112,14 @@ namespace FADC
 
             this.plC_RJ_Button_人員資料_RFID註冊.MouseDownEvent += PlC_RJ_Button_人員資料_RFID註冊_MouseDownEvent;
             this.plC_RJ_Button_人員資料_條碼註冊.MouseDownEvent += PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent;
+            this.plC_Button_人員資料_指紋註冊.MouseDownEvent += PlC_Button_人員資料_指紋註冊_MouseDownEvent;
             this.plC_UI_Init.Add_Method(this.sub_Program_人員資料);
 
 
         }
+
+     
+
         bool flag_人員資料_權限管理_頁面更新 = false;
         private void sub_Program_人員資料()
         {
@@ -534,7 +539,7 @@ namespace FADC
         {
             this.Function_人員資料_清除內容();
         }
-
+   
 
         private void PlC_RJ_Button_人員資料_資料查詢_一維條碼_MouseDownEvent(MouseEventArgs mevent)
         {
@@ -677,6 +682,36 @@ namespace FADC
             finally
             {
             }
+        }
+        private void PlC_Button_人員資料_指紋註冊_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                Dialog_AlarmForm dialog_AlarmForm;
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                if (list_value.Count == 0)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                Dialog_HID指紋註冊 dialog_HID指紋註冊 = new Dialog_HID指紋註冊();
+                if (dialog_HID指紋註冊.ShowDialog() != DialogResult.Yes) return;
+
+                string fmd = dialog_HID指紋註冊.resultFmd.ToBase64();
+
+                list_value[0][(int)enum_人員資料.指紋辨識] = fmd;
+                this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
+                this.sqL_DataGridView_人員資料.ReplaceExtra(list_value[0], true);
+                dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
+                dialog_AlarmForm.ShowDialog();
+
+
+            }
+            finally
+            {
+            }
+          
         }
     }
      
