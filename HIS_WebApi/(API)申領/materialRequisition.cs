@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Drawing;
-using System.Text;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
-using MyOffice;
-using NPOI;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
-using MyUI;
+﻿using Basic;
+using DrawingClass;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using HIS_WebApi._API_系統;
+using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using MyUI;
+using NPOI;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using DrawingClass;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace HIS_WebApi
 {
@@ -127,7 +128,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]</returns>
         [Route("add")]
         [HttpPost]
-        public string POST_add([FromBody] returnData returnData)
+        public async Task<string> POST_add([FromBody] returnData returnData)
         {
 
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -157,7 +158,13 @@ namespace HIS_WebApi
                     returnData.Result = $"傳入資料異常!";
                     return returnData.JsonSerializationt();
                 }
-
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_request_build", "申領建單預代核撥量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
                 for (int i = 0; i < materialRequisitionClasses.Count; i++)
                 {
                     if (materialRequisitionClasses[i].藥碼.StringIsEmpty()) continue;
@@ -172,6 +179,7 @@ namespace HIS_WebApi
                     materialRequisitionClasses[i].實撥庫結存 = "";
                     materialRequisitionClasses[i].狀態 = "等待過帳";
                     materialRequisitionClasses_buf.Add(materialRequisitionClasses[i]);
+                    if (settingPages.設定值 == true.ToString()) materialRequisitionClasses[i].實撥量 = materialRequisitionClasses[i].申領量;
                 }
                 List<object[]> list_value = materialRequisitionClasses_buf.ClassToSQL<materialRequisitionClass, enum_materialRequisition>();
                 Table table = new Table(new enum_materialRequisition());
