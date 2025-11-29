@@ -1700,7 +1700,94 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
+        /// <summary>
+        /// 取得所有「尚未被 stock 使用」的空層架資料（medMap_shelf）。
+        /// </summary>
+        /// <remarks>
+        /// <b>JSON 傳入範例</b><br/>
+        /// <code>
+        /// {
+        ///   "Method": "get_empty_shlef",
+        ///   "ValueAry": [
+        ///     "ServerName=A7",
+        ///     "ServerType=調劑台"
+        ///   ],
+        ///   "Data": {}
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">
+        /// 請求物件，需包含以下欄位：
+        /// <list type="bullet">
+        ///   <item>
+        ///     <description><c>ServerName</c>：伺服器名稱，例如 A7</description>
+        ///   </item>
+        ///   <item>
+        ///     <description><c>ServerType</c>：伺服器類型，例如 調劑台 / 藥庫</description>
+        ///   </item>
+        /// </list>
+        /// </param>
+        /// <returns>
+        /// 回傳 returnData JSON 字串：<br/>
+        /// <b>Code = 200</b>：成功，Data 為 List&lt;medMap_shelfClass&gt;<br/>
+        /// <b>Code = -200</b>：失敗（參數錯誤或查無資料）
+        /// </returns>
+        [HttpPost("get_empty_shlef")]
+        public async Task<string> get_empty_shlef([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                string GetVal(string key) =>
+                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                    ?.Split('=')[1];
+                string ServerName = GetVal("ServerName") ?? "";
+                string ServerType = GetVal("ServerType") ?? "";
+                if (ServerName.StringIsEmpty() || ServerType.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry錯誤";
+                    return returnData.JsonSerializationt();
+                }
+                List<sys_serverSettingClass> serverSettingClasses = await HIS_WebApi.Method.GetListServerAsync(ServerName, ServerType);
+                sys_serverSettingClass server_shelf = serverSettingClasses.MyFind(ServerName, ServerType, "一般資料").FirstOrDefault();
+                sys_serverSettingClass server_stock = serverSettingClasses.MyFind(ServerName, ServerType, "儲位資料").FirstOrDefault();
+                
 
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo(ServerName, ServerType, "儲位資料");
+                SQLControl sQLControl_shlef = new SQLControl(server_shelf.Server, server_shelf.DBName, "medMap_shelf", server_shelf.User, server_shelf.Password, (uint)server_shelf.Port.StringToInt32(), SSLMode);
+                SQLControl sQLControl_stock = new SQLControl(server_stock.Server, server_stock.DBName, "stock", server_stock.User, server_stock.Password, (uint)server_stock.Port.StringToInt32(), SSLMode);
+                string command = @$"SELECT *
+                FROM {sQLControl_shlef.Database}.{sQLControl_shlef.TableName} s
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM {sQLControl_stock.Database}.{sQLControl_stock.TableName} st
+                    WHERE st.shlef_GUID = s.GUID
+                );";
+                List<object[]> objects = await sQLControl_shlef.WriteCommandAsync(command);
+                if (objects.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"資料不存在!";
+                    return returnData.JsonSerializationt();
+                }
+                List<medMap_shelfClass> medMap_shelfClass = objects.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                
+                returnData.Code = 200;
+                returnData.Data = medMap_shelfClass;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_empty_shlef";
+                returnData.Result = $"取得層架資料成功!";
+                return returnData.JsonSerializationt(true);
+
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         /// 以Master_GUID取得層架資料
         /// </summary>
@@ -3293,60 +3380,7 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
-        [HttpPost("get_available_shelves")]
-        public async Task<string> get_available_shelves([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            try
-            {
-                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"returnData.ValueAry須為[\"GUID\"]";
-                    return returnData.JsonSerializationt();
-                }
-                returnData returnData_sub_content = await new inspectionController().sub_contents_get_by_GUID(returnData.ValueAry[0]);
-                if (returnData_sub_content == null || returnData_sub_content.Code != 200)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"sub_content取得失敗";
-                    return returnData.JsonSerializationt();
-                }
-                List<inspectionClass.sub_content> sub_contents = returnData_sub_content.Data.ObjToClass<List<inspectionClass.sub_content>>();
-                if (sub_contents == null || sub_contents.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"sub_content取得失敗";
-                    return returnData.JsonSerializationt();
-                }
-                string code = sub_contents[0].藥品碼;
-                returnData returnData_medSize = await new medSize().get_by_code(code);
-                if (returnData_medSize == null || returnData_medSize.Code != 200)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"medsize取得失敗";
-                    return returnData.JsonSerializationt();
-                }
-                List<medSizeClass> medSizeClasses = returnData_medSize.Data.ObjToClass<List<medSizeClass>>();
-                if (medSizeClasses == null || medSizeClasses.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"medsize取得失敗";
-                    return returnData.JsonSerializationt();
-                }
-
-
-
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception ex)
-            {
-                returnData.Code = -200;
-                returnData.Result = ex.Message;
-                return returnData.JsonSerializationt(true);
-            }
-
-        }
+        
 
         /// <summary>
         /// 控制指定藥碼對應裝置之亮燈行為。
