@@ -80,11 +80,6 @@ namespace HIS_DB_Lib
 
         static public Table init(string API_Server, string serverName, string serverType)
         {
-            return init_full(API_Server, serverName, serverType).table;
-        }
-        static public (int code, string result, Table table) init_full(string API_Server, string serverName, string serverType)
-        {
-
             string url = $"{API_Server}/api/storageMedBoxIOConfig/init";
             returnData returnData = new returnData();
             returnData.ServerName = serverName;
@@ -93,20 +88,10 @@ namespace HIS_DB_Lib
 
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
-            returnData returnData_out = json_out.JsonDeserializet<returnData>();
-            if (returnData_out == null)
-            {
-                return (0, "returnData_out == null", null);
-            }
-            if (returnData_out.Data == null)
-            {
-                return (0, "returnData_out.Data == null", null);
-            }
-            Console.WriteLine($"{returnData_out}");
-            Table out_value = returnData_out.Data.ObjToClass<Table>();
-
-            return (returnData_out.Code, returnData_out.Result, out_value);
+            Table table = json_out.JsonDeserializet<Table>();
+            return table;
         }
+     
 
         static public List<storageMedBoxIOConfigClass> get_all(string API_Server, string serverName, string serverType)
         {
@@ -145,7 +130,7 @@ namespace HIS_DB_Lib
         static public (int code, string result, List<storageMedBoxIOConfigClass> storageMedBoxes) add_update_full(string API_Server, string serverName, string serverType, List<storageMedBoxIOConfigClass> storageMedBoxes)
         {
 
-            string url = $"{API_Server}/api/storageMedBoxIOConfig/add_update_full";
+            string url = $"{API_Server}/api/storageMedBoxIOConfig/add_update";
             returnData returnData = new returnData();
             returnData.ServerName = serverName;
             returnData.ServerType = serverType;

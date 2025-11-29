@@ -1,5 +1,6 @@
 ﻿using Basic;
 using H_Pannel_lib;
+using HIS_DB_Lib;
 using MinasA6DLL;
 using MyUI;
 using System;
@@ -37,7 +38,7 @@ namespace FADC
         public static PLC_Device PLC_Device_第五層位置 = new PLC_Device("D4015");
         public static PLC_Device PLC_Device_頂層位置 = new PLC_Device("D4020");
 
-        public static PLC_Device PLC_Device_Z軸馬達歸零 = new PLC_Device("S100");
+        public static PLC_Device PLC_Device_Z軸馬達復歸 = new PLC_Device("S100");
         public static PLC_Device PLC_Device_移動到第一層位置 = new PLC_Device("S1000");
         public static PLC_Device PLC_Device_移動到第二層位置 = new PLC_Device("S1001");
         public static PLC_Device PLC_Device_移動到第三層位置 = new PLC_Device("S1002");
@@ -60,8 +61,7 @@ namespace FADC
         public static string IP_出貨一次 = "";
 
         public static PLC_Device PLC_Device_Z軸馬達激磁 = new PLC_Device("Y10");
-        public static PLC_Device PLC_Device_Z軸馬達激磁狀態 = new PLC_Device("Y11");
-        public static PLC_Device PLC_Device_Z軸馬達Alarm狀態 = new PLC_Device("Y11");
+        public static PLC_Device PLC_Device_Z軸馬達原點狀態 = new PLC_Device("Y11");
         public static PLC_Device PLC_Device_Z軸Alarm = new PLC_Device("Y12");
         public static PLC_Device PLC_Device_Z軸Ready = new PLC_Device("Y13");
 
@@ -95,7 +95,7 @@ namespace FADC
             }
 
             plC_RJ_Button_Z軸激磁.MouseDownEvent += PlC_RJ_Button_Z軸激磁_MouseDownEvent;
-            plC_RJ_Button_Z軸回零.MouseDownEvent += PlC_RJ_Button_Z軸回零_MouseDownEvent;
+            plC_RJ_Button_Z軸復歸.MouseDownEvent += PlC_RJ_Button_Z軸復歸_MouseDownEvent;
             plC_RJ_Button_Z軸Alarm.MouseDownEvent += PlC_RJ_Button_Z軸Alarm_MouseDownEvent;
 
             plC_RJ_Button_Z軸停止.MouseDownEvent += PlC_RJ_Button_Z軸停止_MouseDownEvent;
@@ -124,7 +124,7 @@ namespace FADC
 
                     PLC_Device_Z軸馬達位置.Value = pos;
                     PLC_Device_Z軸馬達激磁.Bool = servo;
-                    PLC_Device_Z軸馬達激磁狀態.Bool = limit.Home;
+                    PLC_Device_Z軸馬達原點狀態.Bool = limit.Home;
                     PLC_Device_Z軸Alarm.Bool = alarm;
                     PLC_Device_Z軸Ready.Bool = ready;
                     //lbPositive.BackColor = limit.Positive ? Color.Red : Color.Green;
@@ -201,6 +201,7 @@ namespace FADC
         #region PLC_出貨一次
         MyTimerBasic MyTimerBasic_出貨一次_檢查延遲 = new MyTimerBasic();
         Task Task_出貨一次;
+        int MotorCnt = 0;
         MyTimer MyTimer_出貨一次_結束延遲 = new MyTimer();
         int cnt_Program_出貨一次 = 65534;
         void sub_Program_出貨一次()
@@ -238,7 +239,49 @@ namespace FADC
         }
         void cnt_Program_出貨一次_初始化(ref int cnt)
         {
-            if (IP_出貨一次.Check_IP_Adress() == false) return;
+            IP_出貨一次 = this.rJ_TextBox_出貨一次_IP.Text;
+            if (IP_出貨一次.Check_IP_Adress() == false)
+            {
+                Console.WriteLine($"[出貨一次] - IP字元異常,{IP_出貨一次}");
+                cnt = 65500;
+                return;
+            }
+            List<storageMedBoxIOConfigClass> storageMedBoxIOConfigClasses = storageMedBoxIOConfigClass.get_all(API_Server, ServerName, ServerType);
+            storageMedBoxIOConfigClass storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP_出貨一次).FirstOrDefault();
+            if (storageMedBoxIO == null)
+            {
+                Console.WriteLine($"[出貨一次] - 伺服器找無此IP({IP_出貨一次})資料");
+                cnt = 65500;
+                return;
+            }
+            string udp_json = storageUI_EPD_266.GetUDPJsonString(IP_出貨一次);
+            if(udp_json.StringIsEmpty())
+            {
+                Console.WriteLine($"[出貨一次] - UdpJson異常");
+                cnt = 65500;
+                return;
+            }
+            UDP_READ_basic uDP_READ_Basic = udp_json.JsonDeserializet<UDP_READ_basic>();
+
+            MotorCnt = uDP_READ_Basic.FADC_motorCnt;
+            if (uDP_READ_Basic == null)
+            {
+                Console.WriteLine($"[出貨一次] - UdpJson異常");
+                cnt = 65500;
+                return;
+            }
+            if (storageMedBoxIO.出料位置Y.StringIsInt32() == false)
+            {
+                Console.WriteLine($"[出貨一次] - 出料位置({storageMedBoxIO.出料位置Y})參數錯誤");
+                cnt = 65500;
+                return;
+            }
+            int temp = storageMedBoxIO.出料位置Y.StringToInt32();
+
+            if (temp < 0) temp = 1;
+            if (temp > 5) temp = 5;
+
+            PLC_Device_出貨一次_Z軸層數.Value = temp;
             if (PLC_Device_Z軸Ready.Bool)
             {
                 cnt++;
@@ -248,6 +291,7 @@ namespace FADC
         {
             if(PLC_Device_輸送帶後退.Bool == false)
             {
+                Console.WriteLine($"[出貨一次] - 等待輸送帶後退");
                 PLC_Device_輸送帶後退.Bool = true;
                 cnt++;
            }      
@@ -256,15 +300,18 @@ namespace FADC
         {
             if (PLC_Device_輸送帶後退.Bool == false)
             {
+                Console.WriteLine($"[出貨一次] - 等待輸送帶完成");
                 cnt++;
             }
         }
         void cnt_Program_出貨一次_等待Z軸移動到層數(ref int cnt)
         {
+          
             if (PLC_Device_出貨一次_Z軸層數.Value == 1)
             {
                 if(PLC_Device_移動到第一層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - 等待Z軸移動到層數({PLC_Device_出貨一次_Z軸層數.Value})");
                     PLC_Device_移動到第一層位置.Bool = true;
                     cnt++;
                 }
@@ -273,6 +320,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第二層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - 等待Z軸移動到層數({PLC_Device_出貨一次_Z軸層數.Value})");
                     PLC_Device_移動到第二層位置.Bool = true;
                     cnt++;
                 }
@@ -281,6 +329,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第三層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - 等待Z軸移動到層數({PLC_Device_出貨一次_Z軸層數.Value})");
                     PLC_Device_移動到第三層位置.Bool = true;
                     cnt++;
                 }
@@ -289,6 +338,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第四層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - 等待Z軸移動到層數({PLC_Device_出貨一次_Z軸層數.Value})");
                     PLC_Device_移動到第四層位置.Bool = true;
                     cnt++;
                 }
@@ -297,6 +347,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第五層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - 等待Z軸移動到層數({PLC_Device_出貨一次_Z軸層數.Value})");
                     PLC_Device_移動到第五層位置.Bool = true;
                     cnt++;
                 }
@@ -304,10 +355,12 @@ namespace FADC
         }
         void cnt_Program_出貨一次_Z軸移動到層數完成(ref int cnt)
         {
+
             if (PLC_Device_出貨一次_Z軸層數.Value == 1)
             {
                 if (PLC_Device_移動到第一層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - Z軸移動到層數完成({PLC_Device_出貨一次_Z軸層數.Value})");
                     cnt++;
                 }
             }
@@ -315,6 +368,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第二層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - Z軸移動到層數完成({PLC_Device_出貨一次_Z軸層數.Value})");
                     cnt++;
                 }
             }
@@ -322,6 +376,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第三層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - Z軸移動到層數完成({PLC_Device_出貨一次_Z軸層數.Value})");
                     cnt++;
                 }
             }
@@ -329,6 +384,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第四層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - Z軸移動到層數完成({PLC_Device_出貨一次_Z軸層數.Value})");
                     cnt++;
                 }
             }
@@ -336,6 +392,7 @@ namespace FADC
             {
                 if (PLC_Device_移動到第五層位置.Bool == false)
                 {
+                    Console.WriteLine($"[出貨一次] - Z軸移動到層數完成({PLC_Device_出貨一次_Z軸層數.Value})");
                     cnt++;
                 }
             }
@@ -344,6 +401,7 @@ namespace FADC
         {
             if (PLC_Device_輸送帶前進.Bool == false)
             {
+                Console.WriteLine($"[出貨一次] - 等待輸送帶前進");
                 PLC_Device_輸送帶前進.Bool = true;
                 cnt++;
             }
@@ -352,12 +410,18 @@ namespace FADC
         {
             if (PLC_Device_輸送帶前進.Bool == false)
             {
+                Console.WriteLine($"[出貨一次] - 輸送帶前進完成");
                 cnt++;
             }
         }
-
-
-
+        void cnt_Program_出貨一次_取得馬達參數(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                Console.WriteLine($"[出貨一次] - 輸送帶前進完成");
+                cnt++;
+            }
+        }
 
 
         #endregion
@@ -1134,7 +1198,7 @@ namespace FADC
         {
             flag_servoStop = true;
         }
-        private void PlC_RJ_Button_Z軸回零_MouseDownEvent(MouseEventArgs mevent)
+        private void PlC_RJ_Button_Z軸復歸_MouseDownEvent(MouseEventArgs mevent)
         {
             flag_servoHome = true;
         }

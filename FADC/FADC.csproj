@@ -175,6 +175,9 @@
     <Compile Include="Program_Scanner_RS232.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Program_storageMedBoxIOConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program_交易紀錄查詢.cs">
       <SubType>Form</SubType>
     </Compile>
