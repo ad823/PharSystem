@@ -22,13 +22,19 @@ namespace 中藥調劑系統
         private bool flag_EXCELL_SCALE_IS_READY = false;
         private void Program_RS232_EXCELL_SCALE_Init()
         {
-            //ExcelScaleLib.Communication.ConsoleWrite = true;
+            Console.WriteLine($"{DateTime.Now.ToDateTimeString()} Program_RS232_EXCELL_SCALE_Init");
+            ExcelScaleLib.Communication.ConsoleWrite = false;
             Task.Run(new Action(delegate
             {
                 int retry = 0;
-                while(true)
+                while (true)
                 {
-                    if (myConfigClass.SCALE_COMPort.StringIsEmpty()) break;
+                    if (myConfigClass.SCALE_COMPort.StringIsEmpty())
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} myConfigClass.SCALE_COMPort.StringIsEmpty() break");
+                        break;
+                    }
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} ExcelScaleLib_Port.Init({myConfigClass.SCALE_COMPort}, 9600) ...");
                     if (ExcelScaleLib_Port.Init(myConfigClass.SCALE_COMPort, 9600))
                     {
                         myThread_RS232_EXCELL_SCALE_Init = new MyThread();
@@ -47,10 +53,10 @@ namespace 中藥調劑系統
                         break;
                     }
                 }
-          
+
 
             }));
-  
+
         }
         private void EXCELL_set_sub_current_weight()
         {
