@@ -1918,10 +1918,10 @@ namespace HIS_WebApi
                 //string 開方日期 = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
                 string start = input_orderClass[count_ - 1].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
                 string end = input_orderClass[0].開方日期.StringToDateTime().ToString("yyyy-MM-dd");
-
+                string 病歷號 = input_orderClass[0].病歷號;
 
                 command = $"SELECT * FROM {DB}.order_list " +
-                    $"WHERE PRI_KEY like '{PRI_KEY}%' " +
+                    $"WHERE 病歷號 = '{病歷號}' " +
                     $" AND 開方日期 >= '{start} 00:00:00'" +
                     $" AND 開方日期 <= '{end} 23:59:59';";
 
