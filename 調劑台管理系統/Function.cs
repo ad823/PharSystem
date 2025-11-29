@@ -364,8 +364,12 @@ namespace 調劑台管理系統
                 }
                 if(flag_重複刷取 > 0)
                 {
-                    Task.Run(new Action(delegate { $"有{flag_重複刷取}筆藥單重複刷取".PlayGooleVoiceAsync(Main_Form.API_Server); }));
-                    if (Main_Form.PLC_Device_藥單重複刷取開檢查.Bool) return;
+                   
+                    if (Main_Form.PLC_Device_藥單重複刷取開檢查.Bool)
+                    {
+                        Task.Run(new Action(delegate { $"有{flag_重複刷取}筆藥單重複刷取".PlayGooleVoiceAsync(Main_Form.API_Server); }));
+                        return;
+                    }
                 }
             });
             List<Task> taskList = new List<Task>();

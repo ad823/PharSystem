@@ -22,8 +22,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.04191")]
-[assembly: AssemblyFileVersion("1.0.25.04191")]
+[assembly: AssemblyVersion("1.0.25.11291")]
+[assembly: AssemblyFileVersion("1.0.25.11291")]
 namespace 智能藥庫系統
 {
     public partial class Main_Form : Form
