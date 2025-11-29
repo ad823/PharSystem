@@ -39,11 +39,11 @@ namespace FADC
         public static PLC_Device PLC_Device_頂層位置 = new PLC_Device("D4020");
 
         public static PLC_Device PLC_Device_Z軸馬達復歸 = new PLC_Device("S100");
-        public static PLC_Device PLC_Device_移動到第一層位置 = new PLC_Device("S1000");
-        public static PLC_Device PLC_Device_移動到第二層位置 = new PLC_Device("S1001");
-        public static PLC_Device PLC_Device_移動到第三層位置 = new PLC_Device("S1002");
-        public static PLC_Device PLC_Device_移動到第四層位置 = new PLC_Device("S1003");
-        public static PLC_Device PLC_Device_移動到第五層位置 = new PLC_Device("S1004");
+        public static PLC_Device PLC_Device_移動到第一層位置 = new PLC_Device("S1001");
+        public static PLC_Device PLC_Device_移動到第二層位置 = new PLC_Device("S1002");
+        public static PLC_Device PLC_Device_移動到第三層位置 = new PLC_Device("S1003");
+        public static PLC_Device PLC_Device_移動到第四層位置 = new PLC_Device("S1004");
+        public static PLC_Device PLC_Device_移動到第五層位置 = new PLC_Device("S1005");
         public static PLC_Device PLC_Device_移動到頂層位置 = new PLC_Device("S1010");
 
         public static PLC_Device PLC_Device_輸送帶正轉 = new PLC_Device("S2000");
@@ -202,6 +202,7 @@ namespace FADC
         MyTimerBasic MyTimerBasic_出貨一次_檢查延遲 = new MyTimerBasic();
         Task Task_出貨一次;
         int MotorCnt = 0;
+        int MotorDelayCnt = 0;
         MyTimer MyTimer_出貨一次_結束延遲 = new MyTimer();
         int cnt_Program_出貨一次 = 65534;
         void sub_Program_出貨一次()
@@ -216,8 +217,25 @@ namespace FADC
             if (cnt_Program_出貨一次 == 65535) cnt_Program_出貨一次 = 1;
             if (cnt_Program_出貨一次 == 1) cnt_Program_出貨一次_檢查按下(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 2) cnt_Program_出貨一次_初始化(ref cnt_Program_出貨一次);
-    
-            if (cnt_Program_出貨一次 == 5) cnt_Program_出貨一次 = 65500;
+            if (cnt_Program_出貨一次 == 3) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 4) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 5) cnt_Program_出貨一次_等待Z軸移動到層數(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 6) cnt_Program_出貨一次_Z軸移動到層數完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 7) cnt_Program_出貨一次_等待輸送帶前進(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 8) cnt_Program_出貨一次_輸送帶前進完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 9) cnt_Program_出貨一次_出料一次開始(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 10) cnt_Program_出貨一次_等待出料一次完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 11) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 12) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次_等待Z軸移動到頂層(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 14) cnt_Program_出貨一次_Z軸移動到頂層結束(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 15) cnt_Program_出貨一次_等待輸送帶前進(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 16) cnt_Program_出貨一次_輸送帶前進完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 17) cnt_Program_出貨一次_輸送帶正轉開始(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 18) cnt_Program_出貨一次_輸送帶正轉完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 19) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 20) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 21) cnt_Program_出貨一次 = 65500;
             if (cnt_Program_出貨一次 > 1) cnt_Program_出貨一次_檢查放開(ref cnt_Program_出貨一次);
 
             if (cnt_Program_出貨一次 == 65500)
@@ -225,6 +243,7 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_出貨一次_結束延遲.TickStop();
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
+                PLC_Device_Z軸移動到頂層.Bool = false;
                 PLC_Device_出貨一次.Bool = false;
                 cnt_Program_出貨一次 = 65535;
             }
@@ -263,7 +282,7 @@ namespace FADC
             }
             UDP_READ_basic uDP_READ_Basic = udp_json.JsonDeserializet<UDP_READ_basic>();
 
-            MotorCnt = uDP_READ_Basic.FADC_motorCnt;
+   
             if (uDP_READ_Basic == null)
             {
                 Console.WriteLine($"[出貨一次] - UdpJson異常");
@@ -276,6 +295,8 @@ namespace FADC
                 cnt = 65500;
                 return;
             }
+            MotorCnt = uDP_READ_Basic.FADC_motorCnt;
+            Console.WriteLine($"[出貨一次] - {IP_出貨一次} ,MotorCnt({MotorCnt})參數");
             int temp = storageMedBoxIO.出料位置Y.StringToInt32();
 
             if (temp < 0) temp = 1;
@@ -414,16 +435,65 @@ namespace FADC
                 cnt++;
             }
         }
-        void cnt_Program_出貨一次_取得馬達參數(ref int cnt)
+        void cnt_Program_出貨一次_出料一次開始(ref int cnt)
         {
-            if (PLC_Device_輸送帶前進.Bool == false)
+            PLC_Device_輸送帶反轉.Bool = true;
+            Console.WriteLine($"[出貨一次] - 出料一次開始");
+            this.storageUI_EPD_266.Set_ADCMotorTrigger(IP_出貨一次, 29000, 0);
+            cnt++;
+        }
+        void cnt_Program_出貨一次_等待出料一次完成(ref int cnt)
+        {
+            string udp_json = storageUI_EPD_266.GetUDPJsonString(IP_出貨一次);
+            UDP_READ_basic uDP_READ_Basic = udp_json.JsonDeserializet<UDP_READ_basic>();
+            if (uDP_READ_Basic != null)
             {
-                Console.WriteLine($"[出貨一次] - 輸送帶前進完成");
+                if(uDP_READ_Basic.FADC_motorCnt != MotorCnt)
+                {
+                    Console.WriteLine($"[出貨一次] - 出料一次完成");
+                    cnt++;
+                }
+        
+            }
+           
+        }
+
+
+        void cnt_Program_出貨一次_等待Z軸移動到頂層(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨一次] - 等待Z軸移動到頂層");
+                PLC_Device_Z軸移動到頂層.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨一次_Z軸移動到頂層結束(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨一次] - Z軸移動到頂層完成");
                 cnt++;
             }
         }
 
-
+        void cnt_Program_出貨一次_輸送帶正轉開始(ref int cnt)
+        {
+            if (PLC_Device_輸送帶正轉.Bool == false)
+            {
+                Console.WriteLine($"[出貨一次] - 輸送帶正轉開始");
+                PLC_Device_輸送帶正轉.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨一次_輸送帶正轉完成(ref int cnt)
+        {
+            if (PLC_Device_輸送帶正轉.Bool == false)
+            {
+                Console.WriteLine($"[出貨一次] - 輸送帶正轉完成");
+                cnt++;
+            }
+        }
         #endregion
 
         #region PLC_Z軸絕對位置移動
@@ -921,9 +991,8 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶正轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶正轉_結束延遲.StartTickTime(10000);
-                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶反轉, false);
                 PLC_Device_輸送帶正轉.Bool = false;
                 cnt_Program_輸送帶正轉 = 65535;
             }
@@ -945,9 +1014,8 @@ namespace FADC
         }
         void cnt_Program_輸送帶正轉_開始移動(ref int cnt)
         {
-            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, true);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, true);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶反轉, false);
             MyTimerBasic_輸送帶正轉_檢查延遲.TickStop();
             MyTimerBasic_輸送帶正轉_檢查延遲.StartTickTime(PLC_Device_輸送帶正轉時間.Value);
             cnt++;
@@ -994,9 +1062,8 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶反轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶反轉_結束延遲.StartTickTime(10000);
-                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶反轉, false);
                 PLC_Device_輸送帶反轉.Bool = false;
                 cnt_Program_輸送帶反轉 = 65535;
             }
@@ -1018,9 +1085,9 @@ namespace FADC
         }
         void cnt_Program_輸送帶反轉_開始移動(ref int cnt)
         {
-            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶正轉, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶反轉, true);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶反轉, true);
+
             MyTimerBasic_輸送帶反轉_檢查延遲.TickStop();
             MyTimerBasic_輸送帶反轉_檢查延遲.StartTickTime(PLC_Device_輸送帶反轉時間.Value);
             cnt++;
@@ -1067,9 +1134,8 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶前進_結束延遲.TickStop();
                 this.MyTimer_輸送帶前進_結束延遲.StartTickTime(10000);
-                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶後退, false);
                 PLC_Device_輸送帶前進.Bool = false;
                 cnt_Program_輸送帶前進 = 65535;
             }
@@ -1091,9 +1157,13 @@ namespace FADC
         }
         void cnt_Program_輸送帶前進_開始移動(ref int cnt)
         {
-            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, true);
+            if(PLC_Device_輸送帶前進時間.Value == 0)
+            {
+                cnt++;
+                return;
+            }
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, true);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶後退, false);
             MyTimerBasic_輸送帶前進_檢查延遲.TickStop();
             MyTimerBasic_輸送帶前進_檢查延遲.StartTickTime(PLC_Device_輸送帶前進時間.Value);
             cnt++;
@@ -1140,9 +1210,10 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶後退_結束延遲.TickStop();
                 this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
-                UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
-                H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, false);
+
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, false);
+                this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶後退, false);
+
                 PLC_Device_輸送帶後退.Bool = false;
                 cnt_Program_輸送帶後退 = 65535;
             }
@@ -1164,9 +1235,8 @@ namespace FADC
         }
         void cnt_Program_輸送帶後退_開始移動(ref int cnt)
         {
-            UDP_Class uDP_Class = new UDP_Class(myConfigClass.Board_IP, 29010, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶前進, false);
-            H_Pannel_lib.Communication.Set_OutputPIN(uDP_Class, myConfigClass.Board_IP, (int)enunm_InOutBoard.輸送帶後退, true);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, false);
+            this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶後退, true);
             MyTimerBasic_輸送帶後退_檢查延遲.TickStop();
             MyTimerBasic_輸送帶後退_檢查延遲.StartTickTime(PLC_Device_輸送帶後退時間.Value);
             cnt++;

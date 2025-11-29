@@ -16,7 +16,7 @@ namespace FADC
         [STAThread]
         static void Main()
         {
-            mutex = new System.Threading.Mutex(true, "OnlyRun");
+            mutex = new System.Threading.Mutex(true, "FADC");
             if (mutex.WaitOne(0, false))
             {
                 Application.EnableVisualStyles();
