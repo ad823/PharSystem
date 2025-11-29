@@ -1962,7 +1962,7 @@ namespace 癌症備藥機
         }
         void cnt_Program_出料一次_初始化(ref int cnt)
         {
-            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_CMPM_StorageConfig.IP, 出料一次_IP, false);
+            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_storageMedBoxIOConfig.IP, 出料一次_IP, false);
          
             if(list_馬達輸出索引表.Count == 0)
             {
@@ -1971,10 +1971,10 @@ namespace 癌症備藥機
                 Console.WriteLine($"[出料一次] : 找無({出料一次_IP})馬達輸出索引表 {DateTime.Now.ToDateTimeString()}");
                 return;
             }
-            出料一次_出料位置X = (int)(list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料位置X].StringToDouble() * 100);
-            出料一次_出料位置Z = (int)(list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料位置Y].StringToDouble() * 100);
-            出料一次_藥盒方位 = list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.藥盒方位].ObjectToString();
-            出料一次_區域 = list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.區域].ObjectToString();
+            出料一次_出料位置X = (int)(list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料位置X].StringToDouble() * 100);
+            出料一次_出料位置Z = (int)(list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料位置Y].StringToDouble() * 100);
+            出料一次_藥盒方位 = list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.藥盒方位].ObjectToString();
+            出料一次_區域 = list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.區域].ObjectToString();
             if (出料一次_區域 != "常溫" && 出料一次_區域 != "冷藏")
             {
                 Console.WriteLine($"[出料一次] : ({出料一次_IP})({出料一次_區域})區域資訊錯誤 {DateTime.Now.ToDateTimeString()}");
@@ -2347,14 +2347,14 @@ namespace 癌症備藥機
                 }
                 string IP = 出料一次_IP;
                 List<object[]> list_replace = new List<object[]>();
-                List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_CMPM_StorageConfig.IP, IP, false);
+                List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_storageMedBoxIOConfig.IP, IP, false);
                 if (list_馬達輸出索引表.Count == 0)
                 {
                     Console.WriteLine($"[出料一次] 找無馬達索引 {DateTime.Now.ToDateTimeString()}");
                     cnt = 65500;
                     return;
                 }
-                list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料馬達輸出觸發] = true.ToString();
+                list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發] = true.ToString();
                 list_replace.LockAdd(list_馬達輸出索引表[0]);
                 if (list_replace.Count > 0) sqL_DataGridView_馬達輸出索引表.SQL_ReplaceExtra(list_replace, false);
                 flag_OK = true;             
@@ -2411,14 +2411,14 @@ namespace 癌症備藥機
                     return;
                 }
                 string IP = 出料一次_IP;
-                List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_CMPM_StorageConfig.IP, IP, false);
+                List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_storageMedBoxIOConfig.IP, IP, false);
                 if (list_馬達輸出索引表.Count == 0)
                 {
                     Console.WriteLine($"[出料一次] 找無馬達索引 {DateTime.Now.ToDateTimeString()}");
                     cnt = 65500;
                     return;
                 }
-                string 馬達輸出 = list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料馬達輸出索引].ObjectToString();
+                string 馬達輸出 = list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料馬達輸出索引].ObjectToString();
                 PLC_Device pLC_Device = new PLC_Device($"{馬達輸出}");
                 if (pLC_Device.Bool == false)
                 {

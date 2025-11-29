@@ -138,7 +138,7 @@
     <Compile Include="shiftClass.cs" />
     <Compile Include="住院藥車\patientInfoClass.cs" />
     <Compile Include="儲位資訊\stockClass.cs" />
-    <Compile Include="化療排程\CMPM_StorageConfig_Class.cs" />
+    <Compile Include="化療排程\storageMedBoxIOConfigClass.cs" />
     <Compile Include="commonSpaceSetup.cs" />
     <Compile Include="computerConfigClass.cs" />
     <Compile Include="consumptionClass.cs" />

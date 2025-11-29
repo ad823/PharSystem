@@ -25,7 +25,7 @@ using DeltaMotor485;
 using H_Pannel_lib;
 namespace 癌症備藥機
 {
-    public enum enum_CMPM_StorageConfig_匯出
+    public enum enum_storageMedBoxIOConfig_匯出
     {
         IP,
         鎖控輸出索引,
@@ -38,7 +38,7 @@ namespace 癌症備藥機
         藥盒方位,
         區域,
     }
-    public enum enum_CMPM_StorageConfig_匯入
+    public enum enum_storageMedBoxIOConfig_匯入
     {
         IP,
         鎖控輸出索引,
@@ -72,17 +72,17 @@ namespace 癌症備藥機
             this.sqL_DataGridView_馬達輸出索引表.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_馬達輸出索引表.MouseDown += SqL_DataGridView_馬達輸出索引表_MouseDown;
             this.sqL_DataGridView_馬達輸出索引表.Init(table);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnVisible(false, new enum_CMPM_StorageConfig().GetEnumNames());
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.IP);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.鎖控輸出索引);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.鎖控輸入索引);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.出料馬達輸出索引);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.出料馬達輸入索引);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.出料馬達輸入延遲時間);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.出料位置X);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.出料位置Y);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.藥盒方位);
-            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_CMPM_StorageConfig.區域);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnVisible(false, new enum_storageMedBoxIOConfig().GetEnumNames());
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.IP);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.鎖控輸出索引);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.鎖控輸入索引);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.出料馬達輸出索引);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.出料馬達輸入索引);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.出料馬達輸入延遲時間);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.出料位置X);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.出料位置Y);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.藥盒方位);
+            this.sqL_DataGridView_馬達輸出索引表.Set_ColumnWidth(80, enum_storageMedBoxIOConfig.區域);
             this.sqL_DataGridView_馬達輸出索引表.DataGridRowsChangeRefEvent += SqL_DataGridView_馬達輸出索引表_DataGridRowsChangeRefEvent;
             _sqL_DataGridView_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表;
 
@@ -247,8 +247,8 @@ namespace 癌症備藥機
             List<object[]> list_value = this.sqL_DataGridView_馬達輸出索引表.SQL_GetAllRows(false);                      
             for (int i = 0; i < list_value.Count; i++)
             {
-                string IP = list_value[i][(int)enum_CMPM_StorageConfig.IP].ObjectToString();
-                string 馬達輸出 = list_value[i][(int)enum_CMPM_StorageConfig.出料馬達輸出索引].ObjectToString();
+                string IP = list_value[i][(int)enum_storageMedBoxIOConfig.IP].ObjectToString();
+                string 馬達輸出 = list_value[i][(int)enum_storageMedBoxIOConfig.出料馬達輸出索引].ObjectToString();
                 Storage storage = List_EPD266_本地資料.SortByIP(IP);
                 if (storage == null) continue;
                 bool flag_output = storageUI_EPD_266.Get_OutputPIN(storage);
@@ -263,18 +263,18 @@ namespace 癌症備藥機
             List<object[]> list_replace = new List<object[]>();
             for (int i = 0; i < list_value.Count; i++)
             {
-                string IP = list_value[i][(int)enum_CMPM_StorageConfig.IP].ObjectToString();
-                string 出料馬達輸出觸發 = list_value[i][(int)enum_CMPM_StorageConfig.出料馬達輸出觸發].ObjectToString();
+                string IP = list_value[i][(int)enum_storageMedBoxIOConfig.IP].ObjectToString();
+                string 出料馬達輸出觸發 = list_value[i][(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發].ObjectToString();
                 if (出料馬達輸出觸發 != true.ToString()) continue;
                 Storage storage = List_EPD266_本地資料.SortByIP(IP);
-                int ms = list_value[0][(int)enum_CMPM_StorageConfig.出料馬達輸入延遲時間].StringToInt32();
+                int ms = list_value[0][(int)enum_storageMedBoxIOConfig.出料馬達輸入延遲時間].StringToInt32();
                 if (ms < 0) ms = 0;
                 tasks.Add(Task.Run(new Action(delegate
                 {
                     storageUI_EPD_266.Set_ADCMotorTrigger(storage, ms);
                     Console.WriteLine($"[出料馬達輸出] {storage.IP} ({storage.Code}){storage.Name} {DateTime.Now.ToDateTimeString()}");
                 })));
-                list_value[i][(int)enum_CMPM_StorageConfig.出料馬達輸出觸發] = false.ToString();
+                list_value[i][(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發] = false.ToString();
                 list_replace.LockAdd(list_value[i]);
             }
             Task.WhenAll(tasks).Wait();
@@ -297,8 +297,8 @@ namespace 癌症備藥機
                 if (this.saveFileDialog_SaveExcel.ShowDialog() != DialogResult.OK) return;
                 List<object[]> list_value = this.sqL_DataGridView_馬達輸出索引表.SQL_GetAllRows(false);
                 list_value.Sort(new ICP_馬達輸出索引表());
-                DataTable dataTable = list_value.ToDataTable(new enum_CMPM_StorageConfig());
-                dataTable = dataTable.ReorderTable(new enum_CMPM_StorageConfig_匯出());
+                DataTable dataTable = list_value.ToDataTable(new enum_storageMedBoxIOConfig());
+                dataTable = dataTable.ReorderTable(new enum_storageMedBoxIOConfig_匯出());
 
                 dataTable.NPOI_SaveFile(this.saveFileDialog_SaveExcel.FileName);
 
@@ -320,42 +320,42 @@ namespace 癌症備藥機
                 List<object[]> list_馬達輸出索引表_replace = new List<object[]>();
                 for (int i = 0; i < list_匯入資料.Count; i++)
                 {
-                    string IP = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.IP].ObjectToString();
-                    list_馬達輸出索引表_buf = list_馬達輸出索引表.GetRows((int)enum_CMPM_StorageConfig.IP, IP);
+                    string IP = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.IP].ObjectToString();
+                    list_馬達輸出索引表_buf = list_馬達輸出索引表.GetRows((int)enum_storageMedBoxIOConfig.IP, IP);
                     if(list_馬達輸出索引表_buf.Count == 0)
                     {
-                        object[] value = new object[new enum_CMPM_StorageConfig().GetLength()];
-                        value[(int)enum_CMPM_StorageConfig.GUID] = Guid.NewGuid().ToString();
-                        value[(int)enum_CMPM_StorageConfig.IP] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.IP].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料位置X] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料位置X].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料位置Y] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料位置Y].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸入延遲時間] = "100";
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸入狀態] = "False";
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸入索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料馬達輸入索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸出索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料馬達輸出索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸出觸發] = "False";
-                        value[(int)enum_CMPM_StorageConfig.藥盒方位] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.藥盒方位].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸入狀態] = "False";
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸入索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.鎖控輸入索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸出索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.鎖控輸出索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸出觸發] = "False";
-                        value[(int)enum_CMPM_StorageConfig.區域] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.區域].ObjectToString();
+                        object[] value = new object[new enum_storageMedBoxIOConfig().GetLength()];
+                        value[(int)enum_storageMedBoxIOConfig.GUID] = Guid.NewGuid().ToString();
+                        value[(int)enum_storageMedBoxIOConfig.IP] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.IP].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料位置X] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料位置X].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料位置Y] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料位置Y].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸入延遲時間] = "100";
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸入狀態] = "False";
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸入索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料馬達輸入索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸出索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料馬達輸出索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發] = "False";
+                        value[(int)enum_storageMedBoxIOConfig.藥盒方位] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.藥盒方位].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸入狀態] = "False";
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸入索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.鎖控輸入索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸出索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.鎖控輸出索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸出觸發] = "False";
+                        value[(int)enum_storageMedBoxIOConfig.區域] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.區域].ObjectToString();
 
                         list_馬達輸出索引表_add.Add(value);
                     }
                     else
                     {
                         object[] value = list_馬達輸出索引表_buf[0];
-                        value[(int)enum_CMPM_StorageConfig.IP] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.IP].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料位置X] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料位置X].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料位置Y] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料位置Y].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸入索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料馬達輸入索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸出索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料馬達輸出索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.藥盒方位] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.藥盒方位].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸入索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.鎖控輸入索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.鎖控輸出索引] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.鎖控輸出索引].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.區域] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.區域].ObjectToString();
-                        value[(int)enum_CMPM_StorageConfig.出料馬達輸入延遲時間] = list_匯入資料[i][(int)enum_CMPM_StorageConfig_匯入.出料馬達輸入延遲時間].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.IP] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.IP].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料位置X] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料位置X].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料位置Y] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料位置Y].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸入索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料馬達輸入索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸出索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料馬達輸出索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.藥盒方位] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.藥盒方位].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸入索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.鎖控輸入索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.鎖控輸出索引] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.鎖控輸出索引].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.區域] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.區域].ObjectToString();
+                        value[(int)enum_storageMedBoxIOConfig.出料馬達輸入延遲時間] = list_匯入資料[i][(int)enum_storageMedBoxIOConfig_匯入.出料馬達輸入延遲時間].ObjectToString();
 
 
                         list_馬達輸出索引表_replace.Add(value);
@@ -411,7 +411,7 @@ namespace 癌症備藥機
                 {
  
                    
-                    int ms = list_面板_儲位列表[0][(int)enum_CMPM_StorageConfig.出料馬達輸入延遲時間].StringToInt32();
+                    int ms = list_面板_儲位列表[0][(int)enum_storageMedBoxIOConfig.出料馬達輸入延遲時間].StringToInt32();
                     if (!storageUI_EPD_266.Set_ADCMotorTrigger(storage, ms))
                     {
                         break;
@@ -461,12 +461,12 @@ namespace 癌症備藥機
 
             string IP = list_面板_儲位列表[0][(int)enum_面板_儲位列表.IP].ObjectToString();
    
-            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_CMPM_StorageConfig.IP, IP, false);
+            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_storageMedBoxIOConfig.IP, IP, false);
             if (list_馬達輸出索引表.Count == 0)
             {
                 Console.WriteLine($"找無馬達索引 {DateTime.Now.ToDateTimeString()}");
             }
-            list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料馬達輸出觸發] = true.ToString();
+            list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發] = true.ToString();
             list_replace.LockAdd(list_馬達輸出索引表[0]);
 
 
@@ -481,8 +481,8 @@ namespace 癌症備藥機
         {
             public int Compare(object[] x, object[] y)
             {
-                string IP_0 = x[(int)enum_CMPM_StorageConfig.IP].ObjectToString();
-                string IP_1 = y[(int)enum_CMPM_StorageConfig.IP].ObjectToString();
+                string IP_0 = x[(int)enum_storageMedBoxIOConfig.IP].ObjectToString();
+                string IP_1 = y[(int)enum_storageMedBoxIOConfig.IP].ObjectToString();
                 string[] IP_0_Array = IP_0.Split('.');
                 string[] IP_1_Array = IP_1.Split('.');
                 IP_0 = "";

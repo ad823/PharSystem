@@ -338,12 +338,12 @@ namespace 癌症備藥機
             LoadingForm.ShowLoadingForm();
             string IP = list_面板_儲位列表[0][(int)enum_面板_儲位列表.IP].ObjectToString();
             List<object[]> list_replace = new List<object[]>();
-            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_CMPM_StorageConfig.IP, IP, false);
+            List<object[]> list_馬達輸出索引表 = this.sqL_DataGridView_馬達輸出索引表.SQL_GetRows((int)enum_storageMedBoxIOConfig.IP, IP, false);
             if (list_馬達輸出索引表.Count == 0)
             {
                 Console.WriteLine($"找無馬達索引 {DateTime.Now.ToDateTimeString()}");
             }
-            list_馬達輸出索引表[0][(int)enum_CMPM_StorageConfig.出料馬達輸出觸發] = true.ToString();
+            list_馬達輸出索引表[0][(int)enum_storageMedBoxIOConfig.出料馬達輸出觸發] = true.ToString();
             list_replace.LockAdd(list_馬達輸出索引表[0]);
 
 

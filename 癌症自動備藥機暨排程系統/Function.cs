@@ -138,10 +138,10 @@ namespace 癌症備藥機
             for(int i = 0; i < list_value.Count; i++)
             {
                 string IP = list_value[i][(int)enum_儲位資訊.IP].ObjectToString();
-                list_馬達輸出索引表_buf = list_馬達輸出索引表.GetRows((int)enum_CMPM_StorageConfig.IP, IP);
+                list_馬達輸出索引表_buf = list_馬達輸出索引表.GetRows((int)enum_storageMedBoxIOConfig.IP, IP);
                 if(list_馬達輸出索引表_buf.Count > 0)
                 {
-                    string 區域 = list_馬達輸出索引表_buf[0][(int)enum_CMPM_StorageConfig.區域].ObjectToString();
+                    string 區域 = list_馬達輸出索引表_buf[0][(int)enum_storageMedBoxIOConfig.區域].ObjectToString();
                     if(區域 == "常溫")
                     {
                         list_value_常溫.Add(list_value[i]);
