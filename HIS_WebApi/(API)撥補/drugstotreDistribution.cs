@@ -227,7 +227,7 @@ namespace HIS_WebApi
         /// </remarks>
         /// <returns></returns>
         [HttpPost("delete_by_guid")]
-        public string delete_by_guid(returnData returnData)
+        public async Task<string> delete_by_guid(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -247,10 +247,10 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                string GUID = returnData.ValueAry[0];
+                string[] GUID = returnData.ValueAry[0].Split(";");
 
                 SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
-                List<object[]> list_drugstotreDistributions = sQLControl_drugstotreDistribution.GetRowsByLike(null, (int)enum_drugStotreDistribution.GUID, GUID);
+                List<object[]> list_drugstotreDistributions = await sQLControl_drugstotreDistribution.GetRowsByDefultAsync(null, (int)enum_drugStotreDistribution.GUID, GUID);
                 
                 if(list_drugstotreDistributions.Count() == 0)
                 {

@@ -3478,6 +3478,11 @@
             種類
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medMap_sectionClass.reverse">
+            <summary>
+            反向
+            </summary>
+        </member>
         <member name="T:HIS_DB_Lib.medMap_sub_sectionClass">
             <summary>
             藥品地圖_子容器

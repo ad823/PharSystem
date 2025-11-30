@@ -34,7 +34,8 @@ namespace HIS_DB_Lib
         device_type,
         位置,
         絕對位置,
-        type
+        type,
+        reverse
     }
     [EnumDescription("medMap_sub_section")]
     public enum enum_medMap_sub_section
@@ -226,6 +227,12 @@ namespace HIS_DB_Lib
         [Description("type,VARCHAR,30,NONE")]
         [JsonPropertyName("type")]
         public string type { get; set; }
+        /// <summary>
+        /// 反向
+        /// </summary>
+        [Description("VARCHAR,30,NONE")]
+        [JsonPropertyName("reverse")]
+        public string reverse { get; set; }
         public List<medMap_sub_sectionClass> sub_section { get; set; }
 
 

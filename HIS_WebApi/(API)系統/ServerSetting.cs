@@ -42,11 +42,12 @@ namespace HIS_WebApi
             try
             {
                 this.CheckCreatTable();
+                loadData();
                 SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl.GetAllRows(null);
 
                 List<sys_serverSettingClass> sys_serverSettingClasses = list_value.SQLToClass<sys_serverSettingClass, enum_sys_serverSetting>();
-
+                sys_serverSettingClasses = sys_serverSettingClasses.OrderBy(temp => temp.類別).ThenBy(temp => temp.設備名稱).ThenBy(temp => temp.內容).ToList();
                 returnData.Code = 200;
                 returnData.Data = sys_serverSettingClasses;
                 returnData.Result = $"取得伺服器設定成功!共<{sys_serverSettingClasses.Count}>筆";
@@ -234,6 +235,84 @@ namespace HIS_WebApi
                 }
                 sQLControl.AddRows(null, list_value_add);
                 sQLControl.UpdateByDefulteExtra(null, list_value_replace);
+
+                returnData.Code = 200;
+                returnData.Result = "新增伺服器資料成功!";
+                returnData.Data = sys_serverSettingClasses;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                return returnData.JsonSerializationt(true);
+            }
+
+        }
+        /// <summary>
+        /// 新增連線資訊
+        /// </summary>
+        /// <remarks>
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///        [List<sys_serverSettingClasses>]
+        ///     }
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+        [Route("add_no_update")]
+        [HttpPost]
+        public string add_no_update([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            try
+            {
+                returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
+            }
+            catch
+            {
+
+            }
+            returnData.Method = "add";
+            try
+            {
+                this.CheckCreatTable();
+                SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
+                List<object[]> list_value = sQLControl.GetAllRows(null);
+                List<object[]> list_value_returnData = new List<object[]>();
+                List<object[]> list_value_add = new List<object[]>();
+                List<object[]> list_value_buf = new List<object[]>();
+
+                List<sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
+                list_value_returnData = sys_serverSettingClasses.ClassToSQL<sys_serverSettingClass, enum_sys_serverSetting>();
+                for (int i = 0; i < list_value_returnData.Count; i++)
+                {
+                    string 名稱 = list_value_returnData[i][(int)enum_sys_serverSetting.設備名稱].ObjectToString();
+                    string 類別 = list_value_returnData[i][(int)enum_sys_serverSetting.類別].ObjectToString();
+                    string 程式類別 = list_value_returnData[i][(int)enum_sys_serverSetting.程式類別].ObjectToString();
+                    string 內容 = list_value_returnData[i][(int)enum_sys_serverSetting.內容].ObjectToString();
+
+                    list_value_buf = list_value.GetRows((int)enum_sys_serverSetting.設備名稱, 名稱);
+                    list_value_buf = list_value_buf.GetRows((int)enum_sys_serverSetting.類別, 類別);
+                    list_value_buf = list_value_buf.GetRows((int)enum_sys_serverSetting.程式類別, 程式類別);
+                    list_value_buf = list_value_buf.GetRows((int)enum_sys_serverSetting.內容, 內容);
+                    if (list_value_buf.Count == 0)
+                    {
+                        object[] value = list_value_returnData[i];
+                        value[(int)enum_sys_serverSetting.GUID] = Guid.NewGuid().ToString();
+                        list_value_add.Add(value);
+                    }
+                    
+                }
+                sQLControl.AddRows(null, list_value_add);
 
                 returnData.Code = 200;
                 returnData.Result = "新增伺服器資料成功!";
@@ -1039,6 +1118,12 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
 
+        }
+        private void loadData()
+        {
+            string data = Basic.MyFileStream.LoadFileAllText(@"./serverSetting.txt", "utf-8");
+            returnData returnData = data.JsonDeserializet<returnData>();
+            add_no_update(returnData);
         }
 
         private string CheckCreatTable()

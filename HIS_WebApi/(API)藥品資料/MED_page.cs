@@ -3800,6 +3800,62 @@ namespace HIS_WebApi
             }
 
         }
+        [Route("delete_by_guid")]
+        [HttpPost]
+        public async Task<string> delete_by_guid([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimerBasic myTimerBasic = new MyTimerBasic();
+                string TableName = returnData.TableName;
+                returnData.Method = "delete_by_guid";
+
+
+                List<medClass> medClasses = returnData.Data.ObjToListClass<medClass>();
+                if (medClasses == null)
+                {
+                    medClass medClass = returnData.Data.ObjToClass<medClass>();
+                    if (medClass != null)
+                    {
+                        medClasses = new List<medClass>();
+                        medClasses.Add(medClass);
+                    }
+                }
+                if (medClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "反序列化失敗!";
+                    return returnData.JsonSerializationt();
+                }
+                if (TableName == "medicine_page_cloud")
+                {
+
+                    (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
+                    string[] GUID = medClasses.Select(x => x.GUID).ToArray();
+                    SQLControl sQLControl_med = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+                    List<object[]> list_value = await sQLControl_med.GetRowsByDefultAsync(null,(int)enum_雲端藥檔.GUID, GUID);
+                    if (list_value.Count > 0) sQLControl_med.DeleteRowsAsync(null, list_value);
+
+                    
+                    returnData.Code = 200;
+                    returnData.Result = $"雲端藥檔更新成功!刪除<{list_value.Count}>筆";
+                    returnData.TimeTaken = myTimerBasic.ToString();
+                    return returnData.JsonSerializationt(true);
+                }
+                
+                returnData.Code = -200;
+                returnData.Result = "更新藥檔失敗!";
+
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+        }
 
         [Route("serch_by_BarCode")]
         [HttpPost]

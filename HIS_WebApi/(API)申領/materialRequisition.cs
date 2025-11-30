@@ -287,7 +287,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]</returns>
         [Route("delete_by_guid")]
         [HttpPost]
-        public string delete_by_guid([FromBody] returnData returnData)
+        public async Task<string> delete_by_guid([FromBody] returnData returnData)
         {
 
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -317,8 +317,8 @@ namespace HIS_WebApi
                 Table table = new Table(new enum_materialRequisition());
                 SQLControl sQLControl_materialRequisition = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
 
-                string GUID = returnData.ValueAry[0];
-                List<object[]> list_value = sQLControl_materialRequisition.GetRowsByDefult(null, (int)enum_materialRequisition.GUID, GUID);
+                string[] GUID = returnData.ValueAry[0].Split(";");
+                List<object[]> list_value = await sQLControl_materialRequisition.GetRowsByDefultAsync(null, (int)enum_materialRequisition.GUID, GUID);
                 if (list_value.Count == 0)
                 {
                     returnData.Code = -200;
