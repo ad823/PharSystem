@@ -3834,9 +3834,10 @@ namespace HIS_WebApi
                     string[] GUID = medClasses.Select(x => x.GUID).ToArray();
                     SQLControl sQLControl_med = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                     List<object[]> list_value = await sQLControl_med.GetRowsByDefultAsync(null,(int)enum_雲端藥檔.GUID, GUID);
+                    List<medClass> medClasses_buf = list_value.SQLToClass<medClass, enum_雲端藥檔>();
                     if (list_value.Count > 0) sQLControl_med.DeleteRowsAsync(null, list_value);
 
-                    
+                    returnData.Data = medClasses_buf;
                     returnData.Code = 200;
                     returnData.Result = $"雲端藥檔更新成功!刪除<{list_value.Count}>筆";
                     returnData.TimeTaken = myTimerBasic.ToString();

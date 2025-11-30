@@ -65,7 +65,12 @@ namespace HIS_WebApi
             try
             {
                 POST_init(returnData);
-
+                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
+                    return result;
+                }
                 string[] ary = barcode.Split(';');
                 drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
                 drugstotreDistributions.藥碼 = ary.Length >= 2 ? ary[0] : "";

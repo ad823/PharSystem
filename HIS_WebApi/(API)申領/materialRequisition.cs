@@ -86,7 +86,12 @@ namespace HIS_WebApi
             try
             {
                 GET_init(returnData);
-
+                string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_barcode");
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
+                    return result;
+                }
                 string[] ary = barcode.Split(';');
                 materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
                 materialRequisitionClass.藥碼 = ary.Length >= 2 ? ary[0] : "";

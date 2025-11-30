@@ -394,7 +394,7 @@ namespace HIS_WebApi.Anna_Logger
                 SQLControl sqlControl = new SQLControl(Server, DB, "logger", UserName, Password, Port, SSLMode);
 
                 string value = returnData.ValueAry[0];
-                List<object[]> row_values = sqlControl.GetRowsByDefult(null, (int)enum_logger.項目, value);
+                List<object[]> row_values = sqlControl.GetRowsByDefult(null, (int)enum_logger.事件, value);
                 if (row_values.Count == 0)
                 {
                     returnData.Code = -200;
