@@ -4024,6 +4024,69 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("pre_handover")]
+        public string pre_handover([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "med_cart/handover";
+            try
+            {
+                string API = Method.GetServerAPI("Main", "網頁", "API01");
+                List<settingPageClass> settingPageClasses = settingPageClass.get_all(API);
+                settingPageClass 切帳設定 = settingPageClasses.myFind("medicine_cart", "切帳時間");
+                if (IsAfterCutoff(切帳設定.設定值) == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"執行失敗：目前時間尚未超過{切帳設定.設定值}。";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[藥局, 護理站]";
+                    return returnData.JsonSerializationt(true);
+                }
+                string 藥局 = returnData.ValueAry[0];
+                string 護理站 = returnData.ValueAry[1];
+                (string Server, string DB, string UserName, string Password, uint Port) = Method.GetServerInfo("Main", "網頁", "VM端");
+
+                SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_med_carlist = new SQLControl(Server, DB, "med_carlist", UserName, Password, Port, SSLMode);
+                List<object[]> list_med_carlist = sQLControl_med_carlist.GetRowsByDefult(null, (int)enum_med_carList.藥局, 藥局);
+                List<medCarListClass> sql_medCarList = list_med_carlist.SQLToClass<medCarListClass, enum_med_carList>();
+
+                (string StartTime, string Endtime) = GetToday();
+                List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByBetween(null, (int)enum_med_cpoe.更新時間, StartTime, Endtime);
+                List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
+
+                List<medCpoeClass> medCpoeClasses = sql_medCpoe.Where(temp => temp.護理站 == 護理站 && temp.覆核狀態 == "").ToList();
+                medCarListClass medCarList = sql_medCarList.FirstOrDefault(temp => temp.護理站 == 護理站);
+                if (medCpoeClasses.Count != 0)
+                {
+                    int groupCount = medCpoeClasses
+                        .GroupBy(temp => temp.Master_GUID)
+                        .Count();
+                    medCarList.備註 = $"{藥局} {護理站} 尚有{groupCount}床覆核未完成";
+                    returnData.Code = 200;
+                    returnData.Data = medCarList;
+                    returnData.Result = $"未交車";
+                    return returnData.JsonSerializationt(true);
+                }
+                
+
+                returnData.Code = 200;
+                returnData.Data = medCpoeClasses;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Result = $"{藥局} {護理站} 可以交車";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         ///以藥局、護理站確認是否可交車
         /// </summary>

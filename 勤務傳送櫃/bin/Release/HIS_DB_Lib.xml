@@ -1117,6 +1117,11 @@
             藥品單位
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.stockClass.content">
+            <summary>
+            驗收項目
+            </summary>
+        </member>
         <member name="M:HIS_DB_Lib.deviceApiClass.combine_drawer_boxes(System.String,System.String,System.String,H_Pannel_lib.Drawer,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
             <summary>
             呼叫 API: 合併儲位 (CombineBoxes)
@@ -3473,6 +3478,11 @@
             種類
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medMap_sectionClass.reverse">
+            <summary>
+            反向
+            </summary>
+        </member>
         <member name="T:HIS_DB_Lib.medMap_sub_sectionClass">
             <summary>
             藥品地圖_子容器
@@ -4464,6 +4474,11 @@
         <member name="P:HIS_DB_Lib.drugStotreDistributionClass.撥發人員">
             <summary>
             撥發人員。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.drugStotreDistributionClass.撥發人員ID">
+            <summary>
+            撥發人員ID。
             </summary>
         </member>
         <member name="P:HIS_DB_Lib.drugStotreDistributionClass.撥發單位">

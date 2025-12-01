@@ -34,7 +34,8 @@ namespace HIS_DB_Lib
         device_type,
         位置,
         絕對位置,
-        type
+        type,
+        reverse
     }
     [EnumDescription("medMap_sub_section")]
     public enum enum_medMap_sub_section
@@ -226,6 +227,12 @@ namespace HIS_DB_Lib
         [Description("type,VARCHAR,30,NONE")]
         [JsonPropertyName("type")]
         public string type { get; set; }
+        /// <summary>
+        /// 反向
+        /// </summary>
+        [Description("VARCHAR,30,NONE")]
+        [JsonPropertyName("reverse")]
+        public string reverse { get; set; }
         public List<medMap_sub_sectionClass> sub_section { get; set; }
 
 
@@ -259,7 +266,7 @@ namespace HIS_DB_Lib
         }
         static public medMap_sectionClass get_section_by_IP(string API_Server, string IP, string serverName = "", string serverType = "")
         {
-            var (code, result, list) = get_section_by_IP_full(API_Server, serverName, serverType);
+            var (code, result, list) = get_section_by_IP_full(API_Server,IP , serverName, serverType);
             return list;
         }
         static public (int code, string result, medMap_sectionClass) get_section_by_IP_full(string API_Server, string IP, string serverName = "", string serverType = "", bool debug = false)

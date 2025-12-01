@@ -43,6 +43,16 @@ namespace HIS_WebApi
 
               return sys_ServerSetting;
           });
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
+
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+               return (Server, DB, UserName, Password, Port);
+           });
 
         /// <summary>
         /// 初始化資料庫
@@ -3790,21 +3800,74 @@ namespace HIS_WebApi
             }
 
         }
-
-        [Route("serch_by_BarCode")]
+        [Route("delete_by_guid")]
         [HttpPost]
-        public string serch_by_BarCode([FromBody] returnData returnData)
+        public async Task<string> delete_by_guid([FromBody] returnData returnData)
         {
             try
             {
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
+                string TableName = returnData.TableName;
+                returnData.Method = "delete_by_guid";
+
+
                 List<medClass> medClasses = returnData.Data.ObjToListClass<medClass>();
-                if (medClasses == null || medClasses.Count == 0)
+                if (medClasses == null)
                 {
-                    List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                    sys_serverSettingClass sys_serverSettingClasses_med = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料")[0];
-                    medClasses = Get_med_cloud(sys_serverSettingClasses_med);
+                    medClass medClass = returnData.Data.ObjToClass<medClass>();
+                    if (medClass != null)
+                    {
+                        medClasses = new List<medClass>();
+                        medClasses.Add(medClass);
+                    }
                 }
+                if (medClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "反序列化失敗!";
+                    return returnData.JsonSerializationt();
+                }
+                if (TableName == "medicine_page_cloud")
+                {
+
+                    (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
+                    string[] GUID = medClasses.Select(x => x.GUID).ToArray();
+                    SQLControl sQLControl_med = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+                    List<object[]> list_value = await sQLControl_med.GetRowsByDefultAsync(null,(int)enum_雲端藥檔.GUID, GUID);
+                    List<medClass> medClasses_buf = list_value.SQLToClass<medClass, enum_雲端藥檔>();
+                    if (list_value.Count > 0) sQLControl_med.DeleteRowsAsync(null, list_value);
+
+                    returnData.Data = medClasses_buf;
+                    returnData.Code = 200;
+                    returnData.Result = $"雲端藥檔更新成功!刪除<{list_value.Count}>筆";
+                    returnData.TimeTaken = myTimerBasic.ToString();
+                    return returnData.JsonSerializationt(true);
+                }
+                
+                returnData.Code = -200;
+                returnData.Result = "更新藥檔失敗!";
+
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+        }
+
+        [Route("serch_by_BarCode")]
+        [HttpPost]
+        public async Task<string> serch_by_BarCode([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimerBasic myTimerBasic = new MyTimerBasic();
+                
+                
+
 
                 returnData.Method = "serch_by_BarCode";
                 string BarCode = returnData.Value;
@@ -3814,30 +3877,95 @@ namespace HIS_WebApi
                     returnData.Result = "BarCode空白!";
                     return returnData.JsonSerializationt();
                 }
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl_med = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
+                string command = $@"
+                (
+                    -- 第一優先：完整比對藥品碼
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 藥品碼 = '{BarCode}'
+                )
 
-                List<medClass> medClasses_buf = new List<medClass>();
+                UNION ALL
+                (
+                    -- 第二優先：完整比對料號（只有當前面沒資料時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 料號 = '{BarCode}'
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                )
 
-                for (int i = 0; i < medClasses.Count; i++)
-                {
-                    if (BarCode == medClasses[i].藥品碼)
-                    {
-                        medClasses_buf.Add(medClasses[i]);
-                        continue;
-                    }
-                    if (BarCode == medClasses[i].料號)
-                    {
-                        medClasses_buf.Add(medClasses[i]);
-                        continue;
-                    }
-                    foreach (string barcode in medClasses[i].Barcode)
-                    {
-                        if (barcode == BarCode)
-                        {
-                            medClasses_buf.Add(medClasses[i]);
-                            continue;
-                        }
-                    }
-                }
+                UNION ALL
+                (
+                    -- 第三優先：如果沒有完整比對 & BarCode 長度 > 4，改用藥品碼 / 料號前綴模糊搜尋
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE CHAR_LENGTH('{BarCode}') > 4
+                      AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                      )
+                )
+
+                UNION ALL
+                (
+                    -- 第四優先：完整比對藥品條碼2（只有當前面都沒資料時才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE 藥品條碼2 LIKE '%""{BarCode}""%' 
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE CHAR_LENGTH('{BarCode}') > 4
+                            AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
+                      )
+                )
+
+                UNION ALL
+                (
+                    -- 第五優先：模糊搜尋藥品名稱 / 學名（前面都沒資料才有效）
+                    SELECT * FROM {DB}.medicine_page_cloud
+                    WHERE (
+                         藥品名稱 LIKE '%{BarCode}%'
+                         OR 藥品學名 LIKE '%{BarCode}%'
+                    )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud WHERE 料號 = '{BarCode}'
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE CHAR_LENGTH('{BarCode}') > 4
+                            AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM {DB}.medicine_page_cloud
+                          WHERE 藥品條碼2 LIKE '%""{BarCode}""%'
+                      )
+                )
+
+                LIMIT 10;
+                ";
+
+                List<object[]> value = await sQLControl_med.WriteCommandAsync(command);
+                //if (value.Count == 0)
+                //{
+                //    command = $"SELECT * FROM {DB}.medicine_page_cloud WHERE 藥品條碼2 like'%\"{BarCode}\"%' ";
+                //    value = await sQLControl_med.WriteCommandAsync(command);
+
+                //}
+                List<medClass> medClasses_buf = value.SQLToClass<medClass, enum_雲端藥檔>();
+
+
                 if (medClasses_buf.Count == 0)
                 {
                     returnData.Code = -200;

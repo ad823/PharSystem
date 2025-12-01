@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyOffice;
 using MySql.Data.MySqlClient;
 using MyUI;
+using OfficeOpenXml.Interfaces.Drawing.Text;
 using SQLUI;
 using System;
 using System.Collections.Generic;
@@ -35,16 +36,16 @@ namespace HIS_WebApi
     public class inspectionController : Controller
     {
         //private IHostingEnvironment _environment;
-        private static readonly Lazy<Task<(string Server, string DB, string UserName, string pas, uint Port)>>
-          serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
-          {
-              var (Server, DB, UserName, pas, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+           serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+           {
+               var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
-              if (string.IsNullOrWhiteSpace(pas))
-                  throw new SecurityException("Database pas cannot be null or empty (medUnit).");
+               if (string.IsNullOrWhiteSpace(Password))
+                   throw new SecurityException("Database password cannot be null or empty (medUnit).");
 
-              return (Server, DB, UserName, pas, Port);
-          });
+               return (Server, DB, UserName, Password, Port);
+           });
         //public inspectionController(IHostingEnvironment env)
         //{
         //    _environment = env;
@@ -636,7 +637,7 @@ namespace HIS_WebApi
 
                 SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, "inspection_content", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
-                
+
 
                 List<object[]> list_inspection_content = await sQLControl_inspection_content.GetRowsByDefultAsync(null, (int)enum_驗收內容.請購單號, 請購單號);
                 if (list_inspection_content.Count == 0)
@@ -655,7 +656,7 @@ namespace HIS_WebApi
                 string[] guids = contents.Select(x => x.GUID).ToArray();
                 List<object[]> list_inspection_sub_content = await sQLControl_inspection_sub_content.GetRowsByDefultAsync(null, (int)enum_驗收明細.Master_GUID, guids);
                 List<inspectionClass.sub_content> sub_Contents = list_inspection_sub_content.SQLToClass<inspectionClass.sub_content, enum_驗收明細>();
-                
+
                 if (sub_Contents.Count > 0)
                 {
                     foreach (var content in contents)
@@ -901,7 +902,7 @@ namespace HIS_WebApi
             try
             {
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
-                
+
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 string tableName_inspection_content = "inspection_content";
                 string tableName_inspection_sub_content = "inspection_sub_content";
@@ -1003,7 +1004,7 @@ namespace HIS_WebApi
                 object param_content = new { guidList = master_guid };
                 List<object[]> list_inspection_content = await sQLControl_inspection_content.WriteCommandAsync(command_content, param_content);
                 List<inspectionClass.content> contents = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
-                                         
+
 
                 if (sub_Contents.Count > 0)
                 {
@@ -1332,13 +1333,13 @@ namespace HIS_WebApi
                 {
                     inspectionClass.content content_buff = content_sql.FirstOrDefault(x => x.Master_GUID == item.Master_GUID);
                     if (content_buff != null) continue;
-                    item.GUID = Guid.NewGuid().ToString();
-                    item.新增時間 = now;
+                    if (item.GUID.StringIsEmpty()) item.GUID = Guid.NewGuid().ToString();
+                    if (item.新增時間.StringIsEmpty()) item.新增時間 = now;
                     if (item.交貨時間.StringIsEmpty()) item.交貨時間 = now;
                     if (item.訂單時間.StringIsEmpty()) item.訂單時間 = now;
                     content_add.Add(item);
                 }
-                
+
                 List<object[]> list_inspection_content_add = content_add.ClassToSQL<inspectionClass.content, enum_驗收內容>();
                 await sQLControl_inspection_content.AddRowsAsync(null, list_inspection_content_add);
 
@@ -1361,8 +1362,8 @@ namespace HIS_WebApi
 
             }
 
-            
-            
+
+
         }
         /// <summary>
         /// 更新驗收單
@@ -1917,6 +1918,7 @@ namespace HIS_WebApi
             SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
             if (returnData.Data == null)
             {
+              
                 returnData.Code = -5;
                 returnData.Result = $"Data資料長度錯誤!";
                 return returnData.JsonSerializationt();
@@ -1936,6 +1938,55 @@ namespace HIS_WebApi
             returnData.Method = "contents_delete_by_GUID";
 
             return returnData.JsonSerializationt();
+        }
+        [HttpPost("content_get_all")]
+        public async Task<string> content_get_all([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+
+            (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+            SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, "inspection_content", UserName, Password, Port, SSLMode);
+            SQLControl sQLControl_inspection_sub_content = new SQLControl(Server, DB, "inspection_sub_content", UserName, Password, Port, SSLMode);
+
+            
+
+            
+            List<object[]> list_inspection_content = await sQLControl_inspection_content.GetAllRowsAsync(null);
+            List<object[]> list_inspection_sub_content = await sQLControl_inspection_sub_content.GetAllRowsAsync(null);
+            List<inspectionClass.content> content = list_inspection_content.SQLToClass<inspectionClass.content, enum_驗收內容>();
+            List<inspectionClass.sub_content> sub_content = list_inspection_sub_content.SQLToClass<inspectionClass.sub_content, enum_驗收明細>();
+            Dictionary<string, List<inspectionClass.sub_content>> dic_sub_content = sub_content.ToDictByMasterGUID();
+            string[] code = content.Select(x => x.藥品碼).Distinct().ToArray();
+            returnData returnData_med_cloud = await new MED_pageController().get_med_clouds_by_codes(code);
+            if (returnData_med_cloud == null || returnData_med_cloud.Code != 200)
+            {
+                returnData.Result = "取得藥檔失敗";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                return returnData.JsonSerializationt(true);
+            }
+            List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
+            Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
+            foreach (var item in content)
+            {
+                
+                List<inspectionClass.sub_content> sub_content_buff = dic_sub_content.GetByMasterGUID(item.GUID);
+                item.Sub_content = sub_content_buff;
+                List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, item.藥品碼);
+                item.藥品名稱 = medClasses.Count != 0 ? medClasses[0].藥品名稱 : string.Empty;
+                item.中文名稱 = medClasses.Count != 0 ? medClasses[0].中文名稱 : string.Empty;
+                item.包裝單位 = medClasses.Count != 0 ? medClasses[0].包裝單位 : string.Empty;
+                item.Sub_content.Sort(new ICP_sub_content());
+            }
+
+
+            returnData.Data = content;
+            returnData.Code = 200;
+            returnData.TimeTaken = myTimerBasic.ToString();
+            returnData.Result = $"取得驗收內容成功!";
+            returnData.Method = "content_get_all";
+
+            return returnData.JsonSerializationt(true);           
         }
         /// <summary>
         /// 以GUID取得驗收單內驗收藥品
@@ -2235,7 +2286,7 @@ namespace HIS_WebApi
 
             return returnData.JsonSerializationt();
         }
-        
+
         /// <summary>
         /// 新增單筆驗收藥品中的明細
         /// </summary>
@@ -2741,7 +2792,7 @@ namespace HIS_WebApi
         public async Task<string> sub_contents_get_by_code([FromBody] returnData returnData)
         {
 
-            MyTimerBasic myTimerBasic   = new MyTimerBasic();
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
             {
                 if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
@@ -3029,7 +3080,7 @@ namespace HIS_WebApi
                         foreach (var sub in item.Sub_content)
                         {
                             value[(int)enum_驗收資料匯出.實收數量] = sub.實收數量;
-                            value[(int)enum_驗收資料匯出.效期] = sub.效期.Substring(0,10);
+                            value[(int)enum_驗收資料匯出.效期] = sub.效期.Substring(0, 10);
                             value[(int)enum_驗收資料匯出.批號] = sub.批號;
                             value[(int)enum_驗收資料匯出.收貨時間] = sub.操作時間;
                             value[(int)enum_驗收資料匯出.操作人] = sub.操作人;
@@ -3043,7 +3094,7 @@ namespace HIS_WebApi
                     }
 
 
-                    
+
 
                 }
                 System.Data.DataTable dataTable = objects.ToDataTable(new enum_驗收資料匯出());
@@ -3065,7 +3116,7 @@ namespace HIS_WebApi
         public async Task<ActionResult> download_purchaseExcel([FromBody] returnData returnData)
         {
             try
-            {               
+            {
                 if (returnData.Data == null)
                 {
                     returnData.Code = -200;
@@ -3287,18 +3338,18 @@ namespace HIS_WebApi
             string extension = Path.GetExtension(formFile.FileName); // 获取文件的扩展名
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-           
+
             List<medClass> medClasses = medClass.get_med_cloud("http://127.0.0.1:4433");
             List<medClass> medClasses_buf = new List<medClass>();
 
             string json = "";
-            List< inspectionClass.content > contents = new List<inspectionClass.content>();
+            List<inspectionClass.content> contents = new List<inspectionClass.content>();
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await formFile.CopyToAsync(memoryStream);
                 System.Data.DataTable dt = ExcelClass.NPOI_LoadFile(memoryStream.ToArray(), extension);
                 List<object[]> list_value = dt.DataTableToRowList();
-                
+
                 for (int i = 0; i < list_value.Count; i++)
                 {
                     inspectionClass.content content = new inspectionClass.content();
@@ -3458,7 +3509,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Result = "CT(操作人)不可為空";
                 return returnData.JsonSerializationt(true);
-            }            
+            }
 
             string extension = Path.GetExtension(formFile.FileName); // 获取文件的扩展名
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -3494,7 +3545,7 @@ namespace HIS_WebApi
             {
                 content = returnData_content.Data.ObjToClass<List<inspectionClass.content>>();
             }
-            if (content == null || content.Count == 0) 
+            if (content == null || content.Count == 0)
             {
                 returnData.Code = -200;
                 returnData.Result = $"查無此單號{string.Join(";", IC_SN)}";
@@ -3724,11 +3775,11 @@ namespace HIS_WebApi
             return result.JsonDeserializet<returnData>();
         }
         [ApiExplorerSettings(IgnoreApi = true)]
-        public  async Task<returnData> content_get_by_IC_SN(string IC_SN)
+        public async Task<returnData> content_get_by_IC_SN(string IC_SN)
         {
             returnData returnData = new returnData();
             returnData.ValueAry.Add(IC_SN);
-           
+
             string result = await content_get_by_IC_SN(returnData);
             return result.JsonDeserializet<returnData>();
         }
@@ -3756,6 +3807,6 @@ namespace HIS_WebApi
             returnData returnData = new returnData();
             string result = await content_get(returnData);
             return result.JsonDeserializet<returnData>();
-        }     
+        }
     }
 }

@@ -248,6 +248,22 @@
             "value_type": "text",
             "option_str": "",
             "value_db": "15"
+        },
+        {
+            "page_name": "med_allocate_build",
+            "cht": "撥補建單預代核撥量",
+            "name": "pre_build_actualIssuedQuantity",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "False"
+        },
+        {
+            "page_name": "med_request_build",
+            "cht": "申領建單預代核撥量",
+            "name": "pre_build_actualQuantity",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "False"
         }
 
         

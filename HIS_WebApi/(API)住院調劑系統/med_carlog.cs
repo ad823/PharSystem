@@ -38,6 +38,8 @@ namespace HIS_WebApi._API_住院調劑系統
 
                return (Server, DB, UserName, Password, Port);
            });
+        [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(200, "med_carlogClass物件", typeof(med_carlogClass))]
+
         [HttpPost("init")]
         public async Task<string> init([FromBody] returnData returnData)
         {

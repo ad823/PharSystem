@@ -20,7 +20,7 @@ namespace HIS_DB_Lib
         [Description("網址,VARCHAR,250,NONE")]
         網址,
         [Description("事件,VARCHAR,100,INDEX")]
-        項目,
+        事件,
         [Description("操作類型,VARCHAR,50,INDEX")]
         操作類型,
         [Description("操作者ID,VARCHAR,100,NONE")]
@@ -29,7 +29,7 @@ namespace HIS_DB_Lib
         操作者姓名,
         [Description("操作時間,DATETIME,50,INDEX")]
         操作時間,
-        [Description("回傳結果,VARCHAR,500,NONE")]
+        [Description("回傳結果,VARCHAR,1000,NONE")]
         回傳結果
     }
     public class loggerClass

@@ -1,26 +1,28 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
-using MyOffice;
-using NPOI;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
-using MyUI;
+﻿using Basic;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using HIS_WebApi._API_系統;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using MyUI;
+using NPOI;
+using NPOI.SS.Formula.Functions;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace HIS_WebApi
 {
@@ -51,6 +53,51 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugStotreDistributionClass))]
+        
+        [Route("barcode")]
+        [HttpPost]
+        public string barcode(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"barcode\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string barcode = returnData.ValueAry[0];
+                POST_init(returnData);
+                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
+                    return result;
+                }
+                string[] ary = barcode.Split(';');
+                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
+                drugstotreDistributions.藥碼 = ary.Length >= 2 ? ary[0] : "";
+                drugstotreDistributions.撥發量 = ary.Length >= 2 ? ary[1] : "";
+
+
+
+                returnData.Result = $"撥補資料讀取成功";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                returnData.Data = drugstotreDistributions;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
         [HttpPost]
         public string POST_init([FromBody] returnData returnData)
         {
@@ -104,7 +151,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("add")]
         [HttpPost]
-        public string POST_add(returnData returnData)
+        public async Task<string> POST_add(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -126,7 +173,13 @@ namespace HIS_WebApi
                 string UserName = sys_serverSettingClass.User;
                 string Password = sys_serverSettingClass.Password;
                 uint Port = (uint)sys_serverSettingClass.Port.StringToInt32();
-
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_allocate_build", "撥補建單預代核撥量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
                 List<drugStotreDistributionClass> drugstotreDistributions = returnData.Data.ObjToClass<List<drugStotreDistributionClass>>();
 
                 SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
@@ -138,7 +191,7 @@ namespace HIS_WebApi
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.報表生成時間] = DateTime.Now.ToDateTimeString_6();
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.撥發時間] = DateTime.MinValue.ToDateTimeString_6();
                     list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.簽收時間] = DateTime.MinValue.ToDateTimeString_6();
-
+                    if (settingPages.設定值 == true.ToString()) list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.實撥量] = list_drugstotreDistributions[i][(int)enum_drugStotreDistribution.撥發量];
                 }
 
                 sQLControl_drugstotreDistribution.AddRows(null, list_drugstotreDistributions);
@@ -184,7 +237,7 @@ namespace HIS_WebApi
         /// </remarks>
         /// <returns></returns>
         [HttpPost("delete_by_guid")]
-        public string delete_by_guid(returnData returnData)
+        public async Task<string> delete_by_guid(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -204,10 +257,10 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                string GUID = returnData.ValueAry[0];
+                string[] GUID = returnData.ValueAry[0].Split(";");
 
                 SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
-                List<object[]> list_drugstotreDistributions = sQLControl_drugstotreDistribution.GetRowsByLike(null, (int)enum_drugStotreDistribution.GUID, GUID);
+                List<object[]> list_drugstotreDistributions = await sQLControl_drugstotreDistribution.GetRowsByDefultAsync(null, (int)enum_drugStotreDistribution.GUID, GUID);
                 
                 if(list_drugstotreDistributions.Count() == 0)
                 {

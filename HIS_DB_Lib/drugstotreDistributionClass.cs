@@ -68,6 +68,8 @@ namespace HIS_DB_Lib
         目的庫結存,
         [Description("撥發人員,VARCHAR,50,NONE")]
         撥發人員,
+        [Description("撥發人員ID,VARCHAR,50,NONE")]
+        撥發人員ID,
         [Description("撥發單位,VARCHAR,100,NONE")]
         撥發單位,
         [Description("加入時間,DATETIME,20,INDEX")]
@@ -184,6 +186,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("issuer")]
         public string 撥發人員 { get; set; }
+        /// <summary>
+        /// 撥發人員ID。
+        /// </summary>
+        [JsonPropertyName("issuerID")]
+        public string 撥發人員ID { get; set; }
         /// <summary>
         /// 撥發單位。
         /// </summary>

@@ -1144,17 +1144,17 @@
     {
       "GUID": "caec1df9-1a5f-4f47-80a8-c31964ae6604",
       "index": "149",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "驗收管理鎖定權限",
+      "type": "網頁",
+      "group": "業庫",
       "description": ""
     },
     {
       "GUID": "15441cb3-30bf-445e-b2d3-29bf7c3e3aa0",
       "index": "150",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "藥檔編輯權限",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {

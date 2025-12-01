@@ -2516,9 +2516,9 @@ namespace HIS_WebApi
             System.Data.DataTable dataTable = list_value.ToDataTable(new enum_盤點單上傳_Excel());
             //SheetClass sheetClass = dataTable.NPOI_GetSheetClass(new int[] { (int)enum_盤點單上傳_Excel.理論值});
          
-            byte[] excelData = dataTable.NPOI_GetBytes(Excel_Type.xls);
+            byte[] excelData = dataTable.NPOI_GetBytes(Excel_Type.xlsx);
             Stream stream = new MemoryStream(excelData);
-            return await Task.FromResult(File(stream, xlsx_command, $"盤點上傳_header.xls"));
+            return await Task.FromResult(File(stream, xlsx_command, $"盤點上傳_header.xlsx"));
 
 
         }
@@ -2589,7 +2589,12 @@ namespace HIS_WebApi
                     returnData returnData_new_IC_SN = GET_new_IC_SN(returnData).JsonDeserializet<returnData>();
                     if(IC_NAME.StringIsEmpty())
                     {
-                        IC_NAME = Path.GetFileNameWithoutExtension(file.FileName);
+                       
+                        if (file != null) IC_NAME = Path.GetFileNameWithoutExtension(file.FileName);
+                        else IC_NAME = "未命名盤點單";
+                        
+                        
+
                     }
                     creat.盤點名稱 = IC_NAME;
                     creat.盤點單號 = returnData_new_IC_SN.Value;

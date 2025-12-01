@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Drawing;
-using System.Text;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
-using MyOffice;
-using NPOI;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
-using MyUI;
+﻿using Basic;
+using DrawingClass;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using HIS_WebApi._API_系統;
+using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using MyUI;
+using NPOI;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using DrawingClass;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace HIS_WebApi
 {
@@ -74,6 +75,50 @@ namespace HIS_WebApi
             }
 
         }
+        [Route("barcode")]
+        [HttpPost]
+        public string barcode(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"barcode\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string barcode = returnData.ValueAry[0];
+                GET_init(returnData);
+                string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_barcode");
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
+                    return result;
+                }
+                string[] ary = barcode.Split(';');
+                materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
+                materialRequisitionClass.藥碼 = ary.Length >= 2 ? ary[0] : "";
+                materialRequisitionClass.申領量 = ary.Length >= 2 ? ary[1] : "";
+
+
+
+                returnData.Result = $"申領資料讀取成功";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                returnData.Data = materialRequisitionClass;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         /// 新增資料
         /// </summary>
@@ -93,7 +138,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]</returns>
         [Route("add")]
         [HttpPost]
-        public string POST_add([FromBody] returnData returnData)
+        public async Task<string> POST_add([FromBody] returnData returnData)
         {
 
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -123,7 +168,13 @@ namespace HIS_WebApi
                     returnData.Result = $"傳入資料異常!";
                     return returnData.JsonSerializationt();
                 }
-
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_request_build", "申領建單預代核撥量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
                 for (int i = 0; i < materialRequisitionClasses.Count; i++)
                 {
                     if (materialRequisitionClasses[i].藥碼.StringIsEmpty()) continue;
@@ -138,6 +189,7 @@ namespace HIS_WebApi
                     materialRequisitionClasses[i].實撥庫結存 = "";
                     materialRequisitionClasses[i].狀態 = "等待過帳";
                     materialRequisitionClasses_buf.Add(materialRequisitionClasses[i]);
+                    if (settingPages.設定值 == true.ToString()) materialRequisitionClasses[i].實撥量 = materialRequisitionClasses[i].申領量;
                 }
                 List<object[]> list_value = materialRequisitionClasses_buf.ClassToSQL<materialRequisitionClass, enum_materialRequisition>();
                 Table table = new Table(new enum_materialRequisition());
@@ -216,6 +268,81 @@ namespace HIS_WebApi
                 returnData.Result = $"更新申領資料共<{list_value.Count}>筆";
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Data = materialRequisitionClasses_buf;
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+
+            }
+        }
+        /// <summary>
+        /// 根據 GUID 獲取更新申領單。
+        /// </summary>
+        /// <remarks>
+        ///  --------------------------------------------<br/> 
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///        [materialRequisitionClass Ary]
+        ///     }
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]</returns>
+        [Route("delete_by_guid")]
+        [HttpPost]
+        public async Task<string> delete_by_guid([FromBody] returnData returnData)
+        {
+
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_by_guid";
+            try
+            {
+                GET_init(returnData);
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料!";
+                    return returnData.JsonSerializationt();
+                }
+                string Server = sys_serverSettingClasses[0].Server;
+                string DB = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry資料錯誤";
+                    return returnData.JsonSerializationt();
+                }
+                Table table = new Table(new enum_materialRequisition());
+                SQLControl sQLControl_materialRequisition = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
+
+                string[] GUID = returnData.ValueAry[0].Split(";");
+                List<object[]> list_value = await sQLControl_materialRequisition.GetRowsByDefultAsync(null, (int)enum_materialRequisition.GUID, GUID);
+                if (list_value.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無此GUID({GUID})資料";
+                    return returnData.JsonSerializationt();
+                }
+
+
+
+                sQLControl_materialRequisition.DeleteExtra(null, list_value);
+                returnData.Code = 200;
+                returnData.Result = $"刪除申領資料共<{list_value.Count}>筆";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Data = list_value;
                 return returnData.JsonSerializationt();
             }
             catch (Exception e)

@@ -66,7 +66,36 @@ namespace HIS_DB_Lib
         public string 建立時間 { get; set; }
         [JsonPropertyName("ANG_QTY")]
         public string 平均消耗量 { get; set; }
+        static public returnData get_avg_by_start_end(string API_Server, string serverName, string serverType, string start, string end)
+        {
+            string url = $"{API_Server}/api/consumption/get_avg_by_start_end";
 
+            returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+            returnData.ValueAry.Add(start);
+            returnData.ValueAry.Add(end);
+
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
+        static public returnData add(string API_Server, string serverName, string serverType, List<consumptionClass> consumptionClasses)
+        {
+            string url = $"{API_Server}/api/consumption/add";
+            returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+            returnData.Data = consumptionClasses;
+
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
         static public (int code, string result, List<consumptionClass>) serch_by_ST_END_full(
             string API_Server,
             string serverName,
