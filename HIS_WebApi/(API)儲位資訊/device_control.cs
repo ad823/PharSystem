@@ -267,7 +267,7 @@ namespace HIS_WebApi
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
 
 
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting("220.135.128.247");
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 sys_serverSettingClasses = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "儲位資料");
                 if (sys_serverSettingClasses.Count == 0)
                 {

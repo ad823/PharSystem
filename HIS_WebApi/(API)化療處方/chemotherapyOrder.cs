@@ -47,7 +47,7 @@ namespace HIS_WebApi
             returnData.Method = "init";
             try
             {
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting("220.135.128.247");
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 sys_serverSettingClass settingClass = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端").FirstOrDefault();
                 if (settingClass == null)
                 {
