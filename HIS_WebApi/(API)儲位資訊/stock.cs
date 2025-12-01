@@ -267,8 +267,8 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-        [HttpPost("update_stock")]
-        public async Task<string> update_stock([FromBody] returnData returnData)
+        [HttpPost("update")]
+        public async Task<string> update([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -335,6 +335,74 @@ namespace HIS_WebApi
                 returnData.Data = db_medMap_StockClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "update_stock";
+                returnData.Result = $"儲位寫入成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        [HttpPost("add")]
+        public async Task<string> add([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
+                if (medMap_StockClasses == null)
+                {
+                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
+                    if (medMap_stock == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
+                        return returnData.JsonSerializationt();
+                    }
+                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
+                }
+                // DB 連線與資料表
+                if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "ServerName or ServerType is null";
+                    return returnData.JsonSerializationt(true);
+                }
+                string ServerName = returnData.ServerName;
+                string ServerType = returnData.ServerType;
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+                SQLControl sQLControl_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+                foreach (var item in medMap_StockClasses)
+                {
+                    item.GUID = Guid.NewGuid().ToString();
+
+
+                    if (item.效期 == null || (item.效期.Count != item.批號.Count && item.效期.Count != item.數量.Count)) continue;
+                    for (int i = 0; i < item.效期.Count; i++)
+                    {
+                        string value = item.Value;
+                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+
+                        deviceBasic.新增效期(item.效期[i], item.批號[i], item.數量[i]);
+                        item.Value = deviceBasic.JsonSerializationt();
+                    }
+                }
+                List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
+                await sQLControl_stock.AddRowsAsync(null, add);
+
+                returnData.Code = 200;
+                returnData.Data = medMap_StockClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "add";
                 returnData.Result = $"儲位寫入成功!";
                 return returnData.JsonSerializationt(true);
             }
