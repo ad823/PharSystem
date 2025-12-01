@@ -77,14 +77,20 @@ namespace HIS_WebApi
         }
         [Route("barcode")]
         [HttpPost]
-        public string barcode(string? barcode)
+        public string barcode(returnData returnData)
         {
-            returnData returnData = new returnData();
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
             returnData.Method = "barcode";
             try
             {
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"barcode\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string barcode = returnData.ValueAry[0];
                 GET_init(returnData);
                 string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_barcode");
                 if (VM_API.StringIsEmpty() == false)
@@ -110,7 +116,6 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"drugstotreDistribution", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
