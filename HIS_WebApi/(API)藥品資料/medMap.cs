@@ -628,6 +628,8 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_section_buff.燈棒IP.StringIsEmpty() == false) item.燈棒IP = medMap_section_buff.燈棒IP;
                     if (medMap_section_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_section_buff.device_type;
                     if (medMap_section_buff.type.StringIsEmpty() == false) item.type = medMap_section_buff.type;
+                    if (medMap_section_buff.reverse.StringIsEmpty() == false) item.reverse = medMap_section_buff.reverse;
+
                 }
 
                 List<object[]> update = medMaps_section.ClassToSQL<medMap_sectionClass, enum_medMap_section>();
