@@ -271,7 +271,7 @@ namespace HIS_WebApi._API_疾病
 
                 string TableName = "disease";
                 SQLControl sQLControl = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
-                SQLControl sQLControl_Server = new SQLControl(, "dbvm", TableName, "user", "66437068", 3306, SSLMode);
+                SQLControl sQLControl_Server = new SQLControl("220.135.128.247", "dbvm", TableName, "user", "66437068", 3306, SSLMode);
 
                 List<object[]> data = sQLControl.GetAllRows(null);
                 List<object[]> data_server = sQLControl_Server.GetAllRows(null);
