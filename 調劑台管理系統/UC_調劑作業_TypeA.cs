@@ -45,7 +45,7 @@ namespace 調劑台管理系統
         public string 卡號 = "";
         public string ID = "";
         private string _顏色 = "";
-     
+
         public string 顏色
         {
             get
@@ -133,7 +133,7 @@ namespace 調劑台管理系統
                 rJ_Lable_MedGPT_Title.Visible = true;
                 Main_Form.PLC_Device_顯示診斷訊息.Bool = true;
             }
-            if(Main_Form.PLC_Device_顯示診斷訊息.Bool)
+            if (Main_Form.PLC_Device_顯示診斷訊息.Bool)
             {
                 panel_診斷及交互資訊.Height = 100;
             }
@@ -150,7 +150,7 @@ namespace 調劑台管理系統
             myThread_program.Trigger();
         }
 
-    
+
         public void Login()
         {
             this.PlC_RJ_Button_登入_MouseDownEvent(new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
@@ -296,8 +296,8 @@ namespace 調劑台管理系統
                 personPageClass.姓名 = "導引模式";
                 personPageClass.藥師證字號 = "";
                 personPageClass.顏色 = this.顏色;
-              
-                if (Main_Form.Function_醫令領藥(scanner_text, personPageClass, 調劑台名稱, PLC_Device_單醫令模式.Bool , this) == null)
+
+                if (Main_Form.Function_醫令領藥(scanner_text, personPageClass, 調劑台名稱, PLC_Device_單醫令模式.Bool, this) == null)
                 {
                     cnt = 65500;
                     return;
@@ -489,7 +489,7 @@ namespace 調劑台管理系統
                 cnt = 65500;
                 return;
             }
-          
+
             if (Main_Form.Function_ReadBacodeScanner_pre(index) != null)
             {
                 醫令條碼 = Main_Form.Function_ReadBacodeScanner(index);
@@ -513,12 +513,12 @@ namespace 調劑台管理系統
                     }
                     Console.WriteLine($"{text}");
 
-                    if(Function_檢查是否為藥品條碼(text))
+                    if (Function_檢查是否為藥品條碼(text))
                     {
                         cnt = 65500;
                         return;
                     }
-                  
+
                     if (text == Main_Form.QR_Code_醫令模式切換)
                     {
                         PLC_Device_單醫令模式.Bool = !PLC_Device_單醫令模式.Bool;
@@ -578,7 +578,7 @@ namespace 調劑台管理系統
             }
             if (plC_Button_領.Bool)
             {
-               Function_醫令領藥(醫令條碼);
+                Function_醫令領藥(醫令條碼);
             }
             else if (plC_Button_退.Bool)
             {
@@ -587,11 +587,11 @@ namespace 調劑台管理系統
             cnt++;
 
         }
-   
+
 
         private void PictureBox_藥品圖片_Click(object sender, EventArgs e)
         {
-            if(suspiciousRxLog == null)
+            if (suspiciousRxLog == null)
             {
                 return;
             }
@@ -609,7 +609,7 @@ namespace 調劑台管理系統
                 }
             }
         }
-   
+
         #endregion
         #region PLC_刷新領藥內容
         PLC_Device PLC_Device_刷新領藥內容 = new PLC_Device("");
@@ -923,9 +923,9 @@ namespace 調劑台管理系統
             List<object[]> list_取藥堆疊母資料_delete = new List<object[]>();
 
             list_取藥堆疊母資料 = list_取藥堆疊母資料.GetRows((int)enum_取藥堆疊母資料.狀態, enum_取藥堆疊母資料_狀態.RFID使用.GetEnumName());
-            if (list_取藥堆疊母資料.Count > 0 )
+            if (list_取藥堆疊母資料.Count > 0)
             {
-                if(Main_Form.RfidReaderEnable == false)
+                if (Main_Form.RfidReaderEnable == false)
                 {
                     Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_DeleteExtra(list_取藥堆疊母資料, false);
                     Main_Form.voice.SpeakOnTask("RFID讀取器未開啟");
@@ -933,7 +933,7 @@ namespace 調劑台管理系統
                     return;
                 }
                 List<takeMedicineStackClass> takeMedicineStackClasses = list_取藥堆疊母資料.ToTakeMedicineStackClassList();
-                Dialog_HFRFID調劑作業 dialog_HFRFID調劑作業 = new Dialog_HFRFID調劑作業(takeMedicineStackClasses[0].調劑台名稱 ,(takeMedicineStackClasses[0].動作.Contains("退")? IncomeOutcomeMode.收入 : IncomeOutcomeMode.支出));
+                Dialog_HFRFID調劑作業 dialog_HFRFID調劑作業 = new Dialog_HFRFID調劑作業(takeMedicineStackClasses[0].調劑台名稱, (takeMedicineStackClasses[0].動作.Contains("退") ? IncomeOutcomeMode.收入 : IncomeOutcomeMode.支出));
                 if (dialog_HFRFID調劑作業.ShowDialog() != DialogResult.Yes)
                 {
                     Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_DeleteExtra(list_取藥堆疊母資料, false);
@@ -946,7 +946,7 @@ namespace 調劑台管理系統
                 list_取藥堆疊母資料_add = dialog_HFRFID調劑作業.takeMedicineStackClasses.ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
                 list_取藥堆疊母資料_delete.LockAdd(list_取藥堆疊母資料);
             }
-       
+
             if (list_取藥堆疊母資料_delete.Count > 0)
             {
                 Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_DeleteExtra(list_取藥堆疊母資料_delete, false);
@@ -962,7 +962,7 @@ namespace 調劑台管理系統
                 Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_ReplaceExtra(list_取藥堆疊母資料_replace, false);
                 cnt = 1;
             }
-         
+
             if (cnt == 1) return;
             cnt++;
 
@@ -999,11 +999,11 @@ namespace 調劑台管理系統
                         break;
                     }
                     list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.盤點量] = dialog_NumPannel.Value.ToString();
-                    
+
                     //double 庫存量 = Main_Form.Function_從SQL取得庫存(藥碼);
-                
-          
-                   
+
+
+
                     list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.結存量] = 結存量;
                     if (結存量 == dialog_NumPannel.Value)
                     {
@@ -1091,7 +1091,7 @@ namespace 調劑台管理系統
                     Dialog_NumPannel dialog_NumPannel = new Dialog_NumPannel($"(明盤)請輸入取藥後盤點數量\n交易量 : {總異動量}", $"藥碼:{藥碼} \n藥名:{藥名}");
                     dialog_NumPannel.TitleFont = new Font("微軟正黑體", 20, FontStyle.Bold);
                     dialog_NumPannel.X_Visible = true;
-              
+
                     if (dialog_NumPannel.ShowDialog() != DialogResult.Yes)
                     {
                         //list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態] = enum_取藥堆疊母資料_狀態.取消作業.GetEnumName();
@@ -1305,7 +1305,7 @@ namespace 調劑台管理系統
                     MyTimer_入賬完成時間.StartTickTime();
                     if (PLC_Device_閒置登出時間.Value != 0)
                     {
-                        if(Main_Form.PLC_Device_閒置登出要警示.Bool == true)
+                        if (Main_Form.PLC_Device_閒置登出要警示.Bool == true)
                         {
                             if ((PLC_Device_閒置登出時間.Value - (int)MyTimer_閒置登出時間.GetTickTime()) <= 20000)
                             {
@@ -1326,7 +1326,7 @@ namespace 調劑台管理系統
                                 }
                             }
                         }
-                       
+
                     }
 
                 }
@@ -1367,7 +1367,7 @@ namespace 調劑台管理系統
             }
         }
         private void SqL_DataGridView_領藥內容_DataGridClearGridEvent()
-        { 
+        {
             Function_調劑作業_醫令資訊更新();
         }
         private void SqL_DataGridView_領藥內容_RowEnterEvent(object[] RowValue)
@@ -1441,7 +1441,7 @@ namespace 調劑台管理系統
                 MyMessageBox.ShowDialog(ex.Message);
             }
         }
-   
+
         private void PlC_Button_退_ValueChangeEvent(bool Value)
         {
             this.plC_Button_領.Bool = !Value;
@@ -1455,11 +1455,11 @@ namespace 調劑台管理系統
         private void PlC_RJ_Button_登出_MouseDownEvent(MouseEventArgs mevent)
         {
             if (!this.PLC_Device_已登入.Bool) return;
-  
+
             Function_調劑作業_醫令資訊更新();
             Main_Form.Function_取藥堆疊資料_刪除指定調劑台名稱母資料(調劑台名稱);
             this.sqL_DataGridView_領藥內容.ClearGrid();
-
+            sessionClass.Logout(Main_Form.API_Server, ID, Main_Form.ServerName, Main_Form.ServerType);
             Main_Form.Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.登出, 登入者姓名, 調劑台名稱);
             登入者姓名 = "None";
             this.PLC_Device_已登入.Bool = false;
@@ -1535,11 +1535,13 @@ namespace 調劑台管理系統
             藥師證字號 = list_value[0][(int)enum_人員資料.藥師證字號].ObjectToString();
             this.PLC_Device_已登入.Bool = true;
             if (mevent != null) Main_Form.Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.密碼登入, 登入者姓名, 調劑台名稱);
-  
+
             this.plC_Button_領.Bool = true;
             this.plC_Button_退.Bool = false;
 
             Console.WriteLine($"登入成功! ID : {ID}, 名稱 : {登入者姓名}");
+            sessionClass.LoginByID(Main_Form.API_Server, ID, password, Main_Form.ServerName, Main_Form.ServerType);
+
             this.Invoke(new Action(delegate
             {
                 textBox_帳號.Texts = "";
@@ -1590,7 +1592,7 @@ namespace 調劑台管理系統
             }));
 
         }
-        public void Function_調劑作業_醫令資訊更新(string 藥碼, string 藥名,string 姓名,string 年齡, string 領藥住院號, string 病歷號, string 開方時間)
+        public void Function_調劑作業_醫令資訊更新(string 藥碼, string 藥名, string 姓名, string 年齡, string 領藥住院號, string 病歷號, string 開方時間)
         {
 
             Task.Run(new Action(delegate
@@ -1636,9 +1638,9 @@ namespace 調劑台管理系統
                     else
                     {
                         // 範例欄位（你應從某處傳入這些屬性）
-                      
+
                     }
-                       
+
 
 
                     this.rJ_Lable_姓名.Text = 姓名;
@@ -1729,16 +1731,16 @@ namespace 調劑台管理系統
                         suspiciousRxLog = suspiciousRxLogClass;
 
                         if (suspiciousRxLog == null) return;
-                        if(suspiciousRxLog.年齡.StringIsEmpty() == false)
+                        if (suspiciousRxLog.年齡.StringIsEmpty() == false)
                         {
                             年齡_ = suspiciousRxLog.年齡;
                         }
-                      
-                        
+
+
                         string text = "";
                         int text_height = 30;
                         int text_height_basic = TextRenderer.MeasureText("測試", rJ_Lable_診斷.Font).Height;
-                        if(suspiciousRxLog.diseaseClasses != null)
+                        if (suspiciousRxLog.diseaseClasses != null)
                         {
                             for (int i = 0; i < suspiciousRxLog.diseaseClasses.Count; i++)
                             {
@@ -1765,9 +1767,9 @@ namespace 調劑台管理系統
                                 if (i != suspiciousRxLog.過敏紀錄.Count - 1) text_用藥警示 += "\n";
                             }
                         }
-                       
-                       
-                        if(text_用藥警示.StringIsEmpty() == false)
+
+
+                        if (text_用藥警示.StringIsEmpty() == false)
                         {
                             Voice.MediaPlayAsync($@"{Main_Form.currentDirectory}\alarm.wav");
                             Console.WriteLine($"{text_用藥警示}");
@@ -1781,7 +1783,7 @@ namespace 調劑台管理系統
 
 
                         }
-                       
+
                         this.Invoke(new Action(delegate
                         {
                             if (pictureBox_藥品圖片01.BackgroundImage != null)
@@ -1841,7 +1843,7 @@ namespace 調劑台管理系統
                                     //}
                                 }
                             }
-                               
+
                         }));
 
 
@@ -1874,7 +1876,7 @@ namespace 調劑台管理系統
             if (medClasses.Count > 0)
             {
                 flag = true;
-                if(Main_Form.PLC_Device_掃碼顏色固定.Bool)
+                if (Main_Form.PLC_Device_掃碼顏色固定.Bool)
                 {
                     if (index == 0) 顏色 = Main_Form._panel_工程模式_領藥台_01_顏色.BackColor.ToColorString();
                     if (index == 1) 顏色 = Main_Form._panel_工程模式_領藥台_02_顏色.BackColor.ToColorString();
@@ -1882,7 +1884,7 @@ namespace 調劑台管理系統
                     if (index == 3) 顏色 = Main_Form._panel_工程模式_領藥台_04_顏色.BackColor.ToColorString();
 
                 }
-            
+
 
                 List<medConfigClass> medConfigClasses = medConfigClass.get_dispense_note_by_codes(Main_Form.API_Server, medClasses[0].藥品碼);
 
@@ -1892,7 +1894,7 @@ namespace 調劑台管理系統
                     dialog_使用者登入.ShowDialog();
                     if (dialog_使用者登入.DialogResult != DialogResult.Yes) return flag;
                     personPageClass = dialog_使用者登入.personPageClass;
-                    this.Title = $" {(Main_Form.PLC_Device_導引模式.Bool ? "(導引模式)" : "")}[{ personPageClass.姓名}]";
+                    this.Title = $" {(Main_Form.PLC_Device_導引模式.Bool ? "(導引模式)" : "")}[{personPageClass.姓名}]";
 
                 }
 

@@ -25,6 +25,14 @@ namespace HIS_DB_Lib
         loginTime,
         [Description("verifyTime,DATETIME,50,NONE")]
         verifyTime,
+        [Description("ServerName,VARCHAR,50,NONE")]
+        serverName,
+        [Description("ServerType,VARCHAR,50,NONE")]
+        serverType,
+        [Description("state,VARCHAR,50,NONE")]
+        state,
+        [Description("note,VARCHAR,200,NONE")]
+        note,
     }
     public enum enum_login_data
     {
@@ -164,11 +172,19 @@ namespace HIS_DB_Lib
         public string BARCODE { get; set; }
         [JsonPropertyName("license")]
         public string license { get; set; }
+        [JsonPropertyName("serverName")]
+        public string serverName { get; set; }
+        [JsonPropertyName("serverType")]
+        public string serverType { get; set; }
+        [JsonPropertyName("state")]
+        public string state { get; set; }
+        [JsonPropertyName("note")]
+        public string note { get; set; }
 
         public List<PermissionsClass> Permissions { get => permissions; set => permissions = value; }
         private List<PermissionsClass> permissions = new List<PermissionsClass>();
 
-        static public sessionClass LoginByUID(string API_Server, string UID)
+        static public sessionClass LoginByUID(string API_Server, string UID, string note = "", string serverName = "", string serverType = "")
         {
             List<sys_serverSettingClass> sys_serverSettingClasses = sys_serverSettingClassMethod.WebApiGet($"{API_Server}/api/serversetting");
             sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "API_Login");
@@ -181,7 +197,9 @@ namespace HIS_DB_Lib
 
             returnData returnData = new returnData();
             sessionClass _sessionClass = new sessionClass();
-
+            _sessionClass.serverName = serverName;
+            _sessionClass.serverType = serverType;
+            _sessionClass.note = note;
             _sessionClass.UID = UID;
             returnData.Data = _sessionClass;
 
@@ -202,7 +220,7 @@ namespace HIS_DB_Lib
             return returnData_result.Data.ObjToClass<sessionClass>();
 
         }
-        static public sessionClass LoginByBarCode(string API_Server, string BARCODE)
+        static public sessionClass LoginByBarCode(string API_Server, string BARCODE, string note = "", string serverName = "", string serverType = "")
         {
             List<sys_serverSettingClass> sys_serverSettingClasses = sys_serverSettingClassMethod.WebApiGet($"{API_Server}/api/serversetting");
             sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "API_Login");
@@ -217,6 +235,9 @@ namespace HIS_DB_Lib
             sessionClass _sessionClass = new sessionClass();
 
             _sessionClass.BARCODE = BARCODE;
+            _sessionClass.serverName = serverName;
+            _sessionClass.serverType = serverType;
+            _sessionClass.note = note;
             returnData.Data = _sessionClass;
 
             string json_in = returnData.JsonSerializationt();
@@ -236,7 +257,7 @@ namespace HIS_DB_Lib
             return returnData_result.Data.ObjToClass<sessionClass>();
 
         }
-        static public sessionClass LoginByID(string API_Server, string userID, string password)
+        static public sessionClass LoginByID(string API_Server, string userID, string password, string note = "", string serverName = "", string serverType = "")
         {
             List<sys_serverSettingClass> sys_serverSettingClasses = sys_serverSettingClassMethod.WebApiGet($"{API_Server}/api/serversetting");
             sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "API_Login");
@@ -252,6 +273,40 @@ namespace HIS_DB_Lib
 
             _sessionClass.ID = userID;
             _sessionClass.Password = password;
+            _sessionClass.serverName = serverName;
+            _sessionClass.serverType = serverType;
+            _sessionClass.note = note;
+            returnData.Data = _sessionClass;
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_result = json_out.JsonDeserializet<returnData>();
+            if (returnData_result == null)
+            {
+                return null;
+            }
+            if (returnData_result.Data == null)
+            {
+                return null;
+            }
+
+            Console.WriteLine($"{returnData_result}");
+
+            return returnData_result.Data.ObjToClass<sessionClass>();
+
+        }
+        static public sessionClass Logout(string API_Server, string userID, string note = "", string serverName = "", string serverType = "")
+        {
+
+            string url = $"{API_Server}/api/session/logout";
+
+            returnData returnData = new returnData();
+            sessionClass _sessionClass = new sessionClass();
+
+            _sessionClass.ID = userID;
+            _sessionClass.serverName = serverName;
+            _sessionClass.serverType = serverType;
+            _sessionClass.note = note;
             returnData.Data = _sessionClass;
 
             string json_in = returnData.JsonSerializationt();
@@ -277,9 +332,9 @@ namespace HIS_DB_Lib
         static public PermissionsClass GetPermission(this sessionClass sessionclass, string type, string name)
         {
             List<PermissionsClass> permissionsClasses = (from temp in sessionclass.Permissions
-                                  where temp.類別 == type
-                                  where temp.名稱 == name
-                                  select temp).ToList();
+                                                         where temp.類別 == type
+                                                         where temp.名稱 == name
+                                                         select temp).ToList();
             if (permissionsClasses.Count > 0) return permissionsClasses[0];
             return null;
         }

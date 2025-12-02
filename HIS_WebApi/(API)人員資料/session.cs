@@ -1,23 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
+﻿using Basic;
 using HIS_DB_Lib;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto.Tls;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Net;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 namespace HIS_WebApi
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class sessionController : Controller
+    public class session : Controller
     {
         static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
         static string API = "http://127.0.0.1:4433";
@@ -69,7 +70,7 @@ namespace HIS_WebApi
         [HttpGet]
         public string Get(string level)
         {
-            return GetPermissions(level.StringToInt32() ,"","").JsonSerializationt();
+            return GetPermissions(level.StringToInt32(), "", "").JsonSerializationt();
         }
         /// <summary>
         /// 使用者登入並建立/更新登入工作階段（session），
@@ -210,6 +211,9 @@ namespace HIS_WebApi
         {
             try
             {
+                // 解析參數
+
+
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
                 {
@@ -249,7 +253,7 @@ namespace HIS_WebApi
                         flag_admin = true;
                     }
                 }
-            
+
                 if (flag_admin == false)
                 {
                     if (data.UID.StringIsEmpty() == false)
@@ -301,6 +305,9 @@ namespace HIS_WebApi
                         value[(int)enum_login_session.Employer] = list_person_page[0][(int)enum_人員資料.單位].ObjectToString();
                         value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
                         value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
+                        value[(int)enum_login_session.serverName] = data.serverName;
+                        value[(int)enum_login_session.serverType] = data.serverType;
+                        value[(int)enum_login_session.state] = "login";
                         list_login_session_add.Add(value);
                     }
                     else
@@ -312,6 +319,9 @@ namespace HIS_WebApi
                         value[(int)enum_login_session.Employer] = list_person_page[0][(int)enum_人員資料.單位].ObjectToString();
                         value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
                         value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
+                        value[(int)enum_login_session.serverName] = data.serverName;
+                        value[(int)enum_login_session.serverType] = data.serverType;
+                        value[(int)enum_login_session.state] = "login";
                         list_login_session_replace.Add(value);
                     }
                     if (list_login_session_add.Count > 0) sQLControl_login_session.AddRows(null, list_login_session_add);
@@ -363,13 +373,13 @@ namespace HIS_WebApi
                 returnData.Result = "登入成功!";
                 return returnData.JsonSerializationt();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 returnData.Code = -200;
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
             }
-            
+
         }
 
         [Route("logout")]
@@ -377,7 +387,14 @@ namespace HIS_WebApi
         public string POST_logout([FromBody] returnData returnData)
         {
             try
-            {
+            {   // 解析參數
+                string GetVal(string key) =>
+                    returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                    ?.Split('=')[1];
+
+                string serverType = GetVal("severType");
+                string serverName = GetVal("severName");
+
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
                 {
@@ -406,27 +423,62 @@ namespace HIS_WebApi
                 sessionClass sessionClass = returnData.Data.ObjToClass<sessionClass>();
                 List<object[]> list_login_session = sQLControl_login_session.GetAllRows(null);
                 list_login_session = list_login_session.GetRows((int)enum_login_session.ID, sessionClass.ID);
+                object[] obj_person_page = sQLControl_person_page.GetRowsByDefult(null, (int)enum_login_session.ID, sessionClass.ID).FirstOrDefault();
+                List<object[]> list_login_session_add = new List<object[]>();
+                List<object[]> list_login_session_replace = new List<object[]>();
+                object[] value = new object[new enum_login_session().GetLength()];
                 if (list_login_session.Count > 0)
                 {
-                    sQLControl_login_session.DeleteExtra(null, list_login_session);
-                    returnData.Code = 200;
-                    returnData.Result = $"ID :{sessionClass.ID} ,清除session成功!";
-                    return returnData.JsonSerializationt();
+
+                    value = new object[new enum_login_session().GetLength()];
+                    value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
+                    if (obj_person_page != null)
+                    {
+                        value[(int)enum_login_session.ID] = obj_person_page[(int)enum_人員資料.ID].ObjectToString();
+                        value[(int)enum_login_session.Name] = obj_person_page[(int)enum_人員資料.姓名].ObjectToString();
+                        value[(int)enum_login_session.Employer] = obj_person_page[(int)enum_人員資料.單位].ObjectToString();
+                    }
+
+                    value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
+                    value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
+                    value[(int)enum_login_session.serverName] = serverName;
+                    value[(int)enum_login_session.serverType] = serverType;
+                    value[(int)enum_login_session.state] = "logout";
+                    list_login_session_add.Add(value);
+                }
+                else
+                {
+                    value = list_login_session[0];
+                    value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
+                    if (obj_person_page != null)
+                    {
+                        value[(int)enum_login_session.ID] = obj_person_page[(int)enum_人員資料.ID].ObjectToString();
+                        value[(int)enum_login_session.Name] = obj_person_page[(int)enum_人員資料.姓名].ObjectToString();
+                        value[(int)enum_login_session.Employer] = obj_person_page[(int)enum_人員資料.單位].ObjectToString();
+                    }
+                    value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
+                    value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
+                    value[(int)enum_login_session.serverName] = serverName;
+                    value[(int)enum_login_session.serverType] = serverType;
+                    value[(int)enum_login_session.state] = "logout";
+                    list_login_session_replace.Add(value);
                 }
                 returnData.Code = 200;
                 returnData.Result = $"ID :{sessionClass.ID} ,找無此session!";
                 return returnData.JsonSerializationt();
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 returnData.Code = -200;
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
             }
-           
+
 
         }
+
+
 
         [Route("check_session")]
         [HttpPost]
@@ -458,7 +510,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_login_session = new SQLControl(IP, DataBaseName, "login_session", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_person_page = new SQLControl(IP, DataBaseName, "person_page", UserName, Password, Port, SSLMode);
 
-                                CheckCreatTable(sys_serverSettingClasses[0]);
+                CheckCreatTable(sys_serverSettingClasses[0]);
 
                 sessionClass sessionClass = returnData.Data.ObjToClass<sessionClass>();
                 List<object[]> list_login_session = sQLControl_login_session.GetAllRows(null);
@@ -504,7 +556,7 @@ namespace HIS_WebApi
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
             }
-           
+
         }
 
         [Route("update_session")]
@@ -537,7 +589,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_login_session = new SQLControl(IP, DataBaseName, "login_session", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_person_page = new SQLControl(IP, DataBaseName, "person_page", UserName, Password, Port, SSLMode);
 
-                                CheckCreatTable(sys_serverSettingClasses[0]);
+                CheckCreatTable(sys_serverSettingClasses[0]);
 
                 sessionClass sessionClass = returnData.Data.ObjToClass<sessionClass>();
                 List<object[]> list_login_session = sQLControl_login_session.GetAllRows(null);
@@ -553,13 +605,13 @@ namespace HIS_WebApi
                 returnData.Code = 200;
                 return returnData.JsonSerializationt();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 returnData.Code = -200;
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
             }
-           
+
         }
 
         [Route("get_permissions")]
@@ -591,7 +643,7 @@ namespace HIS_WebApi
 
                 SQLControl sQLControl_login_session = new SQLControl(IP, DataBaseName, "login_session", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_person_page = new SQLControl(IP, DataBaseName, "person_page", UserName, Password, Port, SSLMode);
-                                CheckCreatTable(sys_serverSettingClasses[0]);
+                CheckCreatTable(sys_serverSettingClasses[0]);
                 sessionClass data = returnData.Data.ObjToClass<sessionClass>();
                 List<object[]> list_login_session = sQLControl_login_session.GetAllRows(null);
                 List<object[]> list_person_page = sQLControl_person_page.GetAllRows(null);
@@ -628,13 +680,13 @@ namespace HIS_WebApi
                 returnData.Result = "取得權限成功!";
                 return returnData.JsonSerializationt();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 returnData.Code = -200;
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
             }
-           
+
         }
         /// <summary>
         /// 以權限等級取得資料
@@ -658,7 +710,7 @@ namespace HIS_WebApi
         {
             try
             {
-                
+
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
                 returnData.Method = "get_login_data_index";
                 string ServerName = returnData.ServerName;
@@ -738,7 +790,7 @@ namespace HIS_WebApi
                 {
                     string index = item.索引;
                     loginDataIndexClass loginDataIndexClass = sql_loginDataIndex.Where(temp => temp.索引 == index).FirstOrDefault();
-                    if(loginDataIndexClass != null)
+                    if (loginDataIndexClass != null)
                     {
                         loginDataIndexClass.Name = item.Name;
                         loginDataIndexClass.Type = item.Type;
@@ -763,7 +815,7 @@ namespace HIS_WebApi
                 List<object[]> update = update_loginDataIndex.ClassToSQL<loginDataIndexClass, enum_login_data_index>();
                 List<object[]> add = add_loginDataIndex.ClassToSQL<loginDataIndexClass, enum_login_data_index>();
 
-                if(update.Count > 0) sQLControl_login_data_index.UpdateByDefulteExtra(null, update);
+                if (update.Count > 0) sQLControl_login_data_index.UpdateByDefulteExtra(null, update);
                 if (add.Count > 0) sQLControl_login_data_index.AddRows(null, add);
                 add_loginDataIndex.AddRange(update_loginDataIndex);
                 returnData.Code = 200;
@@ -824,7 +876,7 @@ namespace HIS_WebApi
                     ServerType = "網頁";
                     Content = "VM端";
                 }
-                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo(ServerName, ServerType, Content); 
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo(ServerName, ServerType, Content);
                 int level = returnData.ValueAry[0].StringToInt32();
                 string 類別 = returnData.ValueAry[1];
                 List<PermissionsClass> PermissionsClasses = GetPermissions(level, ServerName, ServerType);
@@ -884,7 +936,7 @@ namespace HIS_WebApi
                     returnData.Result = $"ValueAry應為[\"權限等級\"]";
                     return returnData.JsonSerializationt(true);
                 }
-                if(returnData.Data == null)
+                if (returnData.Data == null)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"Data不得為空";
@@ -902,19 +954,19 @@ namespace HIS_WebApi
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo(ServerName, ServerType, Content);
                 string level = returnData.ValueAry[0];
-                List<PermissionsClass> PermissionsClasses = GetPermissions(level.StringToInt32(), ServerName,ServerType);
+                List<PermissionsClass> PermissionsClasses = GetPermissions(level.StringToInt32(), ServerName, ServerType);
 
-                foreach(var item in PermissionsClasses)
+                foreach (var item in PermissionsClasses)
                 {
                     PermissionsClass permissionsClasses = update_permiss.Where(temp => temp.索引 == item.索引).FirstOrDefault();
-                    if(permissionsClasses != null)
+                    if (permissionsClasses != null)
                     {
                         item.狀態 = permissionsClasses.狀態;
-                    }                        
+                    }
                 }
                 List<loginDataClass> loginDataClasses = HIS_DB_Lib.loginDataClass.get_permission_index(API);
                 loginDataClass loginData = loginDataClasses.Where(item => item.權限等級 == level).FirstOrDefault();
-                if(loginData == null)
+                if (loginData == null)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"無{level}權限";
@@ -955,7 +1007,7 @@ namespace HIS_WebApi
         {
             try
             {
-                
+
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
 
                 string ServerName = returnData.ServerName;
@@ -971,7 +1023,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_login_data = new SQLControl(Server, DB, "login_data", UserName, Password, Port, SSLMode);
                 List<object[]> session_data = sQLControl_login_data.GetAllRows(null);
                 List<loginDataClass> loginDataClasses = session_data.SQLToClass<loginDataClass, enum_login_data>();
-                
+
 
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
@@ -979,14 +1031,14 @@ namespace HIS_WebApi
                 returnData.Result = $"取得權限表單，共{loginDataClasses.Count}筆";
                 return returnData.JsonSerializationt(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 returnData.Code = -200;
                 returnData.Result = ex.Message;
                 return returnData.JsonSerializationt(true);
             }
         }
-        private List<PermissionsClass> GetPermissions(int level ,string serverName , string serverType)
+        private List<PermissionsClass> GetPermissions(int level, string serverName, string serverType)
         {
             List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
             if (serverName.StringIsEmpty() || serverType.StringIsEmpty())
@@ -1013,11 +1065,11 @@ namespace HIS_WebApi
             List<MySQL_Login.LoginDataWebAPI.Class_login_data> list_class_login_data = MySQL_Login.LoginDataWebAPI.Get_login_data(sQLControl_login_data);
             List<object[]> login_data_index = sQLControl_login_data_index.GetAllRows(null);
             List<object[]> login_data_index_buf = new List<object[]>();
-            if(level == -1)
+            if (level == -1)
             {
                 list_class_login_data = new List<MySQL_Login.LoginDataWebAPI.Class_login_data>();
                 MySQL_Login.LoginDataWebAPI.Class_login_data class_Login_Data = new MySQL_Login.LoginDataWebAPI.Class_login_data();
-                for(int i = 0; i < class_Login_Data.data.Count; i++)
+                for (int i = 0; i < class_Login_Data.data.Count; i++)
                 {
                     class_Login_Data.data[i] = true;
                 }
@@ -1035,7 +1087,7 @@ namespace HIS_WebApi
                     login_data_index_buf = login_data_index.GetRows((int)MySQL_Login.LoginDataWebAPI.enum_login_data_index.索引, i.ToString("00"));
                     if (list_class_login_data[0].data[i])
                     {
-                        
+
                         if (login_data_index_buf.Count > 0)
                         {
                             PermissionsClass permissionsClass = new PermissionsClass();
@@ -1068,7 +1120,7 @@ namespace HIS_WebApi
             }
             return result;
         }
-        private List<loginDataClass> PackPermissionBitsToLongs(loginDataClass loginDataClass,List<PermissionsClass> permissions)
+        private List<loginDataClass> PackPermissionBitsToLongs(loginDataClass loginDataClass, List<PermissionsClass> permissions)
         {
             bool[] data = new bool[256];
 
@@ -1109,7 +1161,7 @@ namespace HIS_WebApi
             return new List<loginDataClass> { loginData };
         }
 
-    
+
         private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
         {
             string Server = sys_serverSettingClass.Server;
