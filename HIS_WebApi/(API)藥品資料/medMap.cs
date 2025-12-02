@@ -285,16 +285,21 @@ namespace HIS_WebApi._API_藥品資料
                     returnData.Result = $"POST_get_serversetting_by_type 回傳為空";
                     return returnData.JsonSerializationt(true);
                 }
-                List<Task<medMapClass>> tasks = new List<Task<medMapClass>>();
                 List<medMapClass> medMapClasses = new List<medMapClass>();
-
+                List<Task<returnData>> tasks = new List<Task<returnData>>();
                 foreach (var item in sys_serverSettingClasses)
                 {
-                    returnData returnData_get_medMap_by_name_type = await get_medMap_by_name_type(item.設備名稱, item.類別);
-                    medMapClass medMapClass = returnData_get_medMap_by_name_type.Data.ObjToClass<medMapClass>();
-                    medMapClasses.Add(medMapClass);
+                    Task<returnData> returnData_get_medMap_by_name_type =  get_medMap_by_name_type(item.設備名稱, item.類別);
+                    tasks.Add(returnData_get_medMap_by_name_type);
                 }
-
+                returnData[] results = await Task.WhenAll(tasks);
+                for(int i = 0; i < results.Length; i++)
+                {
+                    if (results[i] == null || results[i].Data == null) continue;
+                    medMapClass medMapClass = results[i].Data.ObjToClass<medMapClass>();
+                    if (medMapClass != null) medMapClasses.Add(medMapClass);
+                }
+                
 
                 returnData.Code = 200;
                 returnData.Data = medMapClasses;
@@ -376,13 +381,17 @@ namespace HIS_WebApi._API_藥品資料
                 medMapClass medMapClasses = objects.SQLToClass<medMapClass, enum_medMap>()[0];
                 medMapClasses.sys_ServerSetting = sys_ServerSetting;
 
-                returnData returnData_get_medMap_section_by_Master_GUID = await get_medMap_section_by_Master_GUID(medMapClasses.GUID);
-                if (returnData_get_medMap_section_by_Master_GUID == null || returnData_get_medMap_section_by_Master_GUID.Code != 200)
-                {
-                    return returnData_get_medMap_section_by_Master_GUID.JsonSerializationt(true);
-                }
-                List<medMap_sectionClass> medMap_SectionClasses = returnData_get_medMap_section_by_Master_GUID.Data.ObjToClass<List<medMap_sectionClass>>();
+                SQLControl sQLControl_section = new SQLControl(Server, DB, "medMap_section", UserName, Password, Port, SSLMode);
+
+                List<object[]> objects_section = await sQLControl_section.GetRowsByDefultAsync(null, (int)enum_medMap_section.Master_GUID, medMapClasses.GUID);
+                List<medMap_sectionClass> medMap_SectionClasses = objects.SQLToClass<medMap_sectionClass, enum_medMap_section>();
                 medMapClasses.medMap_Section = medMap_SectionClasses;
+
+                SQLControl sQLControl_sub_section = new SQLControl(Server, DB, "medMap_sub_section", UserName, Password, Port, SSLMode);
+
+
+
+
 
                 returnData.Code = 200;
                 returnData.Data = medMapClasses;
