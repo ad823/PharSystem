@@ -267,6 +267,7 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("update_stock")]
         [HttpPost("update")]
         public async Task<string> update([FromBody] returnData returnData)
         {
@@ -431,6 +432,13 @@ namespace HIS_WebApi
                 stock.批號 = deviceBasic.List_Lot_number;
             }
             return medMap_stockClasses;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_stock_all_server()
+        {
+            returnData returnData = new returnData();      
+            string result = await get_stock_all_server(returnData);
+            return result.JsonDeserializet<returnData>();
         }
     }
 }
