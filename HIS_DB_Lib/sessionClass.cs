@@ -306,6 +306,7 @@ namespace HIS_DB_Lib
             _sessionClass.ID = userID;
             _sessionClass.serverName = serverName;
             _sessionClass.serverType = serverType;
+            _sessionClass.state = "logout";
             _sessionClass.note = note;
             returnData.Data = _sessionClass;
 

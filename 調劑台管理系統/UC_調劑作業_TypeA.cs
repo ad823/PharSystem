@@ -1459,7 +1459,7 @@ namespace 調劑台管理系統
             Function_調劑作業_醫令資訊更新();
             Main_Form.Function_取藥堆疊資料_刪除指定調劑台名稱母資料(調劑台名稱);
             this.sqL_DataGridView_領藥內容.ClearGrid();
-            sessionClass.Logout(Main_Form.API_Server, ID, Main_Form.ServerName, Main_Form.ServerType);
+            sessionClass.Logout(Main_Form.API_Server, ID, "", Main_Form.ServerName, Main_Form.ServerType);
             Main_Form.Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.登出, 登入者姓名, 調劑台名稱);
             登入者姓名 = "None";
             this.PLC_Device_已登入.Bool = false;
@@ -1540,7 +1540,7 @@ namespace 調劑台管理系統
             this.plC_Button_退.Bool = false;
 
             Console.WriteLine($"登入成功! ID : {ID}, 名稱 : {登入者姓名}");
-            sessionClass.LoginByID(Main_Form.API_Server, ID, password, Main_Form.ServerName, Main_Form.ServerType);
+            sessionClass.LoginByID(Main_Form.API_Server, ID, password, "調劑登入", Main_Form.ServerName, Main_Form.ServerType);
 
             this.Invoke(new Action(delegate
             {
