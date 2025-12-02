@@ -506,31 +506,32 @@ namespace HIS_DB_Lib
 
     public static class medMapMethod
     {
-        static public Dictionary<string, List<stockClass>> ToDictByShelfGUID(this List<stockClass> stockClasses)
+        
+        static public Dictionary<string, List<medMap_sub_sectionClass>> ToDictByMasterGUID(this List<medMap_sub_sectionClass> classes)
         {
-            Dictionary<string, List<stockClass>> dictionary = new Dictionary<string, List<stockClass>>();
-            foreach (var item in stockClasses)
+            Dictionary<string, List<medMap_sub_sectionClass>> dictionary = new Dictionary<string, List<medMap_sub_sectionClass>>();
+            foreach (var item in classes)
             {
-                if (dictionary.TryGetValue(item.Shelf_GUID, out List<stockClass> list))
+                if (dictionary.TryGetValue(item.Master_GUID, out List<medMap_sub_sectionClass> list))
                 {
                     list.Add(item);
                 }
                 else
                 {
-                    dictionary[item.Shelf_GUID] = new List<stockClass> { item };
+                    dictionary[item.Master_GUID] = new List<medMap_sub_sectionClass> { item };
                 }
             }
             return dictionary;
         }
-        static public List<stockClass> GetByShelfGUID(this Dictionary<string, List<stockClass>> dict, string Shelf_GUID)
+        static public List<medMap_sub_sectionClass> GetByMasterGUID(this Dictionary<string, List<medMap_sub_sectionClass>> dict, string Master_GUID)
         {
-            if (dict.TryGetValue(Shelf_GUID, out List<stockClass> stockClasses))
+            if (dict.TryGetValue(Master_GUID, out List<medMap_sub_sectionClass> classes))
             {
-                return stockClasses;
+                return classes;
             }
             else
             {
-                return new List<stockClass>();
+                return new List<medMap_sub_sectionClass>();
             }
         }
         static public Dictionary<string, List<medMap_shelfClass>> ToDictByMasterGUID(this List<medMap_shelfClass> shelfClasses)
@@ -560,6 +561,7 @@ namespace HIS_DB_Lib
                 return new List<medMap_shelfClass>();
             }
         }
+
 
     }
 }

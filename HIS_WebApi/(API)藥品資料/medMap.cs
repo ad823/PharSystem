@@ -385,13 +385,45 @@ namespace HIS_WebApi._API_藥品資料
 
                 List<object[]> objects_section = await sQLControl_section.GetRowsByDefultAsync(null, (int)enum_medMap_section.Master_GUID, medMapClasses.GUID);
                 List<medMap_sectionClass> medMap_SectionClasses = objects.SQLToClass<medMap_sectionClass, enum_medMap_section>();
-                medMapClasses.medMap_Section = medMap_SectionClasses;
 
                 SQLControl sQLControl_sub_section = new SQLControl(Server, DB, "medMap_sub_section", UserName, Password, Port, SSLMode);
+                string[] section_GUID = medMap_SectionClasses.Select(x => x.GUID).ToArray();
+                List<object[]> objects_sub_section = await sQLControl_sub_section.GetRowsByDefultAsync(null, (int)enum_medMap_sub_section.Master_GUID, section_GUID);
+                List<medMap_sub_sectionClass> medMap_Sub_Sections = objects.SQLToClass<medMap_sub_sectionClass, enum_medMap_sub_section>();
 
+                SQLControl sQLControl_shelf = new SQLControl(Server, DB, "medMap_shelf", UserName, Password, Port, SSLMode);
+                string[] sub_section_GUID = medMap_Sub_Sections.Select(x => x.GUID).ToArray();
+                List<object[]> objects_shelf = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.Master_GUID, sub_section_GUID);
+                List<medMap_shelfClass> medMap_shelfClass = objects_shelf.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                medMap_shelfClass = medMap_shelfClass
+                .OrderBy(x => int.Parse(x.位置.Split(',')[0]))               // 同理處理 位置
+                .ThenBy(x => int.Parse(x.位置.Split(',')[1]))
+                .ToList();
+                (string Server_, string DB_, string UserName_, string Password_, uint Port_) = await HIS_WebApi.Method.GetServerInfoAsync(設備名稱, 類別, "儲位資料");
+                SQLControl sQLControl_stock = new SQLControl(Server_, DB_, "stock", UserName_, Password_, Port_, SSLMode);
+                List<object[]> objects_stock = await sQLControl_stock.GetAllRowsAsync(null);
+                List<stockClass> stockClasses = objects_stock.SQLToClass<stockClass>();
+                stockClasses = get_stockInfo(stockClasses);
+                Dictionary<string, List<stockClass>> dic_stock = stockClasses.ToDictByShelfGUID();
+                foreach (var shelf in medMap_shelfClass)
+                {
+                    List<stockClass> stockClasses_buff = dic_stock.GetByShelfGUID(shelf.GUID);
+                    shelf.medMapStock = stockClasses_buff;
+                }
+                Dictionary<string, List<medMap_shelfClass>> dic_shelf = medMap_shelfClass.ToDictByMasterGUID();
+                foreach (var sub_section in medMap_Sub_Sections)
+                {
+                    List<medMap_shelfClass> medMap_shelfClasses_buff = dic_shelf.GetByMasterGUID(sub_section.GUID);
+                    sub_section.shelf = medMap_shelfClasses_buff;
+                }
+                Dictionary<string, List<medMap_sub_sectionClass>> dic_sub_section = medMap_Sub_Sections.ToDictByMasterGUID();
 
-
-
+                foreach (var section in medMap_SectionClasses)
+                {
+                    List<medMap_sub_sectionClass> medMap_sub_sectionClasses_buff = dic_sub_section.GetByMasterGUID(section.GUID);
+                    section.sub_section = medMap_sub_sectionClasses_buff;
+                }
+                medMapClasses.medMap_Section = medMap_SectionClasses; 
 
                 returnData.Code = 200;
                 returnData.Data = medMapClasses;
