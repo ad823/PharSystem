@@ -21,8 +21,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.12021")]
-[assembly: AssemblyFileVersion("1.0.25.12021")]
+[assembly: AssemblyVersion("1.0.25.12031")]
+[assembly: AssemblyFileVersion("1.0.25.12031")]
 namespace 調劑台管理系統
 {
 
@@ -269,6 +269,7 @@ namespace 調劑台管理系統
             private string hFRFID_2_COMPort = "";
             private string _藥物辨識網址 = "";
             private string _聲紋辨識_IP = "";
+            private string qRCode_url = "";
 
 
             public bool 主機扣帳模式 { get => _主機扣帳模式; set => _主機扣帳模式 = value; }
@@ -304,6 +305,7 @@ namespace 調劑台管理系統
             public string HFRFID_1_COMPort { get => hFRFID_1_COMPort; set => hFRFID_1_COMPort = value; }
             public string HFRFID_2_COMPort { get => hFRFID_2_COMPort; set => hFRFID_2_COMPort = value; }
             public string 批次領藥篩選 { get => _批次領藥篩選; set => _批次領藥篩選 = value; }
+            public string QRCode_url { get => qRCode_url; set => qRCode_url = value; }
         }
         private void LoadMyConfig()
         {

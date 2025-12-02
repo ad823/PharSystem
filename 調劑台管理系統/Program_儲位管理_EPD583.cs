@@ -536,7 +536,7 @@ namespace 調劑台管理系統
         }
         private void EpD_583_Pannel_DrawerChangeEvent(Drawer drawer)
         {
-          
+            this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
         }
         private void PlC_CheckBox_儲位管理_EPD583_顯示為條碼_CheckStateChanged(object sender, EventArgs e)
         {

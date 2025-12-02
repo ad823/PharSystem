@@ -332,6 +332,11 @@ namespace 調劑台管理系統
                     storage.IsShapeSimilar = (形狀相似_buf == "TRUE");
                     storage.IsSoundSimilar = (發音相似_buf == "TRUE");
 
+                    if (myConfigClass.QRCode_url.StringIsEmpty() == false)
+                    {
+                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                    }
+
                 }
                 if (Is_Replace)
                 {
@@ -1125,7 +1130,10 @@ namespace 調劑台管理系統
                 {
                     string IP = list_value[i][(int)enum_儲位管理_EPD266_儲位資料.IP].ObjectToString();
                     Storage storage = this.storageUI_EPD_266.SQL_GetStorage(IP);
-
+                    if(myConfigClass.QRCode_url.StringIsEmpty() == false)
+                    {
+                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                    }
                     if (Storage.ContainsBitmap(storage.Code) == false)
                     {
                         List<Image> images = Function_取得藥品圖片(storage.Code);

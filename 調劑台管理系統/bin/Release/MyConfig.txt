@@ -31,5 +31,6 @@
   "聲紋辨識_IP": "",
   "HFRFID_1_COMPort": "",
   "HFRFID_2_COMPort": "",
-  "批次領藥篩選": ""
+  "批次領藥篩選": "",
+  "QRCode_url": "https://www.kutech.tw:450/phar_system/med_request_moblie"
 }
