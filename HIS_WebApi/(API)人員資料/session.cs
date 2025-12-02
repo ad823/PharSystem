@@ -387,13 +387,7 @@ namespace HIS_WebApi
         public string POST_logout([FromBody] returnData returnData)
         {
             try
-            {   // 解析參數
-                string GetVal(string key) =>
-                    returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
-                    ?.Split('=')[1];
-
-                string serverType = GetVal("severType");
-                string serverName = GetVal("severName");
+            {  
 
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
@@ -427,7 +421,7 @@ namespace HIS_WebApi
                 List<object[]> list_login_session_add = new List<object[]>();
                 List<object[]> list_login_session_replace = new List<object[]>();
                 object[] value = new object[new enum_login_session().GetLength()];
-                if (list_login_session.Count > 0)
+                if (list_login_session.Count == 0)
                 {
 
                     value = new object[new enum_login_session().GetLength()];
@@ -441,8 +435,8 @@ namespace HIS_WebApi
 
                     value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
                     value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
-                    value[(int)enum_login_session.serverName] = serverName;
-                    value[(int)enum_login_session.serverType] = serverType;
+                    value[(int)enum_login_session.serverName] = sessionClass.serverName;
+                    value[(int)enum_login_session.serverType] = sessionClass.serverType;
                     value[(int)enum_login_session.state] = "logout";
                     list_login_session_add.Add(value);
                 }
@@ -458,13 +452,14 @@ namespace HIS_WebApi
                     }
                     value[(int)enum_login_session.verifyTime] = DateTime.Now.ToDateTimeString();
                     value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
-                    value[(int)enum_login_session.serverName] = serverName;
-                    value[(int)enum_login_session.serverType] = serverType;
+                    value[(int)enum_login_session.serverName] = sessionClass.serverName;
+                    value[(int)enum_login_session.serverType] = sessionClass.serverType;
                     value[(int)enum_login_session.state] = "logout";
                     list_login_session_replace.Add(value);
                 }
+                returnData.Method = "logout";
                 returnData.Code = 200;
-                returnData.Result = $"ID :{sessionClass.ID} ,找無此session!";
+                returnData.Result = $"ID :{sessionClass.ID}";
                 return returnData.JsonSerializationt();
 
             }
