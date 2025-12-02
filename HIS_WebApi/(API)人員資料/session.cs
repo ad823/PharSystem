@@ -207,7 +207,7 @@ namespace HIS_WebApi
         /// </returns>
         [Route("login")]
         [HttpPost]
-        public string POST_login([FromBody] returnData returnData)
+        public string login([FromBody] returnData returnData)
         {
             try
             {
@@ -386,7 +386,7 @@ namespace HIS_WebApi
 
         [Route("logout")]
         [HttpPost]
-        public string POST_logout([FromBody] returnData returnData)
+        public string logout([FromBody] returnData returnData)
         {
             try
             {  
@@ -479,7 +479,55 @@ namespace HIS_WebApi
 
         }
 
+        [Route("get_login_session")]
+        [HttpPost]
+        public string get_login_session([FromBody] returnData returnData)
+        {
+            try
+            {
 
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
+                {
+                    sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
+                }
+                else
+                {
+                    sys_serverSettingClasses = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "人員資料");
+                }
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "找無資料庫參數!";
+                    return returnData.JsonSerializationt();
+                }
+                string IP = sys_serverSettingClasses[0].Server;
+                string DataBaseName = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+                CheckCreatTable(sys_serverSettingClasses[0]);
+                SQLControl sQLControl_login_session = new SQLControl(IP, DataBaseName, "login_session", UserName, Password, Port, SSLMode);
+
+                List<object[]> list_value = sQLControl_login_session.GetAllRows(null);
+                List<sessionClass> sessionClasses = list_value.SQLToClass<sessionClass, enum_login_session>();
+                sessionClasses = sessionClasses.Where(x=> x.state == "login").ToList();
+                returnData.Method = "get_login_session";
+                returnData.Data = sessionClasses;
+                returnData.Code = 200;
+                returnData.Result = $"取得資料共{sessionClasses.Count}筆";
+                return returnData.JsonSerializationt();
+
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+
+        }
 
         [Route("check_session")]
         [HttpPost]
