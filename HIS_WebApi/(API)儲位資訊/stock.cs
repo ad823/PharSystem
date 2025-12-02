@@ -331,7 +331,12 @@ namespace HIS_WebApi
                     }
                     for (int i = 0; i < 效期.Count; i++)
                     {
-                        if (medMap_stock_buff.效期.Contains(效期[i]) == false) deviceBasic.清除效期(效期[i]);
+                        string 效期_ = 效期[i].StringToDateTime().ToDateTimeString();
+                        if (medMap_stock_buff.效期.Contains(效期_) == false) 
+                        
+                        {
+                            deviceBasic.清除效期(效期[i]);
+                        } 
                     }
                     item.Value = deviceBasic.JsonSerializationt();
                 }
