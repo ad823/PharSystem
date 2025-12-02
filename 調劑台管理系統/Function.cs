@@ -2730,7 +2730,7 @@ namespace 調劑台管理系統
                 if (text.StringIsEmpty()) return null;
                 if (text.Length <= 2 || text.Length > 200) return null;
                 if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
-                MySerialPort_Scanner01.ClearReadByte();
+      
                 text = text.Replace("\r\n", "");
                 return text;
             }
@@ -2738,6 +2738,10 @@ namespace 調劑台管理系統
             {
                 Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
                 return null;
+            }
+            finally
+            {
+                MySerialPort_Scanner01.ClearReadByte();
             }
           
         }
@@ -2765,7 +2769,10 @@ namespace 調劑台管理系統
                 Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
                 return null;
             }
-           
+            finally
+            {
+                MySerialPort_Scanner02.ClearReadByte();
+            }
         }
         public static string Function_ReadBacodeScanner03()
         {
@@ -2790,7 +2797,10 @@ namespace 調劑台管理系統
                 Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
                 return null;
             }
-            
+            finally
+            {
+                MySerialPort_Scanner03.ClearReadByte();
+            }
         }
         public static string Function_ReadBacodeScanner04()
         {
@@ -2815,7 +2825,10 @@ namespace 調劑台管理系統
                 Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
                 return null;
             }
-       
+            finally
+            {
+                MySerialPort_Scanner04.ClearReadByte();
+            }
         }
 
         public static string[] Function_ReadBacodeScanner()
