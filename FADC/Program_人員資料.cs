@@ -113,12 +113,14 @@ namespace FADC
             this.plC_RJ_Button_人員資料_RFID註冊.MouseDownEvent += PlC_RJ_Button_人員資料_RFID註冊_MouseDownEvent;
             this.plC_RJ_Button_人員資料_條碼註冊.MouseDownEvent += PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent;
             this.plC_Button_人員資料_指紋註冊.MouseDownEvent += PlC_Button_人員資料_指紋註冊_MouseDownEvent;
+            this.plC_RJ_Button_人員資料_人臉註冊.MouseDownEvent += PlC_RJ_Button_人員資料_人臉註冊_MouseDownEvent;
+
             this.plC_UI_Init.Add_Method(this.sub_Program_人員資料);
 
 
         }
 
-     
+   
 
         bool flag_人員資料_權限管理_頁面更新 = false;
         private void sub_Program_人員資料()
@@ -499,7 +501,7 @@ namespace FADC
                 }
             }
         }
-
+   
         private void PlC_RJ_Button_人員資料_刪除_MouseDownEvent(MouseEventArgs mevent)
         {
             this.Invoke(new Action(delegate
@@ -653,6 +655,33 @@ namespace FADC
             {
 
             }
+        }
+        private void PlC_RJ_Button_人員資料_人臉註冊_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                Dialog_AlarmForm dialog_AlarmForm;
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                if (list_value.Count == 0)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                string id = list_value[0][(int)enum_人員資料.ID].ObjectToString();
+                Dialog_人臉註冊 dialog_人臉註冊 = new Dialog_人臉註冊(id);
+                dialog_人臉註冊.ShowDialog();
+
+            
+
+
+            }
+            finally
+            {
+
+            }
+
+          
         }
         private void PlC_RJ_Button_人員資料_RFID註冊_MouseDownEvent(MouseEventArgs mevent)
         {

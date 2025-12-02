@@ -63,6 +63,16 @@ namespace FADC.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap faceid_register {
+            get {
+                object obj = ResourceManager.GetObject("faceid-register", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap icon_for_searching_medicine_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("icon-for-searching-medicine-removebg-preview", resourceCulture);

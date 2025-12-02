@@ -241,6 +241,7 @@ namespace FADC
             LoadDBConfig();
             ApiServerSetting();
 
+            Program_faceReconition_Init();
             Program_storageMedBoxIOConfig_Init();
             Program_Scanner_RS232_Init();
             Program_fingerMatch_Init();

@@ -198,6 +198,7 @@
             this.rJ_TextBox_人員資料_資料查詢_ID = new MyUI.RJ_TextBox();
             this.rJ_Lable138 = new MyUI.RJ_Lable();
             this.panel80 = new System.Windows.Forms.Panel();
+            this.plC_RJ_Button_人員資料_人臉註冊 = new MyUI.PLC_RJ_Button();
             this.plC_Button_人員資料_指紋註冊 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_人員資料_RFID註冊 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_人員資料_條碼註冊 = new MyUI.PLC_RJ_Button();
@@ -4941,6 +4942,7 @@
             // 
             // panel80
             // 
+            this.panel80.Controls.Add(this.plC_RJ_Button_人員資料_人臉註冊);
             this.panel80.Controls.Add(this.plC_Button_人員資料_指紋註冊);
             this.panel80.Controls.Add(this.plC_RJ_Button_人員資料_RFID註冊);
             this.panel80.Controls.Add(this.plC_RJ_Button_人員資料_條碼註冊);
@@ -4950,6 +4952,59 @@
             this.panel80.Name = "panel80";
             this.panel80.Size = new System.Drawing.Size(132, 465);
             this.panel80.TabIndex = 142;
+            // 
+            // plC_RJ_Button_人員資料_人臉註冊
+            // 
+            this.plC_RJ_Button_人員資料_人臉註冊.AutoResetState = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_人員資料_人臉註冊.Bool = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_人員資料_人臉註冊.BorderRadius = 10;
+            this.plC_RJ_Button_人員資料_人臉註冊.BorderSize = 1;
+            this.plC_RJ_Button_人員資料_人臉註冊.but_press = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_人員資料_人臉註冊.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_人員資料_人臉註冊.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_人員資料_人臉註冊.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_人員資料_人臉註冊.Font = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_人員資料_人臉註冊.GUID = "";
+            this.plC_RJ_Button_人員資料_人臉註冊.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_人員資料_人臉註冊.Image_padding = new System.Windows.Forms.Padding(5, 5, 12, 5);
+            this.plC_RJ_Button_人員資料_人臉註冊.Location = new System.Drawing.Point(6, 347);
+            this.plC_RJ_Button_人員資料_人臉註冊.Name = "plC_RJ_Button_人員資料_人臉註冊";
+            this.plC_RJ_Button_人員資料_人臉註冊.OFF_文字內容 = "人臉註冊";
+            this.plC_RJ_Button_人員資料_人臉註冊.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_人員資料_人臉註冊.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_人員資料_人臉註冊.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_人員資料_人臉註冊.ON_BorderSize = 1;
+            this.plC_RJ_Button_人員資料_人臉註冊.ON_文字內容 = "人臉註冊";
+            this.plC_RJ_Button_人員資料_人臉註冊.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_人員資料_人臉註冊.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_人員資料_人臉註冊.ON_背景顏色 = System.Drawing.Color.Linen;
+            this.plC_RJ_Button_人員資料_人臉註冊.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_人員資料_人臉註冊.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_人員資料_人臉註冊.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_人員資料_人臉註冊.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_人員資料_人臉註冊.ShadowSize = 3;
+            this.plC_RJ_Button_人員資料_人臉註冊.ShowLoadingForm = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.Size = new System.Drawing.Size(92, 109);
+            this.plC_RJ_Button_人員資料_人臉註冊.State = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.TabIndex = 146;
+            this.plC_RJ_Button_人員資料_人臉註冊.Text = "人臉註冊";
+            this.plC_RJ_Button_人員資料_人臉註冊.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_人員資料_人臉註冊.TextHeight = 30;
+            this.plC_RJ_Button_人員資料_人臉註冊.Texts = "人臉註冊";
+            this.plC_RJ_Button_人員資料_人臉註冊.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.字型鎖住 = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_人員資料_人臉註冊.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_人員資料_人臉註冊.文字鎖住 = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.背景圖片 = global::FADC.Properties.Resources.faceid_register;
+            this.plC_RJ_Button_人員資料_人臉註冊.讀取位元反向 = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.讀寫鎖住 = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.音效 = true;
+            this.plC_RJ_Button_人員資料_人臉註冊.顯示 = false;
+            this.plC_RJ_Button_人員資料_人臉註冊.顯示狀態 = false;
             // 
             // plC_Button_人員資料_指紋註冊
             // 
@@ -7745,7 +7800,7 @@
             this.設定02.Controls.Add(this.storageUI_EPD_266);
             this.設定02.Location = new System.Drawing.Point(4, 25);
             this.設定02.Name = "設定02";
-            this.設定02.Size = new System.Drawing.Size(1645, 952);
+            this.設定02.Size = new System.Drawing.Size(475, 301);
             this.設定02.TabIndex = 1;
             this.設定02.Text = "設定02";
             // 
@@ -7765,7 +7820,7 @@
             this.storageUI_EPD_266.Port = ((uint)(3306u));
             this.storageUI_EPD_266.Server_IP_Adress = "0.0.0.0";
             this.storageUI_EPD_266.Server_Port = "0";
-            this.storageUI_EPD_266.Size = new System.Drawing.Size(1645, 952);
+            this.storageUI_EPD_266.Size = new System.Drawing.Size(475, 301);
             this.storageUI_EPD_266.SSID = "";
             this.storageUI_EPD_266.Station = "0";
             this.storageUI_EPD_266.Subnet = "0.0.0.0";
@@ -8764,6 +8819,7 @@
         private MyUI.PLC_RJ_Button plC_RJ_Button8;
         private MyUI.PLC_RJ_Button plC_RJ_Button7;
         private MyUI.PLC_NumBox plC_NumBox16;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_人員資料_人臉註冊;
     }
 }
 
