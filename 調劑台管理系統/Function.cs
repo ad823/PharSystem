@@ -2729,7 +2729,7 @@ namespace 調劑台管理系統
                 text = text.Replace("\0", "");
                 if (text.StringIsEmpty()) return null;
                 if (text.Length <= 2 || text.Length > 200) return null;
-                //if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
+                if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
                 MySerialPort_Scanner01.ClearReadByte();
                 text = text.Replace("\r\n", "");
                 return text;
@@ -2755,7 +2755,7 @@ namespace 調劑台管理系統
                 text = text.Replace("\0", "");
                 if (text.StringIsEmpty()) return null;
                 if (text.Length <= 2 || text.Length > 200) return null;
-                //if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
+                if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
                 MySerialPort_Scanner02.ClearReadByte();
                 text = text.Replace("\r\n", "");
                 return text;
@@ -2780,7 +2780,7 @@ namespace 調劑台管理系統
                 text = text.Replace("\0", "");
                 if (text.StringIsEmpty()) return null;
                 if (text.Length <= 2 || text.Length > 200) return null;
-                //if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
+                if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
                 MySerialPort_Scanner03.ClearReadByte();
                 text = text.Replace("\r\n", "");
                 return text;
@@ -2805,7 +2805,7 @@ namespace 調劑台管理系統
                 text = text.Replace("\0", "");
                 if (text.StringIsEmpty()) return null;
                 if (text.Length <= 2 || text.Length > 200) return null;
-                //if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
+                if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
                 MySerialPort_Scanner04.ClearReadByte();
                 text = text.Replace("\r\n", "");
                 return text;

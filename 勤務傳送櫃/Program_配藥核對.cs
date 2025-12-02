@@ -304,8 +304,13 @@ namespace 勤務傳送櫃
                 value_醫令資料[(int)enum_醫囑資料.結方日期] = DateTime.MinValue.ToDateTimeString();
                 value_醫令資料[(int)enum_醫囑資料.展藥時間] = DateTime.MinValue.ToDateTimeString();
                 value_醫令資料[(int)enum_醫囑資料.就醫時間] = DateTime.MinValue.ToDateTimeString_6();
+                value_醫令資料[(int)enum_醫囑資料.領藥時間] = DateTime.MinValue.ToDateTimeString_6();
+                value_醫令資料[(int)enum_醫囑資料.核對時間] = DateTime.MinValue.ToDateTimeString_6();
+                value_醫令資料[(int)enum_醫囑資料.發藥時間] = DateTime.MinValue.ToDateTimeString_6();
                 value_醫令資料[(int)enum_醫囑資料.過帳時間] = DateTime.Now.ToDateTimeString_6();
-                this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value, false);
+
+                transactionsClass transactionsClass = value.SQLToClass<transactionsClass , enum_交易記錄查詢資料>();
+                transactionsClass.add(API_Server, transactionsClass, ServerName, ServerType);
                 this.sqL_DataGridView_醫令資料.SQL_ReplaceExtra(value_醫令資料, false);
 
                 Funtion_藥袋刷入API(orderClasses[0], this.登入者名稱, this.登入者ID);

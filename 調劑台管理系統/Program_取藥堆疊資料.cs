@@ -358,7 +358,7 @@ namespace 調劑台管理系統
                     if (Function_取藥堆疊資料_取得作業模式(list_堆疊母資料_add[i], enum_取藥堆疊母資料_作業模式.雙人覆核)) Function_外門片解鎖(list_lock_IP);
                     else
                     {
-                        Function_抽屜解鎖(list_lock_IP);
+                        if (PLC_Device_刷取藥單不要都開啟抽屜.Bool == false) Function_抽屜解鎖(list_lock_IP);
                     }
                 }
 

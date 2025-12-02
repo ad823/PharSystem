@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.0.49")]
-[assembly: AssemblyFileVersion("1.0.0.49")]
+[assembly: AssemblyVersion("1.0.0.51")]
+[assembly: AssemblyFileVersion("1.0.0.51")]
 namespace 勤務傳送櫃
 {
     public partial class Main_Form : Form
@@ -38,6 +38,8 @@ namespace 勤務傳送櫃
         private Stopwatch stopwatch = new Stopwatch();
         Basic.MyConvert myConvert = new Basic.MyConvert();
         static public string API_Server = "http://127.0.0.1:4433";
+        static public string ServerName = "";
+        static public string ServerType = "";
         #region DBConfigClass
         private static string DBConfigFileName = $@"{currentDirectory}\DBConfig.txt";
         public DBConfigClass dBConfigClass = new DBConfigClass();
@@ -391,6 +393,8 @@ namespace 勤務傳送櫃
             if (sys_serverSettingClass != null) dBConfigClass.OrderTakeOutApiURL = sys_serverSettingClass.Server;
 
             API_Server = dBConfigClass.Api_URL;
+            ServerName = dBConfigClass.Name;
+            ServerType = enum_sys_serverSetting_Type.傳送櫃.GetEnumName();
 
         }
         private void LoadcommandLineArgs()

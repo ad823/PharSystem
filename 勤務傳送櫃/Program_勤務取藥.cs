@@ -343,7 +343,8 @@ namespace 勤務傳送櫃
             {
                 list_交易紀錄[0][(int)enum_交易記錄查詢資料.領用人] = this.登入者名稱;
             }
-            this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_交易紀錄[0], false); 
+            transactionsClass transactionsClass = list_交易紀錄[0].SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
+ 
             string str = list_交易紀錄[0][(int)enum_交易記錄查詢資料.領用人].ObjectToString();
             if(this.plC_CheckBox_氣送作業.Checked)
             {
