@@ -124,7 +124,8 @@ namespace HIS_WebApi
                     returnData.Result = $"傳入資料異常!";
                     return returnData.JsonSerializationt();
                 }
-                transactionsClass.GUID = Guid.NewGuid().ToString();
+                if (transactionsClass.GUID.StringIsEmpty()) transactionsClass.GUID = Guid.NewGuid().ToString();
+
                 if (transactionsClass.操作時間.Check_Date_String() == false) transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
