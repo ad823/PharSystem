@@ -307,13 +307,14 @@ namespace HIS_WebApi
                         value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
                         value[(int)enum_login_session.serverName] = data.serverName;
                         value[(int)enum_login_session.serverType] = data.serverType;
+                        value[(int)enum_login_session.note] = sessionClass.note;
                         value[(int)enum_login_session.state] = "login";
                         list_login_session_add.Add(value);
                     }
                     else
                     {
                         value = list_login_session[0];
-                        value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
+                        //value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
                         value[(int)enum_login_session.ID] = list_person_page[0][(int)enum_人員資料.ID].ObjectToString();
                         value[(int)enum_login_session.Name] = list_person_page[0][(int)enum_人員資料.姓名].ObjectToString();
                         value[(int)enum_login_session.Employer] = list_person_page[0][(int)enum_人員資料.單位].ObjectToString();
@@ -321,6 +322,7 @@ namespace HIS_WebApi
                         value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
                         value[(int)enum_login_session.serverName] = data.serverName;
                         value[(int)enum_login_session.serverType] = data.serverType;
+                        value[(int)enum_login_session.note] = sessionClass.note;
                         value[(int)enum_login_session.state] = "login";
                         list_login_session_replace.Add(value);
                     }
@@ -437,13 +439,14 @@ namespace HIS_WebApi
                     value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
                     value[(int)enum_login_session.serverName] = sessionClass.serverName;
                     value[(int)enum_login_session.serverType] = sessionClass.serverType;
+                    value[(int)enum_login_session.note] = sessionClass.note;
                     value[(int)enum_login_session.state] = "logout";
                     list_login_session_add.Add(value);
                 }
                 else
                 {
                     value = list_login_session[0];
-                    value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
+                    //value[(int)enum_login_session.GUID] = Guid.NewGuid().ToString();
                     if (obj_person_page != null)
                     {
                         value[(int)enum_login_session.ID] = obj_person_page[(int)enum_人員資料.ID].ObjectToString();
@@ -454,9 +457,12 @@ namespace HIS_WebApi
                     value[(int)enum_login_session.loginTime] = DateTime.Now.ToDateTimeString();
                     value[(int)enum_login_session.serverName] = sessionClass.serverName;
                     value[(int)enum_login_session.serverType] = sessionClass.serverType;
+                    value[(int)enum_login_session.note] = sessionClass.note;
                     value[(int)enum_login_session.state] = "logout";
                     list_login_session_replace.Add(value);
                 }
+                if (list_login_session_add.Count > 0) sQLControl_login_session.AddRows(null, list_login_session_add);
+                if (list_login_session_replace.Count > 0) sQLControl_login_session.UpdateByDefulteExtra(null, list_login_session_replace);
                 returnData.Method = "logout";
                 returnData.Code = 200;
                 returnData.Result = $"ID :{sessionClass.ID}";
