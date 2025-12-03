@@ -384,12 +384,12 @@ namespace HIS_WebApi._API_藥品資料
                 SQLControl sQLControl_section = new SQLControl(Server, DB, "medMap_section", UserName, Password, Port, SSLMode);
 
                 List<object[]> objects_section = await sQLControl_section.GetRowsByDefultAsync(null, (int)enum_medMap_section.Master_GUID, medMapClasses.GUID);
-                List<medMap_sectionClass> medMap_SectionClasses = objects.SQLToClass<medMap_sectionClass, enum_medMap_section>();
+                List<medMap_sectionClass> medMap_SectionClasses = objects_section.SQLToClass<medMap_sectionClass, enum_medMap_section>();
 
                 SQLControl sQLControl_sub_section = new SQLControl(Server, DB, "medMap_sub_section", UserName, Password, Port, SSLMode);
                 string[] section_GUID = medMap_SectionClasses.Select(x => x.GUID).ToArray();
                 List<object[]> objects_sub_section = await sQLControl_sub_section.GetRowsByDefultAsync(null, (int)enum_medMap_sub_section.Master_GUID, section_GUID);
-                List<medMap_sub_sectionClass> medMap_Sub_Sections = objects.SQLToClass<medMap_sub_sectionClass, enum_medMap_sub_section>();
+                List<medMap_sub_sectionClass> medMap_Sub_Sections = objects_sub_section.SQLToClass<medMap_sub_sectionClass, enum_medMap_sub_section>();
 
                 SQLControl sQLControl_shelf = new SQLControl(Server, DB, "medMap_shelf", UserName, Password, Port, SSLMode);
                 string[] sub_section_GUID = medMap_Sub_Sections.Select(x => x.GUID).ToArray();
