@@ -189,6 +189,64 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("delete")]
+        public async Task<string> delete([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<medClassifyClass> medClassifyClasses = returnData.Data.ObjToClass<List<medClassifyClass>>();
+                if (medClassifyClasses == null)
+                {
+                    medClassifyClass medClassify = returnData.Data.ObjToClass<medClassifyClass>();
+                    if (medClassify == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"資料格式錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    medClassifyClasses = new List<medClassifyClass> { medClassify };
+                }
+                
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl = new SQLControl(Server, DB, "medClassify", UserName, Password, Port, SSLMode);
+
+                string[] GUID = medClassifyClasses.Select(x => x.GUID).Distinct().ToArray();
+                
+                List<object[]> objects = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medClassify.GUID, GUID);
+                List<medClassifyClass> medClassifies = objects.SQLToClass<medClassifyClass>();
+                if (objects.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"查無相關資料!";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                
+
+                await sQLControl.DeleteRowsAsync(null, objects);
+
+                returnData.Code = 200;
+                returnData.Data = medClassifies;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "delete";
+                returnData.Result = $"分類刪除成功，共{medClassifies.Count}筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         [HttpPost("get_by_GUID")]
         public async Task<string> get_by_GUID([FromBody] returnData returnData)
         {

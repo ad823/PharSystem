@@ -2374,7 +2374,7 @@ namespace HIS_WebApi
                     list_add.Add(value);
                 }
                 sQLControl_inspection_sub_content.AddRows(null, list_add);
-                if (GUIDs.Count == 1)
+                if (GUIDs.Count == 1 && list_add.Count == 1)
                 {
                     inspectionClass.content content = new inspectionClass.content();
                     content.GUID = sub_Content.Master_GUID;

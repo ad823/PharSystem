@@ -267,6 +267,7 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("update_stock")]
         [HttpPost("update")]
         public async Task<string> update([FromBody] returnData returnData)
         {
@@ -319,14 +320,25 @@ namespace HIS_WebApi
                     if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
                     if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
                     if (medMap_stock_buff.效期 == null || (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count)) continue;
+                    string value = item.Value;
+                    if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
+                    DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
+                    List<string> 效期 = deviceBasic.List_Validity_period; //原來的
+
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
-                        string value = item.Value;
-                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
-                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
-                        item.Value = deviceBasic.JsonSerializationt();
+                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);                                                            
                     }
+                    for (int i = 0; i < 效期.Count; i++)
+                    {
+                        string 效期_ = 效期[i].StringToDateTime().ToDateTimeString();
+                        if (medMap_stock_buff.效期.Contains(效期_) == false) 
+                        
+                        {
+                            deviceBasic.清除效期(效期[i]);
+                        } 
+                    }
+                    item.Value = deviceBasic.JsonSerializationt();
                 }
                 List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.UpdateRowsAsync(null, update);
@@ -425,6 +437,13 @@ namespace HIS_WebApi
                 stock.批號 = deviceBasic.List_Lot_number;
             }
             return medMap_stockClasses;
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_stock_all_server()
+        {
+            returnData returnData = new returnData();      
+            string result = await get_stock_all_server(returnData);
+            return result.JsonDeserializet<returnData>();
         }
     }
 }
