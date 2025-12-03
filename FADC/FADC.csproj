@@ -178,11 +178,17 @@
     <Compile Include="Dialog\Dialog_HID指紋註冊.Designer.cs">
       <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialog_人臉註冊.cs">
+    <Compile Include="Dialog\Dialog_人臉註冊.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialog_人臉註冊.Designer.cs">
+    <Compile Include="Dialog\Dialog_人臉註冊.Designer.cs">
       <DependentUpon>Dialog_人臉註冊.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\Dialog_人臉辨識.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_人臉辨識.Designer.cs">
+      <DependentUpon>Dialog_人臉辨識.cs</DependentUpon>
     </Compile>
     <Compile Include="faceReconition.cs">
       <SubType>Form</SubType>
@@ -225,8 +231,11 @@
     <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
       <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialog_人臉註冊.resx">
+    <EmbeddedResource Include="Dialog\Dialog_人臉註冊.resx">
       <DependentUpon>Dialog_人臉註冊.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_人臉辨識.resx">
+      <DependentUpon>Dialog_人臉辨識.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

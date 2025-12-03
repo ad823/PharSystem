@@ -114,13 +114,14 @@ namespace FADC
             this.plC_RJ_Button_人員資料_條碼註冊.MouseDownEvent += PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent;
             this.plC_Button_人員資料_指紋註冊.MouseDownEvent += PlC_Button_人員資料_指紋註冊_MouseDownEvent;
             this.plC_RJ_Button_人員資料_人臉註冊.MouseDownEvent += PlC_RJ_Button_人員資料_人臉註冊_MouseDownEvent;
+            this.plC_RJ_Button_後台登入_辨識登入.MouseDownEvent += PlC_RJ_Button_後台登入_辨識登入_MouseDownEvent;
 
             this.plC_UI_Init.Add_Method(this.sub_Program_人員資料);
 
 
         }
 
-   
+      
 
         bool flag_人員資料_權限管理_頁面更新 = false;
         private void sub_Program_人員資料()
@@ -541,8 +542,8 @@ namespace FADC
         {
             this.Function_人員資料_清除內容();
         }
-   
 
+      
         private void PlC_RJ_Button_人員資料_資料查詢_一維條碼_MouseDownEvent(MouseEventArgs mevent)
         {
             if (rJ_TextBox_人員資料_資料查詢_一維條碼.Text.StringIsEmpty())

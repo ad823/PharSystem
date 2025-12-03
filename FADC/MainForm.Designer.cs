@@ -328,6 +328,7 @@
             this.contextMenuStrip_Main = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_顯示主控台 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_隱藏主控台 = new System.Windows.Forms.ToolStripMenuItem();
+            this.plC_RJ_Button_後台登入_辨識登入 = new MyUI.PLC_RJ_Button();
             this.panel_Main.ContentsPanel.SuspendLayout();
             this.panel_Main.SuspendLayout();
             this.panel128.SuspendLayout();
@@ -1538,6 +1539,7 @@
             // 
             // panel_主畫面登入
             // 
+            this.panel_主畫面登入.Controls.Add(this.plC_RJ_Button_後台登入_辨識登入);
             this.panel_主畫面登入.Controls.Add(this.rJ_Lable_Title);
             this.panel_主畫面登入.Controls.Add(this.rJ_GroupBox_後台登入_帳密輸入);
             this.panel_主畫面登入.Controls.Add(this.rJ_Pannel_後台登入_歡迎登入);
@@ -8437,6 +8439,59 @@
             this.ToolStripMenuItem_隱藏主控台.Size = new System.Drawing.Size(168, 24);
             this.ToolStripMenuItem_隱藏主控台.Text = "(隱藏)主控台";
             // 
+            // plC_RJ_Button_後台登入_辨識登入
+            // 
+            this.plC_RJ_Button_後台登入_辨識登入.AutoResetState = false;
+            this.plC_RJ_Button_後台登入_辨識登入.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_後台登入_辨識登入.Bool = false;
+            this.plC_RJ_Button_後台登入_辨識登入.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_後台登入_辨識登入.BorderRadius = 10;
+            this.plC_RJ_Button_後台登入_辨識登入.BorderSize = 1;
+            this.plC_RJ_Button_後台登入_辨識登入.but_press = false;
+            this.plC_RJ_Button_後台登入_辨識登入.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_後台登入_辨識登入.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_後台登入_辨識登入.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_後台登入_辨識登入.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_後台登入_辨識登入.Font = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_後台登入_辨識登入.GUID = "";
+            this.plC_RJ_Button_後台登入_辨識登入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_後台登入_辨識登入.Image_padding = new System.Windows.Forms.Padding(5, 5, 12, 5);
+            this.plC_RJ_Button_後台登入_辨識登入.Location = new System.Drawing.Point(788, 322);
+            this.plC_RJ_Button_後台登入_辨識登入.Name = "plC_RJ_Button_後台登入_辨識登入";
+            this.plC_RJ_Button_後台登入_辨識登入.OFF_文字內容 = "辨識登入";
+            this.plC_RJ_Button_後台登入_辨識登入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_後台登入_辨識登入.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_後台登入_辨識登入.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_後台登入_辨識登入.ON_BorderSize = 1;
+            this.plC_RJ_Button_後台登入_辨識登入.ON_文字內容 = "辨識登入";
+            this.plC_RJ_Button_後台登入_辨識登入.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
+            this.plC_RJ_Button_後台登入_辨識登入.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_後台登入_辨識登入.ON_背景顏色 = System.Drawing.Color.Linen;
+            this.plC_RJ_Button_後台登入_辨識登入.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_後台登入_辨識登入.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_後台登入_辨識登入.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_後台登入_辨識登入.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_後台登入_辨識登入.ShadowSize = 3;
+            this.plC_RJ_Button_後台登入_辨識登入.ShowLoadingForm = false;
+            this.plC_RJ_Button_後台登入_辨識登入.Size = new System.Drawing.Size(110, 120);
+            this.plC_RJ_Button_後台登入_辨識登入.State = false;
+            this.plC_RJ_Button_後台登入_辨識登入.TabIndex = 147;
+            this.plC_RJ_Button_後台登入_辨識登入.Text = "辨識登入";
+            this.plC_RJ_Button_後台登入_辨識登入.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_後台登入_辨識登入.TextHeight = 30;
+            this.plC_RJ_Button_後台登入_辨識登入.Texts = "辨識登入";
+            this.plC_RJ_Button_後台登入_辨識登入.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_後台登入_辨識登入.字型鎖住 = false;
+            this.plC_RJ_Button_後台登入_辨識登入.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_後台登入_辨識登入.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_後台登入_辨識登入.文字鎖住 = false;
+            this.plC_RJ_Button_後台登入_辨識登入.背景圖片 = global::FADC.Properties.Resources.faceid_register;
+            this.plC_RJ_Button_後台登入_辨識登入.讀取位元反向 = false;
+            this.plC_RJ_Button_後台登入_辨識登入.讀寫鎖住 = false;
+            this.plC_RJ_Button_後台登入_辨識登入.音效 = true;
+            this.plC_RJ_Button_後台登入_辨識登入.顯示 = false;
+            this.plC_RJ_Button_後台登入_辨識登入.顯示狀態 = false;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -8820,6 +8875,7 @@
         private MyUI.PLC_RJ_Button plC_RJ_Button7;
         private MyUI.PLC_NumBox plC_NumBox16;
         private MyUI.PLC_RJ_Button plC_RJ_Button_人員資料_人臉註冊;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_後台登入_辨識登入;
     }
 }
 

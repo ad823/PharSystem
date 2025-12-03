@@ -23,6 +23,7 @@ namespace FADC
         private bool Isregister = false;
         private string id = "";
         private MyThread myThread;
+
         public Dialog_人臉註冊(string ID)
         {
        
@@ -31,9 +32,6 @@ namespace FADC
             this.FormClosing += Dialog_人臉註冊_FormClosing;
             this.rJ_Button_取消.MouseDownEvent += RJ_Button_取消_MouseDownEvent;
             this.rJ_Button_重新註冊.MouseDownEvent += RJ_Button_重新註冊_MouseDownEvent;
-
-       
-
             this.id = ID;
         }
         private void sub_program()
@@ -136,6 +134,10 @@ namespace FADC
         }
         async private void Dialog_人臉註冊_LoadFinishedEvent(System.EventArgs e)
         {
+            personPageClass personPage = personPageClass.serch_by_id(Main_Form.API_Server, id);
+
+            this.Text = $"{this.Text} {personPage.姓名}({personPage.ID})";
+
             this.faceRecognitionCanvas.StartCapture(Main_Form.videoCapture);
             FaceRecognitionUserList.Initial();
             FaceRecognitionUserList.GetUserList();
@@ -156,6 +158,11 @@ namespace FADC
         }
         private void Dialog_人臉註冊_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(myThread != null)
+            {
+                myThread.Abort();
+                myThread = null;
+            }
             this.faceRecognitionCanvas.StopCaptureSoft();
         }
 

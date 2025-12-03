@@ -653,6 +653,18 @@ namespace FADC
         {
             Function_登出();
         }
+        private void PlC_RJ_Button_後台登入_辨識登入_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Invoke(new Action(delegate
+            {
+                Dialog_人臉辨識 dialog_人臉辨識 = new Dialog_人臉辨識();
+                if (dialog_人臉辨識.ShowDialog() != DialogResult.Yes) return;
+                //Function_登出();
+                textBox_後台登入_帳號.Text = dialog_人臉辨識.Value.ID;
+                textBox_後台登入_密碼.Text = dialog_人臉辨識.Value.密碼;
+            }));
+            Function_登入();
+        }
         #endregion
     }
 
