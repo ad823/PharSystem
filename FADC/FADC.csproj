@@ -190,6 +190,12 @@
     <Compile Include="Dialog\Dialog_人臉辨識.Designer.cs">
       <DependentUpon>Dialog_人臉辨識.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_單品入庫作業.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_單品入庫作業.Designer.cs">
+      <DependentUpon>Dialog_單品入庫作業.cs</DependentUpon>
+    </Compile>
     <Compile Include="faceReconition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -227,6 +233,9 @@
     <Compile Include="Program_後台登入.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Program_調劑作業.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
       <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
@@ -236,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_人臉辨識.resx">
       <DependentUpon>Dialog_人臉辨識.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_單品入庫作業.resx">
+      <DependentUpon>Dialog_單品入庫作業.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -310,6 +322,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\faceid-register.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medication-transfer-to-dispensing-counter-with-arr-removebg-preview.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

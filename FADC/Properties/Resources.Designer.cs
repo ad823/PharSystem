@@ -83,6 +83,16 @@ namespace FADC.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap medication_transfer_to_dispensing_counter_with_arr_removebg_preview {
+            get {
+                object obj = ResourceManager.GetObject("medication-transfer-to-dispensing-counter-with-arr-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap RFID感應 {
             get {
                 object obj = ResourceManager.GetObject("RFID感應", resourceCulture);

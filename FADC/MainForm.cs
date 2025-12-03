@@ -249,6 +249,7 @@ namespace FADC
             Program_後台登入_Init();
             Program_交易紀錄查詢_Init();   
             Program_儲位管理_Init();
+            Program_調劑作業_Init();
             Program_PLC();
         }
     
