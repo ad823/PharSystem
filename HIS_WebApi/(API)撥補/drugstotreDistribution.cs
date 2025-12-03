@@ -53,10 +53,10 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugStotreDistributionClass))]
-        
+
         [Route("barcode")]
         [HttpPost]
-        public string barcode(returnData returnData)
+        public async Task<string> barcode(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -79,9 +79,23 @@ namespace HIS_WebApi
                 }
                 string[] ary = barcode.Split(';');
                 drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
-                drugstotreDistributions.藥碼 = ary.Length >= 2 ? ary[0] : "";
-                drugstotreDistributions.撥發量 = ary.Length >= 2 ? ary[1] : "";
-
+                if (ary.Length >= 2)
+                {
+                    drugstotreDistributions.藥碼 = ary[0];
+                    drugstotreDistributions.撥發量 = ary[1];
+                }
+                if (ary.Length == 1)
+                {
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(ary[0]);
+                    if (returnData_ != null && returnData_.Data != null)
+                    {
+                        medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
+                        if (mED_PageClasses != null)
+                        {
+                            drugstotreDistributions.藥碼 = mED_PageClasses.藥品碼;
+                        }
+                    }
+                }
 
 
                 returnData.Result = $"撥補資料讀取成功";

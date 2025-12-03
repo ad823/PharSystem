@@ -4480,5 +4480,13 @@ namespace HIS_WebApi
             string result = await get_med_cloud(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> serch_by_BarCode(string barcode)
+        {
+            returnData returnData = new returnData();
+            returnData.Value = barcode;
+            string result = await serch_by_BarCode(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
     }
 }
