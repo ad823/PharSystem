@@ -77,7 +77,7 @@ namespace HIS_WebApi
         }
         [Route("barcode")]
         [HttpPost]
-        public string barcode(returnData returnData)
+        public async Task<string> barcode(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -100,8 +100,25 @@ namespace HIS_WebApi
                 }
                 string[] ary = barcode.Split(';');
                 materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
-                materialRequisitionClass.藥碼 = ary.Length >= 2 ? ary[0] : "";
-                materialRequisitionClass.申領量 = ary.Length >= 2 ? ary[1] : "";
+                if (ary.Length >= 2)
+                {
+                    materialRequisitionClass.藥碼 = ary[0] ;
+                    materialRequisitionClass.申領量 = ary[1] ;
+                }
+                if (ary.Length == 1)
+                {
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(ary[0]);
+                    if (returnData_ != null && returnData_.Data != null)
+                    {
+                        medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
+                        if (mED_PageClasses != null)
+                        {
+                            materialRequisitionClass.藥碼 = mED_PageClasses.藥品碼;
+                        }
+                    }
+                }
+
+                
 
 
 

@@ -495,14 +495,14 @@ namespace HIS_WebApi
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
-            try
-            {
-                returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
-            }
-            catch
-            {
+            //try
+            //{
+            //    returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
+            //}
+            //catch
+            //{
 
-            }
+            //}
             returnData.Method = "get_name";
             try
             {

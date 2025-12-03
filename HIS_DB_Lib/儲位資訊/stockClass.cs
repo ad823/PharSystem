@@ -170,6 +170,33 @@ namespace HIS_DB_Lib
     }
     public static class stockClassMethod
     {
+        static public Dictionary<string, List<stockClass>> ToDictByShelfGUID(this List<stockClass> stockClasses)
+        {
+            Dictionary<string, List<stockClass>> dictionary = new Dictionary<string, List<stockClass>>();
+            foreach (var item in stockClasses)
+            {
+                if (dictionary.TryGetValue(item.Shelf_GUID, out List<stockClass> list))
+                {
+                    list.Add(item);
+                }
+                else
+                {
+                    dictionary[item.Shelf_GUID] = new List<stockClass> { item };
+                }
+            }
+            return dictionary;
+        }
+        static public List<stockClass> GetByShelfGUID(this Dictionary<string, List<stockClass>> dict, string Shelf_GUID)
+        {
+            if (dict.TryGetValue(Shelf_GUID, out List<stockClass> stockClasses))
+            {
+                return stockClasses;
+            }
+            else
+            {
+                return new List<stockClass>();
+            }
+        }
         static public Dictionary<string, List<stockClass>> ToDictByCode(this List<stockClass> stockClasses)
         {
             Dictionary<string, List<stockClass>> dictionary = new Dictionary<string, List<stockClass>>();
