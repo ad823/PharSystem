@@ -623,6 +623,7 @@
     <Compile Include="Program_雲端藥檔.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ScreenshotHelper.cs" />
     <Compile Include="UC_調劑作業_TypeA.cs">
       <SubType>UserControl</SubType>
     </Compile>

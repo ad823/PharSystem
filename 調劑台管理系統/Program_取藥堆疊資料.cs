@@ -274,25 +274,7 @@ namespace 調劑台管理系統
                 }
 
                 list_堆疊母資料_add.Add(value);
-
-                Console.WriteLine($"----------------------------------------------");
-                Console.WriteLine($"{i + 1}.新增取藥堆疊 : ");
-                Console.WriteLine($" (動作){takeMedicineStackClasses[i].動作.GetEnumName()} ");
-                Console.WriteLine($" (藥品碼){藥品碼} ");
-                Console.WriteLine($" (病歷號){病歷號} ");
-                Console.WriteLine($" (開方時間){開方時間} ");
-                Console.WriteLine($" (狀態){takeMedicineStackClasses[i].狀態.GetEnumName()} ");
-                Console.WriteLine($" (總異動量){takeMedicineStackClasses[i].總異動量} ");
-                Console.WriteLine($" (顏色){takeMedicineStackClasses[i].顏色} ");
-                Console.WriteLine($" (複盤){flag_複盤} ");
-                Console.WriteLine($" (盲盤){flag_盲盤} ");
-                Console.WriteLine($" (效期管理){flag_效期管理} ");
-                Console.WriteLine($" (雙人覆核){flag_雙人覆核} ");
-                Console.WriteLine($" (效期管理){flag_效期管理} ");
-                Console.WriteLine($" (RFID使用){flag_RFID使用} ");
-                Console.WriteLine($" (耗時){myTimer.ToString()} ");
-                Console.WriteLine($"----------------------------------------------");
-
+                PrintTakeMedicineStackDetail(takeMedicineStackClasses[i], i);
             }
 
 
@@ -401,6 +383,52 @@ namespace 調劑台管理系統
 
 
         }
+        private static void PrintTakeMedicineStackDetail(takeMedicineStackClass tm, int index)
+        {
+            Logger.Log("===============================================");
+            Logger.Log($"【取藥堆疊資料 - 第 {index} 筆】");
+
+            Logger.Log($" GUID                : {tm.GUID}");
+            Logger.Log($" Order_GUID          : {tm.Order_GUID}");
+            Logger.Log($" 序號                : {tm.序號}");
+            Logger.Log($" 調劑台名稱          : {tm.調劑台名稱}");
+            Logger.Log($" IP                  : {tm.IP}");
+            Logger.Log($" 操作人              : {tm.操作人}");
+            Logger.Log($" ID                  : {tm.ID}");
+            Logger.Log($" 藥師證字號          : {tm.藥師證字號}");
+            Logger.Log($" 覆核藥師姓名        : {tm.覆核藥師姓名}");
+            Logger.Log($" 覆核藥師ID          : {tm.覆核藥師ID}");
+            Logger.Log($" 動作                : {tm.動作}");
+            Logger.Log($" 作業模式            : {tm.作業模式}");
+            Logger.Log($" 藥袋序號            : {tm.藥袋序號}");
+            Logger.Log($" 領藥號              : {tm.領藥號}");
+            Logger.Log($" 病房號              : {tm.病房號}");
+            Logger.Log($" 類別                : {tm.類別}");
+            Logger.Log($" 藥品碼              : {tm.藥品碼}");
+            Logger.Log($" 藥品名稱            : {tm.藥品名稱}");
+            Logger.Log($" 單位                : {tm.單位}");
+            Logger.Log($" 病歷號              : {tm.病歷號}");
+            Logger.Log($" 病人姓名            : {tm.病人姓名}");
+            Logger.Log($" 床號                : {tm.床號}");
+            Logger.Log($" 頻次                : {tm.頻次}");
+            Logger.Log($" 開方時間            : {tm.開方時間}");
+            Logger.Log($" 操作時間            : {tm.操作時間}");
+            Logger.Log($" 顏色                : {tm.顏色}");
+            Logger.Log($" 狀態                : {tm.狀態}");
+            Logger.Log($" 庫存量              : {tm.庫存量}");
+            Logger.Log($" 總異動量            : {tm.總異動量}");
+            Logger.Log($" 結存量              : {tm.結存量}");
+            Logger.Log($" 盤點量              : {tm.盤點量}");
+            Logger.Log($" 效期                : {tm.效期}");
+            Logger.Log($" 批號                : {tm.批號}");
+            Logger.Log($" 備註                : {tm.備註}");
+            Logger.Log($" 收支原因            : {tm.收支原因}");
+            Logger.Log($" 診別                : {tm.診別}");
+            Logger.Log($" 儲位描述            : {tm.儲位描述}");
+
+            Logger.Log("===============================================");
+        }
+
         private object[] Function_取藥堆疊資料_新增子資料(string Master_GUID, string Device_GUID, string 調劑台名稱, string 藥品碼, string IP, string Num, string _enum_取藥堆疊_TYPE, string 效期, string 批號, string 異動量)
         {
 
@@ -422,9 +450,20 @@ namespace 調劑台管理系統
             value[(int)enum_取藥堆疊子資料.配藥完成] = false.ToString();
             value[(int)enum_取藥堆疊子資料.調劑結束] = false.ToString();
             value[(int)enum_取藥堆疊子資料.已入帳] = false.ToString();
-            Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 新增子資料 藥碼 : {藥品碼}");
-            this.sqL_DataGridView_取藥堆疊子資料.SQL_AddRow(value, false);
+            PrintTakeMedicineStackSubData(value); this.sqL_DataGridView_取藥堆疊子資料.SQL_AddRow(value, false);
             return value;
+        }
+        private void PrintTakeMedicineStackSubData(object[] value)
+        {
+            Logger.Log("--------------------------------------------------");
+            Logger.Log($"【新增取藥堆疊子資料】 {DateTime.Now.ToDateTimeString()}");
+
+            foreach (enum_取藥堆疊子資料 e in Enum.GetValues(typeof(enum_取藥堆疊子資料)))
+            {
+                Logger.Log($" {e,-12} : {value[(int)e].ObjectToString()}");
+            }
+
+            Logger.Log("--------------------------------------------------");
         }
         static public void Function_取藥堆疊資料_刪除母資料(string GUID)
         {
@@ -845,7 +884,6 @@ namespace 調劑台管理系統
         }
         private object[] Function_取藥堆疊子資料_設定已入帳(object[] 堆疊子資料)
         {
-
             string IP = 堆疊子資料[(int)enum_取藥堆疊子資料.IP].ObjectToString();
             string 藥品碼 = 堆疊子資料[(int)enum_取藥堆疊子資料.藥品碼].ObjectToString();
             string str_TYPE = 堆疊子資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString();
@@ -854,21 +892,46 @@ namespace 調劑台管理系統
             double 儲位庫存 = 0;
             string 批號 = 堆疊子資料[(int)enum_取藥堆疊子資料.批號].ObjectToString();
 
+            Logger.Log("==================================================");
+            Logger.Log($"【設定已入帳 - 子資料】 {DateTime.Now.ToDateTimeString()}");
+            Logger.Log($" IP       : {IP}");
+            Logger.Log($" 藥品碼   : {藥品碼}");
+            Logger.Log($" TYPE     : {str_TYPE}");
+            Logger.Log($" 效期     : {效期}");
+            Logger.Log($" 異動量   : {異動量}");
+            Logger.Log("--------------------------------------------------");
 
-
-            if (plC_CheckBox_面板於過帳後更新.Checked) Function_取藥堆疊資料_刷新面板(藥品碼);
-            if (str_TYPE == DeviceType.EPD583.GetEnumName() || str_TYPE == DeviceType.EPD583_lock.GetEnumName()
-               || str_TYPE == DeviceType.EPD420_D.GetEnumName() || str_TYPE == DeviceType.EPD420_D_lock.GetEnumName()
-               || str_TYPE == DeviceType.EPD730E.GetEnumName() || str_TYPE == DeviceType.EPD730E_lock.GetEnumName())
+            if (plC_CheckBox_面板於過帳後更新.Checked)
             {
+                Logger.Log("→ 刷新面板");
+                Function_取藥堆疊資料_刷新面板(藥品碼);
+            }
+
+            // *****************************************************
+            //  EPD583, 420D, 730E 系列
+            // *****************************************************
+            if (str_TYPE == DeviceType.EPD583.GetEnumName() || str_TYPE == DeviceType.EPD583_lock.GetEnumName()
+             || str_TYPE == DeviceType.EPD420_D.GetEnumName() || str_TYPE == DeviceType.EPD420_D_lock.GetEnumName()
+             || str_TYPE == DeviceType.EPD730E.GetEnumName() || str_TYPE == DeviceType.EPD730E_lock.GetEnumName())
+            {
+                Logger.Log("→ 設備類型：EPD583 / 420D / 730E 系列");
+
                 List<Box> boxes = List_EPD583_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < boxes.Count; i++)
                 {
                     if (boxes[i].IP != IP) continue;
+
+                    Logger.Log($"→ 找到儲位 BOX (IP: {IP})");
                     boxes[i] = this.drawerUI_EPD_583.SQL_GetBox(boxes[i]);
                     儲位庫存 = boxes[i].取得庫存(效期);
+
+                    Logger.Log($"   儲位庫存 : {儲位庫存}");
+                    Logger.Log($"   異動量   : {異動量}");
+
                     if (儲位庫存 + 異動量 < 0)
                     {
+                        Logger.Log("   → 庫存不足，執行庫存異動");
+
                         List<string> list_效期 = new List<string>();
                         List<string> list_批號 = new List<string>();
                         List<string> list_異動量 = new List<string>();
@@ -879,18 +942,22 @@ namespace 調劑台管理系統
                         this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
                         break;
                     }
-                    else if ((儲位庫存) >= 0)
+                    else if (儲位庫存 >= 0)
                     {
+                        Logger.Log("   → 正常異動，更新效期庫存");
                         boxes[i].效期庫存異動(效期, 異動量);
                         批號 = boxes[i].取得批號(效期);
+
                         Drawer drawer = List_EPD583_入賬資料.ReplaceBox(boxes[i]);
                         List_EPD583_入賬資料.Add_NewDrawer(boxes[i]);
                         this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
                         break;
                     }
-                    else if ((儲位庫存) == -1)
+                    else if (儲位庫存 == -1)
                     {
+                        Logger.Log("   → 無此效期，新增效期");
                         boxes[i].新增效期(效期, 批號, 異動量.ToString());
+
                         Drawer drawer = List_EPD583_入賬資料.ReplaceBox(boxes[i]);
                         List_EPD583_入賬資料.Add_NewDrawer(boxes[i]);
                         this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
@@ -898,16 +965,30 @@ namespace 調劑台管理系統
                     }
                 }
             }
-            if (str_TYPE == DeviceType.EPD1020.GetEnumName() || str_TYPE == DeviceType.EPD1020_lock.GetEnumName())
+
+            // *****************************************************
+            //  EPD1020 系列
+            // *****************************************************
+            else if (str_TYPE == DeviceType.EPD1020.GetEnumName() || str_TYPE == DeviceType.EPD1020_lock.GetEnumName())
             {
+                Logger.Log("→ 設備類型：EPD1020");
+
                 List<Box> boxes = List_EPD1020_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < boxes.Count; i++)
                 {
                     if (boxes[i].IP != IP) continue;
+
+                    Logger.Log($"→ 找到儲位 (IP: {IP})");
                     boxes[i] = this.drawerUI_EPD_1020.SQL_GetBox(boxes[i]);
                     儲位庫存 = boxes[i].取得庫存(效期);
+
+                    Logger.Log($"   儲位庫存 : {儲位庫存}");
+                    Logger.Log($"   異動量   : {異動量}");
+
                     if (儲位庫存 + 異動量 < 0)
                     {
+                        Logger.Log("   → 庫存不足，執行庫存異動");
+
                         List<string> list_效期 = new List<string>();
                         List<string> list_批號 = new List<string>();
                         List<string> list_異動量 = new List<string>();
@@ -918,16 +999,20 @@ namespace 調劑台管理系統
                         this.drawerUI_EPD_1020.SQL_ReplaceDrawer(drawer);
                         break;
                     }
-                    else if ((儲位庫存) >= 0)
+                    else if (儲位庫存 >= 0)
                     {
+                        Logger.Log("   → 正常異動，更新效期庫存");
+
                         boxes[i].效期庫存異動(效期, 異動量);
                         Drawer drawer = List_EPD1020_入賬資料.ReplaceByGUID(boxes[i]);
                         List_EPD1020_入賬資料.Add_NewDrawer(boxes[i]);
                         this.drawerUI_EPD_1020.SQL_ReplaceDrawer(drawer);
                         break;
                     }
-                    else if ((儲位庫存) == -1)
+                    else if (儲位庫存 == -1)
                     {
+                        Logger.Log("   → 無此效期，新增加效期");
+
                         boxes[i].新增效期(效期, 批號, 異動量.ToString());
                         Drawer drawer = List_EPD1020_入賬資料.ReplaceBox(boxes[i]);
                         List_EPD1020_入賬資料.Add_NewDrawer(boxes[i]);
@@ -936,20 +1021,34 @@ namespace 調劑台管理系統
                     }
                 }
             }
+
+            // *****************************************************
+            //  EPD266 / 290 / 420 / 213 / 360E 系列
+            // *****************************************************
             else if (str_TYPE == DeviceType.EPD266.GetEnumName() || str_TYPE == DeviceType.EPD266_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD420.GetEnumName() || str_TYPE == DeviceType.EPD420_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD420G.GetEnumName() || str_TYPE == DeviceType.EPD420G_lock.GetEnumName()
-                  || str_TYPE == DeviceType.EPD360E.GetEnumName() || str_TYPE == DeviceType.EPD360E_lock.GetEnumName())
+                 || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD420.GetEnumName() || str_TYPE == DeviceType.EPD420_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD420G.GetEnumName() || str_TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD360E.GetEnumName() || str_TYPE == DeviceType.EPD360E_lock.GetEnumName())
             {
+                Logger.Log("→ 設備類型：EPD266 / 290 / 420 / 213 / 360E 系列");
+
                 Storage storage = List_EPD266_入賬資料.SortByIP(IP);
                 if (storage != null)
                 {
+                    Logger.Log("→ 找到儲位 Storage");
+
                     storage = this.storageUI_EPD_266.SQL_GetStorage(storage);
                     儲位庫存 = storage.取得庫存(效期);
+
+                    Logger.Log($"   儲位庫存 : {儲位庫存}");
+                    Logger.Log($"   異動量   : {異動量}");
+
                     if (儲位庫存 + 異動量 < 0)
                     {
+                        Logger.Log("   → 庫存不足，執行庫存異動");
+
                         List<string> list_效期 = new List<string>();
                         List<string> list_批號 = new List<string>();
                         List<string> list_異動量 = new List<string>();
@@ -958,15 +1057,19 @@ namespace 調劑台管理系統
                         List_EPD266_入賬資料.Add_NewStorage(storage);
                         this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
                     }
-                    else if ((儲位庫存) >= 0)
+                    else if (儲位庫存 >= 0)
                     {
+                        Logger.Log("   → 正常異動，更新效期庫存");
+
                         storage.效期庫存異動(效期, 異動量);
+
                         List_EPD266_入賬資料.Add_NewStorage(storage);
                         this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
-
                     }
-                    else if ((儲位庫存) == -1)
+                    else if (儲位庫存 == -1)
                     {
+                        Logger.Log("   → 無此效期，新增加效期");
+
                         storage.新增效期(效期, 批號, 異動量.ToString());
                         List_EPD266_入賬資料.Add_NewStorage(storage);
                         this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
@@ -974,14 +1077,24 @@ namespace 調劑台管理系統
                 }
                 else
                 {
+                    Logger.Log("→ 未找到 Storage，改由 EPD583 BOX 模式處理");
+
+                    // fallback to BOX
                     List<Box> boxes = List_EPD583_入賬資料.SortByCode(藥品碼);
                     for (int i = 0; i < boxes.Count; i++)
                     {
                         if (boxes[i].IP != IP) continue;
+
                         boxes[i] = this.drawerUI_EPD_583.SQL_GetBox(boxes[i]);
                         儲位庫存 = boxes[i].取得庫存(效期);
+
+                        Logger.Log($"   儲位庫存 : {儲位庫存}");
+                        Logger.Log($"   異動量   : {異動量}");
+
                         if (儲位庫存 + 異動量 < 0)
                         {
+                            Logger.Log("   → 庫存不足，執行庫存異動");
+
                             List<string> list_效期 = new List<string>();
                             List<string> list_批號 = new List<string>();
                             List<string> list_異動量 = new List<string>();
@@ -992,17 +1105,22 @@ namespace 調劑台管理系統
                             this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
                             break;
                         }
-                        else if ((儲位庫存) >= 0)
+                        else if (儲位庫存 >= 0)
                         {
+                            Logger.Log("   → 正常異動，更新效期庫存");
+
                             boxes[i].效期庫存異動(效期, 異動量);
                             批號 = boxes[i].取得批號(效期);
+
                             Drawer drawer = List_EPD583_入賬資料.ReplaceBox(boxes[i]);
                             List_EPD583_入賬資料.Add_NewDrawer(boxes[i]);
                             this.drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
                             break;
                         }
-                        else if ((儲位庫存) == -1)
+                        else if (儲位庫存 == -1)
                         {
+                            Logger.Log("   → 無此效期，新增加效期");
+
                             boxes[i].新增效期(效期, 批號, 異動量.ToString());
                             Drawer drawer = List_EPD583_入賬資料.ReplaceBox(boxes[i]);
                             List_EPD583_入賬資料.Add_NewDrawer(boxes[i]);
@@ -1011,15 +1129,26 @@ namespace 調劑台管理系統
                         }
                     }
                 }
-               
             }
+
+            // *****************************************************
+            //  Pannel35
+            // *****************************************************
             else if (str_TYPE == DeviceType.Pannel35_lock.GetEnumName() || str_TYPE == DeviceType.Pannel35.GetEnumName())
             {
+                Logger.Log("→ 設備類型：WT32 Pannel35");
+
                 Storage storage = List_Pannel35_入賬資料.SortByIP(IP);
                 storage = this.storageUI_WT32.SQL_GetStorage(storage);
                 儲位庫存 = storage.取得庫存(效期);
+
+                Logger.Log($"   儲位庫存 : {儲位庫存}");
+                Logger.Log($"   異動量   : {異動量}");
+
                 if (儲位庫存 + 異動量 < 0)
                 {
+                    Logger.Log("   → 庫存不足，執行庫存異動");
+
                     List<string> list_效期 = new List<string>();
                     List<string> list_批號 = new List<string>();
                     List<string> list_異動量 = new List<string>();
@@ -1028,38 +1157,54 @@ namespace 調劑台管理系統
                     List_Pannel35_入賬資料.Add_NewStorage(storage);
                     this.storageUI_WT32.SQL_ReplaceStorage(storage);
                 }
-                else if ((儲位庫存) >= 0)
+                else if (儲位庫存 >= 0)
                 {
+                    Logger.Log("   → 正常異動，更新效期庫存");
+
                     storage.效期庫存異動(效期, 異動量);
                     List_Pannel35_入賬資料.Add_NewStorage(storage);
                     this.storageUI_WT32.SQL_ReplaceStorage(storage);
+
                     if (!plC_CheckBox_測試模式.Checked)
                     {
+                        Logger.Log("   → 重新繪製 WT32 畫面 JPEG (背景模式)");
                         Task.Run(() =>
                         {
                             this.storageUI_WT32.Set_DrawPannelJEPG(storage);
-
                         });
                     }
-
                 }
-                else if ((儲位庫存) == -1)
+                else if (儲位庫存 == -1)
                 {
+                    Logger.Log("   → 無此效期，新增加效期");
+
                     storage.新增效期(效期, 批號, 異動量.ToString());
                     List_Pannel35_入賬資料.Add_NewStorage(storage);
                     this.storageUI_WT32.SQL_ReplaceStorage(storage);
                 }
             }
+
+            // *****************************************************
+            //  RowsLED
+            // *****************************************************
             else if (str_TYPE == DeviceType.RowsLED.GetEnumName())
             {
+                Logger.Log("→ 設備類型：Rows LED");
+
                 List<RowsDevice> rowsDevices = List_RowsLED_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < rowsDevices.Count; i++)
                 {
                     if (rowsDevices[i].IP != IP) continue;
+
                     rowsDevices[i] = this.rowsLEDUI.SQL_GetRowsDevice(rowsDevices[i]);
                     儲位庫存 = rowsDevices[i].取得庫存(效期);
+
+                    Logger.Log($"   儲位庫存 : {儲位庫存}");
+                    Logger.Log($"   異動量   : {異動量}");
+
                     if (儲位庫存 + 異動量 < 0)
                     {
+                        Logger.Log("   → 庫存不足，執行庫存異動");
                         List<string> list_效期 = new List<string>();
                         List<string> list_批號 = new List<string>();
                         List<string> list_異動量 = new List<string>();
@@ -1070,16 +1215,20 @@ namespace 調劑台管理系統
                         this.rowsLEDUI.SQL_ReplaceRowsLED(rowsLED);
                         break;
                     }
-                    else if ((儲位庫存) >= 0)
+                    else if (儲位庫存 >= 0)
                     {
+                        Logger.Log("   → 正常異動，更新效期庫存");
+
                         rowsDevices[i].效期庫存異動(效期, 異動量);
                         List_RowsLED_入賬資料.Add_NewRowsLED(rowsDevices[i]);
                         RowsLED rowsLED = List_RowsLED_入賬資料.SortByIP(rowsDevices[i].IP);
                         this.rowsLEDUI.SQL_ReplaceRowsLED(rowsLED);
                         break;
                     }
-                    else if ((儲位庫存) == -1)
+                    else if (儲位庫存 == -1)
                     {
+                        Logger.Log("   → 新增效期");
+
                         rowsDevices[i].新增效期(效期, 批號, 異動量.ToString());
                         List_RowsLED_入賬資料.Add_NewRowsLED(rowsDevices[i]);
                         RowsLED rowsLED = List_RowsLED_入賬資料.SortByIP(rowsDevices[i].IP);
@@ -1087,24 +1236,39 @@ namespace 調劑台管理系統
                     }
                 }
             }
+
+            // *****************************************************
+            //  RFID
+            // *****************************************************
             else if (str_TYPE == DeviceType.RFID_Device.GetEnumName())
             {
+                Logger.Log("→ 設備類型：RFID");
+
                 List<RFIDDevice> rFIDDevices = List_RFID_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < rFIDDevices.Count; i++)
                 {
                     if (rFIDDevices[i].IP != IP) continue;
+
                     rFIDDevices[i] = this.rfiD_UI.SQL_GetDevice(rFIDDevices[i]);
                     儲位庫存 = rFIDDevices[i].取得庫存(效期);
-                    if ((儲位庫存) >= 0)
+
+                    Logger.Log($"   儲位庫存 : {儲位庫存}");
+                    Logger.Log($"   異動量   : {異動量}");
+
+                    if (儲位庫存 >= 0)
                     {
+                        Logger.Log("   → 正常異動，更新效期庫存");
+
                         rFIDDevices[i].效期庫存異動(效期, 異動量);
                         List_RFID_入賬資料.Add_NewRFIDClass(rFIDDevices[i]);
                         RFIDClass rFIDClass = List_RFID_入賬資料.SortByIP(rFIDDevices[i].IP);
                         this.rfiD_UI.SQL_ReplaceRFIDClass(rFIDClass);
                         break;
                     }
-                    else if ((儲位庫存) == -1)
+                    else if (儲位庫存 == -1)
                     {
+                        Logger.Log("   → 無效期紀錄，新增效期");
+
                         rFIDDevices[i].新增效期(效期, 批號, 異動量.ToString());
                         List_RFID_入賬資料.Add_NewRFIDClass(rFIDDevices[i]);
                         RFIDClass rFIDClass = List_RFID_入賬資料.SortByIP(rFIDDevices[i].IP);
@@ -1112,12 +1276,25 @@ namespace 調劑台管理系統
                     }
                 }
             }
+
+            // *****************************************************
+            //  設定已入帳 Flags
+            // *****************************************************
             堆疊子資料[(int)enum_取藥堆疊子資料.已入帳] = true.ToString();
             堆疊子資料[(int)enum_取藥堆疊子資料.致能] = true.ToString();
             堆疊子資料[(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
             堆疊子資料[(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+
+            Logger.Log("--------------------------------------------------");
+            Logger.Log(" 子資料標記：已入帳 = True");
+            Logger.Log(" 子資料標記：致能 = True");
+            Logger.Log(" 子資料標記：流程作業完成 = True");
+            Logger.Log(" 子資料標記：配藥完成 = True");
+            Logger.Log("==================================================");
+
             return 堆疊子資料;
         }
+
         private List<object[]> Function_取藥堆疊子資料_取得可致能(ref List<object[]> list_value)
         {
             string IP;
