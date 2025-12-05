@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\DPUruNet.dll</HintPath>
     </Reference>
+    <Reference Include="DrawingClass, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MyUI\0.DLL\DrawingClass.dll</HintPath>
+    </Reference>
     <Reference Include="FaceRecognitionDll">
       <HintPath>..\0.DLL\FaceRecognition\FaceRecognitionDll.dll</HintPath>
     </Reference>
@@ -172,6 +176,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControl\BatchExpiryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl\BatchExpiryControl.Designer.cs">
+      <DependentUpon>BatchExpiryControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,6 +247,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UserControl\BatchExpiryControl.resx">
+      <DependentUpon>BatchExpiryControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
       <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
     </EmbeddedResource>

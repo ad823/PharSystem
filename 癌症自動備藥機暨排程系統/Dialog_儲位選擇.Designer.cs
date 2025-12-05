@@ -99,14 +99,19 @@ namespace 癌症備藥機
             this.rJ_Button_確認選擇.BorderRadius = 10;
             this.rJ_Button_確認選擇.BorderSize = 0;
             this.rJ_Button_確認選擇.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.rJ_Button_確認選擇.DisenableColor = System.Drawing.Color.Gray;
             this.rJ_Button_確認選擇.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_Button_確認選擇.FlatAppearance.BorderSize = 0;
             this.rJ_Button_確認選擇.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rJ_Button_確認選擇.Font = new System.Drawing.Font("微軟正黑體", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Button_確認選擇.ForeColor = System.Drawing.Color.White;
             this.rJ_Button_確認選擇.GUID = "";
+            this.rJ_Button_確認選擇.Image_padding = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.rJ_Button_確認選擇.Location = new System.Drawing.Point(0, 0);
             this.rJ_Button_確認選擇.Name = "rJ_Button_確認選擇";
+            this.rJ_Button_確認選擇.ProhibitionBorderLineWidth = 1;
+            this.rJ_Button_確認選擇.ProhibitionLineWidth = 4;
+            this.rJ_Button_確認選擇.ProhibitionSymbolSize = 30;
             this.rJ_Button_確認選擇.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Button_確認選擇.ShadowSize = 3;
             this.rJ_Button_確認選擇.ShowLoadingForm = false;
@@ -115,6 +120,7 @@ namespace 癌症備藥機
             this.rJ_Button_確認選擇.TabIndex = 0;
             this.rJ_Button_確認選擇.Text = "確 認 選 擇";
             this.rJ_Button_確認選擇.TextColor = System.Drawing.Color.White;
+            this.rJ_Button_確認選擇.TextHeight = 0;
             this.rJ_Button_確認選擇.UseVisualStyleBackColor = false;
             // 
             // sqL_DataGridView_儲位選擇
@@ -124,15 +130,20 @@ namespace 癌症備藥機
             this.sqL_DataGridView_儲位選擇.BorderColor = System.Drawing.Color.Silver;
             this.sqL_DataGridView_儲位選擇.BorderRadius = 0;
             this.sqL_DataGridView_儲位選擇.BorderSize = 2;
+            this.sqL_DataGridView_儲位選擇.CellBorderColor = System.Drawing.Color.White;
             this.sqL_DataGridView_儲位選擇.cellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
             this.sqL_DataGridView_儲位選擇.cellStylBackColor = System.Drawing.Color.PowderBlue;
             this.sqL_DataGridView_儲位選擇.cellStyleFont = new System.Drawing.Font("微軟正黑體", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_儲位選擇.cellStylForeColor = System.Drawing.Color.Black;
+            this.sqL_DataGridView_儲位選擇.checkedRowBackColor = System.Drawing.Color.YellowGreen;
             this.sqL_DataGridView_儲位選擇.columnHeaderBackColor = System.Drawing.Color.DarkGray;
+            this.sqL_DataGridView_儲位選擇.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_儲位選擇.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_儲位選擇.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
             this.sqL_DataGridView_儲位選擇.columnHeadersHeight = 40;
             this.sqL_DataGridView_儲位選擇.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.sqL_DataGridView_儲位選擇.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sqL_DataGridView_儲位選擇.DataKeyEnable = false;
             this.sqL_DataGridView_儲位選擇.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sqL_DataGridView_儲位選擇.Font = new System.Drawing.Font("新細明體", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_儲位選擇.ImageBox = false;
@@ -142,11 +153,17 @@ namespace 癌症備藥機
             this.sqL_DataGridView_儲位選擇.OnlineState = SQLUI.SQL_DataGridView.OnlineEnum.Online;
             this.sqL_DataGridView_儲位選擇.Password = "user82822040";
             this.sqL_DataGridView_儲位選擇.Port = ((uint)(3306u));
+            this.sqL_DataGridView_儲位選擇.rowBorderStyleOption = SQLUI.SQL_DataGridView.RowBorderStyleOption.All;
             this.sqL_DataGridView_儲位選擇.rowHeaderBackColor = System.Drawing.Color.Gray;
+            this.sqL_DataGridView_儲位選擇.rowHeaderBorderStyleOption = SQLUI.SQL_DataGridView.RowBorderStyleOption.All;
             this.sqL_DataGridView_儲位選擇.rowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
             this.sqL_DataGridView_儲位選擇.RowsColor = System.Drawing.SystemColors.Control;
             this.sqL_DataGridView_儲位選擇.RowsHeight = 80;
             this.sqL_DataGridView_儲位選擇.SaveFileName = "SQL_DataGridView";
+            this.sqL_DataGridView_儲位選擇.selectedBorderSize = 0;
+            this.sqL_DataGridView_儲位選擇.selectedRowBackColor = System.Drawing.Color.Blue;
+            this.sqL_DataGridView_儲位選擇.selectedRowBorderColor = System.Drawing.Color.Blue;
+            this.sqL_DataGridView_儲位選擇.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_儲位選擇.Server = "127.0.0.0";
             this.sqL_DataGridView_儲位選擇.Size = new System.Drawing.Size(772, 323);
             this.sqL_DataGridView_儲位選擇.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
@@ -174,11 +191,8 @@ namespace 癌症備藥機
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.rJ_Lable_藥品資訊);
             this.Controls.Add(this.rJ_Lable1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Dialog_儲位選擇";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Special_Time = 100;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

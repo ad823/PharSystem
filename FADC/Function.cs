@@ -118,6 +118,26 @@ namespace FADC
             return 庫存;
         }
 
+        static public List<Device> Function_從SQL取得所有儲位()
+        {
+            List<List<Device>> list_list_devices = new List<List<Device>>();
+            List<Device> devices = new List<Device>();
+            Function_從SQL取得儲位到本地資料();
+
+            list_list_devices.Add(List_EPD266_本地資料.GetAllDevice());
+
+
+            for (int i = 0; i < list_list_devices.Count; i++)
+            {
+                foreach (Device device in list_list_devices[i])
+                {
+                    device.確認效期庫存(true);
+                    devices.Add(device);
+                }
+            }
+            return devices;
+        }
+
         static public void Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作 enum_交易記錄查詢動作, string 操作人, string 備註)
         {
             if (操作人.StringIsEmpty()) return;

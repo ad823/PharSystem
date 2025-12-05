@@ -49,8 +49,7 @@ namespace 癌症備藥機
             List<Device> devices_buf = (from temp in devices
                                           where temp.Code == 藥碼
                                           select temp).ToList();
-
-            
+           
             List<object[]> list_value = new List<object[]>();
             for (int i = 0; i < devices_buf.Count; i++)
             {
