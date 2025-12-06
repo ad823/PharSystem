@@ -29,7 +29,7 @@ namespace HIS_DB_Lib
         操作者姓名,
         [Description("操作時間,DATETIME,50,INDEX")]
         操作時間,
-        [Description("回傳結果,VARCHAR,1000,NONE")]
+        [Description("回傳結果,VARCHAR,1500,NONE")]
         回傳結果
     }
     public class loggerClass

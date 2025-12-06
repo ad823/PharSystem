@@ -130,7 +130,7 @@ namespace HIS_WebApi.Anna_Logger
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("add")]
-        public string POST_add([FromBody] returnData returnData)
+        public async Task<string> add([FromBody] returnData returnData)
         {
             init();
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -432,6 +432,14 @@ namespace HIS_WebApi.Anna_Logger
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_logger()));
 
             return tables.JsonSerializationt(true);
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> add(List<loggerClass> loggerClasses)
+        {
+            returnData returnData = new returnData();
+            returnData.Data = loggerClasses;
+            string result = await add(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
         }
 
     }

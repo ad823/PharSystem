@@ -20,8 +20,8 @@ public class chemotherapyOrderDayClass
 
     /// <summary>第幾天 (1~15)</summary>
     [JsonPropertyName("day_no")]
-    [Description("VARCHAR,5,INDEX")]
-    public string 第幾天 { get; set; }
+    [Description("DATETIME,5,INDEX")]
+    public string 日期 { get; set; }
 
     /// <summary>該日是否使用 (Y/N)</summary>
     [JsonPropertyName("is_used")]
