@@ -18,6 +18,9 @@ using FaceRecognitionDll.Models;
 using SQLUI;
 using H_Pannel_lib;
 using DrawingClass;
+using GestureRecognitionDll;
+using System.Text.RegularExpressions;
+using System.Reflection;
 namespace FADC
 {
     public partial class Dialog_單品入庫作業 : MyDialog
@@ -29,13 +32,13 @@ namespace FADC
             form.Invoke(new Action(delegate { InitializeComponent(); }));
             
             this.LoadFinishedEvent += Dialog_入庫作業_LoadFinishedEvent;
+            this.FormClosed += Dialog_單品入庫作業_FormClosed;
             this.rJ_Button_取消.MouseDownEvent += RJ_Button_取消_MouseDownEvent;
         }
 
-        private void RJ_Button_取消_MouseDownEvent(MouseEventArgs mevent)
-        {
-            this.Close();
-        }
+     
+
+    
         private void Dialog_入庫作業_LoadFinishedEvent(EventArgs e)
         {
             try
@@ -65,7 +68,7 @@ namespace FADC
                 comboBox_藥品搜尋種類.SelectedIndex = 0;
                 RJ_Button_藥品搜尋_MouseDownEvent(null);
 
-
+    
                 table = new Table("");
                 table.AddColumnList("GUID", Table.StringType.VARCHAR, 50, Table.IndexType.None);
 
@@ -90,8 +93,11 @@ namespace FADC
            
         }
 
-       
 
+        private void Dialog_單品入庫作業_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            gestureRecognitionCanvas.StopCaptureSoft();
+        }
         private void RJ_Button_確認_MouseDownEvent(MouseEventArgs mevent)
         {
             double 庫存 = Main_Form.Function_從SQL取得庫存(_medClass.藥品碼);
@@ -112,7 +118,10 @@ namespace FADC
 
             this.Close();
         }
-
+        private void RJ_Button_取消_MouseDownEvent(MouseEventArgs mevent)
+        {
+            this.Close();
+        }
         private void RJ_Button_下一步_MouseDownEvent(MouseEventArgs mevent)
         {
             this.Invoke(new Action(delegate
@@ -167,22 +176,48 @@ namespace FADC
                     rJ_Lable_效期.Text = batchExpiryControl.GetStock().Validity_period;
                     rJ_Lable_批號.Text = batchExpiryControl.GetStock().Lot_number;
                     rJ_Lable_數量.Text = userControl_NumPanel1.Value.ToString();
+
+                    gestureRecognitionCanvas.UpdateRecognitionResultEvent += GestureRecognitionCanvas_UpdateRecognitionResultEvent;
+                    gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
+                    Console.WriteLine($"手勢感測開始...");
+
                     this.stepViewer1.Next();
                     tabControlEx.SelectTab("確認結果");
 
                 }
                 else if (tabControlEx.SelectedTab.Text == "確認結果")
                 {
-             
-
+                
                 }
             }));
         }
+        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<HandPoseInfo> result)
+        {
+            // 顯示 Log
+           
+            if (result != null && result.State && result.Data != null)
+            {
+                Console.WriteLine($"手勢: {result.Data.Pose}");
+                if (result.Data.Pose == "ok" || result.Data.Pose == "good")
+                {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【確認手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_確認_MouseDownEvent(null);
+                }
+                else if(result.Data.Pose == "bad")
+                {
 
+                }
+            }
+            else
+            {
+                //Console.WriteLine($"無法辨識");
+            }
+
+        }
         private void SqL_DataGridView_藥品資料_RowDoubleClickEvent(object[] RowValue)
         {
        
-
         }
         private void SqL_DataGridView_藥品資料_RowEnterEvent(object[] RowValue)
         {

@@ -1564,6 +1564,7 @@
             // panel146
             // 
             this.panel146.BackColor = System.Drawing.Color.Transparent;
+            this.panel146.BackgroundImage = global::FADC.Properties.Resources.LOGO;
             this.panel146.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel146.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel146.Location = new System.Drawing.Point(0, 55);

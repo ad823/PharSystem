@@ -72,6 +72,12 @@
     <Reference Include="FpMatchLib">
       <HintPath>..\0.DLL\FpMatchLib.dll</HintPath>
     </Reference>
+    <Reference Include="GestureRecognitionDll">
+      <HintPath>..\0.DLL\GestureRecognition\GestureRecognitionDll.dll</HintPath>
+    </Reference>
+    <Reference Include="GestureRecognitionUseerControl">
+      <HintPath>..\0.DLL\GestureRecognition\GestureRecognitionUseerControl.dll</HintPath>
+    </Reference>
     <Reference Include="HIS_DB_Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
@@ -338,6 +344,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\medication-transfer-to-dispensing-counter-with-arr-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LOGO.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
