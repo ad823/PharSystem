@@ -3900,7 +3900,7 @@ namespace HIS_WebApi
                 (
                     -- 第三優先：如果沒有完整比對 & BarCode 長度 > 4，改用藥品碼 / 料號前綴模糊搜尋
                     SELECT * FROM {DB}.medicine_page_cloud
-                    WHERE CHAR_LENGTH('{BarCode}') > 4
+                    WHERE CHAR_LENGTH('{BarCode}') >= 4
                       AND (藥品碼 LIKE '{BarCode}%' OR 料號 LIKE '{BarCode}%')
                       AND NOT EXISTS (
                           SELECT 1 FROM {DB}.medicine_page_cloud WHERE 藥品碼 = '{BarCode}'

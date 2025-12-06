@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -70,12 +71,12 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt();
                 }
                 string barcode = returnData.ValueAry[0];
-                POST_init(returnData);
                 string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
                 if (VM_API.StringIsEmpty() == false)
                 {
-                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
-                    return result;
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);                    
+                    return json_out;
                 }
                 string[] ary = barcode.Split(';');
                 drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();

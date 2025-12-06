@@ -91,12 +91,12 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt();
                 }
                 string barcode = returnData.ValueAry[0];
-                GET_init(returnData);
                 string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_barcode");
                 if (VM_API.StringIsEmpty() == false)
                 {
-                    string result = Basic.Net.WEBApiGet($"{VM_API}{barcode}");
-                    return result;
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    return json_out;
                 }
                 string[] ary = barcode.Split(';');
                 materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();

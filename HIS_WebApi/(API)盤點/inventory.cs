@@ -1603,15 +1603,15 @@ namespace HIS_WebApi
 
 
                 content = list_inventory_content_buf[0].SQLToClass<inventoryClass.content, enum_盤點內容>();
-                int 盤點量 = 0;
+                double 盤點量 = 0;
                 List<object[]> list_inventory_sub_content_buf = sQLControl_inventory_sub_content.GetRowsByDefult(null, (int)enum_盤點明細.Master_GUID, content.GUID);
                 for (int m = 0; m < list_inventory_sub_content_buf.Count; m++)
                 {
                     inventoryClass.sub_content sub_Content = list_inventory_sub_content_buf[m].SQLToClass<inventoryClass.sub_content, enum_盤點明細>();
 
-                    if (sub_Content.盤點量.StringIsInt32())
+                    if (sub_Content.盤點量.StringIsDouble())
                     {
-                        盤點量 += sub_Content.盤點量.StringToInt32();
+                        盤點量 += sub_Content.盤點量.StringToDouble();
                     }
                     content.Sub_content.Add(sub_Content);
                 }
