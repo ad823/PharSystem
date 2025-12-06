@@ -85,6 +85,66 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("get_by_barcode")]
+        public async Task<string> get_by_barcode([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "get_by_barcode";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入ValueAry資料異常";
+                    return returnData.JsonSerializationt();
+                }   
+                string barcode = returnData.ValueAry[0];
+
+                SQLControl sQLControl = new SQLControl(Server, DB, "chemotherapy_orders", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_sub = new SQLControl(Server, DB, "chemotherapy_order_days", UserName, Password, Port, SSLMode);
+
+                string command = string.Empty;
+
+              
+                command = $"SELECT * FROM {DB}.chemotherapy_orders " +
+                    $"WHERE BARCODE = '{barcode}' ";
+
+
+                List<object[]> order_object = await sQLControl.WriteCommandAsync(command);
+                List<chemotherapyOrderClass> orderClasses = order_object.SQLToClass<chemotherapyOrderClass>();
+                string[] GUID = orderClasses.Select(x => x.GUID).ToArray();
+                string GUID_string = GUID.Length > 0 ? string.Join(",", GUID.Select(x => $"'{x}'")) : "''";
+                command = $"SELECT * FROM {DB}.chemotherapy_order_days " +
+                    $"WHERE 主表GUID IN ({GUID_string});";
+                List<object[]> sub_order_object = await sQLControl_sub.WriteCommandAsync(command); //主表GUID
+
+                List<chemotherapyOrderDayClass> sub_orderClasses = sub_order_object.SQLToClass<chemotherapyOrderDayClass>();
+                string now = DateTime.Now.ToDateTimeString();
+                string min_time = DateTime.MinValue.ToDateTimeString();
+                foreach (var item in orderClasses)
+                {
+                    
+                    List<chemotherapyOrderDayClass> chemotherapyOrderDayClass = sub_orderClasses.Where(order => order.主表GUID == item.GUID).ToList();
+                    item.每日紀錄 = chemotherapyOrderDayClass;                   
+                }
+                
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = orderClasses;
+                returnData.Result = $"取得醫令成功,共<{orderClasses.Count}>筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+
+            }
+        }
         /// <summary>
         /// 更新西藥醫令(同一位病人PRI_KEY 不同)
         /// </summary>

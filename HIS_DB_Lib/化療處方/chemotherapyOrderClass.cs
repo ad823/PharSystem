@@ -152,5 +152,17 @@ public class chemotherapyOrderClass
         returnData = json_out.JsonDeserializet<returnData>();  
         return returnData;
     }
+    static public returnData get_by_barcode(string API_Server,string barcode)
+    {
+        string url = $"{API_Server}/api/chemotherapyOrder/get_by_barcode";
+
+        returnData returnData = new returnData();
+        returnData.ValueAry.Add(barcode);
+
+        string json_in = returnData.JsonSerializationt();
+        string json_out = Net.WEBApiPostJson(url, json_in);
+        returnData = json_out.JsonDeserializet<returnData>();
+        return returnData;
+    }
 
 }
