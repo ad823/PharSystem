@@ -312,7 +312,8 @@ namespace 調劑台管理系統
 
                     if (orderClass.交易量.StringToDouble() > 0) 動作 = enum_交易記錄查詢動作.掃碼退藥;
 
-
+                    string[] 儲位描述_ = medClasses_buf[0].storageInfo != null ?  medClasses_buf[0].storageInfo.Select(x => x.儲位描述).ToArray(): new string[] { };
+                    string 儲位描述 = string.Join(",", 儲位描述_);
 
                     takeMedicineStackClass.GUID = GUID;
                     takeMedicineStackClass.Order_GUID  = orderClass.GUID;
@@ -340,10 +341,11 @@ namespace 調劑台管理系統
                     takeMedicineStackClass.藥師證字號 = 藥師證字號;
                     takeMedicineStackClass.總異動量 = orderClass.交易量;
                     takeMedicineStackClass.收支原因 = $"調劑{(orderClass.交易量.StringToDouble() > 0 ? "退" : "領")}藥";
+                    takeMedicineStackClass.儲位描述 = 儲位描述;
 
 
-                 
-                    if(orderClass.批序.StringIsEmpty() == false)
+
+                    if (orderClass.批序.StringIsEmpty() == false)
                     {
                         if (orderClass.批序.Contains("DC"))
                         {
