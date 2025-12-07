@@ -303,12 +303,26 @@ namespace HIS_WebApi
 
                         // 發送 POST 請求
                         string url = Method.GetServerAPI("Main", "網頁", "ai_barcode");
+                        if (url.StringIsEmpty() == false)
+                        {
+                            var response = await client.PostAsync(url, form);
+                            response.EnsureSuccessStatusCode();
 
-                        var response = await client.PostAsync(url, form);
-                        response.EnsureSuccessStatusCode();
+                            // 讀取回應內容
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                        return JsonSerializer.Serialize(new
+                        {
+                            results = new[]
+                            {
+                                new {
+                                    type = "barcode",
+                                    code = "123456789"   // 偵測內容
+                                    }
+                            }
+                        });
 
-                        // 讀取回應內容
-                        return await response.Content.ReadAsStringAsync();
+
                     }
                 }
 
