@@ -137,6 +137,19 @@ namespace FADC
             }
             return devices;
         }
+        static public List<chemotherapyOrderClass> Function_取得醫令(string barcode)
+        {
+            string url = $"{Order_URL}{barcode}";
+            string json = Basic.Net.WEBApiGet(url);
+            returnData returnData = json.JsonDeserializet<returnData>();
+            if(returnData == null)
+            {
+                return null;
+            }
+            List<chemotherapyOrderClass> chemotherapyOrderClasses = returnData.Data.ObjToClass<List<chemotherapyOrderClass>>();
+            return chemotherapyOrderClasses;
+
+        }
 
         static public void Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作 enum_交易記錄查詢動作, string 操作人, string 備註)
         {

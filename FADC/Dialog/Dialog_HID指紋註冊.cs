@@ -41,7 +41,6 @@ namespace FADC
         async private void Dialog_HID指紋註冊_LoadFinishedEvent(EventArgs e)
         {
            
-
             try
             {
                 if (_enrollCts != null)

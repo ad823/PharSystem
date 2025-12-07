@@ -193,7 +193,14 @@ namespace FADC
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.UpdateStyles();
             this.Load += MainFrom_Load;
+            this.Resize += Main_Form_Resize;
         }
+
+        private void Main_Form_Resize(object sender, EventArgs e)
+        {
+            //rJ_Pannel_登入卡片.Location = new System.Drawing.Point((tabPage_登入畫面.Width - rJ_Pannel_登入卡片.Width) / 2, (tabPage_登入畫面.Height - rJ_Pannel_登入卡片.Height) / 2);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             // 使用雙重緩衝
@@ -211,6 +218,9 @@ namespace FADC
             // 將緩衝區域的內容繪製到表單
             myBuffer.Render(e.Graphics);
             myBuffer.Dispose(); // 釋放緩衝區資源
+
+            rJ_Pannel_登入卡片.Location = new System.Drawing.Point((登入畫面.Width - rJ_Pannel_登入卡片.Width) / 2, (登入畫面.Height - rJ_Pannel_登入卡片.Height) / 2);
+
         }
         private void MainFrom_Load(object sender, EventArgs e)
         {
