@@ -18,8 +18,8 @@ namespace FADC
 {
     public partial class Main_Form : Form
     {
-        public static List<medPicClass> medPicClasses = new List<medPicClass>();
-        public static List<Image> Function_取得藥品圖片(string Code)
+        static public  List<medPicClass> medPicClasses = new List<medPicClass>();
+        static public  List<Image> Function_取得藥品圖片(string Code)
         {
             bool IsValidImage(Image img)
             {
@@ -185,5 +185,9 @@ namespace FADC
 
             transactionsClass.add(API_Server, value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>(), ServerName, ServerType);
         }
+
+
+     
+
     }
 }

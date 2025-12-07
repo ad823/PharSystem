@@ -60,7 +60,7 @@
             this.登入畫面 = new System.Windows.Forms.TabPage();
             this.rJ_Pannel_登入卡片 = new MyUI.RJ_Pannel();
             this.panel22 = new System.Windows.Forms.Panel();
-            this.plC_RJ_Button9 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_調劑作業_指紋登入 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_調劑作業_辨識登入 = new MyUI.PLC_RJ_Button();
             this.panel21 = new System.Windows.Forms.Panel();
             this.rJ_Lable4 = new MyUI.RJ_Lable();
@@ -395,7 +395,7 @@
             this.rJ_Lable48 = new MyUI.RJ_Lable();
             this.rJ_Lable49 = new MyUI.RJ_Lable();
             this.rJ_Lable12 = new MyUI.RJ_Lable();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel_調劑畫面_處方內容 = new System.Windows.Forms.FlowLayoutPanel();
             this.plC_RJ_Button11 = new MyUI.PLC_RJ_Button();
             this.rJ_TextBox_調劑畫面_輸入條碼 = new MyUI.RJ_TextBox();
             this.rJ_Lable11 = new MyUI.RJ_Lable();
@@ -480,7 +480,7 @@
             this.panel36.SuspendLayout();
             this.panel37.SuspendLayout();
             this.panel38.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel_調劑畫面_處方內容.SuspendLayout();
             this.panel25.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1405,7 +1405,7 @@
             // panel22
             // 
             this.panel22.BackColor = System.Drawing.Color.White;
-            this.panel22.Controls.Add(this.plC_RJ_Button9);
+            this.panel22.Controls.Add(this.plC_RJ_Button_調劑作業_指紋登入);
             this.panel22.Controls.Add(this.plC_RJ_Button_調劑作業_辨識登入);
             this.panel22.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel22.Location = new System.Drawing.Point(25, 460);
@@ -1413,59 +1413,59 @@
             this.panel22.Size = new System.Drawing.Size(360, 149);
             this.panel22.TabIndex = 37;
             // 
-            // plC_RJ_Button9
+            // plC_RJ_Button_調劑作業_指紋登入
             // 
-            this.plC_RJ_Button9.AutoResetState = true;
-            this.plC_RJ_Button9.BackgroundColor = System.Drawing.Color.White;
-            this.plC_RJ_Button9.Bool = false;
-            this.plC_RJ_Button9.BorderColor = System.Drawing.Color.Gray;
-            this.plC_RJ_Button9.BorderRadius = 30;
-            this.plC_RJ_Button9.BorderSize = 1;
-            this.plC_RJ_Button9.but_press = false;
-            this.plC_RJ_Button9.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
-            this.plC_RJ_Button9.DisenableColor = System.Drawing.Color.Gray;
-            this.plC_RJ_Button9.Dock = System.Windows.Forms.DockStyle.Right;
-            this.plC_RJ_Button9.FlatAppearance.BorderSize = 0;
-            this.plC_RJ_Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.plC_RJ_Button9.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button9.GUID = "";
-            this.plC_RJ_Button9.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
-            this.plC_RJ_Button9.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
-            this.plC_RJ_Button9.Location = new System.Drawing.Point(198, 0);
-            this.plC_RJ_Button9.Name = "plC_RJ_Button9";
-            this.plC_RJ_Button9.OFF_文字內容 = "指紋登入";
-            this.plC_RJ_Button9.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button9.OFF_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button9.OFF_背景顏色 = System.Drawing.Color.White;
-            this.plC_RJ_Button9.ON_BorderSize = 1;
-            this.plC_RJ_Button9.ON_文字內容 = "指紋登入";
-            this.plC_RJ_Button9.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button9.ON_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button9.ON_背景顏色 = System.Drawing.Color.White;
-            this.plC_RJ_Button9.ProhibitionBorderLineWidth = 1;
-            this.plC_RJ_Button9.ProhibitionLineWidth = 4;
-            this.plC_RJ_Button9.ProhibitionSymbolSize = 30;
-            this.plC_RJ_Button9.ShadowColor = System.Drawing.Color.DimGray;
-            this.plC_RJ_Button9.ShadowSize = 0;
-            this.plC_RJ_Button9.ShowLoadingForm = false;
-            this.plC_RJ_Button9.Size = new System.Drawing.Size(162, 149);
-            this.plC_RJ_Button9.State = false;
-            this.plC_RJ_Button9.TabIndex = 141;
-            this.plC_RJ_Button9.Text = "指紋登入";
-            this.plC_RJ_Button9.TextColor = System.Drawing.Color.Black;
-            this.plC_RJ_Button9.TextHeight = 35;
-            this.plC_RJ_Button9.Texts = "指紋登入";
-            this.plC_RJ_Button9.UseVisualStyleBackColor = false;
-            this.plC_RJ_Button9.字型鎖住 = false;
-            this.plC_RJ_Button9.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
-            this.plC_RJ_Button9.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
-            this.plC_RJ_Button9.文字鎖住 = false;
-            this.plC_RJ_Button9.背景圖片 = global::FADC.Properties.Resources.指紋辨識登入;
-            this.plC_RJ_Button9.讀取位元反向 = false;
-            this.plC_RJ_Button9.讀寫鎖住 = false;
-            this.plC_RJ_Button9.音效 = true;
-            this.plC_RJ_Button9.顯示 = false;
-            this.plC_RJ_Button9.顯示狀態 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.AutoResetState = true;
+            this.plC_RJ_Button_調劑作業_指紋登入.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_指紋登入.Bool = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.BorderColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_調劑作業_指紋登入.BorderRadius = 30;
+            this.plC_RJ_Button_調劑作業_指紋登入.BorderSize = 1;
+            this.plC_RJ_Button_調劑作業_指紋登入.but_press = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_調劑作業_指紋登入.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_調劑作業_指紋登入.Dock = System.Windows.Forms.DockStyle.Right;
+            this.plC_RJ_Button_調劑作業_指紋登入.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_調劑作業_指紋登入.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_調劑作業_指紋登入.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_指紋登入.GUID = "";
+            this.plC_RJ_Button_調劑作業_指紋登入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_調劑作業_指紋登入.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_調劑作業_指紋登入.Location = new System.Drawing.Point(198, 0);
+            this.plC_RJ_Button_調劑作業_指紋登入.Name = "plC_RJ_Button_調劑作業_指紋登入";
+            this.plC_RJ_Button_調劑作業_指紋登入.OFF_文字內容 = "指紋登入";
+            this.plC_RJ_Button_調劑作業_指紋登入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_指紋登入.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_指紋登入.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_指紋登入.ON_BorderSize = 1;
+            this.plC_RJ_Button_調劑作業_指紋登入.ON_文字內容 = "指紋登入";
+            this.plC_RJ_Button_調劑作業_指紋登入.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_指紋登入.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_指紋登入.ON_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_指紋登入.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_調劑作業_指紋登入.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_調劑作業_指紋登入.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_調劑作業_指紋登入.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_調劑作業_指紋登入.ShadowSize = 0;
+            this.plC_RJ_Button_調劑作業_指紋登入.ShowLoadingForm = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.Size = new System.Drawing.Size(162, 149);
+            this.plC_RJ_Button_調劑作業_指紋登入.State = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.TabIndex = 141;
+            this.plC_RJ_Button_調劑作業_指紋登入.Text = "指紋登入";
+            this.plC_RJ_Button_調劑作業_指紋登入.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_指紋登入.TextHeight = 35;
+            this.plC_RJ_Button_調劑作業_指紋登入.Texts = "指紋登入";
+            this.plC_RJ_Button_調劑作業_指紋登入.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.字型鎖住 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_調劑作業_指紋登入.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_調劑作業_指紋登入.文字鎖住 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.背景圖片 = global::FADC.Properties.Resources.指紋辨識登入;
+            this.plC_RJ_Button_調劑作業_指紋登入.讀取位元反向 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.讀寫鎖住 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.音效 = true;
+            this.plC_RJ_Button_調劑作業_指紋登入.顯示 = false;
+            this.plC_RJ_Button_調劑作業_指紋登入.顯示狀態 = false;
             // 
             // plC_RJ_Button_調劑作業_辨識登入
             // 
@@ -3478,7 +3478,7 @@
             this.sqL_DataGridView_交易記錄查詢.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_交易記錄查詢.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_交易記錄查詢.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.sqL_DataGridView_交易記錄查詢.columnHeadersHeight = 18;
+            this.sqL_DataGridView_交易記錄查詢.columnHeadersHeight = 17;
             this.sqL_DataGridView_交易記錄查詢.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_交易記錄查詢.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_交易記錄查詢.DataKeyEnable = false;
@@ -3548,7 +3548,7 @@
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeight = 18;
+            this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeight = 4;
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_儲位管理_儲位資料.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_儲位管理_儲位資料.DataKeyEnable = false;
@@ -4346,7 +4346,7 @@
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeight = 18;
+            this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeight = 4;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.DataKeyEnable = false;
@@ -9127,7 +9127,7 @@
             this.rJ_Pannel5.BorderColor = System.Drawing.Color.White;
             this.rJ_Pannel5.BorderRadius = 30;
             this.rJ_Pannel5.BorderSize = 0;
-            this.rJ_Pannel5.Controls.Add(this.flowLayoutPanel2);
+            this.rJ_Pannel5.Controls.Add(this.flowLayoutPanel_調劑畫面_處方內容);
             this.rJ_Pannel5.Controls.Add(this.rJ_Lable12);
             this.rJ_Pannel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_Pannel5.ForeColor = System.Drawing.Color.Black;
@@ -9858,15 +9858,15 @@
             this.rJ_Lable12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rJ_Lable12.TextColor = System.Drawing.Color.RoyalBlue;
             // 
-            // flowLayoutPanel2
+            // flowLayoutPanel_調劑畫面_處方內容
             // 
-            this.flowLayoutPanel2.Controls.Add(this.plC_RJ_Button11);
-            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(25, 85);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(3);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(1007, 80);
-            this.flowLayoutPanel2.TabIndex = 144;
+            this.flowLayoutPanel_調劑畫面_處方內容.Controls.Add(this.plC_RJ_Button11);
+            this.flowLayoutPanel_調劑畫面_處方內容.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel_調劑畫面_處方內容.Location = new System.Drawing.Point(25, 85);
+            this.flowLayoutPanel_調劑畫面_處方內容.Name = "flowLayoutPanel_調劑畫面_處方內容";
+            this.flowLayoutPanel_調劑畫面_處方內容.Padding = new System.Windows.Forms.Padding(3);
+            this.flowLayoutPanel_調劑畫面_處方內容.Size = new System.Drawing.Size(1007, 80);
+            this.flowLayoutPanel_調劑畫面_處方內容.TabIndex = 144;
             // 
             // plC_RJ_Button11
             // 
@@ -10102,7 +10102,7 @@
             this.panel36.ResumeLayout(false);
             this.panel37.ResumeLayout(false);
             this.panel38.ResumeLayout(false);
-            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel_調劑畫面_處方內容.ResumeLayout(false);
             this.panel25.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -10430,7 +10430,7 @@
         private System.Windows.Forms.Panel panel18;
         private MyUI.RJ_Button rJ_Button1;
         private System.Windows.Forms.Panel panel17;
-        private MyUI.PLC_RJ_Button plC_RJ_Button9;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_調劑作業_指紋登入;
         private MyUI.RJ_Pannel rJ_Pannel3;
         private MyUI.RJ_Lable rJ_Lable_調劑畫面_登入資訊;
         private MyUI.PLC_RJ_Button plC_RJ_Button10;
@@ -10475,7 +10475,7 @@
         private MyUI.RJ_Lable rJ_Lable31;
         private MyUI.RJ_Lable rJ_Lable32;
         private MyUI.RJ_Lable rJ_Lable12;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_調劑畫面_處方內容;
         private MyUI.PLC_RJ_Button plC_RJ_Button11;
         private MyUI.RJ_TextBox rJ_TextBox_調劑畫面_輸入條碼;
         private System.Windows.Forms.Panel panel25;

@@ -16,7 +16,7 @@ namespace 調劑台管理系統
         [STAThread]
         static void Main()
         {
-            mutex = new System.Threading.Mutex(true, "OnlyRun");
+            mutex = new System.Threading.Mutex(true, "調劑台管理系統");
             if (mutex.WaitOne(0, false))
             {
                 Application.EnableVisualStyles();
