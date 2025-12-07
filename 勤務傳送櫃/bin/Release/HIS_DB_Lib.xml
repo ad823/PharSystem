@@ -5567,7 +5567,7 @@
         <member name="P:chemotherapyOrderClass.化療處方流水號">
             <summary>化療處方流水號</summary>
         </member>
-        <member name="P:chemotherapyOrderClass.病歷號碼">
+        <member name="P:chemotherapyOrderClass.病歷號">
             <summary>病歷號碼</summary>
         </member>
         <member name="P:chemotherapyOrderClass.處方日期">
@@ -5594,16 +5594,16 @@
         <member name="P:chemotherapyOrderClass.化療處方名稱">
             <summary>化療處方名稱</summary>
         </member>
-        <member name="P:chemotherapyOrderClass.醫令代碼">
+        <member name="P:chemotherapyOrderClass.藥碼">
             <summary>醫令代碼</summary>
         </member>
-        <member name="P:chemotherapyOrderClass.醫令名稱">
+        <member name="P:chemotherapyOrderClass.藥品名稱">
             <summary>醫令名稱</summary>
         </member>
         <member name="P:chemotherapyOrderClass.次劑量">
             <summary>次劑量</summary>
         </member>
-        <member name="P:chemotherapyOrderClass.頻率">
+        <member name="P:chemotherapyOrderClass.頻次">
             <summary>頻率</summary>
         </member>
         <member name="P:chemotherapyOrderClass.用藥途徑">
@@ -5612,7 +5612,7 @@
         <member name="P:chemotherapyOrderClass.總量">
             <summary>總量</summary>
         </member>
-        <member name="P:chemotherapyOrderClass.是否自費">
+        <member name="P:chemotherapyOrderClass.費用別">
             <summary>是否自費 (Y/N)</summary>
         </member>
         <member name="P:chemotherapyOrderClass.流速">
@@ -5641,7 +5641,7 @@
         <member name="P:chemotherapyOrderDayClass.主表GUID">
             <summary>主表化療處方 GUID (chemotherapy_orders.GUID)</summary>
         </member>
-        <member name="P:chemotherapyOrderDayClass.第幾天">
+        <member name="P:chemotherapyOrderDayClass.日期">
             <summary>第幾天 (1~15)</summary>
         </member>
         <member name="P:chemotherapyOrderDayClass.是否使用">

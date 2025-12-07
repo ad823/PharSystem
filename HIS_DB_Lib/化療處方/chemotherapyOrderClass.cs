@@ -2,6 +2,9 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel;
 using System.Collections.Generic;
+using HIS_DB_Lib;
+using System.Text.Json.Serialization;
+using Basic;
 
 /// <summary>
 /// 化療處方資料 (Chemotherapy Order)
@@ -13,6 +16,10 @@ public class chemotherapyOrderClass
     [JsonPropertyName("GUID")]
     [Description("VARCHAR,50,PRIMARY")]
     public string GUID { get; set; }
+
+    [JsonPropertyName("PRI_KEY")]
+    [Description("VARCHAR,50,INDEX")]
+    public string PRI_KEY { get; set; }
 
     /// <summary>BARCODE</summary>
     [JsonPropertyName("BARCODE")]
@@ -32,7 +39,7 @@ public class chemotherapyOrderClass
     /// <summary>病歷號碼</summary>
     [JsonPropertyName("CHE_PATID")]
     [Description("VARCHAR,10,INDEX")]
-    public string 病歷號碼 { get; set; }
+    public string 病歷號 { get; set; }
 
     /// <summary>處方日期</summary>
     [JsonPropertyName("CHE_VISITDT")]
@@ -46,7 +53,7 @@ public class chemotherapyOrderClass
 
     /// <summary>處方來源 (1.門診 2.住院 3.急診)</summary>
     [JsonPropertyName("CHE_KIND")]
-    [Description("VARCHAR,1,NONE")]
+    [Description("VARCHAR,5,NONE")]
     public string 處方來源 { get; set; }
 
     /// <summary>類型 (1.化療前 2.化療 3.化療後)</summary>
@@ -77,12 +84,12 @@ public class chemotherapyOrderClass
     /// <summary>醫令代碼</summary>
     [JsonPropertyName("CHE_DIACODE")]
     [Description("VARCHAR,10,INDEX")]
-    public string 醫令代碼 { get; set; }
+    public string 藥碼 { get; set; }
 
     /// <summary>醫令名稱</summary>
     [JsonPropertyName("CHE_EGNAME")]
     [Description("VARCHAR,120,NONE")]
-    public string 醫令名稱 { get; set; }
+    public string 藥品名稱 { get; set; }
 
     /// <summary>次劑量</summary>
     [JsonPropertyName("CHE_QTY_PERTIME")]
@@ -92,7 +99,7 @@ public class chemotherapyOrderClass
     /// <summary>頻率</summary>
     [JsonPropertyName("CHE_FEQNO")]
     [Description("VARCHAR,8,NONE")]
-    public string 頻率 { get; set; }
+    public string 頻次 { get; set; }
 
     /// <summary>途徑</summary>
     [JsonPropertyName("CHE_PATHNO")]
@@ -106,8 +113,8 @@ public class chemotherapyOrderClass
 
     /// <summary>是否自費 (Y/N)</summary>
     [JsonPropertyName("CHE_SELF_PAY")]
-    [Description("VARCHAR,1,NONE")]
-    public string 是否自費 { get; set; }
+    [Description("VARCHAR,10,NONE")]
+    public string 費用別 { get; set; }
 
     /// <summary>流速</summary>
     [JsonPropertyName("CHE_FLOW_RATE")]
@@ -132,4 +139,30 @@ public class chemotherapyOrderClass
     /// <summary>每日詳細紀錄 (子表)</summary>
     [JsonPropertyName("day_records")]
     public List<chemotherapyOrderDayClass> 每日紀錄 { get; set; } = new List<chemotherapyOrderDayClass>();
+
+    static public returnData update_order_list(string API_Server, List<chemotherapyOrderClass> chemotherapyOrderClasses)
+    {
+        string url = $"{API_Server}/api/chemotherapyOrder/update_order_list";
+
+        returnData returnData = new returnData();
+        returnData.Data = chemotherapyOrderClasses;
+
+        string json_in = returnData.JsonSerializationt();
+        string json_out = Net.WEBApiPostJson(url, json_in);
+        returnData = json_out.JsonDeserializet<returnData>();  
+        return returnData;
+    }
+    static public returnData get_by_barcode(string API_Server,string barcode)
+    {
+        string url = $"{API_Server}/api/chemotherapyOrder/get_by_barcode";
+
+        returnData returnData = new returnData();
+        returnData.ValueAry.Add(barcode);
+
+        string json_in = returnData.JsonSerializationt();
+        string json_out = Net.WEBApiPostJson(url, json_in);
+        returnData = json_out.JsonDeserializet<returnData>();
+        return returnData;
+    }
+
 }
