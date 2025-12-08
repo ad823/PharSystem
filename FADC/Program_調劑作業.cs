@@ -25,6 +25,7 @@ namespace FADC
     public partial class Main_Form : Form
     {
         private List<chemotherapyOrderClass>  chemotherapyOrders = null;
+        private personPageClass personpageClass_調劑畫面 = null;
         public enum enum_處方藥品
         {
             [Description("GUID,VARCHAR,15,NONE")]
@@ -69,7 +70,7 @@ namespace FADC
             this.sqL_DataGridView_調劑畫面_處方藥品.Set_ColumnWidth(80, enum_處方藥品.調劑藥師);
             this.sqL_DataGridView_調劑畫面_處方藥品.Set_ColumnWidth(100, enum_處方藥品.審核時間);
             this.sqL_DataGridView_調劑畫面_處方藥品.Set_ColumnWidth(80, enum_處方藥品.審核藥師);
-
+            this.sqL_DataGridView_調劑畫面_處方藥品.DataGridRefreshEvent += SqL_DataGridView_調劑畫面_處方藥品_DataGridRefreshEvent;
 
             tabControlEx_調劑畫面.TabIndexChanged += TabControlEx_調劑畫面_TabIndexChanged;
             rJ_TextBox_調劑畫面_密碼.PassWordChar = true;
@@ -147,11 +148,20 @@ namespace FADC
         }
 
   
+
         private void Program_調劑作業()
         {
             foreach (PLC_RJ_Button pLC_RJ_Button in pLC_RJ_Buttons)
             {
                 pLC_RJ_Button.Run();
+            }
+
+            string text = Main_Form.Function_ReadBacodeScanner(0);
+
+            if(text.StringIsEmpty() == false)
+            {
+                this.rJ_TextBox_調劑畫面_輸入條碼.Text = text;
+                RJ_TextBox_調劑畫面_輸入條碼_KeyPress(null,new KeyPressEventArgs((char)Keys.Enter));
             }
         }
 
@@ -181,6 +191,17 @@ namespace FADC
    
         }
 
+        private void SqL_DataGridView_調劑畫面_處方藥品_DataGridRefreshEvent()
+        {
+            for (int i = 0; i < this.sqL_DataGridView_調劑畫面_處方藥品.dataGridView.Rows.Count; i++)
+            {
+                if (this.sqL_DataGridView_調劑畫面_處方藥品.dataGridView.Rows[i].Cells[enum_處方藥品.調劑藥師.GetEnumName()].Value.ToString() != "-")
+                {
+                    this.sqL_DataGridView_調劑畫面_處方藥品.dataGridView.Rows[i].ReadOnly = true;
+                    this.sqL_DataGridView_調劑畫面_處方藥品.dataGridView.Rows[i].DefaultCellStyle.BackColor = Color.LightGray;
+                }
+            }
+        }
         private void TabControlEx_調劑畫面_TabIndexChanged(object sender, EventArgs e)
         {
             if(tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
@@ -209,8 +230,9 @@ namespace FADC
                 MyMessageBox.ShowDialog("找無人員資訊");
                 return;
             }
-            this.Invoke(new Action(delegate 
+            this.Invoke(new Action(delegate
             {
+                personpageClass_調劑畫面 = personPage;
                 rJ_Lable_調劑畫面_登入資訊.Text = $"{personPage.姓名}({personPage.ID})";
                 tabControlEx_調劑畫面.SelectTab("刷取藥單");
             }));
@@ -275,7 +297,49 @@ namespace FADC
         }
         private void RJ_Button_調劑畫面_開始調劑_MouseDownEvent(MouseEventArgs mevent)
         {
-            List<object[]> list_ = sqL_DataGridView_調劑畫面_處方藥品.Get_All_Checked_RowsValuesEx();
+            List<object[]> list_處方藥品 = sqL_DataGridView_調劑畫面_處方藥品.Get_All_Checked_RowsValuesEx();
+            if(list_處方藥品.Count == 0)
+            {
+                MyMessageBox.ShowDialog("請選擇調劑藥品");
+                return;
+            }
+            string title = "是否開始調劑下列藥品?\n";
+            for(int i = 0; i < list_處方藥品.Count; i++)
+            {
+                string 藥碼 = list_處方藥品[i][(int)enum_處方藥品.藥碼].ObjectToString();
+                string 藥名 = list_處方藥品[i][(int)enum_處方藥品.藥名].ObjectToString();
+                string 總量 = list_處方藥品[i][(int)enum_處方藥品.總量].ObjectToString();
+
+                title += $"{藥名.StringLength(30)}({總量})";
+                if (i != list_處方藥品.Count - 1) title += "\n";
+            }
+            if (MyMessageBox.ShowDialog(title, MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) return;
+
+            List<chemotherapyOrderDayClass> chemotherapyOrderDays = new List<chemotherapyOrderDayClass>();
+            for (int i = 0; i < chemotherapyOrders.Count; i++)
+            {
+                object[] value = new object[new enum_處方藥品().GetLength()];
+
+                for (int k = 0; k < chemotherapyOrders[i].每日紀錄.Count; k++)
+                {
+                    for(int j = 0; j < list_處方藥品.Count; j++)
+                    {
+                        string guid = list_處方藥品[j][(int)enum_處方藥品.GUID].ObjectToString();
+                        if(guid == chemotherapyOrders[i].每日紀錄[k].GUID)
+                        {
+                            chemotherapyOrders[i].每日紀錄[k].調劑藥師 = personpageClass_調劑畫面.姓名;
+                            chemotherapyOrders[i].每日紀錄[k].調劑時間 = DateTime.Now.ToDateTimeString_6();
+                            chemotherapyOrderDays.Add(chemotherapyOrders[i].每日紀錄[k]);
+                        }
+                    }
+                 
+                }
+            }
+            chemotherapyOrderClass.update_chemotherapyOrderDay_by_guid(Main_Form.API_Server, chemotherapyOrderDays);
+            sqL_DataGridView_調劑畫面_處方藥品.ClearDataKeys();
+            sqL_DataGridView_調劑畫面_處方藥品.ClearGrid();
+
+            List<chemotherapyOrderClass> chemotherapyOrderClasses = Function_取得醫令(this.rJ_TextBox_調劑畫面_輸入條碼.Text);
         }
 
         private void PLC_RJ_Button_MouseDownEventEx(RJ_Button rJ_Button, MouseEventArgs mevent)
@@ -300,7 +364,7 @@ namespace FADC
                         {
                             if (chemotherapyOrders[i].每日紀錄[k].日期.StringToDateTime().ToDateString() == rJ_Button.Text.StringToDateTime().ToDateString())
                             {
-                                value[(int)enum_處方藥品.GUID] = chemotherapyOrders[i].GUID;
+                                value[(int)enum_處方藥品.GUID] = chemotherapyOrders[i].每日紀錄[k].GUID;
                                 value[(int)enum_處方藥品.序號] = chemotherapyOrders[i].醫令順序流水號;
                                 value[(int)enum_處方藥品.藥碼] = chemotherapyOrders[i].藥碼;
                                 value[(int)enum_處方藥品.藥名] = chemotherapyOrders[i].藥品名稱;
@@ -321,10 +385,8 @@ namespace FADC
 
                 }
             }
-
+     
         }
-
-
         private void PlC_RJ_Button_調劑作業_指紋登入_MouseDownEvent(MouseEventArgs mevent)
         {
             Dialog_HID指紋登入 dialog_HID = new Dialog_HID指紋登入();
@@ -332,6 +394,7 @@ namespace FADC
             personPageClass personPageClass = dialog_HID.Value;
             this.Invoke(new Action(delegate
             {
+                personpageClass_調劑畫面 = personPageClass;
                 rJ_Lable_調劑畫面_登入資訊.Text = $"{personPageClass.姓名}({personPageClass.ID})";
                 tabControlEx_調劑畫面.SelectTab("刷取藥單");
             }));
@@ -341,8 +404,9 @@ namespace FADC
             Dialog_人臉辨識 dialog_人臉辨識 = new Dialog_人臉辨識();
             if (dialog_人臉辨識.ShowDialog() != DialogResult.Yes) return;
             personPageClass personPageClass = dialog_人臉辨識.Value;
-            this.Invoke(new Action(delegate 
+            this.Invoke(new Action(delegate
             {
+                personpageClass_調劑畫面 = personPageClass;
                 rJ_Lable_調劑畫面_登入資訊.Text = $"{personPageClass.姓名}({personPageClass.ID})";
                 tabControlEx_調劑畫面.SelectTab("刷取藥單");
             }));
