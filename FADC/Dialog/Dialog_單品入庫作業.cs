@@ -206,6 +206,9 @@ namespace FADC
                 }
                 else if(result.Data.Pose == "bad")
                 {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【取消手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_取消_MouseDownEvent(null);
 
                 }
             }

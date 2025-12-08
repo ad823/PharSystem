@@ -168,6 +168,7 @@ namespace FADC
 
         private void Function_調劑畫面_處方資訊更新(List<chemotherapyOrderClass> chemotherapyOrderClasses = null)
         {
+            if (chemotherapyOrderClasses == null) return;
             chemotherapyOrderClasses.Sort(new ICP_By_chemotherapyOrderClass_sn());
             chemotherapyOrders = chemotherapyOrderClasses;
             this.Invoke(new Action(delegate 
@@ -262,6 +263,7 @@ namespace FADC
             if(e.KeyChar == (char)Keys.Enter)
             {
                 List<chemotherapyOrderClass> chemotherapyOrderClasses = Function_取得醫令(this.rJ_TextBox_調劑畫面_輸入條碼.Text);
+                if (chemotherapyOrderClasses == null) return;
                 Function_調劑畫面_處方資訊更新(chemotherapyOrderClasses);
                 List<DateTime> dateTimes = chemotherapyOrderClasses.GetOrderAllDates();
 
