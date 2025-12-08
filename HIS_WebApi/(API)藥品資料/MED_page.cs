@@ -425,7 +425,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -461,8 +461,8 @@ namespace HIS_WebApi
             {
                 sys_serverSettingClass sys_serverSettingClasses = await GetServerAsync.Value;
 
-                             
-                
+
+
                 if (returnData.ValueAry.Count != 1)
                 {
                     returnData.Code = -200;
@@ -526,7 +526,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -621,7 +621,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -715,7 +715,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -816,7 +816,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -910,7 +910,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1076,7 +1076,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1313,7 +1313,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1404,7 +1404,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1551,7 +1551,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1704,7 +1704,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1781,7 +1781,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -1928,7 +1928,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -2083,7 +2083,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -2160,7 +2160,7 @@ namespace HIS_WebApi
                 returnData.Code = -200;
                 returnData.Data = null;
                 returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] { returnData.Result}");
+                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
                 return returnData.JsonSerializationt(true);
             }
         }
@@ -2830,7 +2830,7 @@ namespace HIS_WebApi
                 string UserName = sys_serverSettingClasses.User;
                 string Password = sys_serverSettingClasses.Password;
                 uint Port = (uint)sys_serverSettingClasses.Port.StringToDouble();
-               
+
                 if (returnData.ValueAry.Count != 1)
                 {
                     returnData.Code = -200;
@@ -3833,7 +3833,7 @@ namespace HIS_WebApi
                     (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
                     string[] GUID = medClasses.Select(x => x.GUID).ToArray();
                     SQLControl sQLControl_med = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
-                    List<object[]> list_value = await sQLControl_med.GetRowsByDefultAsync(null,(int)enum_雲端藥檔.GUID, GUID);
+                    List<object[]> list_value = await sQLControl_med.GetRowsByDefultAsync(null, (int)enum_雲端藥檔.GUID, GUID);
                     List<medClass> medClasses_buf = list_value.SQLToClass<medClass, enum_雲端藥檔>();
                     if (list_value.Count > 0) sQLControl_med.DeleteRowsAsync(null, list_value);
 
@@ -3843,7 +3843,7 @@ namespace HIS_WebApi
                     returnData.TimeTaken = myTimerBasic.ToString();
                     return returnData.JsonSerializationt(true);
                 }
-                
+
                 returnData.Code = -200;
                 returnData.Result = "更新藥檔失敗!";
 
@@ -3865,8 +3865,8 @@ namespace HIS_WebApi
             try
             {
                 MyTimerBasic myTimerBasic = new MyTimerBasic();
-                
-                
+
+
 
 
                 returnData.Method = "serch_by_BarCode";
@@ -3972,6 +3972,32 @@ namespace HIS_WebApi
                     returnData.Result = "查無資料";
                     return returnData.JsonSerializationt();
                 }
+                Task<returnData> task_returnData = new medStorage().get_all();
+
+                returnData returnData_medStorage = await task_returnData;
+
+                if (returnData_medStorage == null || returnData_medStorage.Code != 200)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"儲位取得失敗! (耗時: {myTimerBasic.ToString()})";
+                    return await returnData.JsonSerializationtAsync(true);
+                }
+
+                List<medStorageClass> medStorageClasses = returnData_medStorage.Data.ObjToClass<List<medStorageClass>>();
+                if (medStorageClasses != null && medStorageClasses.Count > 0)
+                {
+                    Dictionary<string, List<medStorageClass>> dict_medStorage = medStorageClass.ToDictByCode(medStorageClasses);
+                    foreach (var item in medClasses_buf)
+                    {
+                        List<medStorageClass> medStorages = medStorageClass.GetDictByCode(dict_medStorage, item.藥品碼);
+                        if (medStorages != null && medStorages.Count > 0)
+                        {
+                            item.storageInfo = medStorages;
+                        }
+                    }
+                }
+
+
                 returnData.Data = medClasses_buf;
                 returnData.Code = 200;
                 returnData.Result = "搜尋BARCODE完成!";
@@ -4033,7 +4059,7 @@ namespace HIS_WebApi
                         returnData.Result = $"文件內容不得為空";
                         return returnData.JsonSerializationt(true);
                     }
-                    medClasses = list_value.SQLToClass<medClass,enum_雲端藥檔>();
+                    medClasses = list_value.SQLToClass<medClass, enum_雲端藥檔>();
                     //for (int i = 0; i < list_value.Count; i++)
                     //{
                     //    string 中西藥品 = list_value[i][(int)enum_雲端藥檔_EXCEL.中西藥].ObjectToString();
@@ -4284,7 +4310,7 @@ namespace HIS_WebApi
             Table table = new Table(TableName);
             if (TableName == "medicine_page_cloud")
             {
-            
+
                 sys_serverSettingClass sys_serverSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "藥檔資料");
 
                 returnData.Method = "get_init";
@@ -4309,7 +4335,7 @@ namespace HIS_WebApi
             }
             if (TableName == "medicine_page_phar")
             {
-         
+
                 sys_serverSettingClass sys_serverSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "本地端");
 
                 returnData.Method = "get_init";
@@ -4324,7 +4350,7 @@ namespace HIS_WebApi
 
             if (TableName == "medicine_page")
             {
-                
+
                 sys_serverSettingClass sys_serverSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "本地端");
 
                 returnData.Method = "get_init";
@@ -4385,7 +4411,7 @@ namespace HIS_WebApi
                 string Password = sys_serverSettingClass.Password;
                 uint Port = (uint)sys_serverSettingClass.Port.StringToDouble();
                 SQLControl sQLControl_med = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
-                
+
                 List<object[]> list_med = sQLControl_med.GetAllRows(null);
                 List<medClass> medClasses = list_med.SQLToClass<medClass, enum_雲端藥檔>();
                 return medClasses;
@@ -4446,7 +4472,7 @@ namespace HIS_WebApi
         public async Task<returnData> get_by_code(string code, string serverName, string serverType)
         {
             returnData returnData = new returnData();
-            returnData.Value = code;          
+            returnData.Value = code;
             returnData.TableName = "medicine_page_cloud";
             returnData.ServerName = serverName;
             returnData.ServerType = serverType;

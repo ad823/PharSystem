@@ -335,7 +335,7 @@ namespace 調劑台管理系統
                 for (int i = 0; i < list_堆疊母資料_add.Count; i++)
                 {
                     string 狀態 = list_堆疊母資料_add[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString();
-                    list_堆疊母資料_add[i][(int)enum_取藥堆疊母資料.儲位描述] = list_堆疊母資料_add[i][(int)enum_取藥堆疊母資料.調劑台名稱];
+                    list_堆疊母資料_add[i][(int)enum_取藥堆疊母資料.儲位描述] = list_堆疊母資料_add[i][(int)enum_取藥堆疊母資料.儲位描述];
                     if (狀態 == enum_取藥堆疊母資料_狀態.已領用過.GetEnumName() || 狀態 == enum_取藥堆疊母資料_狀態.DC處方.GetEnumName() || 狀態 == enum_取藥堆疊母資料_狀態.未授權.GetEnumName()) continue;
                     if (Function_取藥堆疊資料_取得作業模式(list_堆疊母資料_add[i], enum_取藥堆疊母資料_作業模式.雙人覆核)) Function_外門片解鎖(list_lock_IP);
                     else

@@ -2751,7 +2751,7 @@ namespace HIS_WebApi
                         content.中文名稱 = 中文名稱;
                         content.包裝單位 = 包裝單位;
 
-                        int 盤點量 = 0;
+                        double 盤點量 = 0;
                         list_inventory_sub_content_buf = list_inventory_sub_content.GetRows((int)enum_盤點明細.Master_GUID, content.GUID);
                         for (int m = 0; m < list_inventory_sub_content_buf.Count; m++)
                         {
@@ -2759,10 +2759,10 @@ namespace HIS_WebApi
                             sub_Content.藥品名稱 = 藥品名稱;
                             sub_Content.中文名稱 = 中文名稱;
                             sub_Content.包裝單位 = 包裝單位;
-                            if (sub_Content.盤點量.StringIsInt32())
+                            if (sub_Content.盤點量.StringIsDouble())
                             {
 
-                                盤點量 += sub_Content.盤點量.StringToInt32();
+                                盤點量 += sub_Content.盤點量.StringToDouble();
                             }
                             content.Sub_content.Add(sub_Content);
                         }

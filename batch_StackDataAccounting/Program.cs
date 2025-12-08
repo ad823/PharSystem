@@ -1521,7 +1521,14 @@ namespace batch_StackDataAccounting
             }
             儲位資訊 = 儲位資訊.OrderBy(r => DateTime.Parse(r[(int)enum_儲位資訊.效期].ToDateString())).ToList();
 
-            if (異動量 == 0) return 儲位資訊;
+            if (異動量 == 0)
+            {
+                if (儲位資訊.Count == 0)
+                {
+
+                }
+                return 儲位資訊;
+            }
             int 使用數量 = 異動量;
             int 庫存數量 = 0;
             int 剩餘庫存數量 = 0;
@@ -3661,7 +3668,7 @@ namespace batch_StackDataAccounting
                         flag_取藥堆疊母資料_Update = true;
                     }
                     //無庫存
-                    else if (結存量 < 0)
+                    else if (結存量 < 0 || 庫存量 == 0)
                     {
                         list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態] = enum_取藥堆疊母資料_狀態.庫存不足.GetEnumName();
                         Function_儲位亮燈_Ex(new LightOn(藥品碼, Color.Black));

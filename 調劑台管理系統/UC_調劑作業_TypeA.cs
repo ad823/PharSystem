@@ -1887,7 +1887,10 @@ namespace 調劑台管理系統
 
 
                 List<medConfigClass> medConfigClasses = medConfigClass.get_dispense_note_by_codes(Main_Form.API_Server, medClasses[0].藥品碼);
+                string[] 儲位描述_ = new string[] { };
+                儲位描述_ = medClasses[0].storageInfo.Select(x => x.儲位描述).ToArray();
 
+                string 儲位描述 = string.Join(",", 儲位描述_);
                 if (medConfigClasses.Count > 0)
                 {
                     Dialog_使用者登入 dialog_使用者登入 = new Dialog_使用者登入();
@@ -1914,6 +1917,9 @@ namespace 調劑台管理系統
                     takeMedicineStackClass.操作人 = personPageClass.姓名;
                     takeMedicineStackClass.ID = personPageClass.ID;
                     takeMedicineStackClass.藥師證字號 = personPageClass.藥師證字號;
+                    takeMedicineStackClass.儲位描述 = 儲位描述;
+
+
                     Main_Form.Function_取藥堆疊資料_新增母資料(takeMedicineStackClass);
                 }
                 else
@@ -1929,6 +1935,8 @@ namespace 調劑台管理系統
                     takeMedicineStackClass.操作人 = personPageClass.姓名;
                     takeMedicineStackClass.ID = personPageClass.ID;
                     takeMedicineStackClass.藥師證字號 = personPageClass.藥師證字號;
+                    takeMedicineStackClass.儲位描述 = 儲位描述;
+
                     Main_Form.Function_取藥堆疊資料_新增母資料(takeMedicineStackClass);
                 }
 
