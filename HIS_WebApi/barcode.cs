@@ -311,16 +311,17 @@ namespace HIS_WebApi
                             // 讀取回應內容
                             return await response.Content.ReadAsStringAsync();
                         }
-                        return JsonSerializer.Serialize(new
-                        {
-                            results = new[]
-                            {
-                                new {
-                                    type = "barcode",
-                                    code = "123456789"   // 偵測內容
-                                    }
-                            }
-                        });
+                        //return JsonSerializer.Serialize(new
+                        //{
+                        //    results = new[]
+                        //    {
+                        //        new {
+                        //            type = "barcode",
+                        //            code = "123456789"   // 偵測內容
+                        //            }
+                        //    }
+                        //});
+                        return null;
 
 
                     }

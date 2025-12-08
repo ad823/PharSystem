@@ -3665,6 +3665,224 @@ namespace HIS_WebApi
             }
         }
         /// <summary>
+        ///以GUID確認藥品簽收
+        /// </summary>
+        /// <remarks>
+        /// 以下為JSON範例
+        /// <code>
+        ///     {
+        ///         "ValueAry":["處方GUID;處方GUID"]";
+        ///     }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+
+        [HttpPost("signed_by_GUID")]
+        public async Task<string> signed_by_GUID([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "signed_by_GUID";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 空白，請輸入對應欄位資料";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[\"處方GUID1;處方GUID2\"]";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry[0].StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"無可覆核處方";
+                    return returnData.JsonSerializationt(true);
+                }
+                medInventoryLogClass medInventoryLog = returnData.Data.ObjToClass<medInventoryLogClass>();
+                if (medInventoryLog == null || medInventoryLog.操作者代號.StringIsEmpty() || medInventoryLog.操作者姓名.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"請指定操作者代號與姓名";
+                    return returnData.JsonSerializationt(true);
+                }
+                string 操作者代號 = medInventoryLog.操作者代號;
+                string 操作者姓名 = medInventoryLog.操作者姓名;
+
+                List<string> GUIDs = returnData.ValueAry[0].Split(";").ToList();
+                string 護理站 = returnData.ValueAry[1];
+
+                SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
+                (string StartTime, string Endtime) = await GetTodayAsync();
+                string tableName_med_cpoe = "med_cpoe";
+                string sql = $@"
+                    SELECT *
+                    FROM dbvm.{tableName_med_cpoe}
+                    WHERE 更新時間 >= @start
+                    AND 更新時間 < @end
+                    AND GUID IN @guid";
+
+                var parameters = new
+                {
+                    start = StartTime,
+                    end = Endtime,
+                    guid = GUIDs,
+                };
+                List<object[]> list_med_cpoe = await sQLControl_med_cpoe.WriteCommandAsync(sql, parameters);
+                List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
+                if (sql_medCpoe.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.TimeTaken = $"{myTimerBasic}";
+                    returnData.Data = sql_medCpoe;
+                    returnData.Result = $"查無資料";
+                    return await returnData.JsonSerializationtAsync(true);
+                }
+
+                foreach (var item in sql_medCpoe)
+                {
+                    item.簽收狀態 = "Y";
+                }
+
+                List<object[]> update_medCpoe = sql_medCpoe.ClassToSQL<medCpoeClass, enum_med_cpoe>();
+                if (update_medCpoe.Count > 0)
+                {
+                    string GUID = string.Join(";", sql_medCpoe.Select(x => x.GUID).ToArray());
+
+                    await sQLControl_med_cpoe.UpdateRowsAsync(null, update_medCpoe);
+                    add_log("簽收", GUID, 操作者代號, 操作者姓名);
+                }
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = sql_medCpoe;
+                returnData.Result = $"更新藥車: {護理站}處方紀錄共{GUIDs.Count}筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"Exception:{ex.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        /// <summary>
+        ///以GUID取消藥品簽收
+        /// </summary>
+        /// <remarks>
+        /// 以下為JSON範例
+        /// <code>
+        ///     {
+        ///         "ValueAry":["處方GUID;處方GUID"]";
+        ///     }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+
+        [HttpPost("unsigned_by_GUID")]
+        public async Task<string> unsigned_by_GUID([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "unsigned_by_GUID";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 空白，請輸入對應欄位資料";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為[\"處方GUID1;處方GUID2\"]";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry[0].StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"無可覆核處方";
+                    return returnData.JsonSerializationt(true);
+                }
+                medInventoryLogClass medInventoryLog = returnData.Data.ObjToClass<medInventoryLogClass>();
+                if (medInventoryLog == null || medInventoryLog.操作者代號.StringIsEmpty() || medInventoryLog.操作者姓名.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"請指定操作者代號與姓名";
+                    return returnData.JsonSerializationt(true);
+                }
+                string 操作者代號 = medInventoryLog.操作者代號;
+                string 操作者姓名 = medInventoryLog.操作者姓名;
+
+                List<string> GUIDs = returnData.ValueAry[0].Split(";").ToList();
+                string 護理站 = returnData.ValueAry[1];
+
+                SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
+                SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
+                (string StartTime, string Endtime) = await GetTodayAsync();
+                string tableName_med_cpoe = "med_cpoe";
+                string sql = $@"
+                    SELECT *
+                    FROM dbvm.{tableName_med_cpoe}
+                    WHERE 更新時間 >= @start
+                    AND 更新時間 < @end
+                    AND GUID IN @guid";
+
+                var parameters = new
+                {
+                    start = StartTime,
+                    end = Endtime,
+                    guid = GUIDs,
+                };
+                List<object[]> list_med_cpoe = await sQLControl_med_cpoe.WriteCommandAsync(sql, parameters);
+                List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
+                if (sql_medCpoe.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.TimeTaken = $"{myTimerBasic}";
+                    returnData.Data = sql_medCpoe;
+                    returnData.Result = $"查無資料";
+                    return await returnData.JsonSerializationtAsync(true);
+                }
+
+                foreach (var item in sql_medCpoe)
+                {
+                    item.簽收狀態 = "";
+                }
+
+                List<object[]> update_medCpoe = sql_medCpoe.ClassToSQL<medCpoeClass, enum_med_cpoe>();
+                if (update_medCpoe.Count > 0)
+                {
+                    string GUID = string.Join(";", sql_medCpoe.Select(x => x.GUID).ToArray());
+
+                    await sQLControl_med_cpoe.UpdateRowsAsync(null, update_medCpoe);
+                    add_log("取消簽收", GUID, 操作者代號, 操作者姓名);
+                }
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = sql_medCpoe;
+                returnData.Result = $"更新藥車: {護理站}處方紀錄共{GUIDs.Count}筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"Exception:{ex.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        /// <summary>
         ///以護理站取得藥品總量彈窗藥品群組
         /// </summary>
         /// <remarks>

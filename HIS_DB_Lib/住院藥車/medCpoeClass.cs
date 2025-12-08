@@ -89,6 +89,8 @@ namespace HIS_DB_Lib
         調劑異動,
         [Description("覆核狀態,VARCHAR,10,NONE")]
         覆核狀態,
+        [Description("簽收狀態,VARCHAR,10,NONE")]
+        簽收狀態,
         [Description("備註,VARCHAR,200,NONE")]
         備註,
     }
