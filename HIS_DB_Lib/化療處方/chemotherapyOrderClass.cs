@@ -165,8 +165,19 @@ public class chemotherapyOrderClass
         returnData = json_out.JsonDeserializet<returnData>();
         return returnData;
     }
-   
 
+    static public returnData update_chemotherapyOrderDay_by_guid(string API_Server, List<chemotherapyOrderDayClass>  chemotherapyOrderDays)
+    {
+        string url = $"{API_Server}/api/chemotherapyOrder/update_chemotherapyOrderDay_by_guid";
+
+        returnData returnData = new returnData();
+        returnData.Data = chemotherapyOrderDays;
+
+        string json_in = returnData.JsonSerializationt();
+        string json_out = Net.WEBApiPostJson(url, json_in);
+        returnData = json_out.JsonDeserializet<returnData>();
+        return returnData;
+    }
 
 }
 

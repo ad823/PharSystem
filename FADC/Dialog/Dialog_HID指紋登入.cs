@@ -34,55 +34,64 @@ namespace FADC
 
         async private void Dialog_HID指紋登入_LoadFinishedEvent(EventArgs e)
         {
-            if (_enrollCts != null)
+            try
             {
-                this.Invoke(new Action(delegate { rJ_Lable_state.Text = "目前已有流程在執行"; }));
-                _enrollCts.Cancel();
-                _enrollCts.Dispose();
-                _enrollCts = null;
-            }
-            this.Invoke(new Action(delegate { rJ_Lable_state.Text = "請將手指放上指紋機"; }));
-            
-             Dialog_AlarmForm alarmForm;
-            _enrollCts = new CancellationTokenSource();
-            var result = await _reader.CaptureAsync(_enrollCts.Token);
-            DPUruNet.Fmd fingersrc = resultFmd = result.Fmd;
-            pbFinger1.Image = result.Bitmap;
-
-            string b64 = FingerprintSerializer.ToBase64(fingersrc);
-
-            List<personPageClass> personPageClasses = personPageClass.get_all(Main_Form.API_Server);
-
-            foreach (var personPageClass in personPageClasses)
-            {
-                if (personPageClass.指紋辨識.StringIsEmpty()) continue;
-                DPUruNet.Fmd fingerdst = null;
-                try
+                if (_enrollCts != null)
                 {
-                    fingerdst = FingerprintSerializer.FromBase64(personPageClass.指紋辨識);
+                    this.Invoke(new Action(delegate { rJ_Lable_state.Text = "目前已有流程在執行"; }));
+                    _enrollCts.Cancel();
+                    _enrollCts.Dispose();
+                    _enrollCts = null;
                 }
-                catch
+
+                this.Invoke(new Action(delegate { rJ_Lable_state.Text = "請將手指放上指紋機"; }));
+
+                Dialog_AlarmForm alarmForm;
+                _enrollCts = new CancellationTokenSource();
+                var result = await _reader.CaptureAsync(_enrollCts.Token);
+                DPUruNet.Fmd fingersrc = resultFmd = result.Fmd;
+                pbFinger1.Image = result.Bitmap;
+
+                string b64 = FingerprintSerializer.ToBase64(fingersrc);
+
+                List<personPageClass> personPageClasses = personPageClass.get_all(Main_Form.API_Server);
+
+                foreach (var personPageClass in personPageClasses)
                 {
-                    continue;
+                    if (personPageClass.指紋辨識.StringIsEmpty()) continue;
+                    DPUruNet.Fmd fingerdst = null;
+                    try
+                    {
+                        fingerdst = FingerprintSerializer.FromBase64(personPageClass.指紋辨識);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    bool match = fingerprintEngine.Compare(fingersrc, fingerdst);
+                    if (match == false) continue;
+                    Value = personPageClass;
+                    alarmForm = new Dialog_AlarmForm($"【{Value.姓名}】登入成功", 1500, Color.Green);
+                    alarmForm.ShowDialog();
+                    this.DialogResult = DialogResult.Yes;
+                    this.Close();
+                    return;
                 }
-                bool match = fingerprintEngine.Compare(fingersrc, fingerdst);
-                if (match == false) continue;
-                Value = personPageClass;
-                alarmForm = new Dialog_AlarmForm($"【{Value.姓名}】登入成功", 1500, Color.Green);
+                if (_enrollCts != null)
+                {
+                    _enrollCts.Cancel();
+                    _enrollCts.Dispose();
+                    _enrollCts = null;
+                }
+                alarmForm = new Dialog_AlarmForm($"找無匹配指紋", 1500, Color.Red);
                 alarmForm.ShowDialog();
-                this.DialogResult = DialogResult.Yes;
-                this.Close();
-                return;
+                Dialog_HID指紋登入_LoadFinishedEvent(null);
             }
-            if (_enrollCts != null)
+            catch(Exception ex) 
             {
-                _enrollCts.Cancel();
-                _enrollCts.Dispose();
-                _enrollCts = null;
+
             }
-            alarmForm = new Dialog_AlarmForm($"找無匹配指紋", 1500, Color.Red);
-            alarmForm.ShowDialog();
-            Dialog_HID指紋登入_LoadFinishedEvent(null);
+           
 
 
 

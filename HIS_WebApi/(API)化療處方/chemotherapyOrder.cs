@@ -287,5 +287,62 @@ namespace HIS_WebApi
 
             }
         }
+
+
+        /// <summary>
+        /// 更新chemotherapyOrderDayClass(GUID)
+        /// </summary>
+        /// <remarks>
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///       [chemotherapyOrderDayClass(陣列)]
+        ///     },
+        ///     "ValueAry" : 
+        ///     [
+        ///     
+        ///     ]
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+        [HttpPost("update_chemotherapyOrderDay_by_guid")]
+        public async Task<string> update_chemotherapyOrderDay_by_guid([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_chemotherapyOrderDay_by_guid";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+                List<chemotherapyOrderDayClass> chemotherapyOrderDays = returnData.Data.ObjToClass<List<chemotherapyOrderDayClass>>();
+                if (chemotherapyOrderDays == null || chemotherapyOrderDays.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"傳入Data資料異常";
+                    return returnData.JsonSerializationt();
+                }
+
+                SQLControl sQLControl_chemotherapy_order_days = new SQLControl(Server, DB, "chemotherapy_order_days", UserName, Password, Port, SSLMode);
+
+
+                sQLControl_chemotherapy_order_days.UpdateByDefulteExtra(null, chemotherapyOrderDays.ClassToSQL<chemotherapyOrderDayClass>());
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Result = $"更新化療處方成功,修改<{chemotherapyOrderDays.Count}>筆";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+
+            }
+        }
     }
 }
