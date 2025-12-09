@@ -237,7 +237,7 @@ namespace FADC
 
             if (cnt_Program_出貨一次 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_出貨一次_結束延遲.TickStop();
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
                 PLC_Device_出貨一次.Bool = false;
@@ -514,7 +514,7 @@ namespace FADC
 
             if (cnt_Program_出貨到領藥平台 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_出貨到領藥平台_結束延遲.TickStop();
                 this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
                 PLC_Device_出貨到領藥平台.Bool = false;
@@ -660,7 +660,7 @@ namespace FADC
 
             if (cnt_Program_Z軸絕對位置移動 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_Z軸絕對位置移動_結束延遲.TickStop();
                 this.MyTimer_Z軸絕對位置移動_結束延遲.StartTickTime(10000);
                 PLC_Device_Z軸絕對位置移動.Bool = false;
@@ -695,8 +695,10 @@ namespace FADC
         }
         void cnt_Program_Z軸絕對位置移動_等待移動完成(ref int cnt)
         {
-            if(MyTimerBasic_Z軸絕對位置移動_檢查延遲.IsTimeOut())
+            if(MyTimerBasic_Z軸絕對位置移動_檢查延遲.IsTimeOut() || true)
             {
+                //minasA6.MoveAbsolute(deviceID, PLC_Device_目標位置.Value, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
+
                 int pos = minasA6.GetPosition(deviceID);
 
                 if (PLC_Device_目標位置.Value >= pos - 100 && PLC_Device_目標位置.Value <= pos + 100)
@@ -1129,7 +1131,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶正轉 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶正轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶正轉_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
@@ -1200,7 +1202,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶反轉 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶反轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶反轉_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
@@ -1272,7 +1274,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶前進 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶前進_結束延遲.TickStop();
                 this.MyTimer_輸送帶前進_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, false);
@@ -1354,7 +1356,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶後退 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶後退_結束延遲.TickStop();
                 this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
 
