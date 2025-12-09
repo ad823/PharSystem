@@ -1,17 +1,23 @@
-﻿using System;
+﻿using Basic;
+using H_Pannel_lib;
+using MyUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyUI;
-using Basic;
-using System.Diagnostics;//記得取用 FileVersionInfo繼承
-using System.Reflection;//記得取用 Assembly繼承
+using SQLUI;
 using HIS_DB_Lib;
+using System.Diagnostics;
+using FpMatchLib;
+using FingerprintLib;
+using NPOI.SS.Formula.Functions;
+using DPUruNet;
+
 namespace 調劑台管理系統
 {
     public partial class Main_Form : Form
@@ -164,7 +170,9 @@ namespace 調劑台管理系統
 
             this.sub_Program_後台登入_RFID登入();
             this.sub_Program_後台登入_一維碼登入();
-            this.sub_Program_後台登入_指紋登入();
+            if(Main_Form.fingerModle == FingerModleType.fpMatchSoket) this.sub_Program_後台登入_指紋登入();
+            else sub_Program_後台登入_HID指紋登入();
+
 
 
         }
@@ -548,6 +556,67 @@ namespace 調劑台管理系統
         void cnt_Program_後台登入_指紋登入_等待登入完成(ref int cnt)
         {
             cnt++;
+        }
+
+        async void sub_Program_後台登入_HID指紋登入()
+        {
+            if (fingerModle == FingerModleType.fingerPrint)
+            {
+                try
+                {
+                    if (this.PLC_Device_已登入.Bool) return;
+                    if (fingerprintReader.IsCapturing == true)
+                    {
+                        //Console.WriteLine("[後台登入]指紋已在擷取中");
+                        return;
+                    }
+                    //Function_指紋辨識初始化(false);
+                    captureCts = new CancellationTokenSource();
+                    Console.WriteLine("[後台登入]開始擷取指紋");
+                    var result = await fingerprintReader.CaptureAsync(captureCts.Token);
+                    Console.WriteLine("[後台登入]擷取指紋成功");
+
+                    List<personPageClass> personPageClasses = personPageClass.get_all(API_Server);
+                    Fmd fmd_result = result.Fmd;
+                    for (int i = 0; i < personPageClasses.Count; i++)
+                    {
+                        if (personPageClasses[i].指紋辨識.StringIsEmpty()) continue;
+                        Fmd fmd = personPageClasses[i].指紋辨識.FromBase64();
+                        if (fmd == null) continue;
+                        bool flag_match = fingerprintEngine.Compare(fmd_result, fmd);
+                        if (flag_match)
+                        {
+                            this.Invoke(new Action(delegate
+                            {
+                                this.textBox_後台登入_帳號.Text = personPageClasses[i].ID;
+                                this.textBox_後台登入_密碼.Text = personPageClasses[i].密碼;
+                            }));
+                            Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.指紋登入, personPageClasses[i].姓名, "後台登入(指紋)");
+                            Function_登入();
+                            if (captureCts != null)
+                            {
+                                captureCts.Cancel();
+                                captureCts.Dispose();
+                                captureCts = null;
+                            }
+                            return;
+                        }
+                    }
+                    MyMessageBox.ShowDialog(string.Format("查無此指紋帳號"));
+                    return;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("擷取 Finger #1 錯誤：" + ex.Message);
+
+                }
+                finally
+                {
+
+
+                }
+            }
         }
         #endregion
 

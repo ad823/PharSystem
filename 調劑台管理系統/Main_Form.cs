@@ -247,6 +247,7 @@ namespace 調劑台管理系統
             private bool rFID_Enable = true;
             private bool pannel35_Enable = true;
             private bool _舊版晶片 = false;
+            private bool _使用HID指紋機 = false;
 
             private int ePD583_Port = 29005;
             private int ePD266_Port = 29000;
@@ -306,6 +307,7 @@ namespace 調劑台管理系統
             public string HFRFID_2_COMPort { get => hFRFID_2_COMPort; set => hFRFID_2_COMPort = value; }
             public string 批次領藥篩選 { get => _批次領藥篩選; set => _批次領藥篩選 = value; }
             public string QRCode_url { get => qRCode_url; set => qRCode_url = value; }
+            public bool 使用HID指紋機 { get => _使用HID指紋機; set => _使用HID指紋機 = value; }
         }
         private void LoadMyConfig()
         {
@@ -444,6 +446,7 @@ namespace 調劑台管理系統
 
                 LoadDBConfig();
                 LoadMyConfig();
+
 
                 if (myConfigClass.ControlMode) ControlMode = true;
 

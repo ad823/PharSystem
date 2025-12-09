@@ -18,6 +18,7 @@ namespace 調劑台管理系統
     {
         private MyThread myThread = new MyThread();
         public FpMatchClass Value;
+        public personPageClass Value2;
         public int 台號 = -1;
         private bool about = false;
         public Dialog_指紋登入()
@@ -108,30 +109,41 @@ namespace 調劑台管理系統
             if (this.stepViewer1.CurrentStep == 3)
             {
                 flag_step_3 = true;
-                Value = Main_Form.fpMatchSoket.GetFeatureOnce();
-                if (Value == null) return;
-                if (Value.featureLen == 768)
+                if (Main_Form.fingerModle == Main_Form.FingerModleType.fpMatchSoket)
                 {
-
-                    List<object[]> list_人員資料 = Main_Form._sqL_DataGridView_人員資料.SQL_GetAllRows(false);
-                    object[] value = null;
-                    for (int i = 0; i < list_人員資料.Count; i++)
+                    Value = Main_Form.fpMatchSoket.GetFeatureOnce();
+                    if (Value == null) return;
+                    if (Value.featureLen == 768)
                     {
-                        string feature = list_人員資料[i][(int)enum_人員資料.指紋辨識].ObjectToString();
-                        if (Main_Form.fpMatchSoket.Match(Value.feature, feature))
-                        {
-                            value = list_人員資料[i];
 
+                        List<object[]> list_人員資料 = Main_Form._sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+                        object[] value = null;
+                        for (int i = 0; i < list_人員資料.Count; i++)
+                        {
+                            string feature = list_人員資料[i][(int)enum_人員資料.指紋辨識].ObjectToString();
+                            if (Main_Form.fpMatchSoket.Match(Value.feature, feature))
+                            {
+                                value = list_人員資料[i];
+
+                            }
+                        }
+                        if (value != null) this.stepViewer1.Next();
+                        else
+                        {
+                            Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("找無符合指紋資訊", 2000);
+                            dialog_AlarmForm.ShowDialog();
+                            flag_step_3 = false;
                         }
                     }
-                    if (value != null) this.stepViewer1.Next();
-                    else
-                    {
-                        Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("找無符合指紋資訊", 2000);
-                        dialog_AlarmForm.ShowDialog();
-                        flag_step_3 = false;
-                    }
                 }
+                else
+                {
+                    Dialog_HID指紋登入 dialog_HID = new Dialog_HID指紋登入();
+                    if (dialog_HID.ShowDialog() != DialogResult.Yes) return;
+                    Value2 = dialog_HID.Value;
+                }
+               
+            
             }
             if(this.stepViewer1.CurrentStep == 4 && flag_step_4 == false)
             {

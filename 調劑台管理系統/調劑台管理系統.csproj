@@ -74,9 +74,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\CallBackUI.dll</HintPath>
     </Reference>
+    <Reference Include="DPCtlUruNet">
+      <HintPath>..\0.DLL\DPCtlUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DPUruNet">
+      <HintPath>..\0.DLL\DPUruNet.dll</HintPath>
+    </Reference>
     <Reference Include="DrawingClass, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\DrawingClass.dll</HintPath>
+    </Reference>
+    <Reference Include="FingerprintLib">
+      <HintPath>..\0.DLL\FingerprintLib.dll</HintPath>
     </Reference>
     <Reference Include="FontAwesome.Sharp, Version=5.15.4.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -411,6 +420,24 @@
     </Compile>
     <Compile Include="Dialog\Dialog_處方資訊填寫.Designer.cs">
       <DependentUpon>Dialog_處方資訊填寫.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.Designer.cs">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.Designer.cs">
+      <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialog\Dialog_下載藥檔範圍選擇.cs">
       <SubType>Form</SubType>
@@ -877,6 +904,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_長期醫令.resx">
       <DependentUpon>Dialog_長期醫令.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_HID指紋登入.resx">
+      <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_領藥號輸入.resx">
       <DependentUpon>Dialog_領藥號輸入.cs</DependentUpon>
