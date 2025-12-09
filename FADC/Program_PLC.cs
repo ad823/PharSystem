@@ -198,7 +198,7 @@ namespace FADC
                 sub_Program_輸送帶前進();
                 sub_Program_輸送帶後退();
                 sub_Program_出貨一次();
-
+                sub_Program_出貨到領藥平台();
             }
         }
 
@@ -231,9 +231,8 @@ namespace FADC
             if (cnt_Program_出貨一次 == 10) cnt_Program_出貨一次_等待出料一次完成(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 11) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 12) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次_等待出貨到領藥平台(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 14) cnt_Program_出貨一次_出貨到領藥平台結束(ref cnt_Program_出貨一次);      
-            if (cnt_Program_出貨一次 == 15) cnt_Program_出貨一次 = 65500;
+         
+            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次 = 65500;
             if (cnt_Program_出貨一次 > 1) cnt_Program_出貨一次_檢查放開(ref cnt_Program_出貨一次);
 
             if (cnt_Program_出貨一次 == 65500)
@@ -244,7 +243,6 @@ namespace FADC
                 PLC_Device_出貨一次.Bool = false;
 
                 PLC_Device_Z軸移動到頂層.Bool = false;
-                PLC_Device_出貨到領藥平台.Bool = false;
                 PLC_Device_輸送帶後退.Bool = false;
                 PLC_Device_輸送帶前進.Bool = false;
                 PLC_Device_移動到第一層位置.Bool = false;
@@ -265,7 +263,8 @@ namespace FADC
         }
         void cnt_Program_出貨一次_初始化(ref int cnt)
         {
-            IP_出貨一次 = this.rJ_TextBox_出貨一次_IP.Text;
+            if(plC_ScreenPage_Main.PageText == "工程模式") IP_出貨一次 = this.rJ_TextBox_出貨一次_IP.Text;
+
             if (IP_出貨一次.Check_IP_Adress() == false)
             {
                 Console.WriteLine($"[出貨一次] - IP字元異常,{IP_出貨一次}");
@@ -480,23 +479,6 @@ namespace FADC
         }
 
 
-        void cnt_Program_出貨一次_等待出貨到領藥平台(ref int cnt)
-        {
-            if (PLC_Device_出貨到領藥平台.Bool == false)
-            {
-                Console.WriteLine($"[出貨一次] - 等待出貨到領藥平台");
-                PLC_Device_出貨到領藥平台.Bool = true;
-                cnt++;
-            }
-        }
-        void cnt_Program_出貨一次_出貨到領藥平台結束(ref int cnt)
-        {
-            if (PLC_Device_出貨到領藥平台.Bool == false)
-            {
-                Console.WriteLine($"[出貨一次] - 出貨到領藥平台完成");
-                cnt++;
-            }
-        }
 
         #endregion
         #region PLC_出貨到領藥平台
@@ -537,7 +519,6 @@ namespace FADC
                 this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
                 PLC_Device_出貨到領藥平台.Bool = false;
                 PLC_Device_Z軸移動到頂層.Bool = false;
-                PLC_Device_出貨一次.Bool = false;
                 PLC_Device_輸送帶後退.Bool = false;
                 PLC_Device_輸送帶前進.Bool = false;
                 PLC_Device_移動到第一層位置.Bool = false;
@@ -573,7 +554,7 @@ namespace FADC
                 cnt++;
                 return;
             }
-            if (PLC_Device_輸送帶後退.Bool == false)
+            else if (PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶後退");
                 PLC_Device_輸送帶後退.Bool = true;
@@ -588,7 +569,7 @@ namespace FADC
                 cnt++;
                 return;
             }
-            if (PLC_Device_輸送帶後退.Bool == false)
+            else if (PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶完成");
                 cnt++;
@@ -708,17 +689,21 @@ namespace FADC
             minasA6.MoveAbsolute(deviceID, PLC_Device_目標位置.Value, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
             MyTimerBasic_Z軸絕對位置移動_檢查延遲.TickStop();
             MyTimerBasic_Z軸絕對位置移動_檢查延遲.StartTickTime(100);
+
+            Console.WriteLine( $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] [Z軸移動] DeviceID={deviceID}, 目標位置={PLC_Device_目標位置.Value}, 速度={PLC_Device_Z軸馬達速度.Value}, 加速度={PLC_Device_Z軸馬達加速度.Value}, 減速度={PLC_Device_Z軸馬達減速度.Value}");
             cnt++;
         }
         void cnt_Program_Z軸絕對位置移動_等待移動完成(ref int cnt)
         {
             if(MyTimerBasic_Z軸絕對位置移動_檢查延遲.IsTimeOut())
             {
-                if(PLC_Device_Z軸Ready.Bool)
+                int pos = minasA6.GetPosition(deviceID);
+
+                if (PLC_Device_目標位置.Value >= pos - 100 && PLC_Device_目標位置.Value <= pos + 100)
                 {
                     cnt++;
                 }
-              
+
             }         
         }
 
@@ -1326,6 +1311,11 @@ namespace FADC
         }
         void cnt_Program_輸送帶前進_等待移動完成(ref int cnt)
         {
+            if (PLC_Device_輸送帶前進時間.Value == 0)
+            {
+                cnt++;
+                return;
+            }
             if (MyTimerBasic_輸送帶前進_檢查延遲.IsTimeOut())
             {
                 flag_輸送帶在後方 = false;

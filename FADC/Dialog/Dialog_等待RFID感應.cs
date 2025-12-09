@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Basic;
+using HIS_DB_Lib;
+using MyUI;
+using RFID_FX600lib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,9 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using HIS_DB_Lib;
-using Basic;
-using MyUI;
 
 namespace FADC
 {
@@ -31,11 +32,13 @@ namespace FADC
      
         private void sub_program()
         {
-            if(Main_Form.人員資料_UID.StringIsEmpty() == false && this.IsHandleCreated)
+            string UID_01 =Main_Form._RFID_FX600_UI.Get_RFID_UID(1);
+
+            if (UID_01.StringIsEmpty() == false && this.IsHandleCreated && UID_01.StringToInt32() != 0)
             {
                 this.Invoke(new Action(delegate
                 {
-                    Value = Main_Form.人員資料_UID;
+                    Value = UID_01;
                     this.label_state.Text = $"成功刷入!{Value}";
                     this.label_state.BackColor = Color.GreenYellow;
                     Application.DoEvents();

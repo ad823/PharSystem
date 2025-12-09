@@ -382,6 +382,7 @@
             this.設定03 = new System.Windows.Forms.TabPage();
             this.rfiD_UI = new H_Pannel_lib.RFID_UI();
             this.設定04 = new System.Windows.Forms.TabPage();
+            this.speechRecognitionUserControl = new SpeechRecognitionUserControl.SpeechRecognitionUserControl();
             this.groupBox18 = new System.Windows.Forms.GroupBox();
             this.rfiD_FX600_UI = new RFID_FX600lib.RFID_FX600_UI();
             this.設定05 = new System.Windows.Forms.TabPage();
@@ -406,7 +407,6 @@
             this.contextMenuStrip_Main = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_顯示主控台 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_隱藏主控台 = new System.Windows.Forms.ToolStripMenuItem();
-            this.speechRecognitionUserControl = new SpeechRecognitionUserControl.SpeechRecognitionUserControl();
             this.panel_Main.ContentsPanel.SuspendLayout();
             this.panel_Main.SuspendLayout();
             this.panel128.SuspendLayout();
@@ -1414,7 +1414,7 @@
             this.panel22.Controls.Add(this.plC_RJ_Button_調劑作業_指紋登入);
             this.panel22.Controls.Add(this.plC_RJ_Button_調劑作業_辨識登入);
             this.panel22.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel22.Location = new System.Drawing.Point(25, 460);
+            this.panel22.Location = new System.Drawing.Point(25, 452);
             this.panel22.Name = "panel22";
             this.panel22.Size = new System.Drawing.Size(360, 149);
             this.panel22.TabIndex = 37;
@@ -1531,7 +1531,7 @@
             // 
             this.panel21.BackColor = System.Drawing.Color.White;
             this.panel21.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel21.Location = new System.Drawing.Point(25, 442);
+            this.panel21.Location = new System.Drawing.Point(25, 434);
             this.panel21.Name = "panel21";
             this.panel21.Size = new System.Drawing.Size(360, 18);
             this.panel21.TabIndex = 36;
@@ -1545,10 +1545,10 @@
             this.rJ_Lable4.BorderSize = 10;
             this.rJ_Lable4.Dock = System.Windows.Forms.DockStyle.Top;
             this.rJ_Lable4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable4.Font = new System.Drawing.Font("Arial Unicode MS", 12F);
+            this.rJ_Lable4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.rJ_Lable4.ForeColor = System.Drawing.Color.Transparent;
             this.rJ_Lable4.GUID = "";
-            this.rJ_Lable4.Location = new System.Drawing.Point(25, 421);
+            this.rJ_Lable4.Location = new System.Drawing.Point(25, 413);
             this.rJ_Lable4.Name = "rJ_Lable4";
             this.rJ_Lable4.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable4.ShadowSize = 0;
@@ -1562,7 +1562,7 @@
             // 
             this.panel19.BackColor = System.Drawing.Color.White;
             this.panel19.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel19.Location = new System.Drawing.Point(25, 403);
+            this.panel19.Location = new System.Drawing.Point(25, 395);
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(360, 18);
             this.panel19.TabIndex = 34;
@@ -1572,7 +1572,7 @@
             this.panel18.BackColor = System.Drawing.Color.White;
             this.panel18.Controls.Add(this.rJ_Button_調劑畫面_登入);
             this.panel18.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel18.Location = new System.Drawing.Point(25, 321);
+            this.panel18.Location = new System.Drawing.Point(25, 313);
             this.panel18.Name = "panel18";
             this.panel18.Padding = new System.Windows.Forms.Padding(5);
             this.panel18.Size = new System.Drawing.Size(360, 82);
@@ -1591,7 +1591,7 @@
             this.rJ_Button_調劑畫面_登入.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_Button_調劑畫面_登入.FlatAppearance.BorderSize = 0;
             this.rJ_Button_調劑畫面_登入.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Button_調劑畫面_登入.Font = new System.Drawing.Font("Arial Unicode MS", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Button_調劑畫面_登入.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Button_調劑畫面_登入.ForeColor = System.Drawing.Color.White;
             this.rJ_Button_調劑畫面_登入.GUID = "";
             this.rJ_Button_調劑畫面_登入.Image_padding = new System.Windows.Forms.Padding(0);
@@ -1615,7 +1615,7 @@
             // 
             this.panel17.BackColor = System.Drawing.Color.White;
             this.panel17.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel17.Location = new System.Drawing.Point(25, 303);
+            this.panel17.Location = new System.Drawing.Point(25, 295);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(360, 18);
             this.panel17.TabIndex = 32;
@@ -1628,10 +1628,10 @@
             this.rJ_TextBox_調劑畫面_密碼.BorderRadius = 5;
             this.rJ_TextBox_調劑畫面_密碼.BorderSize = 1;
             this.rJ_TextBox_調劑畫面_密碼.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rJ_TextBox_調劑畫面_密碼.Font = new System.Drawing.Font("Arial Unicode MS", 16F);
+            this.rJ_TextBox_調劑畫面_密碼.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.rJ_TextBox_調劑畫面_密碼.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_調劑畫面_密碼.GUID = "";
-            this.rJ_TextBox_調劑畫面_密碼.Location = new System.Drawing.Point(25, 258);
+            this.rJ_TextBox_調劑畫面_密碼.Location = new System.Drawing.Point(25, 254);
             this.rJ_TextBox_調劑畫面_密碼.Multiline = false;
             this.rJ_TextBox_調劑畫面_密碼.Name = "rJ_TextBox_調劑畫面_密碼";
             this.rJ_TextBox_調劑畫面_密碼.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
@@ -1639,7 +1639,7 @@
             this.rJ_TextBox_調劑畫面_密碼.PlaceholderColor = System.Drawing.Color.DarkGray;
             this.rJ_TextBox_調劑畫面_密碼.PlaceholderText = "";
             this.rJ_TextBox_調劑畫面_密碼.ShowTouchPannel = false;
-            this.rJ_TextBox_調劑畫面_密碼.Size = new System.Drawing.Size(360, 45);
+            this.rJ_TextBox_調劑畫面_密碼.Size = new System.Drawing.Size(360, 41);
             this.rJ_TextBox_調劑畫面_密碼.TabIndex = 31;
             this.rJ_TextBox_調劑畫面_密碼.TextAlgin = System.Windows.Forms.HorizontalAlignment.Left;
             this.rJ_TextBox_調劑畫面_密碼.Texts = "";
@@ -1654,10 +1654,10 @@
             this.rJ_Lable3.BorderSize = 10;
             this.rJ_Lable3.Dock = System.Windows.Forms.DockStyle.Top;
             this.rJ_Lable3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable3.Font = new System.Drawing.Font("Arial Unicode MS", 12F);
+            this.rJ_Lable3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.rJ_Lable3.ForeColor = System.Drawing.Color.Transparent;
             this.rJ_Lable3.GUID = "";
-            this.rJ_Lable3.Location = new System.Drawing.Point(25, 237);
+            this.rJ_Lable3.Location = new System.Drawing.Point(25, 233);
             this.rJ_Lable3.Name = "rJ_Lable3";
             this.rJ_Lable3.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable3.ShadowSize = 0;
@@ -1671,7 +1671,7 @@
             // 
             this.panel15.BackColor = System.Drawing.Color.White;
             this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel15.Location = new System.Drawing.Point(25, 219);
+            this.panel15.Location = new System.Drawing.Point(25, 215);
             this.panel15.Name = "panel15";
             this.panel15.Size = new System.Drawing.Size(360, 18);
             this.panel15.TabIndex = 29;
@@ -1684,7 +1684,7 @@
             this.rJ_TextBox_調劑畫面_帳號.BorderRadius = 5;
             this.rJ_TextBox_調劑畫面_帳號.BorderSize = 1;
             this.rJ_TextBox_調劑畫面_帳號.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rJ_TextBox_調劑畫面_帳號.Font = new System.Drawing.Font("Arial Unicode MS", 16F);
+            this.rJ_TextBox_調劑畫面_帳號.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.rJ_TextBox_調劑畫面_帳號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_調劑畫面_帳號.GUID = "";
             this.rJ_TextBox_調劑畫面_帳號.Location = new System.Drawing.Point(25, 174);
@@ -1695,7 +1695,7 @@
             this.rJ_TextBox_調劑畫面_帳號.PlaceholderColor = System.Drawing.Color.DarkGray;
             this.rJ_TextBox_調劑畫面_帳號.PlaceholderText = "";
             this.rJ_TextBox_調劑畫面_帳號.ShowTouchPannel = false;
-            this.rJ_TextBox_調劑畫面_帳號.Size = new System.Drawing.Size(360, 45);
+            this.rJ_TextBox_調劑畫面_帳號.Size = new System.Drawing.Size(360, 41);
             this.rJ_TextBox_調劑畫面_帳號.TabIndex = 28;
             this.rJ_TextBox_調劑畫面_帳號.TextAlgin = System.Windows.Forms.HorizontalAlignment.Left;
             this.rJ_TextBox_調劑畫面_帳號.Texts = "";
@@ -1710,7 +1710,7 @@
             this.rJ_Lable1.BorderSize = 10;
             this.rJ_Lable1.Dock = System.Windows.Forms.DockStyle.Top;
             this.rJ_Lable1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable1.Font = new System.Drawing.Font("Arial Unicode MS", 12F);
+            this.rJ_Lable1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.rJ_Lable1.ForeColor = System.Drawing.Color.Transparent;
             this.rJ_Lable1.GUID = "";
             this.rJ_Lable1.Location = new System.Drawing.Point(25, 153);
@@ -1751,7 +1751,7 @@
             this.rJ_Lable2.BorderSize = 0;
             this.rJ_Lable2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_Lable2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable2.Font = new System.Drawing.Font("Arial Unicode MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Lable2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Lable2.ForeColor = System.Drawing.Color.Transparent;
             this.rJ_Lable2.GUID = "";
             this.rJ_Lable2.Location = new System.Drawing.Point(0, 0);
@@ -2739,7 +2739,7 @@
             this.rJ_Button_調劑畫面_開始調劑.Dock = System.Windows.Forms.DockStyle.Right;
             this.rJ_Button_調劑畫面_開始調劑.FlatAppearance.BorderSize = 0;
             this.rJ_Button_調劑畫面_開始調劑.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Button_調劑畫面_開始調劑.Font = new System.Drawing.Font("Arial Unicode MS", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Button_調劑畫面_開始調劑.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Button_調劑畫面_開始調劑.ForeColor = System.Drawing.Color.White;
             this.rJ_Button_調劑畫面_開始調劑.GUID = "";
             this.rJ_Button_調劑畫面_開始調劑.Image_padding = new System.Windows.Forms.Padding(0);
@@ -2791,7 +2791,7 @@
             this.rJ_Button_調劑畫面_登出.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_Button_調劑畫面_登出.FlatAppearance.BorderSize = 0;
             this.rJ_Button_調劑畫面_登出.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Button_調劑畫面_登出.Font = new System.Drawing.Font("Arial Unicode MS", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Button_調劑畫面_登出.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Button_調劑畫面_登出.ForeColor = System.Drawing.Color.White;
             this.rJ_Button_調劑畫面_登出.GUID = "";
             this.rJ_Button_調劑畫面_登出.Image_padding = new System.Windows.Forms.Padding(0);
@@ -9403,7 +9403,7 @@
             this.plC_RJ_Button_Z軸復歸.UseVisualStyleBackColor = false;
             this.plC_RJ_Button_Z軸復歸.字型鎖住 = false;
             this.plC_RJ_Button_Z軸復歸.寫入元件位置 = "S100";
-            this.plC_RJ_Button_Z軸復歸.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
+            this.plC_RJ_Button_Z軸復歸.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
             this.plC_RJ_Button_Z軸復歸.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
             this.plC_RJ_Button_Z軸復歸.文字鎖住 = false;
             this.plC_RJ_Button_Z軸復歸.背景圖片 = null;
@@ -9555,7 +9555,7 @@
             this.設定03.Controls.Add(this.rfiD_UI);
             this.設定03.Location = new System.Drawing.Point(4, 25);
             this.設定03.Name = "設定03";
-            this.設定03.Size = new System.Drawing.Size(1645, 952);
+            this.設定03.Size = new System.Drawing.Size(475, 301);
             this.設定03.TabIndex = 2;
             this.設定03.Text = "設定03";
             // 
@@ -9577,7 +9577,7 @@
             this.rfiD_UI.RFID_Enable = "0";
             this.rfiD_UI.Server_IP_Adress = "0.0.0.0";
             this.rfiD_UI.Server_Port = "0";
-            this.rfiD_UI.Size = new System.Drawing.Size(1645, 952);
+            this.rfiD_UI.Size = new System.Drawing.Size(475, 301);
             this.rfiD_UI.SSID = "";
             this.rfiD_UI.Station = "0";
             this.rfiD_UI.Subnet = "0.0.0.0";
@@ -9594,9 +9594,17 @@
             this.設定04.Controls.Add(this.groupBox18);
             this.設定04.Location = new System.Drawing.Point(4, 25);
             this.設定04.Name = "設定04";
-            this.設定04.Size = new System.Drawing.Size(1645, 952);
+            this.設定04.Size = new System.Drawing.Size(475, 301);
             this.設定04.TabIndex = 3;
             this.設定04.Text = "設定04";
+            // 
+            // speechRecognitionUserControl
+            // 
+            this.speechRecognitionUserControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.speechRecognitionUserControl.Location = new System.Drawing.Point(419, 19);
+            this.speechRecognitionUserControl.Name = "speechRecognitionUserControl";
+            this.speechRecognitionUserControl.Size = new System.Drawing.Size(420, 242);
+            this.speechRecognitionUserControl.TabIndex = 31;
             // 
             // groupBox18
             // 
@@ -9628,7 +9636,7 @@
             this.設定05.Controls.Add(this.sqL_DataGridView_storageMedBoxIOConfig);
             this.設定05.Location = new System.Drawing.Point(4, 25);
             this.設定05.Name = "設定05";
-            this.設定05.Size = new System.Drawing.Size(1645, 952);
+            this.設定05.Size = new System.Drawing.Size(475, 301);
             this.設定05.TabIndex = 4;
             this.設定05.Text = "設定05";
             // 
@@ -9781,7 +9789,7 @@
             this.sqL_DataGridView_storageMedBoxIOConfig.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_storageMedBoxIOConfig.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_storageMedBoxIOConfig.Server = "localhost";
-            this.sqL_DataGridView_storageMedBoxIOConfig.Size = new System.Drawing.Size(1645, 559);
+            this.sqL_DataGridView_storageMedBoxIOConfig.Size = new System.Drawing.Size(475, 559);
             this.sqL_DataGridView_storageMedBoxIOConfig.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_storageMedBoxIOConfig.TabIndex = 23;
             this.sqL_DataGridView_storageMedBoxIOConfig.TableName = "person_page";
@@ -10155,14 +10163,6 @@
             this.ToolStripMenuItem_隱藏主控台.Name = "ToolStripMenuItem_隱藏主控台";
             this.ToolStripMenuItem_隱藏主控台.Size = new System.Drawing.Size(168, 24);
             this.ToolStripMenuItem_隱藏主控台.Text = "(隱藏)主控台";
-            // 
-            // speechRecognitionUserControl
-            // 
-            this.speechRecognitionUserControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.speechRecognitionUserControl.Location = new System.Drawing.Point(419, 19);
-            this.speechRecognitionUserControl.Name = "speechRecognitionUserControl";
-            this.speechRecognitionUserControl.Size = new System.Drawing.Size(420, 242);
-            this.speechRecognitionUserControl.TabIndex = 31;
             // 
             // Main_Form
             // 

@@ -168,7 +168,7 @@ namespace FADC
             {
                 SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
             }));
-            if (SelectedTabText == "登入畫面")
+            if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
             {
                 string UID_01 = _RFID_FX600_UI.Get_RFID_UID(1);
                 if (!UID_01.StringIsEmpty() && UID_01.StringToInt32() != 0 && this.IsHandleCreated)
@@ -181,6 +181,7 @@ namespace FADC
                         if (personPage == null)
                         {
                             Console.WriteLine($"找無人員資訊");
+                            return;
                         }
                         this.Invoke(new Action(delegate
                         {
@@ -296,32 +297,34 @@ namespace FADC
                 Function_調劑畫面_處方資訊更新(chemotherapyOrderClasses);
                 List<DateTime> dateTimes = chemotherapyOrderClasses.GetOrderAllDates();
 
-                foreach (PLC_RJ_Button pLC_RJ_Button in pLC_RJ_Buttons)
+                this.Invoke(new Action(delegate 
                 {
-                    pLC_RJ_Button.OFF_文字內容 = "";
-                    pLC_RJ_Button.ON_文字內容 = "";
-                    pLC_RJ_Button.Size = new System.Drawing.Size(140, 60);
-                    pLC_RJ_Button.Text = "";
-                    pLC_RJ_Button.Bool = false;
-                    pLC_RJ_Button.Visible = true;
-                    pLC_RJ_Button.Enabled = false;
-                }
-                if(chemotherapyOrderClasses.Count == 0)
-                {
-                    if (sender != null) MyMessageBox.ShowDialog("查無處方資訊");
-                    return;
-                }
-                int index = 0;
-                foreach (DateTime date in dateTimes)
-                {
-                    pLC_RJ_Buttons[index].Enabled = true;
-                    pLC_RJ_Buttons[index].OFF_文字內容 = date.ToDateString();
-                    pLC_RJ_Buttons[index].ON_文字內容 = date.ToDateString();
-                    pLC_RJ_Buttons[index].Text = date.ToDateString();
-                    index++;
-
-
-                }
+                    foreach (PLC_RJ_Button pLC_RJ_Button in pLC_RJ_Buttons)
+                    {
+                        pLC_RJ_Button.OFF_文字內容 = "";
+                        pLC_RJ_Button.ON_文字內容 = "";
+                        pLC_RJ_Button.Size = new System.Drawing.Size(140, 60);
+                        pLC_RJ_Button.Text = "";
+                        pLC_RJ_Button.Bool = false;
+                        pLC_RJ_Button.Visible = true;
+                        pLC_RJ_Button.Enabled = false;
+                    }
+                    if (chemotherapyOrderClasses.Count == 0)
+                    {
+                        if (sender != null) MyMessageBox.ShowDialog("查無處方資訊");
+                        return;
+                    }
+                    int index = 0;
+                    foreach (DateTime date in dateTimes)
+                    {
+                        pLC_RJ_Buttons[index].Enabled = true;
+                        pLC_RJ_Buttons[index].OFF_文字內容 = date.ToDateString();
+                        pLC_RJ_Buttons[index].ON_文字內容 = date.ToDateString();
+                        pLC_RJ_Buttons[index].Text = date.ToDateString();
+                        index++;
+                    }
+                }));
+           
 
 
             }

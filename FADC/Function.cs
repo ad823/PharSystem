@@ -28,6 +28,8 @@ namespace FADC
             庫存,
             異動量,
             Value,
+            藥碼,
+            狀態,
         }
         static public  List<medPicClass> medPicClasses = new List<medPicClass>();
         static public  List<Image> Function_取得藥品圖片(string Code)

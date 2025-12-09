@@ -288,6 +288,31 @@ namespace FADC
             log.AppendLine($"Data: {data}");
 
             Console.WriteLine(log);
+            string SelectedTabText = "";
+            this.Invoke(new Action(delegate
+            {
+                SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
+            }));
+            if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if(response.Command.ToUpper() == "LOGIN" || response.Command.ToUpper() == "DISPENSE")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(null);
+                }
+
+            } 
+            if (SelectedTabText == "刷取藥單" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if (response.Command.ToUpper() == "LOGOUT")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    RJ_Button_調劑畫面_登出_MouseDownEvent(null);
+                }
+
+            }
         }
 
         private void RFID_Iint()
@@ -304,7 +329,7 @@ namespace FADC
 
                     if (MyTimer_rfiD_FX600_UI_Init.IsTimeOut() && !flag_rfiD_FX600_UI_Init)
                     {
-                        int num = 1;
+                        int num = 2;
                         this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
 
                         flag_rfiD_FX600_UI_Init = true;
