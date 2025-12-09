@@ -467,7 +467,7 @@ namespace HIS_WebApi
                                 AND a.藥品碼 <> ''
                         ) t2 ON t1.藥品碼 = t2.藥品碼
                     ";
-                    string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL OR 交易量 <> '');";
+                    string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL AND 交易量 <> '');";
                     List<object[]> value = await sQLControl_trading.WriteCommandAsync(command);
                     List<transactionsClass> transactionsClasses = value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                     List<List<transactionsClass>> transactions = transactionsClasses.GroupBy(g => g.藥品碼).Select(s => s.ToList()).ToList();
