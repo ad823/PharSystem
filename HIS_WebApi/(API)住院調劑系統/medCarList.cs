@@ -334,12 +334,12 @@ namespace HIS_WebApi
                 //medCartList_sql.Sort(new medCarListClass.ICP_By_phar_name());
                 if (medCartList_sql[0].排序.StringIsEmpty())
                 {
-                    medCartList_sql = medCartList_sql.OrderBy(x => x.護理站, new NaturalComparer()).ToList();
+                    medCartList_sql = medCartList_sql.OrderBy(x => x.護理站).ToList();
 
                 }
                 else
                 {
-                    medCartList_sql = medCartList_sql.OrderBy(x => x.排序, new NaturalComparer()).ToList();
+                    medCartList_sql = medCartList_sql.OrderBy(x => x.排序).ToList();
                 }
 
                 returnData.Code = 200;
