@@ -108,9 +108,33 @@
     <Reference Include="MyUI">
       <HintPath>..\0.DLL\MyUI.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="NAudio, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\0.DLL\FaceRecognition\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Asio">
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.Asio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Lame">
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.Lame.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Midi">
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.Midi.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Wasapi, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.Wasapi.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.WinForms">
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.WinMM, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\SpeechRecognition\NAudio.WinMM.dll</HintPath>
     </Reference>
     <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -136,6 +160,12 @@
     </Reference>
     <Reference Include="RFID_FX600lib">
       <HintPath>..\0.DLL\RFID_FX600lib.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeechRecognitionDll">
+      <HintPath>..\0.DLL\SpeechRecognition\SpeechRecognitionDll.dll</HintPath>
+    </Reference>
+    <Reference Include="SpeechRecognitionUserControl">
+      <HintPath>..\0.DLL\SpeechRecognition\SpeechRecognitionUserControl.dll</HintPath>
     </Reference>
     <Reference Include="SQLUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -188,6 +218,15 @@
     <Compile Include="Dialog\Dialog_HID指紋登入.Designer.cs">
       <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_調劑取藥.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_調劑取藥.Designer.cs">
+      <DependentUpon>Dialog_調劑取藥.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program_PLC.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserControl\BatchExpiryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -234,9 +273,6 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Program_PLC.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Program_Scanner_RS232.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -261,6 +297,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialog\Dialog_HID指紋登入.resx">
       <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_調劑取藥.resx">
+      <DependentUpon>Dialog_調劑取藥.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\BatchExpiryControl.resx">
       <DependentUpon>BatchExpiryControl.cs</DependentUpon>

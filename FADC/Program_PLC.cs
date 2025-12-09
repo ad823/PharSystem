@@ -60,6 +60,10 @@ namespace FADC
         public static PLC_Device PLC_Device_出貨一次_Z軸層數 = new PLC_Device("D3000");
         public static string IP_出貨一次 = "";
 
+        public static PLC_Device PLC_Device_出貨到領藥平台 = new PLC_Device("S3001");
+   
+        public bool flag_輸送帶在後方 = false;
+
         public static PLC_Device PLC_Device_Z軸馬達激磁 = new PLC_Device("Y10");
         public static PLC_Device PLC_Device_Z軸馬達原點狀態 = new PLC_Device("Y11");
         public static PLC_Device PLC_Device_Z軸Alarm = new PLC_Device("Y12");
@@ -227,15 +231,9 @@ namespace FADC
             if (cnt_Program_出貨一次 == 10) cnt_Program_出貨一次_等待出料一次完成(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 11) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 12) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次_等待Z軸移動到頂層(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 14) cnt_Program_出貨一次_Z軸移動到頂層結束(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 15) cnt_Program_出貨一次_等待輸送帶前進(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 16) cnt_Program_出貨一次_輸送帶前進完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 17) cnt_Program_出貨一次_輸送帶正轉開始(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 18) cnt_Program_出貨一次_輸送帶正轉完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 19) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 20) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 21) cnt_Program_出貨一次 = 65500;
+            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次_等待出貨到領藥平台(ref cnt_Program_出貨一次);
+            if (cnt_Program_出貨一次 == 14) cnt_Program_出貨一次_出貨到領藥平台結束(ref cnt_Program_出貨一次);      
+            if (cnt_Program_出貨一次 == 15) cnt_Program_出貨一次 = 65500;
             if (cnt_Program_出貨一次 > 1) cnt_Program_出貨一次_檢查放開(ref cnt_Program_出貨一次);
 
             if (cnt_Program_出貨一次 == 65500)
@@ -243,8 +241,17 @@ namespace FADC
                 minasA6.S_Stop(deviceID);
                 this.MyTimer_出貨一次_結束延遲.TickStop();
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
-                PLC_Device_Z軸移動到頂層.Bool = false;
                 PLC_Device_出貨一次.Bool = false;
+
+                PLC_Device_Z軸移動到頂層.Bool = false;
+                PLC_Device_出貨到領藥平台.Bool = false;
+                PLC_Device_輸送帶後退.Bool = false;
+                PLC_Device_輸送帶前進.Bool = false;
+                PLC_Device_移動到第一層位置.Bool = false;
+                PLC_Device_移動到第二層位置.Bool = false;
+                PLC_Device_移動到第三層位置.Bool = false;
+                PLC_Device_移動到第四層位置.Bool = false;
+                PLC_Device_移動到第五層位置.Bool = false;
                 cnt_Program_出貨一次 = 65535;
             }
         }
@@ -310,6 +317,13 @@ namespace FADC
         }
         void cnt_Program_出貨一次_等待輸送帶後退(ref int cnt)
         {
+            if(flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+
+                cnt++;
+                return;
+            }
             if(PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨一次] - 等待輸送帶後退");
@@ -319,6 +333,13 @@ namespace FADC
         }
         void cnt_Program_出貨一次_輸送帶後退完成(ref int cnt)
         {
+            if (flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+
+                cnt++;
+                return;
+            }
             if (PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨一次] - 等待輸送帶完成");
@@ -459,42 +480,177 @@ namespace FADC
         }
 
 
-        void cnt_Program_出貨一次_等待Z軸移動到頂層(ref int cnt)
+        void cnt_Program_出貨一次_等待出貨到領藥平台(ref int cnt)
         {
-            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            if (PLC_Device_出貨到領藥平台.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - 等待Z軸移動到頂層");
-                PLC_Device_Z軸移動到頂層.Bool = true;
+                Console.WriteLine($"[出貨一次] - 等待出貨到領藥平台");
+                PLC_Device_出貨到領藥平台.Bool = true;
                 cnt++;
             }
         }
-        void cnt_Program_出貨一次_Z軸移動到頂層結束(ref int cnt)
+        void cnt_Program_出貨一次_出貨到領藥平台結束(ref int cnt)
         {
-            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            if (PLC_Device_出貨到領藥平台.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - Z軸移動到頂層完成");
+                Console.WriteLine($"[出貨一次] - 出貨到領藥平台完成");
                 cnt++;
             }
         }
 
-        void cnt_Program_出貨一次_輸送帶正轉開始(ref int cnt)
+        #endregion
+        #region PLC_出貨到領藥平台
+        MyTimerBasic MyTimerBasic_出貨到領藥平台_檢查延遲 = new MyTimerBasic();
+        Task Task_出貨到領藥平台;
+
+        MyTimer MyTimer_出貨到領藥平台_結束延遲 = new MyTimer();
+        int cnt_Program_出貨到領藥平台 = 65534;
+        void sub_Program_出貨到領藥平台()
+        {
+            if (cnt_Program_出貨到領藥平台 == 65534)
+            {
+                this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨到領藥平台.SetComment("PLC_出貨到領藥平台");
+                PLC_Device_出貨到領藥平台.Bool = false;
+                cnt_Program_出貨到領藥平台 = 65535;
+            }
+            if (cnt_Program_出貨到領藥平台 == 65535) cnt_Program_出貨到領藥平台 = 1;
+            if (cnt_Program_出貨到領藥平台 == 1) cnt_Program_出貨到領藥平台_檢查按下(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 2) cnt_Program_出貨到領藥平台_初始化(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 3) cnt_Program_出貨到領藥平台_等待輸送帶後退(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 4) cnt_Program_出貨到領藥平台_輸送帶後退完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 5) cnt_Program_出貨到領藥平台_等待Z軸移動到頂層(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 6) cnt_Program_出貨到領藥平台_Z軸移動到頂層結束(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 7) cnt_Program_出貨到領藥平台_等待輸送帶前進(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 8) cnt_Program_出貨到領藥平台_輸送帶前進完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 9) cnt_Program_出貨到領藥平台_輸送帶正轉開始(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 10) cnt_Program_出貨到領藥平台_輸送帶正轉完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 11) cnt_Program_出貨到領藥平台_等待輸送帶後退(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 12) cnt_Program_出貨到領藥平台_輸送帶後退完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 13) cnt_Program_出貨到領藥平台 = 65500;
+            if (cnt_Program_出貨到領藥平台 > 1) cnt_Program_出貨到領藥平台_檢查放開(ref cnt_Program_出貨到領藥平台);
+
+            if (cnt_Program_出貨到領藥平台 == 65500)
+            {
+                minasA6.S_Stop(deviceID);
+                this.MyTimer_出貨到領藥平台_結束延遲.TickStop();
+                this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨到領藥平台.Bool = false;
+                PLC_Device_Z軸移動到頂層.Bool = false;
+                PLC_Device_出貨一次.Bool = false;
+                PLC_Device_輸送帶後退.Bool = false;
+                PLC_Device_輸送帶前進.Bool = false;
+                PLC_Device_移動到第一層位置.Bool = false;
+                PLC_Device_移動到第二層位置.Bool = false;
+                PLC_Device_移動到第三層位置.Bool = false;
+                PLC_Device_移動到第四層位置.Bool = false;
+                PLC_Device_移動到第五層位置.Bool = false;
+                cnt_Program_出貨到領藥平台 = 65535;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_出貨到領藥平台.Bool) cnt++;
+        }
+        void cnt_Program_出貨到領藥平台_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_出貨到領藥平台.Bool) cnt = 65500;
+        }
+        void cnt_Program_出貨到領藥平台_初始化(ref int cnt)
+        {
+           
+          
+            if (PLC_Device_Z軸Ready.Bool)
+            {
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_等待輸送帶後退(ref int cnt)
+        {
+            if (flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+                cnt++;
+                return;
+            }
+            if (PLC_Device_輸送帶後退.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶後退");
+                PLC_Device_輸送帶後退.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_輸送帶後退完成(ref int cnt)
+        {
+            if (flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+                cnt++;
+                return;
+            }
+            if (PLC_Device_輸送帶後退.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶完成");
+                cnt++;
+            }
+        }
+
+
+        void cnt_Program_出貨到領藥平台_等待Z軸移動到頂層(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待Z軸移動到頂層");
+                PLC_Device_Z軸移動到頂層.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_Z軸移動到頂層結束(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - Z軸移動到頂層完成");
+                cnt++;
+            }
+        }
+
+        void cnt_Program_出貨到領藥平台_等待輸送帶前進(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶前進");
+                PLC_Device_輸送帶前進.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_輸送帶前進完成(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶前進完成");
+                cnt++;
+            }
+        }
+
+        void cnt_Program_出貨到領藥平台_輸送帶正轉開始(ref int cnt)
         {
             if (PLC_Device_輸送帶正轉.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - 輸送帶正轉開始");
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶正轉開始");
                 PLC_Device_輸送帶正轉.Bool = true;
                 cnt++;
             }
         }
-        void cnt_Program_出貨一次_輸送帶正轉完成(ref int cnt)
+        void cnt_Program_出貨到領藥平台_輸送帶正轉完成(ref int cnt)
         {
             if (PLC_Device_輸送帶正轉.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - 輸送帶正轉完成");
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶正轉完成");
                 cnt++;
             }
         }
         #endregion
+
 
         #region PLC_Z軸絕對位置移動
         PLC_Device PLC_Device_Z軸絕對位置移動 = new PLC_Device("S1000");
@@ -1172,6 +1328,7 @@ namespace FADC
         {
             if (MyTimerBasic_輸送帶前進_檢查延遲.IsTimeOut())
             {
+                flag_輸送帶在後方 = false;
                 cnt++;
             }
         }
@@ -1245,6 +1402,7 @@ namespace FADC
         {
             if (MyTimerBasic_輸送帶後退_檢查延遲.IsTimeOut())
             {
+                flag_輸送帶在後方 = true;
                 cnt++;
             }
         }

@@ -125,6 +125,8 @@
             this.rJ_Lable8 = new MyUI.RJ_Lable();
             this.rJ_Lable7 = new MyUI.RJ_Lable();
             this.rJ_Pannel3 = new MyUI.RJ_Pannel();
+            this.rJ_Button_調劑畫面_開始調劑 = new MyUI.RJ_Button();
+            this.panel33 = new System.Windows.Forms.Panel();
             this.panel27 = new System.Windows.Forms.Panel();
             this.rJ_Button_調劑畫面_登出 = new MyUI.RJ_Button();
             this.rJ_Lable_調劑畫面_登入資訊 = new MyUI.RJ_Lable();
@@ -317,6 +319,7 @@
             this.plC_ScreenPage_setting = new MyUI.PLC_ScreenPage();
             this.設定01 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.plC_RJ_Button9 = new MyUI.PLC_RJ_Button();
             this.panel10 = new System.Windows.Forms.Panel();
             this.plC_RJ_Button8 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_出貨一次 = new MyUI.PLC_RJ_Button();
@@ -403,8 +406,7 @@
             this.contextMenuStrip_Main = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_顯示主控台 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_隱藏主控台 = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel33 = new System.Windows.Forms.Panel();
-            this.rJ_Button_調劑畫面_開始調劑 = new MyUI.RJ_Button();
+            this.speechRecognitionUserControl = new SpeechRecognitionUserControl.SpeechRecognitionUserControl();
             this.panel_Main.ContentsPanel.SuspendLayout();
             this.panel_Main.SuspendLayout();
             this.panel128.SuspendLayout();
@@ -2724,6 +2726,48 @@
             this.rJ_Pannel3.Size = new System.Drawing.Size(1639, 140);
             this.rJ_Pannel3.TabIndex = 139;
             // 
+            // rJ_Button_調劑畫面_開始調劑
+            // 
+            this.rJ_Button_調劑畫面_開始調劑.AutoResetState = false;
+            this.rJ_Button_調劑畫面_開始調劑.BackColor = System.Drawing.Color.Transparent;
+            this.rJ_Button_調劑畫面_開始調劑.BackgroundColor = System.Drawing.Color.Black;
+            this.rJ_Button_調劑畫面_開始調劑.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_Button_調劑畫面_開始調劑.BorderRadius = 20;
+            this.rJ_Button_調劑畫面_開始調劑.BorderSize = 0;
+            this.rJ_Button_調劑畫面_開始調劑.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.rJ_Button_調劑畫面_開始調劑.DisenableColor = System.Drawing.Color.Gray;
+            this.rJ_Button_調劑畫面_開始調劑.Dock = System.Windows.Forms.DockStyle.Right;
+            this.rJ_Button_調劑畫面_開始調劑.FlatAppearance.BorderSize = 0;
+            this.rJ_Button_調劑畫面_開始調劑.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rJ_Button_調劑畫面_開始調劑.Font = new System.Drawing.Font("Arial Unicode MS", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Button_調劑畫面_開始調劑.ForeColor = System.Drawing.Color.White;
+            this.rJ_Button_調劑畫面_開始調劑.GUID = "";
+            this.rJ_Button_調劑畫面_開始調劑.Image_padding = new System.Windows.Forms.Padding(0);
+            this.rJ_Button_調劑畫面_開始調劑.Location = new System.Drawing.Point(662, 20);
+            this.rJ_Button_調劑畫面_開始調劑.Name = "rJ_Button_調劑畫面_開始調劑";
+            this.rJ_Button_調劑畫面_開始調劑.ProhibitionBorderLineWidth = 1;
+            this.rJ_Button_調劑畫面_開始調劑.ProhibitionLineWidth = 4;
+            this.rJ_Button_調劑畫面_開始調劑.ProhibitionSymbolSize = 30;
+            this.rJ_Button_調劑畫面_開始調劑.ShadowColor = System.Drawing.Color.LightGray;
+            this.rJ_Button_調劑畫面_開始調劑.ShadowSize = 3;
+            this.rJ_Button_調劑畫面_開始調劑.ShowLoadingForm = false;
+            this.rJ_Button_調劑畫面_開始調劑.Size = new System.Drawing.Size(664, 100);
+            this.rJ_Button_調劑畫面_開始調劑.State = false;
+            this.rJ_Button_調劑畫面_開始調劑.TabIndex = 147;
+            this.rJ_Button_調劑畫面_開始調劑.Text = "開始調劑";
+            this.rJ_Button_調劑畫面_開始調劑.TextColor = System.Drawing.Color.White;
+            this.rJ_Button_調劑畫面_開始調劑.TextHeight = 0;
+            this.rJ_Button_調劑畫面_開始調劑.UseVisualStyleBackColor = false;
+            // 
+            // panel33
+            // 
+            this.panel33.BackColor = System.Drawing.Color.White;
+            this.panel33.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel33.Location = new System.Drawing.Point(1326, 20);
+            this.panel33.Name = "panel33";
+            this.panel33.Size = new System.Drawing.Size(22, 100);
+            this.panel33.TabIndex = 146;
+            // 
             // panel27
             // 
             this.panel27.Controls.Add(this.rJ_Button_調劑畫面_登出);
@@ -4548,7 +4592,7 @@
             this.sqL_DataGridView_交易記錄查詢.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_交易記錄查詢.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_交易記錄查詢.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.sqL_DataGridView_交易記錄查詢.columnHeadersHeight = 17;
+            this.sqL_DataGridView_交易記錄查詢.columnHeadersHeight = 18;
             this.sqL_DataGridView_交易記錄查詢.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_交易記錄查詢.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_交易記錄查詢.DataKeyEnable = false;
@@ -4618,7 +4662,7 @@
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeight = 4;
+            this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeight = 18;
             this.sqL_DataGridView_儲位管理_儲位資料.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_儲位管理_儲位資料.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_儲位管理_儲位資料.DataKeyEnable = false;
@@ -5416,7 +5460,7 @@
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeaderBorderColor = System.Drawing.Color.DimGray;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeight = 4;
+            this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeight = 18;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.sqL_DataGridView_儲位管理_儲位內容_效期及庫存.DataKeyEnable = false;
@@ -7667,6 +7711,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.plC_RJ_Button9);
             this.groupBox2.Controls.Add(this.panel10);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label14);
@@ -7691,6 +7736,61 @@
             this.groupBox2.TabIndex = 41;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "手動作業";
+            // 
+            // plC_RJ_Button9
+            // 
+            this.plC_RJ_Button9.AutoResetState = false;
+            this.plC_RJ_Button9.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button9.Bool = false;
+            this.plC_RJ_Button9.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button9.BorderRadius = 10;
+            this.plC_RJ_Button9.BorderSize = 0;
+            this.plC_RJ_Button9.but_press = false;
+            this.plC_RJ_Button9.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.plC_RJ_Button9.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button9.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button9.Font = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button9.GUID = "";
+            this.plC_RJ_Button9.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button9.Image_padding = new System.Windows.Forms.Padding(0);
+            this.plC_RJ_Button9.Location = new System.Drawing.Point(1169, 169);
+            this.plC_RJ_Button9.Name = "plC_RJ_Button9";
+            this.plC_RJ_Button9.OFF_文字內容 = "出貨到領藥平台";
+            this.plC_RJ_Button9.OFF_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button9.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button9.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button9.ON_BorderSize = 0;
+            this.plC_RJ_Button9.ON_文字內容 = "出貨到領藥平台";
+            this.plC_RJ_Button9.ON_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button9.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button9.ON_背景顏色 = System.Drawing.Color.Yellow;
+            this.plC_RJ_Button9.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button9.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button9.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button9.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button9.ShadowSize = 0;
+            this.plC_RJ_Button9.ShowLoadingForm = false;
+            this.plC_RJ_Button9.Size = new System.Drawing.Size(180, 62);
+            this.plC_RJ_Button9.State = false;
+            this.plC_RJ_Button9.TabIndex = 75;
+            this.plC_RJ_Button9.Text = "出貨到領藥平台";
+            this.plC_RJ_Button9.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button9.TextHeight = 0;
+            this.plC_RJ_Button9.Texts = "出貨到領藥平台";
+            this.plC_RJ_Button9.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button9.字型鎖住 = false;
+            this.plC_RJ_Button9.寫入元件位置 = "S3001";
+            this.plC_RJ_Button9.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
+            this.plC_RJ_Button9.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button9.文字鎖住 = false;
+            this.plC_RJ_Button9.背景圖片 = null;
+            this.plC_RJ_Button9.讀取位元反向 = false;
+            this.plC_RJ_Button9.讀取元件位置 = "S3001";
+            this.plC_RJ_Button9.讀寫鎖住 = false;
+            this.plC_RJ_Button9.音效 = true;
+            this.plC_RJ_Button9.顯示 = false;
+            this.plC_RJ_Button9.顯示狀態 = false;
             // 
             // panel10
             // 
@@ -9455,7 +9555,7 @@
             this.設定03.Controls.Add(this.rfiD_UI);
             this.設定03.Location = new System.Drawing.Point(4, 25);
             this.設定03.Name = "設定03";
-            this.設定03.Size = new System.Drawing.Size(475, 301);
+            this.設定03.Size = new System.Drawing.Size(1645, 952);
             this.設定03.TabIndex = 2;
             this.設定03.Text = "設定03";
             // 
@@ -9477,7 +9577,7 @@
             this.rfiD_UI.RFID_Enable = "0";
             this.rfiD_UI.Server_IP_Adress = "0.0.0.0";
             this.rfiD_UI.Server_Port = "0";
-            this.rfiD_UI.Size = new System.Drawing.Size(475, 301);
+            this.rfiD_UI.Size = new System.Drawing.Size(1645, 952);
             this.rfiD_UI.SSID = "";
             this.rfiD_UI.Station = "0";
             this.rfiD_UI.Subnet = "0.0.0.0";
@@ -9490,10 +9590,11 @@
             // 設定04
             // 
             this.設定04.BackColor = System.Drawing.Color.White;
+            this.設定04.Controls.Add(this.speechRecognitionUserControl);
             this.設定04.Controls.Add(this.groupBox18);
             this.設定04.Location = new System.Drawing.Point(4, 25);
             this.設定04.Name = "設定04";
-            this.設定04.Size = new System.Drawing.Size(475, 301);
+            this.設定04.Size = new System.Drawing.Size(1645, 952);
             this.設定04.TabIndex = 3;
             this.設定04.Text = "設定04";
             // 
@@ -9527,7 +9628,7 @@
             this.設定05.Controls.Add(this.sqL_DataGridView_storageMedBoxIOConfig);
             this.設定05.Location = new System.Drawing.Point(4, 25);
             this.設定05.Name = "設定05";
-            this.設定05.Size = new System.Drawing.Size(475, 301);
+            this.設定05.Size = new System.Drawing.Size(1645, 952);
             this.設定05.TabIndex = 4;
             this.設定05.Text = "設定05";
             // 
@@ -9680,7 +9781,7 @@
             this.sqL_DataGridView_storageMedBoxIOConfig.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_storageMedBoxIOConfig.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_storageMedBoxIOConfig.Server = "localhost";
-            this.sqL_DataGridView_storageMedBoxIOConfig.Size = new System.Drawing.Size(475, 559);
+            this.sqL_DataGridView_storageMedBoxIOConfig.Size = new System.Drawing.Size(1645, 559);
             this.sqL_DataGridView_storageMedBoxIOConfig.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_storageMedBoxIOConfig.TabIndex = 23;
             this.sqL_DataGridView_storageMedBoxIOConfig.TableName = "person_page";
@@ -10055,46 +10156,13 @@
             this.ToolStripMenuItem_隱藏主控台.Size = new System.Drawing.Size(168, 24);
             this.ToolStripMenuItem_隱藏主控台.Text = "(隱藏)主控台";
             // 
-            // panel33
+            // speechRecognitionUserControl
             // 
-            this.panel33.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel33.Location = new System.Drawing.Point(1326, 20);
-            this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(22, 100);
-            this.panel33.TabIndex = 146;
-            // 
-            // rJ_Button_調劑畫面_開始調劑
-            // 
-            this.rJ_Button_調劑畫面_開始調劑.AutoResetState = false;
-            this.rJ_Button_調劑畫面_開始調劑.BackColor = System.Drawing.Color.Transparent;
-            this.rJ_Button_調劑畫面_開始調劑.BackgroundColor = System.Drawing.Color.Black;
-            this.rJ_Button_調劑畫面_開始調劑.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rJ_Button_調劑畫面_開始調劑.BorderRadius = 20;
-            this.rJ_Button_調劑畫面_開始調劑.BorderSize = 0;
-            this.rJ_Button_調劑畫面_開始調劑.buttonType = MyUI.RJ_Button.ButtonType.Push;
-            this.rJ_Button_調劑畫面_開始調劑.DisenableColor = System.Drawing.Color.Gray;
-            this.rJ_Button_調劑畫面_開始調劑.Dock = System.Windows.Forms.DockStyle.Right;
-            this.rJ_Button_調劑畫面_開始調劑.FlatAppearance.BorderSize = 0;
-            this.rJ_Button_調劑畫面_開始調劑.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Button_調劑畫面_開始調劑.Font = new System.Drawing.Font("Arial Unicode MS", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rJ_Button_調劑畫面_開始調劑.ForeColor = System.Drawing.Color.White;
-            this.rJ_Button_調劑畫面_開始調劑.GUID = "";
-            this.rJ_Button_調劑畫面_開始調劑.Image_padding = new System.Windows.Forms.Padding(0);
-            this.rJ_Button_調劑畫面_開始調劑.Location = new System.Drawing.Point(662, 20);
-            this.rJ_Button_調劑畫面_開始調劑.Name = "rJ_Button_調劑畫面_開始調劑";
-            this.rJ_Button_調劑畫面_開始調劑.ProhibitionBorderLineWidth = 1;
-            this.rJ_Button_調劑畫面_開始調劑.ProhibitionLineWidth = 4;
-            this.rJ_Button_調劑畫面_開始調劑.ProhibitionSymbolSize = 30;
-            this.rJ_Button_調劑畫面_開始調劑.ShadowColor = System.Drawing.Color.LightGray;
-            this.rJ_Button_調劑畫面_開始調劑.ShadowSize = 3;
-            this.rJ_Button_調劑畫面_開始調劑.ShowLoadingForm = false;
-            this.rJ_Button_調劑畫面_開始調劑.Size = new System.Drawing.Size(664, 100);
-            this.rJ_Button_調劑畫面_開始調劑.State = false;
-            this.rJ_Button_調劑畫面_開始調劑.TabIndex = 147;
-            this.rJ_Button_調劑畫面_開始調劑.Text = "開始調劑";
-            this.rJ_Button_調劑畫面_開始調劑.TextColor = System.Drawing.Color.White;
-            this.rJ_Button_調劑畫面_開始調劑.TextHeight = 0;
-            this.rJ_Button_調劑畫面_開始調劑.UseVisualStyleBackColor = false;
+            this.speechRecognitionUserControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.speechRecognitionUserControl.Location = new System.Drawing.Point(419, 19);
+            this.speechRecognitionUserControl.Name = "speechRecognitionUserControl";
+            this.speechRecognitionUserControl.Size = new System.Drawing.Size(420, 242);
+            this.speechRecognitionUserControl.TabIndex = 31;
             // 
             // Main_Form
             // 
@@ -10580,6 +10648,8 @@
         private MyUI.RJ_Lable rJ_Lable_調劑畫面_登入資訊;
         private MyUI.RJ_Button rJ_Button_調劑畫面_開始調劑;
         private System.Windows.Forms.Panel panel33;
+        private MyUI.PLC_RJ_Button plC_RJ_Button9;
+        private SpeechRecognitionUserControl.SpeechRecognitionUserControl speechRecognitionUserControl;
     }
 }
 

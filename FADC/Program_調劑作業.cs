@@ -24,8 +24,8 @@ namespace FADC
 {
     public partial class Main_Form : Form
     {
-        private List<chemotherapyOrderClass>  chemotherapyOrders = null;
-        private personPageClass personpageClass_調劑畫面 = null;
+        static public List<chemotherapyOrderClass>  chemotherapyOrders = null;
+        static public personPageClass personpageClass_調劑畫面 = null;
         public enum enum_處方藥品
         {
             [Description("GUID,VARCHAR,15,NONE")]
@@ -163,6 +163,35 @@ namespace FADC
                 this.rJ_TextBox_調劑畫面_輸入條碼.Text = text;
                 RJ_TextBox_調劑畫面_輸入條碼_KeyPress(null,new KeyPressEventArgs((char)Keys.Enter));
             }
+            string SelectedTabText = "";
+            this.Invoke(new Action(delegate 
+            {
+                SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
+            }));
+            if (SelectedTabText == "登入畫面")
+            {
+                string UID_01 = _RFID_FX600_UI.Get_RFID_UID(1);
+                if (!UID_01.StringIsEmpty() && UID_01.StringToInt32() != 0 && this.IsHandleCreated)
+                {
+                    this.Invoke(new Action(delegate
+                    {
+                        Console.WriteLine($"接收到[RFID01] {UID_01}");
+                        List<personPageClass> personPageClasses = personPageClass.get_all(Main_Form.API_Server);
+                        personPageClass personPage = personPageClasses.Where(x => x.卡號 == UID_01).FirstOrDefault();
+                        if (personPage == null)
+                        {
+                            Console.WriteLine($"找無人員資訊");
+                        }
+                        this.Invoke(new Action(delegate
+                        {
+                            personpageClass_調劑畫面 = personPage;
+                            rJ_Lable_調劑畫面_登入資訊.Text = $"{personPage.姓名}({personPage.ID})";
+                            tabControlEx_調劑畫面.SelectTab("刷取藥單");
+                        }));
+                    }));
+                }
+            }
+             
         }
 
 
@@ -300,6 +329,7 @@ namespace FADC
         private void RJ_Button_調劑畫面_開始調劑_MouseDownEvent(MouseEventArgs mevent)
         {
             List<object[]> list_處方藥品 = sqL_DataGridView_調劑畫面_處方藥品.Get_All_Checked_RowsValuesEx();
+            List<StockClass> stockClasses = new List<StockClass>();
             if(list_處方藥品.Count == 0)
             {
                 MyMessageBox.ShowDialog("請選擇調劑藥品");
@@ -311,6 +341,12 @@ namespace FADC
                 string 藥碼 = list_處方藥品[i][(int)enum_處方藥品.藥碼].ObjectToString();
                 string 藥名 = list_處方藥品[i][(int)enum_處方藥品.藥名].ObjectToString();
                 string 總量 = list_處方藥品[i][(int)enum_處方藥品.總量].ObjectToString();
+                StockClass stockClass = new StockClass();
+
+                stockClass.Code = 藥碼;
+                stockClass.Name = 藥名;
+                stockClass.Qty = 總量;
+                stockClasses.Add(stockClass);
 
                 title += $"{藥名.StringLength(30)}({總量})";
                 if (i != list_處方藥品.Count - 1) title += "\n";
@@ -337,11 +373,16 @@ namespace FADC
                  
                 }
             }
-            chemotherapyOrderClass.update_chemotherapyOrderDay_by_guid(Main_Form.API_Server, chemotherapyOrderDays);
+            Dialog_調劑取藥 dialog_調劑取藥 = new Dialog_調劑取藥(stockClasses);
+            dialog_調劑取藥.ShowDialog();
+
+
+            //chemotherapyOrderClass.update_chemotherapyOrderDay_by_guid(Main_Form.API_Server, chemotherapyOrderDays);
             sqL_DataGridView_調劑畫面_處方藥品.ClearDataKeys();
             sqL_DataGridView_調劑畫面_處方藥品.ClearGrid();
 
             List<chemotherapyOrderClass> chemotherapyOrderClasses = Function_取得醫令(this.rJ_TextBox_調劑畫面_輸入條碼.Text);
+
         }
 
         private void PLC_RJ_Button_MouseDownEventEx(RJ_Button rJ_Button, MouseEventArgs mevent)

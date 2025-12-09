@@ -13,6 +13,9 @@ using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
 using FpMatchLib;
+using SpeechRecognitionUserControl;
+using System.Text;
+using System.Threading.Tasks;
 
 
 [assembly: AssemblyVersion("1.0.0.0000")]
@@ -29,7 +32,7 @@ namespace FADC
         public static string ServerType = "";
         public static string Order_URL = "";
         public static string OrderByCodeApi_URL = "";
-
+        public static RFID_FX600lib.RFID_FX600_UI _RFID_FX600_UI = null;
         public bool ControlMode = false;
         public static MinasA6 minasA6 = null;
         public static string currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -45,11 +48,13 @@ namespace FADC
             private string servoZ_Com = "COM1";
             private string board_IP = "";
             private string scanner01_COMPort = "COM2";
+            private string rFID_COMPort = "COM3";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
             public string Board_IP { get => board_IP; set => board_IP = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
+            public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
         }
         private void LoadMyConfig()
         {
@@ -187,6 +192,7 @@ namespace FADC
             }
         }
         #endregion
+
         public Main_Form()
         {
             InitializeComponent();
@@ -247,9 +253,13 @@ namespace FADC
             PLC_UI_Init.Set_PLC_ScreenPage(panel_Main, this.plC_ScreenPage_Main);
             PLC_UI_Init.Set_PLC_ScreenPage(panel_setting, this.plC_ScreenPage_setting);
 
+            speechRecognitionUserControl.Init();
+            speechRecognitionUserControl.OnRecognized += SpeechRecognitionUserControl_OnRecognized;
             LoadMyConfig();
             LoadDBConfig();
             ApiServerSetting();
+            
+            RFID_Iint();
 
             Program_faceReconition_Init();
             Program_storageMedBoxIOConfig_Init();
@@ -261,9 +271,51 @@ namespace FADC
             Program_儲位管理_Init();
             Program_調劑作業_Init();
             Program_PLC();
+
+         
         }
-    
-       private void LoadcommandLineArgs()
+
+        private void SpeechRecognitionUserControl_OnRecognized(SpeechRecognitionDll.Response<SpeechRecognitionDll.Detail> response)
+        {
+            StringBuilder log = new StringBuilder();
+
+            log.AppendLine($"Success: {response.State}");
+            log.AppendLine($"Message: {response.Message}");
+            log.AppendLine($"ErrorCode: {response.ErrorCode}");
+            log.AppendLine($"Command: {response.Command}");
+
+            var data = response.Data.JsonSerializationt(true);
+            log.AppendLine($"Data: {data}");
+
+            Console.WriteLine(log);
+        }
+
+        private void RFID_Iint()
+        {
+            Task.Run(new Action(delegate
+            {
+                MyTimer MyTimer_rfiD_FX600_UI_Init = new MyTimer();
+                bool flag_rfiD_FX600_UI_Init = false;
+                MyTimer_rfiD_FX600_UI_Init.TickStop();
+                MyTimer_rfiD_FX600_UI_Init.StartTickTime(5000);
+                while (true)
+                {
+                    _RFID_FX600_UI = this.rfiD_FX600_UI;
+
+                    if (MyTimer_rfiD_FX600_UI_Init.IsTimeOut() && !flag_rfiD_FX600_UI_Init)
+                    {
+                        int num = 1;
+                        this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+
+                        flag_rfiD_FX600_UI_Init = true;
+                        break;
+
+                    }
+                    System.Threading.Thread.Sleep(100);
+                }
+            }));
+        }
+        private void LoadcommandLineArgs()
         {
             string jsonstr = MyFileStream.LoadFileAllText($"{DBConfigFileName}");
             string[] commandLineArgs = Environment.GetCommandLineArgs();
