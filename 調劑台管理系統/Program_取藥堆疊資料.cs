@@ -2101,10 +2101,7 @@ namespace 調劑台管理系統
 
                         }));
                     }
-                    else if (device.DeviceType == DeviceType.RowsLED)
-                    {
-
-                    }
+           
                 }
             }
             allTask = Task.WhenAll(taskList);
@@ -3491,12 +3488,12 @@ namespace 調劑台管理系統
                             flag_TOFON = true;
                         }
                     }
-                    else
-                    {
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                        list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
-                    }
+                    //else
+                    //{
+                    //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                    //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                    //    list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
+                    //}
 
 
                 }
@@ -3780,13 +3777,13 @@ namespace 調劑台管理系統
                                            || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E_lock.GetEnumName()
                                      select value).ToList();
 
-            if (plC_CheckBox_同藥品全部亮燈.Bool)
-            {
-                for (int i = 0; i < list_取藥子堆疊資料_手勢感測作業檢查.Count; i++) list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                if (list_取藥子堆疊資料_手勢感測作業檢查.Count > 0) this.sqL_DataGridView_取藥堆疊子資料.SQL_ReplaceExtra(list_取藥子堆疊資料_手勢感測作業檢查, false);
-                cnt++;
-                return;
-            }
+            //if (plC_CheckBox_同藥品全部亮燈.Bool)
+            //{
+            //    for (int i = 0; i < list_取藥子堆疊資料_手勢感測作業檢查.Count; i++) list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+            //    if (list_取藥子堆疊資料_手勢感測作業檢查.Count > 0) this.sqL_DataGridView_取藥堆疊子資料.SQL_ReplaceExtra(list_取藥子堆疊資料_手勢感測作業檢查, false);
+            //    cnt++;
+            //    return;
+            //}
 
             taskList = new List<Task>();
             list_需更新資料 = new List<string[]>();
@@ -3820,6 +3817,7 @@ namespace 調劑台管理系統
                             if (index_IP.StringIsEmpty())
                             {
                                 list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                                if (plC_CheckBox_同藥品全部亮燈.Bool) list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
                                 list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
                                 continue;
                             }

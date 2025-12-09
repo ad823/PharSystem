@@ -1,6 +1,6 @@
 {
-  "主機扣帳模式": true,
-  "主機輸出模式": true,
+  "主機扣帳模式": false,
+  "主機輸出模式": false,
   "RFID使用": true,
   "掃碼槍COM通訊": true,
   "RFID_COMPort": "COM1",
@@ -32,5 +32,6 @@
   "HFRFID_1_COMPort": "",
   "HFRFID_2_COMPort": "",
   "批次領藥篩選": "",
-  "QRCode_url": "https://www.kutech.tw:450/phar_system/med_request_moblie"
+  "QRCode_url": "",
+  "使用HID指紋機": false
 }

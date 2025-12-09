@@ -157,6 +157,7 @@ namespace 調劑台管理系統
                                 Task.Run(new Action(delegate { storageUI_LCD_114.ClearCanvas(index_IP, 29008); }));
 
                             }
+                            this.Function_取藥堆疊子資料_設定配藥完成ByIP("None", IP, Num);
                             //if (plC_CheckBox_同藥品全部亮燈.Bool) return;
 
                             //List_EPD583_雲端資料.Add_NewDrawer(drawer);

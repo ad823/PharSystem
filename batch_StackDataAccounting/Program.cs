@@ -1,18 +1,28 @@
-﻿using System;
+﻿using Basic;
+using H_Pannel_lib;
+using HIS_DB_Lib;
+using MyUI;
+using SQLUI;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SQLUI;
-using HIS_DB_Lib;
-using H_Pannel_lib;
-using Basic;
-using MyUI;
-using System.IO;
-using System.Reflection;
-using System.Drawing;
 namespace batch_StackDataAccounting
 {
+    public enum enum_LCD114_索引表
+    {
+        [Description("GUID,VARCHAR,50,PRIKEY")]
+        GUID,
+        [Description("IP,VARCHAR,50,INDEX")]
+        IP,
+        [Description("index_IP,VARCHAR,50,INDEX")]
+        index_IP,
+    }
     static public class CommonSapceMethod
     {
         public static void WriteTakeMedicineStack(this List<CommonSapceClass> commonSapceClasses, List<object[]> list_堆疊母資料_add)
@@ -278,6 +288,7 @@ namespace batch_StackDataAccounting
             異動量,
             Value,
         }
+        static public double lightness = 0.5;
         public class LightOn
         {
             public LightOn(string 藥碼, Color color, double qty)
@@ -354,6 +365,7 @@ namespace batch_StackDataAccounting
             private int ePD1020_Port = 29012;
             private int rowsLED_Port = 29001;
             private int pannel35_Port = 29020;
+            private int lCD114_Port = 29008;
 
 
             public int EPD583_Port { get => ePD583_Port; set => ePD583_Port = value; }
@@ -361,6 +373,7 @@ namespace batch_StackDataAccounting
             public int EPD1020_Port { get => ePD1020_Port; set => ePD1020_Port = value; }
             public int RowsLED_Port { get => rowsLED_Port; set => rowsLED_Port = value; }
             public int Pannel35_Port { get => pannel35_Port; set => pannel35_Port = value; }
+            public int LCD114_Port { get => lCD114_Port; set => lCD114_Port = value; }
         }
         static private void LoadMyConfig()
         {
@@ -741,6 +754,7 @@ namespace batch_StackDataAccounting
         static public StorageUI_EPD_266 storageUI_EPD_266 = new StorageUI_EPD_266();
         static public StorageUI_WT32 storageUI_WT32 = new StorageUI_WT32();
         static public DrawerUI_EPD_583 drawerUI_EPD_583 = new DrawerUI_EPD_583();
+        static public StorageUI_LCD_114 storageUI_LCD_114 = new StorageUI_LCD_114();
         static public RowsLEDUI rowsLEDUI = new RowsLEDUI();
 
         static public List<Drawer> List_EPD583_入賬資料 = new List<Drawer>();
@@ -768,6 +782,7 @@ namespace batch_StackDataAccounting
         static public SQLControl sQLControl_交易記錄查詢 = new SQLControl();
         static public SQLControl sQLControl_共用區設定 = new SQLControl();
         static public SQLControl sQLControl_Locker_Index_Table = new SQLControl();
+        static public SQLControl sQLControl_LCD114_Index = new SQLControl();
         static public List<object[]> list_取藥堆疊母資料 = new List<object[]>();
         static public List<object[]> list_取藥堆疊子資料 = new List<object[]>();
         static bool flag_系統取藥模式 = false;
@@ -830,7 +845,16 @@ namespace batch_StackDataAccounting
             table.AddColumnList("設置時間", Table.DateType.DATETIME, Table.IndexType.None);
             sQLControl_共用區設定.Init(table);
 
+            table = new Table(new enum_LCD114_索引表());
+            table.Server = sys_serverSettingClass.Server;
+            table.Username = sys_serverSettingClass.User;
+            table.Password = sys_serverSettingClass.Password;
+            table.Port = sys_serverSettingClass.Port;
+            table.DBName = sys_serverSettingClass.DBName;
+            table.TableName = "lcd114_index";            
+            sQLControl_LCD114_Index.Init(table);
 
+            list_LCD114_索引表 = sQLControl_LCD114_Index.GetAllRows(null);
 
             Console.WriteLine($"EPD583_Port : {myConfigClass.EPD583_Port} \n");
             Console.WriteLine($"EPD266_Port : {myConfigClass.EPD266_Port} \n");
@@ -846,7 +870,7 @@ namespace batch_StackDataAccounting
             storageUI_EPD_266.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD266_Port, myConfigClass.EPD266_Port,false);
             storageUI_WT32.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.Pannel35_Port, myConfigClass.Pannel35_Port,false);
             rowsLEDUI.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.RowsLED_Port, myConfigClass.RowsLED_Port,false);
-
+            storageUI_LCD_114.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.LCD114_Port, myConfigClass.LCD114_Port, false);
             Function_從SQL取得儲位到本地資料();
             Function_從SQL取得儲位到雲端資料();
             commonSapceClasses = Program.Function_取得共用區所有儲位();
@@ -914,7 +938,7 @@ namespace batch_StackDataAccounting
                 for (int i = 0; i < List_EPD583_本地資料.Count; i++)
                 {
                     Drawer drawer = List_EPD583_本地資料[i];
-                    string json = drawerUI_EPD_583.GetUDPJsonString(drawer.IP);
+                    string json = drawerUI_EPD_583.Get_JsonStrin(drawer.IP , myConfigClass.EPD583_Port);
                     if (json.StringIsEmpty()) continue;
                     DrawerUI_EPD_583.UDP_READ uDP_READ = json.JsonDeserializet<DrawerUI_EPD_583.UDP_READ>();
                     if (uDP_READ == null) continue;
@@ -925,8 +949,15 @@ namespace batch_StackDataAccounting
                         {
                             Console.WriteLine($"抽屜[{drawer.IP}]關閉");
                             drawer.LED_Bytes = DrawerUI_EPD_583.Get_Empty_LEDBytes();
+                            Function_取藥堆疊子資料_設定配藥完成ByIP("None", drawer.IP, "-1");
                             drawer.ActionDone = true;
                             drawerUI_EPD_583.Set_LED_Clear_UDP(drawer);
+                            string index_IP = Funcion_取得LCD114索引表_index_IP(drawer.IP);
+                            if (index_IP.StringIsEmpty() == false)
+                            {
+                                Task.Run(new Action(delegate { storageUI_LCD_114.ClearCanvas(index_IP, myConfigClass.LCD114_Port); }));
+
+                            }
                             drawer.SetAllBoxes_LightOff();
                             List_EPD583_本地資料.Add_NewDrawer(drawer);
 
@@ -1961,6 +1992,8 @@ namespace batch_StackDataAccounting
         {
             string 藥品碼 = lightOn.藥品碼;
             Color color = lightOn.顏色;
+            color = Color.FromArgb((int)(color.R * lightness), (int)(color.G * lightness), (int)(color.B * lightness));
+            
             if (藥品碼.StringIsEmpty()) return;
 
             if (color == Color.Black)
@@ -2191,7 +2224,25 @@ namespace batch_StackDataAccounting
 
                         list_IP.Add(IP);
                     }
-                   
+                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                         || device.DeviceType == DeviceType.EPD420_D || device.DeviceType == DeviceType.EPD420_D_lock
+                         || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
+                    {
+                        taskList.Add(Task.Run(() =>
+                        {
+
+                            string index_IP = Funcion_取得LCD114索引表_index_IP(device.IP);
+                            if (index_IP.StringIsEmpty()) return;
+                            if (color == Color.Black) storageUI_LCD_114.ClearCanvas(index_IP, myConfigClass.LCD114_Port);
+                            if (lightOn.flag_Refresh_LCD)
+                            {
+                                Color color_fore = Color.White;
+                                if (lightOn.LCD_Color.R > 230 && lightOn.LCD_Color.G > 230 && lightOn.LCD_Color.B > 230) color_fore = Color.Black;
+                                storageUI_LCD_114.DrawImage(index_IP, myConfigClass.LCD114_Port, 數量.ToString(), new Font("標楷體", 70, FontStyle.Bold), color_fore, lightOn.LCD_Color);
+                            }
+
+                        }));
+                    }
                 }
             }
             allTask = Task.WhenAll(taskList);
@@ -3065,6 +3116,15 @@ namespace batch_StackDataAccounting
             return 庫存;
         }
 
+        static List<object[]> list_LCD114_索引表 = new List<object[]>();
+        static public  string Funcion_取得LCD114索引表_index_IP(string IP)
+        {
+            List<object[]> list_LCD114_索引表_buf = list_LCD114_索引表.GetRows((int)enum_LCD114_索引表.IP, IP);
+
+            if (list_LCD114_索引表_buf.Count == 0) return "";
+            return list_LCD114_索引表_buf[0][(int)enum_LCD114_索引表.index_IP].ObjectToString();
+        }
+  
         #region PLC_取藥堆疊資料_檢查資料
         static public bool PLC_Device_取藥堆疊資料_檢查資料 = false;
         static public bool PLC_Device_取藥堆疊資料_檢查資料_更新儲位資料 = false;
@@ -4216,7 +4276,8 @@ namespace batch_StackDataAccounting
             if (cnt_Program_取藥堆疊資料_流程作業檢查 == 3) cnt_Program_取藥堆疊資料_流程作業檢查_檢查盲盤複盤(ref cnt_Program_取藥堆疊資料_流程作業檢查);
             if (cnt_Program_取藥堆疊資料_流程作業檢查 == 4) cnt_Program_取藥堆疊資料_流程作業檢查_檢查同藥碼全亮(ref cnt_Program_取藥堆疊資料_流程作業檢查);
             if (cnt_Program_取藥堆疊資料_流程作業檢查 == 5) cnt_Program_取藥堆疊資料_流程作業檢查_檢查層架及手勢感測(ref cnt_Program_取藥堆疊資料_流程作業檢查);
-            if (cnt_Program_取藥堆疊資料_流程作業檢查 == 6) cnt_Program_取藥堆疊資料_流程作業檢查 = 65500;
+            if (cnt_Program_取藥堆疊資料_流程作業檢查 == 6) cnt_Program_取藥堆疊資料_流程作業檢查_檢查抽屜手勢感測感應到(ref cnt_Program_取藥堆疊資料_流程作業檢查);           
+            if (cnt_Program_取藥堆疊資料_流程作業檢查 == 7) cnt_Program_取藥堆疊資料_流程作業檢查 = 65500;
             if (cnt_Program_取藥堆疊資料_流程作業檢查 > 1) cnt_Program_取藥堆疊資料_流程作業檢查_檢查放開(ref cnt_Program_取藥堆疊資料_流程作業檢查);
             if (cnt_Program_取藥堆疊資料_流程作業檢查 == 65500)
             {
@@ -4339,12 +4400,12 @@ namespace batch_StackDataAccounting
                             flag_TOFON = true;
                         }
                     }
-                    else
-                    {
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                        list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
-                    }
+                    //else
+                    //{
+                    //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                    //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                    //    list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
+                    //}
 
 
                 }
@@ -4352,16 +4413,16 @@ namespace batch_StackDataAccounting
                 MyTimer_取藥堆疊資料_流程作業檢查.TickStop();
                 MyTimer_取藥堆疊資料_流程作業檢查.StartTickTime(100);
 
-                if (!flag_TOFON)
-                {
-                    cnt = 65500;
-                    return;
-                }
-                else
-                {
-                    cnt++;
-                    return;
-                }
+                //if (!flag_TOFON)
+                //{
+                //    cnt = 65500;
+                //    return;
+                //}
+                //else
+                //{
+                //    cnt++;
+                //    return;
+                //}
             }
             cnt++;
         }
@@ -4614,7 +4675,126 @@ namespace batch_StackDataAccounting
             #endregion
             cnt++;
         }
+        static public void cnt_Program_取藥堆疊資料_流程作業檢查_檢查抽屜手勢感測感應到(ref int cnt)
+        {
+            List<Task> taskList = new List<Task>();
+            string IP = "";
+            string 藥品碼 = "";
+            string 調劑台名稱 = "";
+            string GUID = "";
+            string Master_GUID = "";
+            string Device_GUID = "";
+            bool flag_TOFON = false;
+            Color color = Color.Black;
 
+            List<object[]> list_取藥母堆疊資料 = Function_取藥堆疊資料_取得母資料();
+            List<object[]> list_取藥母堆疊資料_buf = new List<object[]>();
+            List<object[]> list_取藥子堆疊資料 = Function_取藥堆疊資料_取得子資料();
+            List<object[]> list_取藥子堆疊資料_buf = new List<object[]>();
+            List<object[]> list_取藥子堆疊資料_replace = new List<object[]>();
+
+
+
+            Task allTask;
+            List<string[]> list_需更新資料;
+            List<object[]> list_取藥子堆疊資料_手勢感測作業檢查 = new List<object[]>();
+
+            list_取藥子堆疊資料_手勢感測作業檢查 = (from value in list_取藥子堆疊資料
+                                     where value[(int)enum_取藥堆疊子資料.致能].ObjectToString() == true.ToString()
+                                     where value[(int)enum_取藥堆疊子資料.流程作業完成].ObjectToString() == false.ToString()
+                                     where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
+                                     where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName()
+                                           || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E_lock.GetEnumName()
+                                     select value).ToList();
+
+            //if (plC_CheckBox_同藥品全部亮燈.Bool)
+            //{
+            //    for (int i = 0; i < list_取藥子堆疊資料_手勢感測作業檢查.Count; i++) list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+            //    if (list_取藥子堆疊資料_手勢感測作業檢查.Count > 0) this.sqL_DataGridView_取藥堆疊子資料.SQL_ReplaceExtra(list_取藥子堆疊資料_手勢感測作業檢查, false);
+            //    cnt++;
+            //    return;
+            //}
+
+            taskList = new List<Task>();
+            list_需更新資料 = new List<string[]>();
+            List<string[]> list_手勢檢查資料 = new List<string[]>();
+            for (int i = 0; i < list_取藥子堆疊資料_手勢感測作業檢查.Count; i++)
+            {
+                IP = list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.IP].ObjectToString();
+                藥品碼 = list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.藥品碼].ObjectToString();
+                調劑台名稱 = list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.調劑台名稱].ObjectToString();
+                Master_GUID = list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.Master_GUID].ObjectToString();
+                list_取藥母堆疊資料_buf = list_取藥母堆疊資料.GetRows((int)enum_取藥堆疊母資料.GUID, Master_GUID);
+
+                list_取藥子堆疊資料_buf = (from temp in list_取藥子堆疊資料_replace
+                                    where temp[(int)enum_取藥堆疊母資料.IP].ObjectToString() == IP
+                                    select temp).ToList();
+                if (list_取藥母堆疊資料_buf.Count > 0)
+                {
+                    color = list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.顏色].ObjectToString().ToColor();
+                    double 數量 = list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.總異動量].StringToDouble();
+                    if (數量 < 0) 數量 = 數量 * -1;
+                    if (list_取藥子堆疊資料_buf.Count == 0)
+                    {
+                        List<Box> boxes = List_EPD583_本地資料.SortByCode(藥品碼);
+                        for (int k = 0; k < boxes.Count; k++)
+                        {
+                            Drawer drawer = List_EPD583_本地資料.SortByIP(boxes[k].IP);
+                            if (drawer == null) continue;
+
+
+                            string index_IP = Funcion_取得LCD114索引表_index_IP(boxes[k].IP);
+                            if (index_IP.StringIsEmpty())
+                            {
+                                list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                                list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                                list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
+                                continue;
+                            }
+                            Rectangle rectangle = DrawerUI_EPD_583.Get_Box_rect(drawer, boxes[k]);
+                            DrawerUI_EPD_583.LightSensorClass lightSensorClass = DrawerUI_EPD_583.Get_LightSensorClass(rectangle);
+                            string json = storageUI_LCD_114.Get_JsonStrin(index_IP , myConfigClass.LCD114_Port);
+                            StorageUI_LCD_114.UDP_READ uDP_READ = json.JsonDeserializet<StorageUI_LCD_114.UDP_READ>();
+                            if (uDP_READ == null) continue;
+                            bool Sensor_ON = uDP_READ.IsSensorOn(lightSensorClass);
+                            if (Sensor_ON)
+                            {
+                                Console.WriteLine($"lightSensorClass : {lightSensorClass}");
+                                Console.WriteLine($"IP : {boxes[k].IP} , index_IP : {index_IP}, Sensor_ON : {Sensor_ON}");
+
+                                list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                                list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
+                                LightOn lightOn = new LightOn(藥品碼, color, 數量);
+                                lightOn.顏色 = Color.FromArgb((int)(color.R * 0.1), (int)(color.G * 0.1), (int)(color.B * 0.1));
+                                lightOn.flag_Refresh_Light = true;
+                                Function_儲位亮燈(lightOn);
+                          
+
+                            }
+                            else if (uDP_READ.Input > 0)
+                            {
+                                int temp = list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.暫存參數].StringToInt32();
+                                list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
+
+                           
+
+
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            allTask = Task.WhenAll(taskList);
+            allTask.Wait();
+            if (list_取藥子堆疊資料_replace.Count > 0)
+            {
+                sQLControl_取藥堆疊子資料.UpdateByDefulteExtra(null, list_取藥子堆疊資料_replace);
+            }
+
+            cnt++;
+        }
         #endregion
         #region PLC_取藥堆疊資料_入賬檢查
         static public bool PLC_Device_取藥堆疊資料_入賬檢查 = false;
