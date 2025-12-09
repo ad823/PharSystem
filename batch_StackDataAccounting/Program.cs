@@ -518,7 +518,8 @@ namespace batch_StackDataAccounting
 
                 if (device == null) continue;
 
-                if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
+                if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                    || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                 {
                     Box box = list_Device[i] as Box;
                     if (box != null)
@@ -836,12 +837,15 @@ namespace batch_StackDataAccounting
             Console.WriteLine($"Pannel35_Port : {myConfigClass.Pannel35_Port} \n");
             Console.WriteLine($"RowsLED_Port : {myConfigClass.RowsLED_Port} \n");
 
-            drawerUI_EPD_583.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD583_Port + 1000, myConfigClass.EPD583_Port);
-            storageUI_EPD_266.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD266_Port + 1000, myConfigClass.EPD266_Port);
-            storageUI_WT32.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.Pannel35_Port + 1000, myConfigClass.Pannel35_Port);
-            rowsLEDUI.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.RowsLED_Port + 1000, myConfigClass.RowsLED_Port);
+            //drawerUI_EPD_583.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD583_Port + 1000, myConfigClass.EPD583_Port);
+            //storageUI_EPD_266.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD266_Port + 1000, myConfigClass.EPD266_Port);
+            //storageUI_WT32.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.Pannel35_Port + 1000, myConfigClass.Pannel35_Port);
+            //rowsLEDUI.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.RowsLED_Port + 1000, myConfigClass.RowsLED_Port);
 
-
+            drawerUI_EPD_583.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD583_Port, myConfigClass.EPD583_Port,false);
+            storageUI_EPD_266.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.EPD266_Port, myConfigClass.EPD266_Port,false);
+            storageUI_WT32.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.Pannel35_Port, myConfigClass.Pannel35_Port,false);
+            rowsLEDUI.Console_Init(sys_serverSettingClass_儲位資料.DBName, sys_serverSettingClass_儲位資料.User, sys_serverSettingClass_儲位資料.Password, sys_serverSettingClass_儲位資料.Server, sys_serverSettingClass_儲位資料.Port.StringToUInt32(), MySql.Data.MySqlClient.MySqlSslMode.None, myConfigClass.RowsLED_Port, myConfigClass.RowsLED_Port,false);
 
             Function_從SQL取得儲位到本地資料();
             Function_從SQL取得儲位到雲端資料();
@@ -1331,7 +1335,11 @@ namespace batch_StackDataAccounting
             string Type_str = "";
             for (int k = 0; k < values.Count; k++)
             {
-                if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName() || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName())
+                if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
+                    || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
+                    || TYPE[k] == DeviceType.EPD290G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290G.GetEnumName()
+                    || TYPE[k] == DeviceType.EPD420G.GetEnumName() || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName()
+                    || TYPE[k] == DeviceType.EPD360E.GetEnumName() || TYPE[k] == DeviceType.EPD360E_lock.GetEnumName())
                 {
 
                     Storage storage = (Storage)values[k];
@@ -1369,7 +1377,8 @@ namespace batch_StackDataAccounting
                     }
 
                 }
-                else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName())
+                else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName()
+                         || TYPE[k] == DeviceType.EPD730E_lock.GetEnumName() || TYPE[k] == DeviceType.EPD730E.GetEnumName())
                 {
                     Box box = (Box)values[k];
                     if (!IP.StringIsEmpty())
@@ -1566,7 +1575,11 @@ namespace batch_StackDataAccounting
 
             if (Value is Storage)
             {
-                if (TYPE == DeviceType.EPD266.GetEnumName() || TYPE == DeviceType.EPD266_lock.GetEnumName() || TYPE == DeviceType.EPD290.GetEnumName() || TYPE == DeviceType.EPD290_lock.GetEnumName())
+                if (TYPE == DeviceType.EPD266.GetEnumName() || TYPE == DeviceType.EPD266_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD290.GetEnumName() || TYPE == DeviceType.EPD290_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD290G.GetEnumName() || TYPE == DeviceType.EPD290G_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD420G.GetEnumName() || TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD360E.GetEnumName() || TYPE == DeviceType.EPD360E_lock.GetEnumName())
                 {
                     Storage storage = (Storage)Value;
                     storage = List_EPD266_雲端資料.SortByIP(storage.IP);
@@ -1595,7 +1608,8 @@ namespace batch_StackDataAccounting
             }
             else if (Value is Box)
             {
-                if (TYPE == DeviceType.EPD583.GetEnumName() || TYPE == DeviceType.EPD583_lock.GetEnumName())
+                if (TYPE == DeviceType.EPD583.GetEnumName() || TYPE == DeviceType.EPD583_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD730E.GetEnumName() || TYPE == DeviceType.EPD730E_lock.GetEnumName())
                 {
                     Box box = (Box)Value;
                     box.效期庫存異動(效期, 批號, 異動量, false);
@@ -1632,7 +1646,11 @@ namespace batch_StackDataAccounting
             string TYPE = 儲位資訊[(int)enum_儲位資訊.TYPE].ObjectToString();
             if (Value is Storage)
             {
-                if (TYPE == DeviceType.EPD266.GetEnumName() || TYPE == DeviceType.EPD266_lock.GetEnumName() || TYPE == DeviceType.EPD290.GetEnumName() || TYPE == DeviceType.EPD290_lock.GetEnumName())
+                if (TYPE == DeviceType.EPD266.GetEnumName() || TYPE == DeviceType.EPD266_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD290.GetEnumName() || TYPE == DeviceType.EPD290_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD290G.GetEnumName() || TYPE == DeviceType.EPD290G_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD420G.GetEnumName() || TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD360E.GetEnumName() || TYPE == DeviceType.EPD360E_lock.GetEnumName())
                 {
                     Storage storage = (Storage)Value;
                     storage = List_EPD266_雲端資料.SortByIP(storage.IP);
@@ -1661,7 +1679,8 @@ namespace batch_StackDataAccounting
             }
             else if (Value is Box)
             {
-                if (TYPE == DeviceType.EPD583.GetEnumName() || TYPE == DeviceType.EPD583_lock.GetEnumName())
+                if (TYPE == DeviceType.EPD583.GetEnumName() || TYPE == DeviceType.EPD583_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD730E.GetEnumName() || TYPE == DeviceType.EPD730E_lock.GetEnumName())
                 {
                     Box box = (Box)Value;
                     box.效期庫存異動(效期, 異動量, false);
@@ -1862,7 +1881,11 @@ namespace batch_StackDataAccounting
 
                 if (device != null)
                 {
-                    if (device.DeviceType == DeviceType.EPD266 || device.DeviceType == DeviceType.EPD266_lock || device.DeviceType == DeviceType.EPD290 || device.DeviceType == DeviceType.EPD290_lock)
+                    if (device.DeviceType == DeviceType.EPD266 || device.DeviceType == DeviceType.EPD266_lock
+                        || device.DeviceType == DeviceType.EPD290 || device.DeviceType == DeviceType.EPD290_lock
+                        || device.DeviceType == DeviceType.EPD290G || device.DeviceType == DeviceType.EPD290G_lock
+                        || device.DeviceType == DeviceType.EPD420G || device.DeviceType == DeviceType.EPD420G_lock
+                        || device.DeviceType == DeviceType.EPD360E || device.DeviceType == DeviceType.EPD360E_lock)
                     {
                         Storage storage = list_Device[i] as Storage;
                         if (storage != null)
@@ -1874,10 +1897,13 @@ namespace batch_StackDataAccounting
                             }));
 
                             list_IP.Add(IP);
-                            if (device.DeviceType == DeviceType.EPD266_lock || device.DeviceType == DeviceType.EPD290_lock) list_lock_IP.Add(IP);
+                            if (device.DeviceType == DeviceType.EPD266_lock || device.DeviceType == DeviceType.EPD290_lock
+                                || device.DeviceType == DeviceType.EPD290G_lock || device.DeviceType == DeviceType.EPD420G_lock
+                                || device.DeviceType == DeviceType.EPD360E_lock) list_lock_IP.Add(IP);
                         }
                     }
-                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
+                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                        || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                     {
                         Box box = list_Device[i] as Box;
                         if (box != null)
@@ -1984,20 +2010,22 @@ namespace batch_StackDataAccounting
                         if (storage != null)
                         {
                             list_IP.Add(IP);
-                            if (device.DeviceType == DeviceType.EPD266_lock || device.DeviceType == DeviceType.EPD290_lock
-                              || device.DeviceType == DeviceType.EPD420_lock)
+                            if (device.DeviceType == DeviceType.EPD266_lock || device.DeviceType == DeviceType.EPD290_lock || device.DeviceType == DeviceType.EPD290G_lock
+                              || device.DeviceType == DeviceType.EPD420_lock || device.DeviceType == DeviceType.EPD420G_lock || device.DeviceType == DeviceType.EPD360E_lock)
                             {
                                 list_lock_IP.Add(IP);
                             }
                         }
                     }
-                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
+                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                        || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                     {
                         Box box = list_Device[i] as Box;
                         if (box != null)
                         {
                             list_IP.Add(IP);
-                            if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
+                            if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock
+                                || device.DeviceType == DeviceType.EPD730E || device.DeviceType == DeviceType.EPD730E_lock)
                             {
                                 list_lock_IP.Add(IP);
                             }
@@ -2163,18 +2191,7 @@ namespace batch_StackDataAccounting
 
                         list_IP.Add(IP);
                     }
-                    else if (device.DeviceType == DeviceType.Pannel35 || device.DeviceType == DeviceType.Pannel35_lock)
-                    {
-
-                    }
-                    else if (device.DeviceType == DeviceType.EPD583 || device.DeviceType == DeviceType.EPD583_lock)
-                    {
-
-                    }
-                    else if (device.DeviceType == DeviceType.RowsLED)
-                    {
-
-                    }
+                   
                 }
             }
             allTask = Task.WhenAll(taskList);
@@ -2283,6 +2300,48 @@ namespace batch_StackDataAccounting
                         flag_可致能資料 = false;
                     }
                 }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G_lock.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G_lock.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E_lock.GetEnumName())
+                {
+                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
+                    {
+                        flag_可致能資料 = false;
+                    }
+                }
                 else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.Pannel35.GetEnumName())
                 {
                     if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
@@ -2297,20 +2356,17 @@ namespace batch_StackDataAccounting
                         flag_可致能資料 = false;
                     }
                 }
-                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583.GetEnumName())
+                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583.GetEnumName()
+                     || list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName()
+                     || list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E.GetEnumName()
+                     || list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E_lock.GetEnumName())
                 {
                     if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
                     {
                         flag_可致能資料 = false;
                     }
                 }
-                else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName())
-                {
-                    if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
-                    {
-                        flag_可致能資料 = false;
-                    }
-                }
+          
                 else if (list_取藥堆疊子資料[i][(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD1020.GetEnumName())
                 {
                     if (致能 == true.ToString() && 流程作業完成 == true.ToString() && 配藥完成 == true.ToString())
@@ -2373,7 +2429,8 @@ namespace batch_StackDataAccounting
             double 異動量 = 堆疊子資料[(int)enum_取藥堆疊子資料.異動量].StringToInt32();
             double 儲位庫存 = 0;
             string 批號 = 堆疊子資料[(int)enum_取藥堆疊子資料.批號].ObjectToString();
-            if (str_TYPE == DeviceType.EPD583.GetEnumName() || str_TYPE == DeviceType.EPD583_lock.GetEnumName())
+            if (str_TYPE == DeviceType.EPD583.GetEnumName() || str_TYPE == DeviceType.EPD583_lock.GetEnumName()
+                || str_TYPE == DeviceType.EPD730E.GetEnumName() || str_TYPE == DeviceType.EPD730E_lock.GetEnumName())
             {
                 List<Box> boxes = List_EPD583_入賬資料.SortByCode(藥品碼);
                 for (int i = 0; i < boxes.Count; i++)
@@ -2412,7 +2469,11 @@ namespace batch_StackDataAccounting
                     }
                 }
             }
-            else if (str_TYPE == DeviceType.EPD266.GetEnumName() || str_TYPE == DeviceType.EPD266_lock.GetEnumName() || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName())
+            else if (str_TYPE == DeviceType.EPD266.GetEnumName() || str_TYPE == DeviceType.EPD266_lock.GetEnumName()
+                || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName()
+                || str_TYPE == DeviceType.EPD290G.GetEnumName() || str_TYPE == DeviceType.EPD290G_lock.GetEnumName()
+                || str_TYPE == DeviceType.EPD420G.GetEnumName() || str_TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                || str_TYPE == DeviceType.EPD360E.GetEnumName() || str_TYPE == DeviceType.EPD360E_lock.GetEnumName())
             {
                 Storage storage = List_EPD266_入賬資料.SortByIP(IP);
                 storage = storageUI_EPD_266.SQL_GetStorage(storage);
@@ -3335,7 +3396,11 @@ namespace batch_StackDataAccounting
                     Function_從雲端資料取得儲位(藥品碼, ref TYPE, ref values);
                     for (int k = 0; k < values.Count; k++)
                     {
-                        if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName() || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName())
+                        if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD290G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290G.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD360E_lock.GetEnumName() || TYPE[k] == DeviceType.EPD360E.GetEnumName())
                         {
 
                             Storage storage = (Storage)values[k];
@@ -3369,7 +3434,8 @@ namespace batch_StackDataAccounting
                             }
 
                         }
-                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName())
+                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName()
+                             || TYPE[k] == DeviceType.EPD730E.GetEnumName() || TYPE[k] == DeviceType.EPD730E_lock.GetEnumName())
                         {
                             Box box = (Box)values[k];
                             if (!IP.StringIsEmpty())
@@ -3534,7 +3600,11 @@ namespace batch_StackDataAccounting
                     Function_從雲端資料取得儲位(藥品碼, ref TYPE, ref values);
                     for (int k = 0; k < values.Count; k++)
                     {
-                        if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName() || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName())
+                        if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD290G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290G.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD420G.GetEnumName() || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD360E.GetEnumName() || TYPE[k] == DeviceType.EPD360E_lock.GetEnumName())
                         {
 
                             Storage storage = (Storage)values[k];
@@ -3562,7 +3632,8 @@ namespace batch_StackDataAccounting
                             break;
 
                         }
-                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName())
+                        else if (TYPE[k] == DeviceType.EPD583_lock.GetEnumName() || TYPE[k] == DeviceType.EPD583.GetEnumName()
+                            || TYPE[k] == DeviceType.EPD730E.GetEnumName() || TYPE[k] == DeviceType.EPD730E_lock.GetEnumName())
                         {
 
                             Box box = (Box)values[k];
@@ -3859,7 +3930,8 @@ namespace batch_StackDataAccounting
 
                 if (!flag_同藥碼全亮 || flag_系統取藥模式)
                 {
-                    if (取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName())
+                    if (取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD583_lock.GetEnumName()
+                        || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD730E_lock.GetEnumName())
                     {
                         if (藥品碼.StringIsEmpty()) return;
                         //Function_儲位亮燈(藥品碼, color, ref list_lock_IP);
@@ -3885,7 +3957,14 @@ namespace batch_StackDataAccounting
                     if (取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266_lock.GetEnumName()
                         || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName()
                          || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290_lock.GetEnumName()
-                          || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName())
+                          || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
+                            || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G_lock.GetEnumName()
+                              || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G.GetEnumName()
+                                || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName()
+                                  || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G_lock.GetEnumName()
+                                   || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName()
+                                  || 取藥堆疊資料[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E_lock.GetEnumName())
+
                     {
                         Storage storage = List_EPD266_雲端資料.SortByIP(IP);
                         storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
@@ -4246,7 +4325,8 @@ namespace batch_StackDataAccounting
                     IP = list_取藥子堆疊資料[i][(int)enum_取藥堆疊子資料.IP].ObjectToString();
 
                     Storage storage = List_EPD266_雲端資料.SortByIP(IP);
-                    if (storage != null && (storage.DeviceType == DeviceType.EPD266 || storage.DeviceType == DeviceType.EPD290))
+                    if (storage != null && (storage.DeviceType == DeviceType.EPD266 || storage.DeviceType == DeviceType.EPD290
+                        || storage.DeviceType == DeviceType.EPD290G || storage.DeviceType == DeviceType.EPD420G || storage.DeviceType == DeviceType.EPD360E))
                     {
                         if (!storage.TOFON)
                         {
@@ -4319,13 +4399,21 @@ namespace batch_StackDataAccounting
                                          where value[(int)enum_取藥堆疊子資料.致能].ObjectToString() == true.ToString()
                                          where value[(int)enum_取藥堆疊子資料.流程作業完成].ObjectToString() == false.ToString()
                                          where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
-                                         where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
+                                         where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName()
                                          select value).ToList();
             list_取藥子堆疊資料_2_66層架_作業已完成 = (from value in list_取藥子堆疊資料
                                          where value[(int)enum_取藥堆疊子資料.致能].ObjectToString() == true.ToString()
                                          where value[(int)enum_取藥堆疊子資料.流程作業完成].ObjectToString() == true.ToString()
                                          where value[(int)enum_取藥堆疊子資料.配藥完成].ObjectToString() == false.ToString()
-                                         where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName() || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
+                                         where value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD266.GetEnumName()
+                                          || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD290G.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD420G.GetEnumName()
+                                         || value[(int)enum_取藥堆疊子資料.TYPE].ObjectToString() == DeviceType.EPD360E.GetEnumName()
                                          select value).ToList();
             list_取藥子堆疊資料_LED層架_作業未完成 = (from value in list_取藥子堆疊資料
                                         where value[(int)enum_取藥堆疊子資料.致能].ObjectToString() == true.ToString()

@@ -67,15 +67,19 @@ namespace 調劑台管理系統
             plC_RJ_Button_4號.Run();
             if(flag_init == false)
             {
-                if (Main_Form.Function_指紋辨識初始化(true,false) == false)
+                if(Main_Form.fingerModle == Main_Form.FingerModleType.fpMatchSoket)
                 {
-                    this.Invoke(new Action(delegate
+                    if (Main_Form.Function_指紋辨識初始化(true, false) == false)
                     {
-                        this.DialogResult = DialogResult.No;
-                        this.Close();
-                    }));
-                    return;
+                        this.Invoke(new Action(delegate
+                        {
+                            this.DialogResult = DialogResult.No;
+                            this.Close();
+                        }));
+                        return;
+                    }
                 }
+           
                 this.stepViewer1.Next();
                 if (Main_Form.myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
                 {
@@ -141,6 +145,9 @@ namespace 調劑台管理系統
                     Dialog_HID指紋登入 dialog_HID = new Dialog_HID指紋登入();
                     if (dialog_HID.ShowDialog() != DialogResult.Yes) return;
                     Value2 = dialog_HID.Value;
+                    "指紋辨識成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+
+                    this.stepViewer1.Next();
                 }
                
             

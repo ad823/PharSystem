@@ -695,6 +695,10 @@ namespace 調劑台管理系統
             {
                 Dialog_指紋登入 dialog_指紋登入 = new Dialog_指紋登入();
                 if (dialog_指紋登入.ShowDialog() != DialogResult.Yes) return;
+                if (dialog_指紋登入.台號 == 1) uC_調劑作業_TypeA_1.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 2) uC_調劑作業_TypeA_2.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 3) uC_調劑作業_TypeA_3.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 4) uC_調劑作業_TypeA_4.personPageInput = dialog_指紋登入.Value2;
             }
 
         }

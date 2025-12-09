@@ -145,6 +145,15 @@ namespace 調劑台管理系統
             {
                 if(flag_後台登入_頁面更新_離開頁面 == false)
                 {
+                    if(fingerModle == FingerModleType.fingerPrint)
+                    {
+                        if (captureCts != null)
+                        {
+                            captureCts.Cancel();
+                            captureCts.Dispose();
+                            captureCts = null;
+                        }
+                    }
                     flag_後台登入_頁面更新_離開頁面 = true;
                 }
                 this.flag_後台登入_頁面更新 = false;
