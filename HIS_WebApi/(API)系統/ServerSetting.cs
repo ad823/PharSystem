@@ -507,7 +507,8 @@ namespace HIS_WebApi
             try
             {
                 List<sys_serverSettingClass> sys_serverSettingClasses = GetAllServerSetting();
-                sys_serverSettingClasses = sys_serverSettingClasses.Where(temp => (temp.類別 == "調劑台" || temp.類別 == "藥庫") && temp.內容 == "一般資料").ToList();
+                //sys_serverSettingClasses = sys_serverSettingClasses.Where(temp => temp.內容 == "一般資料").ToList();
+                sys_serverSettingClasses = sys_serverSettingClasses.Where(temp => (temp.類別 == "調劑台" || temp.類別 == "藥庫" || temp.類別 == "FADC") && temp.內容 == "一般資料").ToList();
                 sys_serverSettingClasses.Sort(new sys_serverSettingClass.ICP_By_dps_name());
                 returnData.Code = 200;
                 returnData.Result = $"取得連線資訊,共<{sys_serverSettingClasses.Count}>筆";
