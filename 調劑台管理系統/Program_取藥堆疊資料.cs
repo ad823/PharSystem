@@ -321,6 +321,7 @@ namespace 調劑台管理系統
                     if (藥品碼.StringIsEmpty()) continue;
                     takeMedicineStackClasses_buf = (from temp in takeMedicineStackClasses
                                                     where temp.藥品碼 == 藥品碼
+                                                    where temp.狀態 != "DC處方" && temp.狀態 != "已領用過"
                                                     select temp).ToList();
                     if (takeMedicineStackClasses_buf.Count > 0)
                     {
