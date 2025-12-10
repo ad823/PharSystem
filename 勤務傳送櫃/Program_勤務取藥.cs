@@ -33,7 +33,7 @@ namespace 勤務傳送櫃
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.MouseDownEvent += PlC_RJ_Button_勤務取藥_條碼刷入區_清除_MouseDownEvent;
         }
 
- 
+
 
         bool flag_勤務取藥_頁面更新_init = false;
         private void Program_勤務取藥()
@@ -46,7 +46,7 @@ namespace 勤務傳送櫃
                     {
                         if (this.plC_CheckBox_氣送作業.Checked)
                         {
-                            if(PLC_Device_已登入.Bool == false)
+                            if (PLC_Device_已登入.Bool == false)
                             {
                                 MyMessageBox.ShowDialog("氣送作業模式,請先登入使用者!");
                                 this.plC_ScreenPage_Main.SelecteTabText("登入畫面");
@@ -131,7 +131,7 @@ namespace 勤務傳送櫃
 
         #endregion
 
-     
+
         #region Function
         MyTimerBasic MyTimerBasic_勤務取藥_刷藥單結束計時 = new MyTimerBasic();
         string 勤務取藥_text = "";
@@ -175,19 +175,19 @@ namespace 勤務傳送櫃
                 }
                 text = text.Replace("\r\n", "");
             }
-    
 
-         
+
+
             this.Invoke(new Action(delegate
             {
-                if(text.StringIsEmpty() == false)
+                if (text.StringIsEmpty() == false)
                 {
                     textBox_勤務取藥_條碼刷入區.Text = text;
                     TextBox_勤務取藥_條碼刷入區_KeyPress(null, new KeyPressEventArgs((char)Keys.Enter));
                     Console.WriteLine($"接收掃碼內容:{text}");
                     //Application.DoEvents();
                 }
-             
+
             }));
             if (勤務取藥_text.StringIsEmpty() == true) return;
             勤務取藥_text = 勤務取藥_text.Replace("\r\n", "");
@@ -343,10 +343,14 @@ namespace 勤務傳送櫃
             {
                 list_交易紀錄[0][(int)enum_交易記錄查詢資料.領用人] = this.登入者名稱;
             }
-            transactionsClass transactionsClass = list_交易紀錄[0].SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
- 
+          
+          
             string str = list_交易紀錄[0][(int)enum_交易記錄查詢資料.領用人].ObjectToString();
-            if(this.plC_CheckBox_氣送作業.Checked)
+            transactionsClass transactionsClass = list_交易紀錄[0].SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
+            List<transactionsClass> transactionsClasses = new List<transactionsClass>();
+            transactionsClasses.Add(transactionsClass);
+            transactionsClass.update_by_guid(Main_Form.API_Server, transactionsClasses, Main_Form.ServerName, Main_Form.ServerType);
+            if (this.plC_CheckBox_氣送作業.Checked)
             {
                 str = str + "(氣送)";
             }
@@ -365,7 +369,7 @@ namespace 勤務傳送櫃
         }
         private void PlC_RJ_Button_勤務取藥_條碼刷入區_清除_MouseDownEvent(MouseEventArgs mevent)
         {
-            this.Invoke(new Action(delegate 
+            this.Invoke(new Action(delegate
             {
                 textBox_勤務取藥_條碼刷入區.Text = "";
             }));
