@@ -26,7 +26,7 @@ namespace HIS_WebApi._API_藥品資料
     public class medMap : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        static private string API_server = "http://127.0.0.1:4433";
+        static private string API_server = "https://127.0.0.1:4443";
         private static readonly Lazy<Task<(string Server, string DB, string UserName, string pas, uint Port)>>
            serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
            {
@@ -3618,10 +3618,11 @@ namespace HIS_WebApi._API_藥品資料
                     }
                 }
                 List<Task<returnData>> tasks = new List<Task<returnData>>();
+                device_control device_control = new device_control();
                 foreach (var light_ in list_light)
                 {
                     List<string> command_arry = light_.Split(";").ToList();
-                    Task<returnData> task = deviceApiClass.light_action(API_server, command_arry);
+                    Task<returnData> task = device_control.light_action(command_arry);
                     tasks.Add(task);
                 }
                 returnData[] results = await Task.WhenAll(tasks);

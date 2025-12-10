@@ -147,7 +147,7 @@ namespace HIS_WebApi
         /// <returns>JSON 格式的回應字串，描述裝置亮燈結果</returns>
         [Route("light_action")]
         [HttpPost]
-        public string light_action(returnData returnData)
+        public async Task<string> light_action(returnData returnData)
         {
             try
             {
@@ -318,6 +318,15 @@ namespace HIS_WebApi
                 returnData.Result = $"Exception : {ex.Message}";
                 return returnData.JsonSerializationt(true);
             }
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> light_action(List<string> strings)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry = strings;
+
+            string result = await light_action(returnData);
+            return result.JsonDeserializet<returnData>();
         }
 
         static public byte[] Get_Rows_Empty_LEDBytes()
