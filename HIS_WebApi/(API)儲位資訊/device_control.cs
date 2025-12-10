@@ -219,8 +219,9 @@ namespace HIS_WebApi
                 else if(device_type.Contains("EPD") == true)
                 {
                     int port = EPD_port;
-                    if (device_type.Contains("730") == true) port = 29005;
-                     UDP_Class uDP_Class = new UDP_Class(ip, port, false);
+                    if (device_type.Contains("EPD730F") == true) port = 29005;
+                    if (device_type.Contains("EPD730_7Color") == true) port = 29001;
+                    UDP_Class uDP_Class = new UDP_Class(ip, port, false);
                     Storage storage = storages.Where(x => x.IP == ip).FirstOrDefault();
                     if (storage == null)
                     {
