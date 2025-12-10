@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -366,7 +367,8 @@ namespace batch_StackDataAccounting
             private int rowsLED_Port = 29001;
             private int pannel35_Port = 29020;
             private int lCD114_Port = 29008;
-
+            private string voice_IP = "192.168.5.241";
+            private int voice_port = 5200;
 
             public int EPD583_Port { get => ePD583_Port; set => ePD583_Port = value; }
             public int EPD266_Port { get => ePD266_Port; set => ePD266_Port = value; }
@@ -374,6 +376,8 @@ namespace batch_StackDataAccounting
             public int RowsLED_Port { get => rowsLED_Port; set => rowsLED_Port = value; }
             public int Pannel35_Port { get => pannel35_Port; set => pannel35_Port = value; }
             public int LCD114_Port { get => lCD114_Port; set => lCD114_Port = value; }
+            public string Voice_IP { get => voice_IP; set => voice_IP = value; }
+            public int Voice_port { get => voice_port; set => voice_port = value; }
         }
         static private void LoadMyConfig()
         {
@@ -4761,7 +4765,7 @@ namespace batch_StackDataAccounting
                             {
                                 Console.WriteLine($"lightSensorClass : {lightSensorClass}");
                                 Console.WriteLine($"IP : {boxes[k].IP} , index_IP : {index_IP}, Sensor_ON : {Sensor_ON}");
-
+                                SendPlayVoiceCommand(myConfigClass.Voice_IP, myConfigClass.Voice_port, "OK");
                                 list_取藥子堆疊資料_手勢感測作業檢查[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
                                 list_取藥子堆疊資料_replace.Add(list_取藥子堆疊資料_手勢感測作業檢查[i]);
                                 LightOn lightOn = new LightOn(藥品碼, color, 數量);
@@ -5142,6 +5146,33 @@ namespace batch_StackDataAccounting
                 if (致能_B == true.ToString()) 致能_B = "1";
                 else 致能_B = "0";
                 return 致能_B.CompareTo(致能_A);
+            }
+        }
+
+        public static void SendPlayVoiceCommand(string targetIP, int port, string command)
+        {
+            try
+            {
+                using (UdpClient udp = new UdpClient())
+                {
+                    byte[] data = Encoding.UTF8.GetBytes(command);
+
+                    Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] 準備發送 UDP...");
+                    Console.WriteLine($"  → 目標 IP   : {targetIP}");
+                    Console.WriteLine($"  → 目標 Port : {port}");
+                    Console.WriteLine($"  → 指令內容 : {command}");
+
+                    int sendLength = udp.Send(data, data.Length, targetIP, port);
+
+                    Console.WriteLine($"[SUCCESS] 已成功送出 {sendLength} bytes");
+                    Console.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[ERROR] UDP 發送失敗！");
+                Console.WriteLine($"  錯誤訊息: {ex.Message}");
+                Console.WriteLine();
             }
         }
     }

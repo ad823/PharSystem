@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "智能藥庫系統", "智能藥庫系統\智能藥庫系統.csproj", "{BAB61187-27DE-4337-ADF3-F84019E01A99}"
 EndProject
@@ -58,6 +58,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_UDPlightRefrsh", "batch_UDPlightRefrsh\batch_UDPlightRefrsh.csproj", "{5A895251-0AAC-4DC0-8F91-68FE478C53C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "勤務傳送櫃", "勤務傳送櫃\勤務傳送櫃.csproj", "{8685E561-35B8-45D4-A21C-B465884C14FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_playVoice", "batch_playVoice\batch_playVoice.csproj", "{DAAA345E-32A5-4588-8179-C3CF8C8726A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdpVoiceTestSender", "UdpVoiceTestSender\UdpVoiceTestSender.csproj", "{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +161,14 @@ Global
 		{8685E561-35B8-45D4-A21C-B465884C14FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8685E561-35B8-45D4-A21C-B465884C14FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8685E561-35B8-45D4-A21C-B465884C14FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAAA345E-32A5-4588-8179-C3CF8C8726A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAAA345E-32A5-4588-8179-C3CF8C8726A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAAA345E-32A5-4588-8179-C3CF8C8726A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAAA345E-32A5-4588-8179-C3CF8C8726A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,6 +183,7 @@ Global
 		{D052F6A1-7A59-4351-B2CC-F72D1CE81809} = {E617E12B-9021-4311-8DAA-E6E3CFE5047F}
 		{1EE88150-F781-470C-BFFA-3902125C3064} = {BED408C5-A664-4417-812E-6486B776D33E}
 		{78F6D9F8-3160-4BEB-B716-25E26EEE8C99} = {A26FB20E-1042-41C8-BA46-0CB7E82757E8}
+		{DAAA345E-32A5-4588-8179-C3CF8C8726A2} = {E617E12B-9021-4311-8DAA-E6E3CFE5047F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B921A9E-6909-4DAB-8E4C-5F9D26A5CEDE}
