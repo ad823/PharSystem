@@ -713,6 +713,20 @@ namespace 勤務傳送櫃
                     {
                         if (this.myTimer_InitinputDelay.IsTimeOut())
                         {
+                            if (this.pLC_Device_sensor_input.Bool)
+                            {
+                                Task.Run(new Action(delegate
+                                {
+                                    using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{Main_Form.currentDirectory}\放回籃聲音.wav"))
+                                    {
+                                        sp.Stop();
+                                        sp.Play();
+                                        sp.PlaySync();
+                                    }
+
+                                }));
+                                Console.WriteLine($"[CloseEvent]  關門且有籃子開始撥放音樂 {DateTime.Now.ToDateTimeString_6()}");
+                            }
                             this.CloseEvent(this);
                             Console.WriteLine($"[CloseEvent]  WardName:{WardName},Number{Number} { DateTime.Now.ToDateTimeString_6()}");
                         }

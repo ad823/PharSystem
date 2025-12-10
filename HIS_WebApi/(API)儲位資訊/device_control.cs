@@ -216,11 +216,13 @@ namespace HIS_WebApi
                 }
                 else if(device_type.Contains("EPD") == true)
                 {
-                    UDP_Class uDP_Class = new UDP_Class(ip, EPD_port, false);
+                    int port = EPD_port;
+                    if (device_type.Contains("730") == true) port = 29005;
+                    UDP_Class uDP_Class = new UDP_Class(ip, port, false);
                     Storage storage = storages.Where(x => x.IP == ip).FirstOrDefault();
                     if (storage == null)
                     {
-                        storage = new Storage(ip, EPD_port);
+                        storage = new Storage(ip, port);
                         storages.Add(storage);
                     }
                     storage.LED_Bytes = Get_Storage_LEDBytes(ref storage.LED_Bytes, color.ToColor(), _lightness);
