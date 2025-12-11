@@ -429,6 +429,100 @@ namespace HIS_WebApi
             }
         }
 
+        [Route("get_person_time_period")]
+        [HttpPost]
+        public string get_person_time_period([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "get_person_time_period";
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry不可為空";
+                    return returnData.JsonSerializationt();
+                }
+
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "藥檔資料");
+                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+                SQLControl sQLControl_personTimePeriod = new SQLControl(Server, DB, "person_time_period", UserName, Password, Port, SSLMode);
+
+             
+                List<object[]> list_value = sQLControl_personTimePeriod.GetAllRows(null);
+
+
+                List<personTimePeriodClass> personTimePeriodClasses = list_value.SQLToClass<personTimePeriodClass , enum_personTimePeriod>();
+
+                returnData.Code = 200;
+                returnData.Data = personTimePeriodClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
+        [Route("add_person_time_period")]
+        [HttpPost]
+        public string add_person_time_period([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "add_person_time_period";
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry不可為空";
+                    return returnData.JsonSerializationt();
+                }
+        
+                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "藥檔資料");
+                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+                SQLControl sQLControl_personTimePeriod = new SQLControl(Server, DB, "person_time_period", UserName, Password, Port, SSLMode);
+
+                personTimePeriodClass personTimePeriod = returnData.Data.ObjToClass<personTimePeriodClass>();
+                if(personTimePeriod == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"personTimePeriod Data 傳入失敗";
+                    return returnData.JsonSerializationt();
+                }
+                List<object[]> list_value = sQLControl_personTimePeriod.GetAllRows(null);
+                object[] objects = list_value.Where(x => x[(int)enum_personTimePeriod.ID].ObjectToString() == personTimePeriod.ID).FirstOrDefault();
+                if(objects == null)
+                {
+                    personTimePeriod.GUID = Guid.NewGuid().ToString();
+                    objects = personTimePeriod.ClassToSQL<personTimePeriodClass, enum_personTimePeriod>();
+                    sQLControl_personTimePeriod.AddRow(null, objects);
+                    returnData.Result = "新增成功"; 
+                }
+                else
+                {
+                    string GUID = objects[(int)enum_personTimePeriod.GUID].ObjectToString();
+                    objects = personTimePeriod.ClassToSQL<personTimePeriodClass ,enum_personTimePeriod>();
+                    objects[(int)enum_personTimePeriod.GUID] = GUID;
+                    sQLControl_personTimePeriod.UpdateByDefulteExtra(null, objects);
+                    returnData.Result = "更新成功";
+                }
+
+
+
+                returnData.Code = 200;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
 
         private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
         {
@@ -470,6 +564,9 @@ namespace HIS_WebApi
             {
                 sQLControl.CheckAllColumnName(table, true);
             }
+
+
+            MethodClass.CheckCreatTable(sys_serverSettingClass, new enum_personTimePeriod());
             return table.JsonSerializationt(true);
         }
 

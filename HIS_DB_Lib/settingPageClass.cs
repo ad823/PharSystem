@@ -10,7 +10,6 @@ using System.Text.Json.Serialization;
 namespace HIS_DB_Lib
 {
     [EnumDescription("settingPage")]
-
     public enum enum_settingPage
     {
         [Description("GUID,VARCHAR,50,PRIMARY")]

@@ -56,6 +56,8 @@ namespace 調劑台管理系統
             刪除選取資料,
             [Description("M8000")]
             自動分配未配置顏色人員,
+            [Description("M8000")]
+            時段設定,
         }
 
 
@@ -790,6 +792,18 @@ namespace 調劑台管理系統
                             }
                             this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value, true);
                         }
+                    }
+                    else if (dialog_ContextMenuStrip.Value == ContextMenuStrip_人員資料.時段設定.GetEnumName())
+                    {
+                        List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                        if(list_value.Count == 0)
+                        {
+                            MyMessageBox.ShowDialog("未選擇資料");
+                            return;
+                        }
+                        string ID = list_value[0][(int)enum_人員資料.ID].ObjectToString();
+                        Dialog_時段設定 dialog_時段設定 = new Dialog_時段設定(ID);
+                        dialog_時段設定.ShowDialog();
                     }
                 }
             }

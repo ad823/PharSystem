@@ -47,7 +47,6 @@ namespace batch_playVoice
             }
 
             Console.OutputEncoding = Encoding.UTF8;
-            Console.Title = "UDP 4500 播放音效監聽程式 (穩定版, test=OK)";
 
             try
             {

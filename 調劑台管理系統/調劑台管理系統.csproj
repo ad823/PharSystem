@@ -571,6 +571,12 @@
     <Compile Include="Dialog\Dialog_收支作業_RFID清點作業.Designer.cs">
       <DependentUpon>Dialog_收支作業_RFID清點作業.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_時段設定.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_時段設定.Designer.cs">
+      <DependentUpon>Dialog_時段設定.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -792,6 +798,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_收支異常提示.resx">
       <DependentUpon>Dialog_收支異常提示.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_時段設定.resx">
+      <DependentUpon>Dialog_時段設定.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_條碼管理.resx">
       <DependentUpon>Dialog_條碼管理.cs</DependentUpon>
