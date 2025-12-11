@@ -264,6 +264,14 @@
             "value_type": "checkbox",
             "option_str": "",
             "value_db": "False"
+        },
+        {
+            "page_name": "bulletin",
+            "cht": "緊急申領通知週期",
+            "name": "urgent_request_interval",
+            "value_type": "text",
+            "option_str": "",
+            "value_db": "180"
         }
 
         

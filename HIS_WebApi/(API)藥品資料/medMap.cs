@@ -67,6 +67,58 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt();
             }
         }
+        [HttpPost("barcode")]
+        public async Task<string> barcode(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                if (returnData.Value.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"Value錯誤，不可為空值";
+                    return returnData.JsonSerializationt();
+                }
+                string barcode = returnData.Value;
+                string 藥碼 = string.Empty;
+                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥袋條碼回傳錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_barcode = json_out.JsonDeserializet<returnData>();
+                    medClass medClass = returnData_barcode.Data.ObjToClass<medClass>();
+                    if (medClass != null)
+                    {
+                        藥碼 = medClass.藥品碼;
+                    }
+                }
+                if (藥碼.StringIsEmpty()) 藥碼 = barcode;
+               
+    
+                returnData returnData_ = await new MED_pageController().serch_by_BarCode(藥碼);
+
+                return returnData_.JsonSerializationt(true);
+
+
+                
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         /// 新增父容器
         /// </summary>
