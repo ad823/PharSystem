@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.0.51")]
-[assembly: AssemblyFileVersion("1.0.0.51")]
+[assembly: AssemblyVersion("1.0.0.52")]
+[assembly: AssemblyFileVersion("1.0.0.52")]
 namespace 勤務傳送櫃
 {
     public partial class Main_Form : Form
@@ -130,12 +130,14 @@ namespace 勤務傳送櫃
             private string rFID_COMPort = "";
             private string scanner01_COMPort = "COM2";
             private string scanner02_COMPort = "COM3";
+            private string resetIP = "192.168.32.240";
             private bool show_login = true;
 
             public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public string Scanner02_COMPort { get => scanner02_COMPort; set => scanner02_COMPort = value; }
             public bool Show_login { get => show_login; set => show_login = value; }
+            public string ResetIP { get => resetIP; set => resetIP = value; }
         }
         private void LoadMyConfig()
         {
