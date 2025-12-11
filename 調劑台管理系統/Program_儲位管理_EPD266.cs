@@ -238,6 +238,7 @@ namespace 調劑台管理系統
                 List<object[]> list_藥品設定表_buf = new List<object[]>();
 
                 string 藥品碼 = "";
+                string 料號 = "";
                 string 藥品名稱 = "";
                 string 中文名稱 = "";
                 string 藥品學名 = "";
@@ -250,6 +251,7 @@ namespace 調劑台管理系統
                 string 管制級別 = "";
 
                 string 藥品碼_buf = "";
+                string 料號_buf = "";
                 string 藥品名稱_buf = "";
                 string 中文名稱_buf = "";
                 string 藥品學名_buf = "";
@@ -275,6 +277,8 @@ namespace 調劑台管理系統
                 else
                 {
                     藥品碼_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品碼].ObjectToString();
+                    料號_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.料號].ObjectToString();
+
                     藥品名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品名稱].ObjectToString();
                     中文名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.中文名稱].ObjectToString();
                     藥品學名_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品學名].ObjectToString();
@@ -298,6 +302,7 @@ namespace 調劑台管理系統
                     }
 
                     藥品碼 = storage.GetValue(Device.ValueName.藥品碼, Device.ValueType.Value).ObjectToString();
+                    料號 = storage.SKDIACODE;
                     藥品名稱 = storage.GetValue(Device.ValueName.藥品名稱, Device.ValueType.Value).ObjectToString();
                     中文名稱 = storage.GetValue(Device.ValueName.藥品中文名稱, Device.ValueType.Value).ObjectToString();
                     藥品學名 = storage.GetValue(Device.ValueName.藥品學名, Device.ValueType.Value).ObjectToString();
@@ -310,6 +315,7 @@ namespace 調劑台管理系統
                     發音相似 = storage.IsSoundSimilar ? "TRUE" : "FALSE";
 
                     if (藥品碼 != 藥品碼_buf) Is_Replace = true;
+                    if (料號 != 料號_buf) Is_Replace = true;
                     if (藥品名稱 != 藥品名稱_buf) Is_Replace = true;
                     if (中文名稱 != 中文名稱_buf) Is_Replace = true;
                     if (藥品學名 != 藥品學名_buf) Is_Replace = true;
@@ -326,6 +332,7 @@ namespace 調劑台管理系統
                     storage.SetValue(Device.ValueName.藥品學名, Device.ValueType.Value, 藥品學名_buf);
                     storage.SetValue(Device.ValueName.BarCode, Device.ValueType.Value, BarCode_buf);
                     storage.SetValue(Device.ValueName.包裝單位, Device.ValueType.Value, 包裝單位_buf);
+                    storage.SKDIACODE = 料號_buf;
                     storage.DRUGKIND = 管制級別_buf;
                     storage.IsWarning = (警訊藥品_buf == "TRUE");
                     storage.IsAnesthetic = (麻醉藥品_buf == "TRUE");

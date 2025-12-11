@@ -250,6 +250,7 @@ namespace 調劑台管理系統
             List<object[]> list_藥品設定表_buf = new List<object[]>();
             List<Drawer> list_replaceValue = new List<Drawer>();
             string 藥品碼 = "";
+            string 料號 = "";
             string 藥品名稱 = "";
             string 中文名稱 = "";
             string 藥品學名 = "";
@@ -261,6 +262,7 @@ namespace 調劑台管理系統
             string 管制級別 = "";
 
             string 藥品碼_buf = "";
+            string 料號_buf = "";
             string 藥品名稱_buf = "";
             string 中文名稱_buf = "";
             string 藥品學名_buf = "";
@@ -289,6 +291,7 @@ namespace 調劑台管理系統
                     else
                     {
                         藥品碼_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品碼].ObjectToString();
+                        料號_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.料號].ObjectToString();
                         藥品名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品名稱].ObjectToString();
                         中文名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.中文名稱].ObjectToString();
                         藥品學名_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品學名].ObjectToString();
@@ -321,9 +324,10 @@ namespace 調劑台管理系統
                         麻醉藥品 = boxes[k].IsAnesthetic ? "TRUE" : "FALSE";
                         形狀相似 = boxes[k].IsShapeSimilar ? "TRUE" : "FALSE";
                         發音相似 = boxes[k].IsSoundSimilar ? "TRUE" : "FALSE";
-
+                        料號 = boxes[k].SKDIACODE;
 
                         if (藥品碼 != 藥品碼_buf) Is_Replace = true;
+                        if (料號 != 料號_buf) Is_Replace = true;
                         if (藥品名稱 != 藥品名稱_buf) Is_Replace = true;
                         if (中文名稱 != 中文名稱_buf) Is_Replace = true;
                         if (藥品學名 != 藥品學名_buf) Is_Replace = true;
@@ -339,6 +343,7 @@ namespace 調劑台管理系統
                         boxes[k].SetValue(Device.ValueName.藥品中文名稱, Device.ValueType.Value, 中文名稱_buf);
                         boxes[k].SetValue(Device.ValueName.藥品學名, Device.ValueType.Value, 藥品學名_buf);
                         boxes[k].SetValue(Device.ValueName.包裝單位, Device.ValueType.Value, 包裝單位_buf);
+                        boxes[k].SKDIACODE = 料號_buf;
                         boxes[k].DRUGKIND = 管制級別_buf;
                         boxes[k].IsWarning = (警訊藥品_buf == "TRUE");
                         boxes[k].IsAnesthetic = (麻醉藥品_buf == "TRUE");

@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace batch_StackDataAccounting
 {
+   
     public enum enum_LCD114_索引表
     {
         [Description("GUID,VARCHAR,50,PRIKEY")]
@@ -53,7 +54,6 @@ namespace batch_StackDataAccounting
                 Console.WriteLine($"{commonSapceClasses[i]} 新增共用台資料,共<{list_堆疊母資料_add.Count}>筆");
             }
         }
-
     }
     public class CommonSapceClass
     {
@@ -127,7 +127,7 @@ namespace batch_StackDataAccounting
     class Program
     {
         static public List<CommonSapceClass> commonSapceClasses = new List<CommonSapceClass>();
-
+        private static List<medClass> medClasses_cloud_global = null;
 
         static public List<object> Function_從共用區取得儲位(string 藥品碼)
         {
@@ -1996,7 +1996,7 @@ namespace batch_StackDataAccounting
         {
             string 藥品碼 = lightOn.藥品碼;
             Color color = lightOn.顏色;
-            color = Color.FromArgb((int)(color.R * lightness), (int)(color.G * lightness), (int)(color.B * lightness));
+           
             
             if (藥品碼.StringIsEmpty()) return;
 
@@ -2170,6 +2170,7 @@ namespace batch_StackDataAccounting
             }
             else
             {
+                color = Color.FromArgb((int)(color.R * lightness), (int)(color.G * lightness), (int)(color.B * lightness));
                 Console.WriteLine($"◇◇儲位亮燈◇◇,藥品碼:{藥品碼},color{color.ToColorString()}");
             }
             Task allTask;
@@ -2751,6 +2752,10 @@ namespace batch_StackDataAccounting
             List<Task> taskList = new List<Task>();
             MyTimer myTimer = new MyTimer(500000);
             MyTimer myTimer_total = new MyTimer(500000);
+            List<string> codes = takeMedicineStackClasses.Select(x => x.藥品碼).ToList();
+            List<medClass> medClasses_cloud = medClass.get_med_clouds_by_codes(API_Server, codes);
+            List<medClass> medClasses_cloud_buf = new List<medClass>();
+            if (medClasses_cloud_global == null) medClasses_cloud_global = medClass.get_med_cloud(API_Server);
 
             List<object[]> list_堆疊母資料 = sQLControl_取藥堆疊母資料.GetAllRows(null);
             List<object[]> list_堆疊母資料_add = new List<object[]>();
@@ -2770,6 +2775,17 @@ namespace batch_StackDataAccounting
                 string 藥袋序號 = takeMedicineStackClasses[i].藥袋序號;
                 顏色 = takeMedicineStackClasses[i].顏色;
 
+                medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.藥品碼 == 藥品碼).ToList();
+                if (medClasses_cloud_buf.Count > 0)
+                {
+                    string 料號 = medClasses_cloud_buf[0].料號;
+                    medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
+                    if (medClasses_cloud_buf.Count > 1)
+                    {
+                        藥品碼 = medClasses_cloud_buf[0].料號;
+                        takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                    }
+                }
 
                 list_堆疊母資料 = list_堆疊母資料_buf.GetRows((int)enum_取藥堆疊母資料.藥品碼, 藥品碼);
                 list_堆疊母資料_buf = list_堆疊母資料_buf.GetRows((int)enum_取藥堆疊母資料.病歷號, takeMedicineStackClasses[i].病歷號);

@@ -38,7 +38,7 @@ namespace 調劑台管理系統
                 return (R == r && G == g && B == b);
             }
         }
-
+        private static List<medClass> medClasses_cloud_global = null;
         List<object[]> list_取藥堆疊母資料 = new List<object[]>();
         List<object[]> list_取藥堆疊子資料 = new List<object[]>();
         private MyThread MyThread_取藥堆疊資料_檢查資料;
@@ -173,10 +173,14 @@ namespace 調劑台管理系統
         static public void Function_取藥堆疊資料_新增母資料(List<takeMedicineStackClass> takeMedicineStackClasses)
         {
             List<takeMedicineStackClass> takeMedicineStackClasses_buf = new List<takeMedicineStackClass>();
+
             List<Task> taskList = new List<Task>();
             MyTimer myTimer = new MyTimer(500000);
             MyTimer myTimer_total = new MyTimer(500000);
-            List<object[]> list_藥品資料 = _sqL_DataGridView_藥品資料_藥檔資料.SQL_GetAllRows(false);
+            List<string> codes = takeMedicineStackClasses.Select(x => x.藥品碼).ToList();
+            List<medClass> medClasses_cloud = medClass.get_med_clouds_by_codes(Main_Form.API_Server, codes);
+            List<medClass> medClasses_cloud_buf = new List<medClass>();
+            if(medClasses_cloud_global == null) medClasses_cloud_global = medClass.get_med_cloud(Main_Form.API_Server);
             List<object[]> list_藥品設定表 = medConfigClass.get_all(Main_Form.API_Server).ClassToSQL<medConfigClass, enum_medConfig>();
             List<object[]> list_藥品管制方式設定 = _sqL_DataGridView_藥品管制方式設定.SQL_GetAllRows(false);
             List<object[]> list_堆疊母資料 = _sqL_DataGridView_取藥堆疊母資料.SQL_GetAllRows(false);
@@ -193,6 +197,18 @@ namespace 調劑台管理系統
             {
                 List<object[]> list_堆疊母資料_buf = new List<object[]>();
                 string 藥品碼 = takeMedicineStackClasses[i].藥品碼;
+                medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.藥品碼 == 藥品碼).ToList();
+                if(medClasses_cloud_buf.Count > 0)
+                {
+                    string 料號 = medClasses_cloud_buf[0].料號;
+                    medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
+                    if (medClasses_cloud_buf.Count > 1)
+                    {
+                        藥品碼 = medClasses_cloud_buf[0].料號;
+                        takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                    }
+                }
+               
                 string 病歷號 = takeMedicineStackClasses[i].病歷號;
                 string 開方時間 = takeMedicineStackClasses[i].開方時間;
                 string 藥袋序號 = takeMedicineStackClasses[i].藥袋序號;
@@ -236,11 +252,12 @@ namespace 調劑台管理系統
                 object[] value = takeMedicineStackClasses[i].ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
                 value[(int)enum_取藥堆疊母資料.動作] = takeMedicineStackClasses[i].動作.GetEnumName();
                 value[(int)enum_取藥堆疊母資料.狀態] = takeMedicineStackClasses[i].狀態.GetEnumName();
-                List<object[]> list_藥品資料_buf = list_藥品資料.GetRows((int)enum_藥品資料_藥檔資料.藥品碼, 藥品碼);
+                //List<object[]> list_藥品資料_buf = list_藥品資料.GetRows((int)enum_藥品資料_藥檔資料.藥品碼, 藥品碼);
 
                 if (PLC_Device_主機扣賬模式.Bool == true)
                 {
-                    if (list_藥品資料_buf.Count > 0)
+                    medClasses_cloud_buf = medClasses_cloud.Where(x => x.藥品碼 == 藥品碼).ToList();
+                    if (medClasses_cloud_buf.Count > 0)
                     {
                         flag_RFID使用 = Function_藥品設定表_取得管制方式(list_藥品設定表, enum_medConfig.使用RFID, 藥品碼);
                         if (Function_藥品設定表_取得是否自訂義(list_藥品設定表, 藥品碼))
@@ -253,10 +270,10 @@ namespace 調劑台管理系統
                         }
                         else
                         {
-                            string 管制級別 = list_藥品資料_buf[0][(int)enum_藥品資料_藥檔資料.管制級別].ObjectToString();
-                            string 警訊藥品 = (list_藥品資料_buf[0][(int)enum_藥品資料_藥檔資料.警訊藥品].ObjectToString() == true.ToString()) ? "警訊" : "";
-                            string 高價藥品 = (list_藥品資料_buf[0][(int)enum_藥品資料_藥檔資料.高價藥品].ObjectToString() == true.ToString()) ? "高價" : "";
-                            string 生物製劑 = (list_藥品資料_buf[0][(int)enum_藥品資料_藥檔資料.生物製劑].ObjectToString() == true.ToString()) ? "生物製劑" : "";
+                            string 管制級別 = medClasses_cloud_buf[0].管制級別;
+                            string 警訊藥品 = (medClasses_cloud_buf[0].警訊藥品 == true.ToString()) ? "警訊" : "";
+                            string 高價藥品 = (medClasses_cloud_buf[0].高價藥品 == true.ToString()) ? "高價" : "";
+                            string 生物製劑 = (medClasses_cloud_buf[0].生物製劑 == true.ToString()) ? "生物製劑" : "";
                             flag_複盤 = (Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.複盤, 管制級別) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.複盤, 警訊藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.複盤, 高價藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.複盤, 生物製劑));
                             flag_盲盤 = (Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.盲盤, 管制級別) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.盲盤, 警訊藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.盲盤, 高價藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.盲盤, 生物製劑));
                             flag_效期管理 = (Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.效期管理, 管制級別) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.效期管理, 警訊藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.效期管理, 高價藥品) || Function_藥品管制方式設定_取得管制方式(list_藥品管制方式設定, enum_medGeneralConfig.效期管理, 生物製劑));
