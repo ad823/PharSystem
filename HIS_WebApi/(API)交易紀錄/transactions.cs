@@ -1290,6 +1290,8 @@ namespace HIS_WebApi
                 List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "cdmi_excel_download_api");
                 string VM_API = string.Empty;
                 if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
+
+                if (VM_API.StringIsEmpty() == true) VM_API = Method.GetServerAPI("Main", "網頁", "cdmi_excel_download_api");
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
@@ -1301,7 +1303,6 @@ namespace HIS_WebApi
                         var response = await client.PostAsync(VM_API, content);
                         //string json_out = Net.WEBApiPostJson(VM_API, json_in);
                         //returnData = json_out.JsonDeserializet<returnData>();
-
 
                         if (response.IsSuccessStatusCode)
                         {
