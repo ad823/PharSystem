@@ -859,6 +859,7 @@ namespace 調劑台管理系統
                     string 藥碼 = list_value[0][(int)enum_交班藥品.藥碼].ObjectToString();
                     Main_Form.Function_儲位亮燈(new Main_Form.LightOn(藥碼, Color.Black));
                 }
+                Main_Form.LockClosingEvent -= Main_Form_LockClosingEvent;
             }
             else
             {
