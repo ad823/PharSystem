@@ -85,16 +85,13 @@ namespace 調劑台管理系統
                 }
                 alarmForm = new Dialog_AlarmForm($"找無匹配指紋", 1500, Color.Red);
                 alarmForm.ShowDialog();
-                Dialog_HID指紋登入_LoadFinishedEvent(null);
+                RJ_Button_取消_MouseDownEvent(null);
+                //Dialog_HID指紋登入_LoadFinishedEvent(null);
             }
             catch(Exception ex) 
             {
 
             }
-           
-
-
-
         }
 
         private void RJ_Button_取消_MouseDownEvent(MouseEventArgs mevent)

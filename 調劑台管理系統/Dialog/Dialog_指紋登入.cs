@@ -143,7 +143,11 @@ namespace 調劑台管理系統
                 else
                 {
                     Dialog_HID指紋登入 dialog_HID = new Dialog_HID指紋登入();
-                    if (dialog_HID.ShowDialog() != DialogResult.Yes) return;
+                    if (dialog_HID.ShowDialog() != DialogResult.Yes)
+                    {
+                        this.Close();
+                        return;
+                    }
                     Value2 = dialog_HID.Value;
                     "指紋辨識成功".PlayGooleVoiceAsync(Main_Form.API_Server);
 
@@ -168,9 +172,7 @@ namespace 調劑台管理系統
         }
         #region Event
         private void Dialog_指紋登入_LoadFinishedEvent(EventArgs e)
-        {
-          
-
+        {          
             myThread.AutoRun(true);
             myThread.SetSleepTime(50);
             myThread.Add_Method(sub_program);
