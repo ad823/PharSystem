@@ -127,9 +127,10 @@ namespace batch_MQTT_Server
         }
         static void HandleDHTSensorMessage(string clientId, string payload)
         {
+            UDP_READ_basic uDP_READ_Basic = null;
             try
             {
-                UDP_READ_basic uDP_READ_Basic = payload.JsonDeserializet<UDP_READ_basic>();
+                uDP_READ_Basic = payload.JsonDeserializet<UDP_READ_basic>();
                 DateTime now = DateTime.Now;
 
                 if (uploadTimeRecords.ContainsKey(clientId))
@@ -144,30 +145,18 @@ namespace batch_MQTT_Server
 
                 uploadTimeRecords[clientId] = now;
                 temperatureClass temperatureClass = new temperatureClass();
-                if (clientId == "00:E0:4C:04:B7:A1")
-                {
-                    temperatureClass.IP = clientId;
-                    temperatureClass.溫度 = uDP_READ_Basic.dht_t.ToString();
-                    temperatureClass.濕度 = uDP_READ_Basic.dht_h.ToString();
-                }
-                if (clientId == "00:E0:4C:04:AD:4F")
-                {
-                    temperatureClass.IP = clientId;
-                    temperatureClass.溫度 = uDP_READ_Basic.dht_t.ToString();
-                    temperatureClass.濕度 = uDP_READ_Basic.dht_h.ToString();
-                }
-                if (clientId == "00:E0:4C:04:B2:A5")
-                {
-                    temperatureClass.IP = clientId;
-                    temperatureClass.溫度 = uDP_READ_Basic.dht_t.ToString();
-                    temperatureClass.濕度 = uDP_READ_Basic.dht_h.ToString();
-                }
-
+                temperatureClass.IP = $"({uDP_READ_Basic.IP}){clientId}";
+                temperatureClass.溫度 = uDP_READ_Basic.dht_t.ToString();
+                temperatureClass.濕度 = uDP_READ_Basic.dht_h.ToString();
                 Console.WriteLine($"上傳溫濕度： 溫度 = {temperatureClass.溫度}°C，濕度 = {temperatureClass.濕度}%");
                 temperatureClass.add(dBConfigClass.Api_Server, temperatureClass);
             }
             catch (Exception ex)
             {
+                if (uDP_READ_Basic != null)
+                {
+                    Console.Write($"({uDP_READ_Basic.IP})");
+                }
                 Console.WriteLine($"DHTSensor 訊息處理錯誤：{ex.Message}");
             }
         }
