@@ -3843,7 +3843,7 @@ namespace HIS_WebApi
                 string 操作者姓名 = medInventoryLog.操作者姓名;
 
                 List<string> GUIDs = returnData.ValueAry[0].Split(";").ToList();
-                string 護理站 = returnData.ValueAry[1];
+                //string 護理站 = returnData.ValueAry[1];
 
                 SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
@@ -3890,7 +3890,7 @@ namespace HIS_WebApi
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
                 returnData.Data = sql_medCpoe;
-                returnData.Result = $"更新藥車: {護理站}處方紀錄共{GUIDs.Count}筆";
+                returnData.Result = $"更新藥車: 處方紀錄共{GUIDs.Count}筆";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
@@ -3952,7 +3952,7 @@ namespace HIS_WebApi
                 string 操作者姓名 = medInventoryLog.操作者姓名;
 
                 List<string> GUIDs = returnData.ValueAry[0].Split(";").ToList();
-                string 護理站 = returnData.ValueAry[1];
+                //string 護理站 = returnData.ValueAry[1];
 
                 SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
@@ -3999,7 +3999,7 @@ namespace HIS_WebApi
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
                 returnData.Data = sql_medCpoe;
-                returnData.Result = $"更新藥車: {護理站}處方紀錄共{GUIDs.Count}筆";
+                returnData.Result = $"更新藥車: 處方紀錄共{GUIDs.Count}筆";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
