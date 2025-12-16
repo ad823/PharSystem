@@ -202,12 +202,12 @@ namespace FADC
             {
                 if (Main_Form.PLC_Device_出貨一次.Bool == false)
                 {
-                    
+                    string code = "";
                     objects_storage[(int)Main_Form.enum_儲位資訊.狀態] = "已領過";
                     List<object[]> objects = this.sqL_DataGridView_處方藥品.GetAllRows();
                     for (int i = 0; i < objects.Count; i++)
                     {
-                        string code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
+                        code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
                         if(code == objects_storage[(int)Main_Form.enum_儲位資訊.藥碼].ObjectToString())
                         {
                             objects[i][(int)enum_處方藥品.已取量] = (objects[i][(int)enum_處方藥品.已取量].StringToInt32() + 1).ToString();
@@ -222,6 +222,44 @@ namespace FADC
                         }
                         
                     }
+                    Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(Main_Form.IP_出貨一次);
+                    if (storage != null)
+                    {
+                        string 庫存量 = storage.Inventory;
+                        string 備註 = "";
+                        List<StockClass> stockClasses = storage.庫存異動(-1, true);
+                        Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
+
+                        medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, code);
+
+                        transactionsClass transactionsClass = new transactionsClass();
+                        transactionsClass.GUID = Guid.NewGuid().ToString();
+                        transactionsClass.藥品碼 = code;
+
+                        if(_medClass != null)
+                        {
+                            transactionsClass.藥品名稱 = _medClass.藥品名稱;
+                        }
+                        transactionsClass.庫存量 = 庫存量;
+                        transactionsClass.交易量 = "-1";
+                        transactionsClass.結存量 = storage.Inventory;
+
+                        for (int i = 0; i < stockClasses.Count; i++)
+                        {
+                            備註 += $"[效期]:{stockClasses[i].Validity_period},[批號]:{stockClasses[i].Lot_number}";
+                            if (i != stockClasses.Count - 1) 備註 += "\n";
+                        }
+                        transactionsClass.備註 = 備註;
+
+                        if(Main_Form.personpageClass_調劑畫面 != null)
+                        {
+                            transactionsClass.操作人 = Main_Form.personpageClass_調劑畫面.姓名;
+                            transactionsClass.藥師證字號 = Main_Form.personpageClass_調劑畫面.藥師證字號;
+                            transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
+                        }
+                        transactionsClass.add(Main_Form.API_Server, transactionsClass, Main_Form.ServerName, Main_Form.ServerType);
+                    }
+
                     this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
                     cnt++;
                     return;
