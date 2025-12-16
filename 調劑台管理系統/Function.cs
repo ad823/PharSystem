@@ -258,11 +258,15 @@ namespace 調劑台管理系統
                                            where temp[(int)enum_取藥堆疊母資料.Order_GUID].ObjectToString() == orderClass.GUID
                                            where temp[(int)enum_取藥堆疊母資料.調劑台名稱].ObjectToString() == deviceName
                                            select temp).ToList();
-                        if (list_取藥堆疊資料_buf.Count > 0)
+                        if (Main_Form.PLC_Device_藥單重複刷取要檢查.Bool)
                         {
-                            flag_重複刷取++;
-                            continue;
+                            if (list_取藥堆疊資料_buf.Count > 0)
+                            {
+                                flag_重複刷取++;
+                                continue;
+                            }
                         }
+                         
                         PermissionsClass permissionsClass = _sessionClass.GetPermission("調劑台", "禁止調劑1-3級管制藥品");
                         if (permissionsClass != null)
                         {
@@ -370,7 +374,7 @@ namespace 調劑台管理系統
                 if(flag_重複刷取 > 0)
                 {
                    
-                    if (Main_Form.PLC_Device_藥單重複刷取開檢查.Bool)
+                    if (Main_Form.PLC_Device_藥單重複刷取要檢查.Bool)
                     {
                         Task.Run(new Action(delegate { $"有{flag_重複刷取}筆藥單重複刷取".PlayGooleVoiceAsync(Main_Form.API_Server); }));
                         return;
