@@ -37,7 +37,7 @@ namespace FADC
 
         public Dialog_調劑取藥(List<StockClass> stockClasses)
         {
-            form.Invoke(new Action(delegate 
+            form.Invoke(new Action(delegate
             {
                 InitializeComponent();
             }));
@@ -53,7 +53,7 @@ namespace FADC
             this.sqL_DataGridView_處方藥品.Set_ColumnWidth(150, enum_處方藥品.狀態);
 
             List<object[]> objects = new List<object[]>();
-            for(int i = 0; i < stockClasses.Count; i++)
+            for (int i = 0; i < stockClasses.Count; i++)
             {
                 object[] value = new object[new enum_處方藥品().GetLength()];
                 value[(int)enum_處方藥品.GUID] = i;
@@ -103,12 +103,12 @@ namespace FADC
             if (cnt == 1)
             {
                 List<object[]> objects = this.sqL_DataGridView_處方藥品.GetAllRows();
-                for(int i = 0; i < objects.Count; i++)
+                for (int i = 0; i < objects.Count; i++)
                 {
                     string code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
                     double storage_qty = Main_Form.Function_從SQL取得庫存(code);
                     int qty = Math.Abs(objects[i][(int)enum_處方藥品.領藥量].StringToInt32());
-                    if(storage_qty <  qty)
+                    if (storage_qty < qty)
                     {
                         objects[i][(int)enum_處方藥品.狀態] = "庫存不足";
                     }
@@ -132,13 +132,13 @@ namespace FADC
                         for (int k = 0; k < (int)qty; k++)
                         {
                             List<object[]> objects_ = Main_Form.Function_取得異動儲位資訊從本地資料(code, -1);
-                            if(objects_.Count > 0)
+                            if (objects_.Count > 0)
                             {
                                 objects_[0][(int)Main_Form.enum_儲位資訊.藥碼] = code;
                                 objects_storages.Add(objects_[0]);
                             }
-                        }            
-                    }              
+                        }
+                    }
                     this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
                 }
                 cnt++;
@@ -147,7 +147,7 @@ namespace FADC
             {
                 bool flag_有藥品要取 = false;
                 objects_storage = null;
-                for (int i  = 0; i < objects_storages.Count; i++)
+                for (int i = 0; i < objects_storages.Count; i++)
                 {
                     if (objects_storages[i][(int)Main_Form.enum_儲位資訊.狀態].ObjectToString() == "已領過") continue;
 
@@ -156,7 +156,7 @@ namespace FADC
                     storageMedBoxIOConfigClass storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP).FirstOrDefault();
                     if (storageMedBoxIO == null) continue;
                     Console.WriteLine($"{IP} : {storageMedBoxIO.出料位置X},{storageMedBoxIO.出料位置Y}");
-                    if(list_取過X格數.Contains(storageMedBoxIO.出料位置X.StringToInt32()) == false)
+                    if (list_取過X格數.Contains(storageMedBoxIO.出料位置X.StringToInt32()) == false)
                     {
                         objects_storage = objects_storages[i];
                         list_取過X格數.Add(storageMedBoxIO.出料位置X.StringToInt32());
@@ -169,7 +169,7 @@ namespace FADC
 
                     }
                 }
-                if(flag_有藥品要取)
+                if (flag_有藥品要取)
                 {
                     cnt = 500;
                 }
@@ -178,7 +178,7 @@ namespace FADC
                     cnt = 1000;
                 }
             }
-            if(cnt == 500)
+            if (cnt == 500)
             {
                 if (Main_Form.PLC_Device_出貨一次.Bool == false)
                 {
@@ -208,7 +208,7 @@ namespace FADC
                     for (int i = 0; i < objects.Count; i++)
                     {
                         code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
-                        if(code == objects_storage[(int)Main_Form.enum_儲位資訊.藥碼].ObjectToString())
+                        if (code == objects_storage[(int)Main_Form.enum_儲位資訊.藥碼].ObjectToString())
                         {
                             objects[i][(int)enum_處方藥品.已取量] = (objects[i][(int)enum_處方藥品.已取量].StringToInt32() + 1).ToString();
                             if (objects[i][(int)enum_處方藥品.已取量].ObjectToString() == objects[i][(int)enum_處方藥品.領藥量].ObjectToString())
@@ -220,7 +220,7 @@ namespace FADC
                                 objects[i][(int)enum_處方藥品.狀態] = "待命中";
                             }
                         }
-                        
+
                     }
                     Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(Main_Form.IP_出貨一次);
                     if (storage != null)
@@ -229,14 +229,17 @@ namespace FADC
                         string 備註 = "";
                         List<StockClass> stockClasses = storage.庫存異動(-1, true);
                         Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
-
+                        Task.Run(new Action(delegate
+                        {
+                            Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
+                        }));
                         medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, code);
 
                         transactionsClass transactionsClass = new transactionsClass();
                         transactionsClass.GUID = Guid.NewGuid().ToString();
                         transactionsClass.藥品碼 = code;
 
-                        if(_medClass != null)
+                        if (_medClass != null)
                         {
                             transactionsClass.藥品名稱 = _medClass.藥品名稱;
                         }
@@ -251,7 +254,7 @@ namespace FADC
                         }
                         transactionsClass.備註 = 備註;
 
-                        if(Main_Form.personpageClass_調劑畫面 != null)
+                        if (Main_Form.personpageClass_調劑畫面 != null)
                         {
                             transactionsClass.操作人 = Main_Form.personpageClass_調劑畫面.姓名;
                             transactionsClass.藥師證字號 = Main_Form.personpageClass_調劑畫面.藥師證字號;
@@ -287,7 +290,7 @@ namespace FADC
                         flag_已完成 = false;
 
                     }
-                    if(flag_已完成)
+                    if (flag_已完成)
                     {
                         cnt = 65500;
                         return;
@@ -297,10 +300,10 @@ namespace FADC
                         cnt = 3;
                         return;
                     }
-                
+
                 }
             }
-            if(cnt == 65500)
+            if (cnt == 65500)
             {
                 "取藥完成".PlayGooleVoiceAsync(Main_Form.API_Server);
                 Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("取藥完成", 1500, Color.Green);

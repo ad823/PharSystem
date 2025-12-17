@@ -1477,19 +1477,20 @@ namespace 調劑台管理系統
             List<object[]> list_value = Main_Form._sqL_DataGridView_人員資料.SQL_GetAllRows(false);
             list_value = list_value.GetRows((int)enum_人員資料.ID, textBox_帳號.Texts);
             List<personTimePeriodClass> personTimePeriods = personPageClass.get_person_time_period(Main_Form.API_Server);
-            personTimePeriodClass personTimePeriod = personTimePeriods.Where(x => x.ID == list_value[0][(int)enum_人員資料.ID].ObjectToString()).FirstOrDefault();
-            if (personTimePeriod == null)
+            if (personTimePeriods != null)
             {
-          
-            }
-            else
-            {
-                if (personTimePeriodClass.IsAllowedNow(personTimePeriod, DateTime.Now) == false)
+                personTimePeriodClass personTimePeriod = personTimePeriods.Where(x => x.ID == list_value[0][(int)enum_人員資料.ID].ObjectToString()).FirstOrDefault();
+                if (personTimePeriod != null)
                 {
-                    MyMessageBox.ShowDialog("非允許時段登入");
-                    return;
+                    if (personTimePeriodClass.IsAllowedNow(personTimePeriod, DateTime.Now) == false)
+                    {
+                        MyMessageBox.ShowDialog("非允許時段登入");
+                        return;
+                    }
                 }
             }
+          
+          
             if (list_value.Count == 0)
             {
                 Dialog_錯誤提示 dialog_錯誤提示 = new Dialog_錯誤提示("查無此帳號", 2000);
