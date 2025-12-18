@@ -1,6 +1,6 @@
 {
-  "主機扣帳模式": false,
-  "主機輸出模式": false,
+  "主機扣帳模式": true,
+  "主機輸出模式": true,
   "RFID使用": true,
   "掃碼槍COM通訊": true,
   "RFID_COMPort": "COM1",
