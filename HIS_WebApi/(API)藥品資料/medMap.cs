@@ -83,7 +83,7 @@ namespace HIS_WebApi._API_藥品資料
                 }
                 string barcode = returnData.Value;
                 string 藥碼 = string.Empty;
-                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                string VM_API = Method.GetServerAPI("Main", "網頁", "medmap_barcode");
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
