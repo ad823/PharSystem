@@ -72,22 +72,27 @@ namespace HIS_WebApi
                 }
                 string barcode = returnData.ValueAry[0];
                 string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
-                    string json_out = Net.WEBApiPostJson(VM_API, json_in);                    
-                    return json_out;
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥袋條碼回傳錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_barcode = json_out.JsonDeserializet<returnData>();
+                    drugStotreDistributionClass drugStotreDistributionClass = returnData_barcode.Data.ObjToClass<drugStotreDistributionClass>();
+                    if (drugStotreDistributionClass != null && drugStotreDistributionClass.藥碼.StringIsEmpty() == false)
+                    {
+                        drugstotreDistributions = drugStotreDistributionClass;
+                    }
                 }
-                string[] ary = barcode.Split(';');
-                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
-                if (ary.Length >= 2)
+                if (drugstotreDistributions == null) 
                 {
-                    drugstotreDistributions.藥碼 = ary[0];
-                    drugstotreDistributions.撥發量 = ary[1];
-                }
-                if (ary.Length == 1)
-                {
-                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(ary[0]);
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
                     if (returnData_ != null && returnData_.Data != null)
                     {
                         medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
@@ -97,6 +102,7 @@ namespace HIS_WebApi
                         }
                     }
                 }
+                
 
 
                 returnData.Result = $"撥補資料讀取成功";
