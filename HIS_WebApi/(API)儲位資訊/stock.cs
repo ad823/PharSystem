@@ -35,6 +35,20 @@ namespace HIS_WebApi
 
                return (Server, DB, UserName, Password, Port);
            });
+        [HttpPost("init")]
+        public async Task<string> init([FromBody] returnData returnData)
+        {
+            try
+            {
+                return await CheckCreatTable(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"{ex.Message}";
+                return returnData.JsonSerializationt();
+            }
+        }
         [HttpPost("get_stock")]
         public async Task<string> get_stock([FromBody] returnData returnData)
         {
@@ -47,6 +61,7 @@ namespace HIS_WebApi
                     returnData.Result = "ServerName or ServerType is null";
                     return returnData.JsonSerializationt(true);
                 }
+                await init(returnData);
                 string ServerName = returnData.ServerName;
                 string ServerType = returnData.ServerType;
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
@@ -70,10 +85,12 @@ namespace HIS_WebApi
                 returnData returnData_content_get = await new inspectionController().content_get();
                 List<inspectionClass.content> contents = new List<inspectionClass.content>();
 
-                if (returnData_med_unit != null || returnData_med_unit.Code == 200)
+                if (returnData_content_get != null || returnData_content_get.Code == 200)
                 {
                     contents = returnData_content_get.Data.ObjToClass<List<inspectionClass.content>>();
                 }
+                if (contents == null) contents = new List<inspectionClass.content>();
+
                 List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
                 Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
 
@@ -437,6 +454,13 @@ namespace HIS_WebApi
                 stock.批號 = deviceBasic.List_Lot_number;
             }
             return medMap_stockClasses;
+        }
+        private async Task<string> CheckCreatTable(returnData returnData)
+        {
+            sys_serverSettingClass sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+            List<Table> tables = new List<Table>();
+            tables.Add(MethodClass.CheckCreatTable<stockClass>(sys_ServerSettingClass));
+            return tables.JsonSerializationt(true);
         }
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<returnData> get_stock_all_server()

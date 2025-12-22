@@ -489,9 +489,9 @@ namespace HIS_WebApi
                     medCpoe_sql_replace.AddRange(medCpoe_sql_replace_buff);
                 }
 
-                medCpoe_sql_add = CheckUpdateTime(medCpoe_sql_add);
-                medCpoe_sql_replace = CheckUpdateTime(medCpoe_sql_replace);
-                medCpoe_sql_delete = CheckUpdateTime(medCpoe_sql_delete);
+                //medCpoe_sql_add = CheckUpdateTime(medCpoe_sql_add);
+                //medCpoe_sql_replace = CheckUpdateTime(medCpoe_sql_replace);
+                //medCpoe_sql_delete = CheckUpdateTime(medCpoe_sql_delete);
 
                 medCpoe_sql_add = medCpoe_sql_add.GroupBy(x => new { x.Master_GUID, x.PRI_KEY }).Select(g => g.First()).ToList();
 
@@ -1477,7 +1477,7 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 if (settingPages != null && settingPages.設定值 == true.ToString()) sql_medCpoe = sql_medCpoe.Where(temp => temp.DC確認.StringIsEmpty()).ToList();
-                string API = await taskApi;
+                string API = "http://127.0.0.1:4433";
                 returnData returnData_nearmiss = await task_nearmiss;
                 if (returnData_nearmiss == null || returnData_nearmiss.Code != 200) returnData_nearmiss = new returnData();
                 List<nearMissClass> nearMisses = returnData_nearmiss.Data.ObjToClass<List<nearMissClass>>();
@@ -1779,8 +1779,13 @@ namespace HIS_WebApi
 
                 List<object[]> list_med_cpoe = await sQLControl_med_cpoe.WriteCommandAsync(sqlCpoe, paramCpoe, ct);
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-
                 Dictionary<string, List<medCpoeClass>> medCpoeDict = medCpoeClass.ToDictByMasterGUID(sql_medCpoe);
+                //取藥檔
+                List<string> Codes = sql_medCpoe.Select(temp => temp.藥碼).Distinct().ToList();
+                if (Codes.Count == 1) Codes[0] = Codes[0] + ",";
+                List<medClass> med_cloud = medClass.get_med_clouds_by_codes(APIServer, Codes);
+                Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
+
                 List<bedStatusClass> bedStatusClasses = await task_get_bed_status;
                 Dictionary<string, List<bedStatusClass>> inputBedStatusDict = bedStatusClass.ToDictByID(bedStatusClasses);
                 List<patientInfoClass> sql_patinfo_buff = new List<patientInfoClass>();
@@ -1788,6 +1793,10 @@ namespace HIS_WebApi
                 {
                     List<medCpoeClass> targetCpoe = medCpoeClass.GetByMasterGUID(medCpoeDict, item.GUID);
                     if (targetCpoe != null && targetCpoe.Count > 0) item.處方 = targetCpoe;
+                    foreach (var order in targetCpoe)
+                    {                       
+                        order.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, order.藥碼);
+                    }
                     List<bedStatusClass> bedStatus_buff = bedStatusClass.GetByID(inputBedStatusDict, item.病歷號);
                     bedStatusClass bedStatus = bedStatus_buff.Where(temp => temp.狀態 == "轉床").OrderByDescending(x => x.轉床時間).FirstOrDefault();
                     if (bedStatus != null) item.轉床狀態 = bedStatus;
