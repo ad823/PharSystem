@@ -45,7 +45,7 @@ namespace HIS_WebApi
     public class med_cart : ControllerBase
     {
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        private string APIServer = Method.GetServerAPI("Main", "網頁", "API01");
+        private string APIServer = "http://127.0.0.1:4433";
         private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
            serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
            {
@@ -1061,7 +1061,7 @@ namespace HIS_WebApi
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("update_large_in_med_cpoe")]
-        public string update_large_in_med_cpoe([FromBody] returnData returnData)
+        public async Task<string> update_large_in_med_cpoe([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "update_large_in_med_cpoe";
@@ -1084,7 +1084,7 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByDefult(null, (int)enum_med_cpoe.GUID, GUID);
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
                 sql_medCpoe[0].大瓶點滴 = 大瓶藥標記;
-                sql_medCpoe = CheckUpdateTime(sql_medCpoe);
+                sql_medCpoe = await CheckUpdateTime(sql_medCpoe);
                 List<object[]> list_medCpoe_replace = sql_medCpoe.ClassToSQL<medCpoeClass, enum_med_cpoe>();
                 if (list_medCpoe_replace.Count > 0)
                 {
@@ -3034,7 +3034,7 @@ namespace HIS_WebApi
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("check_dispense")]
-        public string check_dispense([FromBody] returnData returnData)
+        public async Task<string> check_dispense([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "check_dispense";
@@ -3059,7 +3059,7 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+                string API = "http://127.0.0.1:4433";
 
                 string Master_GUID = returnData.Value;
                 string[] GUID = returnData.ValueAry[0].Split(";");
@@ -3068,7 +3068,7 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByDefult(null, (int)enum_med_cpoe.Master_GUID, Master_GUID);
 
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-                sql_medCpoe = CheckUpdateTime(sql_medCpoe);
+                sql_medCpoe = await CheckUpdateTime(sql_medCpoe);
                 if (sql_medCpoe.Count == 0)
                 {
                     returnData.Code = -200;
@@ -3193,7 +3193,7 @@ namespace HIS_WebApi
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("check_dispense_by_GUID")]
-        public string check_dispense_by_GUID([FromBody] returnData returnData)
+        public async Task<string> check_dispense_by_GUID([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "check_dispense_by_GUID";
@@ -3216,7 +3216,7 @@ namespace HIS_WebApi
                 string 操作者姓名 = medInventoryLog.操作者姓名;
 
                 (string Server, string DB, string UserName, string Password, uint Port) = Method.GetServerInfo("Main", "網頁", "VM端");
-                string API = Method.GetServerAPI("Main", "網頁", "API01");
+                //string API = Method.GetServerAPI("Main", "網頁", "API01");
 
                 string Master_GUID = returnData.ValueAry[0];
                 string GUID = returnData.ValueAry[1];
@@ -3226,7 +3226,7 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByDefult(null, (int)enum_med_cpoe.Master_GUID, Master_GUID);
 
                 List<medCpoeClass> medCpoe_sql_replace = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-                medCpoe_sql_replace = CheckUpdateTime(medCpoe_sql_replace);
+                medCpoe_sql_replace = await CheckUpdateTime(medCpoe_sql_replace);
                 List<medCpoeClass> debit_medcpoe = new List<medCpoeClass>();
                 List<medCpoeClass> refund_medcpoe = new List<medCpoeClass>();
                 if (medCpoe_sql_replace.Count == 0)
@@ -3506,7 +3506,7 @@ namespace HIS_WebApi
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("double_check")]
-        public string double_check([FromBody] returnData returnData)
+        public async Task<string> double_check([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "double_check";
@@ -3531,7 +3531,7 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
+                string API = "http://127.0.0.1:4433";
 
                 string Master_GUID = returnData.Value;
                 string[] GUID = returnData.ValueAry[0].Split(";");
@@ -3540,7 +3540,7 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByDefult(null, (int)enum_med_cpoe.Master_GUID, Master_GUID);
 
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-                sql_medCpoe = CheckUpdateTime(sql_medCpoe);
+                sql_medCpoe = await CheckUpdateTime(sql_medCpoe);
                 if (sql_medCpoe.Count == 0)
                 {
                     returnData.Code = -200;
@@ -3585,7 +3585,6 @@ namespace HIS_WebApi
                 List<object[]> list_medCpoe_replace = medCpoe_sql_replace.ClassToSQL<medCpoeClass, enum_med_cpoe>();
                 if (list_medCpoe_replace.Count > 0)
                 {
-                    //Logger.Log($"medCpoe-{護理站}", $"update_double_check \n {medCpoe_sql_replace.JsonSerializationt(true)}");
                     sQLControl_med_cpoe.UpdateByDefulteExtra(null, list_medCpoe_replace);
                 }
 
@@ -3617,7 +3616,7 @@ namespace HIS_WebApi
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("double_check_by_GUID")]
-        public string double_check_by_GUID([FromBody] returnData returnData)
+        public async Task<string> double_check_by_GUID([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "double_check_by_GUID";
@@ -3659,7 +3658,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
                 List<object[]> list_med_cpoe = sQLControl_med_cpoe.GetRowsByDefult(null, (int)enum_med_cpoe.GUID, GUID);
                 List<medCpoeClass> medCpoe_sql_replace = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-                medCpoe_sql_replace = CheckUpdateTime(medCpoe_sql_replace);
+                medCpoe_sql_replace = await CheckUpdateTime(medCpoe_sql_replace);
                 if (medCpoe_sql_replace.Count == 0)
                 {
                     returnData.Code = 200;
@@ -5723,9 +5722,9 @@ namespace HIS_WebApi
             else if (type == "Master_GUID") command = $"SELECT * FROM dbvm.{tableName} WHERE Master_GUID = '{GUID}';";
             return command;
         }
-        private List<medCpoeClass> CheckUpdateTime(List<medCpoeClass> medCpoeClasses)
+        private async Task<List<medCpoeClass>> CheckUpdateTime(List<medCpoeClass> medCpoeClasses)
         {
-            (string StartTime, string Endtime) = GetToday();
+            (string StartTime, string Endtime) = await GetTodayAsync();
             DateTime start = StartTime.StringToDateTime();
             DateTime end = Endtime.StringToDateTime();
             medCpoeClasses = medCpoeClasses.Where(temp => temp.更新時間.StringIsEmpty() == false && DateTime.TryParse(temp.更新時間, out DateTime parsedTime) && parsedTime >= start && parsedTime <= end).ToList();
