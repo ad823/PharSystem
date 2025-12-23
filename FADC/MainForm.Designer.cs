@@ -10172,6 +10172,7 @@
             this.ClientSize = new System.Drawing.Size(1904, 1061);
             this.Controls.Add(this.plC_ScreenPage_Main);
             this.Controls.Add(this.panel_Main);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Main_Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
