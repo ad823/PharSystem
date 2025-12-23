@@ -24,6 +24,7 @@ namespace Hospital_Call_Light_System
 
     public partial class Form1 : System.Windows.Forms.Form
     {
+        private GlobalKeyboardScanner _scanner;
         public enum enum_顯示方式
         {
             號碼,
@@ -306,6 +307,7 @@ namespace Hospital_Call_Light_System
         public class MyConfigClass
         {
             private string scanner01_COMPort = "COM1";
+            private bool _鍵盤掃碼模式 = true;
             private enum_顯示方式 _一號台_顯示方式 = enum_顯示方式.號碼;
             private enum_顯示方式 _二號台_顯示方式 = enum_顯示方式.號碼;
             private int _一號台_顯示圖片控制 = 0;
@@ -354,6 +356,7 @@ namespace Hospital_Call_Light_System
             public int 一號台_顯示圖片控制 { get => _一號台_顯示圖片控制; set => _一號台_顯示圖片控制 = value; }
             public int 二號台_顯示圖片控制 { get => _二號台_顯示圖片控制; set => _二號台_顯示圖片控制 = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
+            public bool 鍵盤掃碼模式 { get => _鍵盤掃碼模式; set => _鍵盤掃碼模式 = value; }
         }
         private void LoadMyConfig()
         {
@@ -432,7 +435,23 @@ namespace Hospital_Call_Light_System
             this.checkBox_本地音效.Checked = myConfigClass.本地音效;
             this.checkBox_全局音效.Checked = myConfigClass.全局音效;
 
+            _scanner = new GlobalKeyboardScanner(200);
+            _scanner.OnScanCompleted += scan =>
+            {
+                Console.WriteLine($"掃碼完成: {scan}");
+                byte[] data = Encoding.UTF8.GetBytes(scan);
+                MySerialPort_Scanner01.SetReadByte(data);
+            };
+
+            _scanner.Start();
+            this.FormClosing += Form1_FormClosing;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _scanner?.Dispose();
+        }
+
         private void PlC_UI_Init_UI_Finished_Event()
         {
             PLC_UI_Init.Set_PLC_ScreenPage(this.panel_Main, this.plC_ScreenPage_Main);
@@ -458,12 +477,17 @@ namespace Hospital_Call_Light_System
         {
             if(dBConfigClass.OrderApiURL.StringIsEmpty() == false)
             {
-                if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false && flag_mySerialPort == false)
+                MySerialPort_Scanner01.ConsoleWrite = true;
+                if (myConfigClass.鍵盤掃碼模式 == false)
                 {
-                    MySerialPort_Scanner01.Init(myConfigClass.Scanner01_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.None);
-                    MySerialPort_Scanner01.SerialPortOpen();
-                    flag_mySerialPort = true;
+                    if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false && flag_mySerialPort == false)
+                    {
+                        MySerialPort_Scanner01.Init(myConfigClass.Scanner01_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                        MySerialPort_Scanner01.SerialPortOpen();
+                        flag_mySerialPort = true;
+                    }
                 }
+                   
                 string text = Function_ReadBacodeScanner01();
                 if (text == null) return;
                 if (text.StringIsEmpty()) return;
@@ -499,6 +523,7 @@ namespace Hospital_Call_Light_System
         {
             try
             {
+
                 System.Threading.Thread.Sleep(200);
                 string text = MySerialPort_Scanner01.ReadString();
                 if (text == null) return null;
@@ -650,5 +675,7 @@ namespace Hospital_Call_Light_System
 
             return orderClasses;
         }
+
+ 
     }
 }
