@@ -250,7 +250,10 @@ namespace 調劑台管理系統
         void cnt_Program_後台登入_RFID登入_外部設備資料(ref int cnt)
         {
             string RFID = "0";
-            List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID = this.rfiD_FX600_UI.Get_RFID();
+
+   
+            List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID = new List<RFID_FX600lib.RFID_FX600_UI.RFID_Device>();
+            if(myConfigClass.使用ISW_RFID == false) list_RFID = this.rfiD_FX600_UI.Get_RFID();
 
             for (int i = 0; i < List_RFID_本地資料.Count; i++)
             {
@@ -273,6 +276,29 @@ namespace 調劑台管理系統
                 {
                     RFID = list_RFID[0].UID;
                 }           
+            }
+            if (myConfigClass.使用ISW_RFID == true)
+            {
+                byte[] bytes = serialPort_ISW.ReadByteEx();
+              
+                if (bytes != null)
+                {
+                    if (bytes.Length != 18)
+                    {
+                        serialPort_ISW.ClearReadByte();
+                        cnt = 65500;
+                        return;
+                    }
+                    string hexs = bytes.ByteToStringHex();
+                    hexs = hexs.Replace("-", "");
+
+                    hexs = hexs.Substring(12, 20);
+                    serialPort_ISW.ClearReadByte();
+                    RFID = hexs;
+                    
+                    Console.WriteLine($"ISW : {hexs}");
+                }
+  
             }
             if (RFID.StringToInt32() == 0 || RFID.StringIsEmpty())
             {

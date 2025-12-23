@@ -229,6 +229,7 @@ namespace 調劑台管理系統
         #endregion
         #region MyConfigClass
         private static string MyConfigFileName = $@"{currentDirectory}\MyConfig.txt";
+        static public  MySerialPort serialPort_ISW = new MySerialPort();
         static public MyConfigClass myConfigClass = new MyConfigClass();
         public class MyConfigClass
         {
@@ -248,6 +249,7 @@ namespace 調劑台管理系統
             private bool pannel35_Enable = true;
             private bool _舊版晶片 = false;
             private bool _使用HID指紋機 = false;
+            private bool _使用ISW_RFID = false;
 
             private int ePD583_Port = 29005;
             private int ePD266_Port = 29000;
@@ -308,6 +310,7 @@ namespace 調劑台管理系統
             public string 批次領藥篩選 { get => _批次領藥篩選; set => _批次領藥篩選 = value; }
             public string QRCode_url { get => qRCode_url; set => qRCode_url = value; }
             public bool 使用HID指紋機 { get => _使用HID指紋機; set => _使用HID指紋機 = value; }
+            public bool 使用ISW_RFID { get => _使用ISW_RFID; set => _使用ISW_RFID = value; }
         }
         private void LoadMyConfig()
         {
@@ -873,29 +876,40 @@ namespace 調劑台管理系統
                     _RFID_FX600_UI = this.rfiD_FX600_UI;
                     if (myConfigClass.RFID使用 == false) break;
 
+
+
                     if (MyTimer_rfiD_FX600_UI_Init.IsTimeOut() && !flag_rfiD_FX600_UI_Init)
                     {
                         if (myConfigClass.RFID使用)
                         {
-                            int num = 1;
-                            if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
+                            if(myConfigClass.使用ISW_RFID == false)
                             {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner02_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner03_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner04_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
+                                int num = 1;
+                                if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner02_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner03_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner04_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
 
-                            this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+                                this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+                            }
+                            else
+                            {
+                                serialPort_ISW.Init(myConfigClass.RFID_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                                serialPort_ISW.SerialPortOpen();
+                            }
+                           
 
                         }
                         flag_rfiD_FX600_UI_Init = true;

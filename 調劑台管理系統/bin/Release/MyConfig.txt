@@ -3,7 +3,7 @@
   "主機輸出模式": true,
   "RFID使用": true,
   "掃碼槍COM通訊": true,
-  "RFID_COMPort": "COM1",
+  "RFID_COMPort": "COM4",
   "Scanner01_COMPort": "COM2",
   "Scanner02_COMPort": "",
   "Scanner03_COMPort": "",
@@ -33,5 +33,6 @@
   "HFRFID_2_COMPort": "",
   "批次領藥篩選": "",
   "QRCode_url": "",
-  "使用HID指紋機": false
+  "使用HID指紋機": false,
+  "使用ISW_RFID": true
 }

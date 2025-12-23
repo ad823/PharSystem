@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using HIS_DB_Lib;
 using Basic;
 using MyUI;
+using NPOI.SS.Formula.Functions;
+using static RFID_FX600lib.RFID_ESP32_UI;
 
 namespace 調劑台管理系統
 {
@@ -31,19 +33,55 @@ namespace 調劑台管理系統
      
         private void sub_program()
         {
-            if(Main_Form.人員資料_UID.StringIsEmpty() == false && this.IsHandleCreated)
+
+            if (Main_Form.myConfigClass.使用ISW_RFID == true)
             {
-                this.Invoke(new Action(delegate
+                byte[] bytes = Main_Form.serialPort_ISW.ReadByteEx();
+
+                if (bytes != null)
                 {
-                    Value = Main_Form.人員資料_UID;
-                    this.label_state.Text = $"成功刷入!{Value}";
-                    this.label_state.BackColor = Color.GreenYellow;
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(1000);
-                    this.DialogResult = DialogResult.Yes;
-                    this.Close();
-                }));
+                    if (bytes.Length != 18)
+                    {
+                        Main_Form.serialPort_ISW.ClearReadByte();
+                        return;
+                    }
+                    string hexs = bytes.ByteToStringHex();
+                    hexs = hexs.Replace("-", "");
+
+                    hexs = hexs.Substring(12, 20);
+                    Main_Form.serialPort_ISW.ClearReadByte();
+
+                    this.Invoke(new Action(delegate
+                    {
+                        Value = hexs;
+                        this.label_state.Text = $"成功刷入!{Value}";
+                        this.label_state.BackColor = Color.GreenYellow;
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(1000);
+                        this.DialogResult = DialogResult.Yes;
+                        this.Close();
+                    }));
             
+
+                }
+
+            }
+            else
+            {
+                if (Main_Form.人員資料_UID.StringIsEmpty() == false && this.IsHandleCreated)
+                {
+                    this.Invoke(new Action(delegate
+                    {
+                        Value = Main_Form.人員資料_UID;
+                        this.label_state.Text = $"成功刷入!{Value}";
+                        this.label_state.BackColor = Color.GreenYellow;
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(1000);
+                        this.DialogResult = DialogResult.Yes;
+                        this.Close();
+                    }));
+
+                }
             }
         }
         #region Event
