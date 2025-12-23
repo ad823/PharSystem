@@ -243,6 +243,7 @@ namespace FADC
                         {
                             transactionsClass.藥品名稱 = _medClass.藥品名稱;
                         }
+                        transactionsClass.動作 = enum_交易記錄查詢動作.掃碼領藥.GetEnumName();
                         transactionsClass.庫存量 = 庫存量;
                         transactionsClass.交易量 = "-1";
                         transactionsClass.結存量 = storage.Inventory;

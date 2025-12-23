@@ -531,7 +531,7 @@ namespace FADC
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"({storage.IP})";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -620,7 +620,7 @@ namespace FADC
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"({storage.IP})";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 

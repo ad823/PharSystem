@@ -104,12 +104,14 @@ namespace FADC
             double 異動 = rJ_Lable_數量.Text.StringToDouble();
             double 結存 = 庫存 + 異動;
             transactionsClass transactionsClass = new transactionsClass();
+            transactionsClass.GUID = Guid.NewGuid().ToString();
             transactionsClass.動作 = enum_交易記錄查詢動作.入庫作業.GetEnumName();
             transactionsClass.藥品碼 = _medClass.藥品碼;
             transactionsClass.藥品名稱 = _medClass.藥品名稱;
             transactionsClass.庫存量 = 庫存.ToString();
             transactionsClass.交易量 = 異動.ToString();
             transactionsClass.結存量 = 結存.ToString();
+            transactionsClass.收支原因 = $"({device.IP})";
             transactionsClass.備註 = $"[效期]:{rJ_Lable_效期.Text},[批號]:{rJ_Lable_批號.Text}";
     
             device.效期庫存異動(rJ_Lable_效期.Text, rJ_Lable_批號.Text, 異動.ToString());

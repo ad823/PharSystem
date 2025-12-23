@@ -411,48 +411,48 @@ namespace 調劑台管理系統
         }
         private static void PrintTakeMedicineStackDetail(takeMedicineStackClass tm, int index)
         {
-            Logger.Log("===============================================");
-            Logger.Log($"【取藥堆疊資料 - 第 {index} 筆】");
+            Console.WriteLine("===============================================");
+            Console.WriteLine($"【取藥堆疊資料 - 第 {index} 筆】");
 
-            Logger.Log($" GUID                : {tm.GUID}");
-            Logger.Log($" Order_GUID          : {tm.Order_GUID}");
-            Logger.Log($" 序號                : {tm.序號}");
-            Logger.Log($" 調劑台名稱          : {tm.調劑台名稱}");
-            Logger.Log($" IP                  : {tm.IP}");
-            Logger.Log($" 操作人              : {tm.操作人}");
-            Logger.Log($" ID                  : {tm.ID}");
-            Logger.Log($" 藥師證字號          : {tm.藥師證字號}");
-            Logger.Log($" 覆核藥師姓名        : {tm.覆核藥師姓名}");
-            Logger.Log($" 覆核藥師ID          : {tm.覆核藥師ID}");
-            Logger.Log($" 動作                : {tm.動作}");
-            Logger.Log($" 作業模式            : {tm.作業模式}");
-            Logger.Log($" 藥袋序號            : {tm.藥袋序號}");
-            Logger.Log($" 領藥號              : {tm.領藥號}");
-            Logger.Log($" 病房號              : {tm.病房號}");
-            Logger.Log($" 類別                : {tm.類別}");
-            Logger.Log($" 藥品碼              : {tm.藥品碼}");
-            Logger.Log($" 藥品名稱            : {tm.藥品名稱}");
-            Logger.Log($" 單位                : {tm.單位}");
-            Logger.Log($" 病歷號              : {tm.病歷號}");
-            Logger.Log($" 病人姓名            : {tm.病人姓名}");
-            Logger.Log($" 床號                : {tm.床號}");
-            Logger.Log($" 頻次                : {tm.頻次}");
-            Logger.Log($" 開方時間            : {tm.開方時間}");
-            Logger.Log($" 操作時間            : {tm.操作時間}");
-            Logger.Log($" 顏色                : {tm.顏色}");
-            Logger.Log($" 狀態                : {tm.狀態}");
-            Logger.Log($" 庫存量              : {tm.庫存量}");
-            Logger.Log($" 總異動量            : {tm.總異動量}");
-            Logger.Log($" 結存量              : {tm.結存量}");
-            Logger.Log($" 盤點量              : {tm.盤點量}");
-            Logger.Log($" 效期                : {tm.效期}");
-            Logger.Log($" 批號                : {tm.批號}");
-            Logger.Log($" 備註                : {tm.備註}");
-            Logger.Log($" 收支原因            : {tm.收支原因}");
-            Logger.Log($" 診別                : {tm.診別}");
-            Logger.Log($" 儲位描述            : {tm.儲位描述}");
+            Console.WriteLine($" GUID                : {tm.GUID}");
+            Console.WriteLine($" Order_GUID          : {tm.Order_GUID}");
+            Console.WriteLine($" 序號                : {tm.序號}");
+            Console.WriteLine($" 調劑台名稱          : {tm.調劑台名稱}");
+            Console.WriteLine($" IP                  : {tm.IP}");
+            Console.WriteLine($" 操作人              : {tm.操作人}");
+            Console.WriteLine($" ID                  : {tm.ID}");
+            Console.WriteLine($" 藥師證字號          : {tm.藥師證字號}");
+            Console.WriteLine($" 覆核藥師姓名        : {tm.覆核藥師姓名}");
+            Console.WriteLine($" 覆核藥師ID          : {tm.覆核藥師ID}");
+            Console.WriteLine($" 動作                : {tm.動作}");
+            Console.WriteLine($" 作業模式            : {tm.作業模式}");
+            Console.WriteLine($" 藥袋序號            : {tm.藥袋序號}");
+            Console.WriteLine($" 領藥號              : {tm.領藥號}");
+            Console.WriteLine($" 病房號              : {tm.病房號}");
+            Console.WriteLine($" 類別                : {tm.類別}");
+            Console.WriteLine($" 藥品碼              : {tm.藥品碼}");
+            Console.WriteLine($" 藥品名稱            : {tm.藥品名稱}");
+            Console.WriteLine($" 單位                : {tm.單位}");
+            Console.WriteLine($" 病歷號              : {tm.病歷號}");
+            Console.WriteLine($" 病人姓名            : {tm.病人姓名}");
+            Console.WriteLine($" 床號                : {tm.床號}");
+            Console.WriteLine($" 頻次                : {tm.頻次}");
+            Console.WriteLine($" 開方時間            : {tm.開方時間}");
+            Console.WriteLine($" 操作時間            : {tm.操作時間}");
+            Console.WriteLine($" 顏色                : {tm.顏色}");
+            Console.WriteLine($" 狀態                : {tm.狀態}");
+            Console.WriteLine($" 庫存量              : {tm.庫存量}");
+            Console.WriteLine($" 總異動量            : {tm.總異動量}");
+            Console.WriteLine($" 結存量              : {tm.結存量}");
+            Console.WriteLine($" 盤點量              : {tm.盤點量}");
+            Console.WriteLine($" 效期                : {tm.效期}");
+            Console.WriteLine($" 批號                : {tm.批號}");
+            Console.WriteLine($" 備註                : {tm.備註}");
+            Console.WriteLine($" 收支原因            : {tm.收支原因}");
+            Console.WriteLine($" 診別                : {tm.診別}");
+            Console.WriteLine($" 儲位描述            : {tm.儲位描述}");
 
-            Logger.Log("===============================================");
+            Console.WriteLine("===============================================");
         }
 
         private object[] Function_取藥堆疊資料_新增子資料(string Master_GUID, string Device_GUID, string 調劑台名稱, string 藥品碼, string IP, string Num, string _enum_取藥堆疊_TYPE, string 效期, string 批號, string 異動量)
