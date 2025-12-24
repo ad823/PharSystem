@@ -46,10 +46,10 @@ namespace 調劑台管理系統
             this.transparentPanel = new MyUI.TransparentPanel();
             this.panel_UI = new System.Windows.Forms.Panel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_GroupBox1 = new MyUI.PLC_RJ_GroupBox();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.sqL_DataGridView_panel_lock_ui_jsonstring = new SQLUI.SQL_DataGridView();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部 = new MyUI.PLC_RJ_Button();
             this.panel_control.SuspendLayout();
             this.panel1.SuspendLayout();
             this.plC_ScreenPage_main.SuspendLayout();
@@ -99,6 +99,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_刷新.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_刷新.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_刷新.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_刷新.GUID = "";
             this.plC_RJ_Button_刷新.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_刷新.Location = new System.Drawing.Point(696, 0);
             this.plC_RJ_Button_刷新.Name = "plC_RJ_Button_刷新";
@@ -106,10 +107,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_刷新.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_刷新.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_刷新.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_刷新.ON_BorderSize = 5;
             this.plC_RJ_Button_刷新.ON_文字內容 = "刷新";
             this.plC_RJ_Button_刷新.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_刷新.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_刷新.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_刷新.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_刷新.ShadowSize = 0;
+            this.plC_RJ_Button_刷新.ShowLoadingForm = false;
             this.plC_RJ_Button_刷新.Size = new System.Drawing.Size(122, 58);
             this.plC_RJ_Button_刷新.State = false;
             this.plC_RJ_Button_刷新.TabIndex = 14;
@@ -141,6 +146,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_讀檔.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_讀檔.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_讀檔.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_讀檔.GUID = "";
             this.plC_RJ_Button_讀檔.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_讀檔.Location = new System.Drawing.Point(818, 0);
             this.plC_RJ_Button_讀檔.Name = "plC_RJ_Button_讀檔";
@@ -148,10 +154,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_讀檔.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_讀檔.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_讀檔.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_讀檔.ON_BorderSize = 5;
             this.plC_RJ_Button_讀檔.ON_文字內容 = "讀檔";
             this.plC_RJ_Button_讀檔.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_讀檔.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_讀檔.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_讀檔.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_讀檔.ShadowSize = 0;
+            this.plC_RJ_Button_讀檔.ShowLoadingForm = false;
             this.plC_RJ_Button_讀檔.Size = new System.Drawing.Size(122, 58);
             this.plC_RJ_Button_讀檔.State = false;
             this.plC_RJ_Button_讀檔.TabIndex = 13;
@@ -183,6 +193,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_存檔.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_存檔.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_存檔.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_存檔.GUID = "";
             this.plC_RJ_Button_存檔.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_存檔.Location = new System.Drawing.Point(940, 0);
             this.plC_RJ_Button_存檔.Name = "plC_RJ_Button_存檔";
@@ -190,10 +201,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_存檔.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_存檔.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_存檔.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_存檔.ON_BorderSize = 5;
             this.plC_RJ_Button_存檔.ON_文字內容 = "存檔";
             this.plC_RJ_Button_存檔.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_存檔.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_存檔.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_存檔.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_存檔.ShadowSize = 0;
+            this.plC_RJ_Button_存檔.ShowLoadingForm = false;
             this.plC_RJ_Button_存檔.Size = new System.Drawing.Size(122, 58);
             this.plC_RJ_Button_存檔.State = false;
             this.plC_RJ_Button_存檔.TabIndex = 12;
@@ -236,6 +251,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_刪除元件.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_刪除元件.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_刪除元件.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_刪除元件.GUID = "";
             this.plC_RJ_Button_刪除元件.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_刪除元件.Location = new System.Drawing.Point(37, 0);
             this.plC_RJ_Button_刪除元件.Name = "plC_RJ_Button_刪除元件";
@@ -243,10 +259,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_刪除元件.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_刪除元件.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_刪除元件.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_刪除元件.ON_BorderSize = 5;
             this.plC_RJ_Button_刪除元件.ON_文字內容 = "刪除元件";
             this.plC_RJ_Button_刪除元件.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_刪除元件.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_刪除元件.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_刪除元件.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_刪除元件.ShadowSize = 0;
+            this.plC_RJ_Button_刪除元件.ShowLoadingForm = false;
             this.plC_RJ_Button_刪除元件.Size = new System.Drawing.Size(120, 58);
             this.plC_RJ_Button_刪除元件.State = false;
             this.plC_RJ_Button_刪除元件.TabIndex = 3;
@@ -278,6 +298,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_新增容器.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_新增容器.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_新增容器.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_新增容器.GUID = "";
             this.plC_RJ_Button_新增容器.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_新增容器.Location = new System.Drawing.Point(157, 0);
             this.plC_RJ_Button_新增容器.Name = "plC_RJ_Button_新增容器";
@@ -285,10 +306,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_新增容器.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_新增容器.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_新增容器.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_新增容器.ON_BorderSize = 5;
             this.plC_RJ_Button_新增容器.ON_文字內容 = "新增容器";
             this.plC_RJ_Button_新增容器.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_新增容器.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_新增容器.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_新增容器.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_新增容器.ShadowSize = 0;
+            this.plC_RJ_Button_新增容器.ShowLoadingForm = false;
             this.plC_RJ_Button_新增容器.Size = new System.Drawing.Size(120, 58);
             this.plC_RJ_Button_新增容器.State = false;
             this.plC_RJ_Button_新增容器.TabIndex = 2;
@@ -320,6 +345,7 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_新增鎖控.FlatAppearance.BorderSize = 0;
             this.plC_RJ_Button_新增鎖控.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.plC_RJ_Button_新增鎖控.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_新增鎖控.GUID = "";
             this.plC_RJ_Button_新增鎖控.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_新增鎖控.Location = new System.Drawing.Point(277, 0);
             this.plC_RJ_Button_新增鎖控.Name = "plC_RJ_Button_新增鎖控";
@@ -327,10 +353,14 @@ namespace 調劑台管理系統
             this.plC_RJ_Button_新增鎖控.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_新增鎖控.OFF_文字顏色 = System.Drawing.Color.White;
             this.plC_RJ_Button_新增鎖控.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_新增鎖控.ON_BorderSize = 5;
             this.plC_RJ_Button_新增鎖控.ON_文字內容 = "新增鎖控";
             this.plC_RJ_Button_新增鎖控.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_RJ_Button_新增鎖控.ON_文字顏色 = System.Drawing.Color.Black;
             this.plC_RJ_Button_新增鎖控.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_新增鎖控.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_新增鎖控.ShadowSize = 0;
+            this.plC_RJ_Button_新增鎖控.ShowLoadingForm = false;
             this.plC_RJ_Button_新增鎖控.Size = new System.Drawing.Size(120, 58);
             this.plC_RJ_Button_新增鎖控.State = false;
             this.plC_RJ_Button_新增鎖控.TabIndex = 0;
@@ -481,53 +511,13 @@ namespace 調劑台管理系統
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "資料庫";
             // 
-            // plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部
-            // 
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.AutoResetState = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BackgroundColor = System.Drawing.Color.RoyalBlue;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Bool = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderRadius = 5;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderSize = 0;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.but_press = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.FlatAppearance.BorderSize = 0;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Location = new System.Drawing.Point(428, 6);
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Name = "plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部";
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字內容 = "顯示全部";
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字顏色 = System.Drawing.Color.White;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_背景顏色 = System.Drawing.SystemColors.Control;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字內容 = "顯示全部";
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_背景顏色 = System.Drawing.SystemColors.Control;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Size = new System.Drawing.Size(150, 58);
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.State = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.TabIndex = 1;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Text = "顯示全部";
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.TextColor = System.Drawing.Color.White;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Texts = "顯示全部";
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.UseVisualStyleBackColor = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.字型鎖住 = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.文字鎖住 = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.讀取位元反向 = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.讀寫鎖住 = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.音效 = true;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.顯示 = false;
-            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.顯示狀態 = false;
-            // 
             // plC_RJ_GroupBox1
             // 
             // 
             // plC_RJ_GroupBox1.ContentsPanel
             // 
             this.plC_RJ_GroupBox1.ContentsPanel.BackColor = System.Drawing.Color.White;
+            this.plC_RJ_GroupBox1.ContentsPanel.BackgroundColor = System.Drawing.Color.Transparent;
             this.plC_RJ_GroupBox1.ContentsPanel.BorderColor = System.Drawing.Color.SkyBlue;
             this.plC_RJ_GroupBox1.ContentsPanel.BorderRadius = 5;
             this.plC_RJ_GroupBox1.ContentsPanel.BorderSize = 2;
@@ -539,9 +529,12 @@ namespace 調劑台管理系統
             this.plC_RJ_GroupBox1.ContentsPanel.Location = new System.Drawing.Point(0, 37);
             this.plC_RJ_GroupBox1.ContentsPanel.Name = "ContentsPanel";
             this.plC_RJ_GroupBox1.ContentsPanel.Padding = new System.Windows.Forms.Padding(5);
+            this.plC_RJ_GroupBox1.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_GroupBox1.ContentsPanel.ShadowSize = 0;
             this.plC_RJ_GroupBox1.ContentsPanel.Size = new System.Drawing.Size(607, 735);
             this.plC_RJ_GroupBox1.ContentsPanel.TabIndex = 2;
             this.plC_RJ_GroupBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_GroupBox1.GUID = "";
             this.plC_RJ_GroupBox1.Location = new System.Drawing.Point(0, 0);
             this.plC_RJ_GroupBox1.Name = "plC_RJ_GroupBox1";
             this.plC_RJ_GroupBox1.PannelBackColor = System.Drawing.Color.White;
@@ -559,15 +552,6 @@ namespace 調劑台管理系統
             this.plC_RJ_GroupBox1.TitleHeight = 37;
             this.plC_RJ_GroupBox1.TitleTextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.plC_RJ_GroupBox1.TitleTexts = "UI位置";
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(5, 662);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(597, 68);
-            this.panel2.TabIndex = 0;
             // 
             // sqL_DataGridView_panel_lock_ui_jsonstring
             // 
@@ -605,7 +589,7 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_panel_lock_ui_jsonstring.Size = new System.Drawing.Size(597, 657);
             this.sqL_DataGridView_panel_lock_ui_jsonstring.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_panel_lock_ui_jsonstring.TabIndex = 1;
-            this.sqL_DataGridView_panel_lock_ui_jsonstring.TableName = "panel_lock_ui_jsonstring";
+            this.sqL_DataGridView_panel_lock_ui_jsonstring.TableName = "panel_lock_ui_jsonstring_new";
             this.sqL_DataGridView_panel_lock_ui_jsonstring.UserName = "root";
             this.sqL_DataGridView_panel_lock_ui_jsonstring.可拖曳欄位寬度 = false;
             this.sqL_DataGridView_panel_lock_ui_jsonstring.可選擇多列 = false;
@@ -618,6 +602,61 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_panel_lock_ui_jsonstring.顯示首行 = true;
             this.sqL_DataGridView_panel_lock_ui_jsonstring.首列樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
             this.sqL_DataGridView_panel_lock_ui_jsonstring.首行樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(5, 662);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(597, 68);
+            this.panel2.TabIndex = 0;
+            // 
+            // plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部
+            // 
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.AutoResetState = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BackgroundColor = System.Drawing.Color.RoyalBlue;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Bool = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderRadius = 5;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.BorderSize = 0;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.but_press = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.GUID = "";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Location = new System.Drawing.Point(428, 6);
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Name = "plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字內容 = "顯示全部";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_文字顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_BorderSize = 5;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字內容 = "顯示全部";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字字體 = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ON_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ShadowSize = 0;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.ShowLoadingForm = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Size = new System.Drawing.Size(150, 58);
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.State = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.TabIndex = 1;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Text = "顯示全部";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.TextColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.Texts = "顯示全部";
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.字型鎖住 = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.文字鎖住 = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.讀取位元反向 = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.讀寫鎖住 = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.音效 = true;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.顯示 = false;
+            this.plC_RJ_Button_panel_lock_ui_jsonstring_顯示全部.顯示狀態 = false;
             // 
             // Pannel_Locker_Design
             // 

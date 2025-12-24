@@ -991,20 +991,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+    "C:\\Users\\kwokzo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\勤務傳送櫃.csproj",
+      "projectUniqueName": "C:\\Users\\kwokzo\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\勤務傳送櫃.csproj",
       "projectName": "勤務傳送櫃",
-      "projectPath": "C:\\Users\\Administrator\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\勤務傳送櫃.csproj",
-      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\obj\\",
+      "projectPath": "C:\\Users\\kwokzo\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\勤務傳送櫃.csproj",
+      "packagesPath": "C:\\Users\\kwokzo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kwokzo\\Source\\Repos\\inventorySystem\\勤務傳送櫃\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
-        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kwokzo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

@@ -919,3 +919,73 @@ C:\Users\hsonds01\Source\Repos\inventorySystem20231119\智能藥庫系統(VM Ser
 C:\Users\hsonds01\Source\Repos\inventorySystem20231119\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).csproj.CopyComplete
 C:\Users\hsonds01\Source\Repos\inventorySystem20231119\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).exe
 C:\Users\hsonds01\Source\Repos\inventorySystem20231119\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).pdb
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\智能藥庫系統(VM Server).exe.config
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\智能藥庫系統(VM Server).exe.manifest
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\智能藥庫系統(VM Server).application
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\智能藥庫系統(VM Server).exe
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\智能藥庫系統(VM Server).pdb
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Basic.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\DrawingClass.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\FontAwesome.Sharp.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\HCGUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\H_Pannel_lib.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\IBM.Data.DB2.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\LadderUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\LeadShineUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\LicenseLib.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\LightControlUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MeasureSystemUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MVSDK.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MVSDKUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MyOffice.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MySql.Data.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MySqlBackup.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MySQL_Login.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MyUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Newtonsoft.Json.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\PortControlUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\SLDUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\SQLUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Buffers.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Memory.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Numerics.Vectors.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Text.Encodings.Web.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Text.Json.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Threading.Tasks.Extensions.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.ValueTuple.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\TCP.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\ZealTechUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\zxing.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Interop.SpeechLib.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\CallBackUI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\MeasureSystemFunction.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\NPOI.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Microsoft.Office.Interop.Excel.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\NPOI.OOXML.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\office.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\NPOI.OpenXml4Net.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\NPOI.OpenXmlFormats.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\stdole.dll
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Buffers.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Memory.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Numerics.Vectors.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Text.Encodings.Web.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Text.Json.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.Threading.Tasks.Extensions.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\bin\Release\System.ValueTuple.xml
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).csproj.AssemblyReference.cache
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統_VM_Server_.Form1.resources
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統_VM_Server_.Form_Buf.resources
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統_VM_Server_.Properties.Resources.resources
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).csproj.GenerateResource.cache
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).csproj.CoreCompileInputs.cache
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).exe.manifest
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).application
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).csproj.CopyComplete
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).exe
+C:\Users\kwokzo\Source\Repos\inventorySystem\智能藥庫系統(VM Server)\obj\Release\智能藥庫系統(VM Server).pdb

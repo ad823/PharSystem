@@ -1,5 +1,5 @@
 {
-  "Name": "ºÞÃÄ",
-  "Api_Server": "http://192.168.23.54:4433",
+  "Name": "ºÞÃÄ(UD)",
+  "Api_Server": "http://172.16.33.9:4433",
   "Med_Update_ApiURL": ""
 }
