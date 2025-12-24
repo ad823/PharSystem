@@ -1139,9 +1139,11 @@ namespace 調劑台管理系統
                 {
                     string IP = list_value[i][(int)enum_儲位管理_EPD266_儲位資料.IP].ObjectToString();
                     Storage storage = this.storageUI_EPD_266.SQL_GetStorage(IP);
-                    if(myConfigClass.QRCode_url.StringIsEmpty() == false)
+                    if (myConfigClass.QRCode_url.StringIsEmpty() == false)
                     {
-                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                        storage.QRCode = $"{myConfigClass.QRCode_url}";
+                        storage.QRCode = storage.QRCode.Replace("{code}", storage.Code);
+                        storage.QRCode = storage.QRCode.Replace("{serverName}", ServerName);
                     }
                     if (Storage.ContainsBitmap(storage.Code) == false)
                     {

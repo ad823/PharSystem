@@ -32,7 +32,7 @@
   "HFRFID_1_COMPort": "",
   "HFRFID_2_COMPort": "",
   "批次領藥篩選": "",
-  "QRCode_url": "",
+  "QRCode_url": "http://172.16.50.96/ph/med_web/index_view.php?adc=detail&id={code}",
   "使用HID指紋機": false,
   "使用ISW_RFID": true
 }
