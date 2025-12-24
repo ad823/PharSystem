@@ -341,7 +341,9 @@ namespace 調劑台管理系統
 
                     if (myConfigClass.QRCode_url.StringIsEmpty() == false)
                     {
-                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                        storage.QRCode = $"{myConfigClass.QRCode_url}";
+                        storage.QRCode = storage.QRCode.Replace("{code}", storage.Code);
+                        storage.QRCode = storage.QRCode.Replace("{serverName}", ServerName);
                     }
 
                 }
