@@ -52,6 +52,7 @@ namespace 調劑台管理系統
             DrawerUI_EPD_583.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
             RowsLEDUI.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
             StorageUI_EPD_266.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
+            CommonSapceMethod.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
 
             if (this.plC_ScreenPage_Main.PageText == "工程模式")
             {

@@ -346,7 +346,10 @@ namespace 調劑台管理系統
                         {
                             顏色 = takeMedicineStackClasses_buf[0].顏色;
                             if (Function_取藥堆疊資料_取得作業模式(takeMedicineStackClasses_buf[0], enum_取藥堆疊母資料_作業模式.雙人覆核)) continue;
-                            Function_儲位亮燈(new Main_Form.LightOn(藥品碼, 顏色.ToColor()), ref list_lock_IP);
+
+                            Main_Form.LightOn lightOn = new Main_Form.LightOn(藥品碼, 顏色.ToColor());
+                            lightOn.數量 = Math.Abs(takeMedicineStackClasses_buf[0].總異動量.StringToDouble());
+                            Function_儲位亮燈(lightOn, ref list_lock_IP);
                         }
 
                     }
@@ -2035,7 +2038,18 @@ namespace 調劑台管理系統
                                 }
                                 else
                                 {
-                                    this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    if(storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                    {
+                                        if(數量 == storage.Min_Package_Num.StringToDouble())
+                                        {
+                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    }
+                                        
                                 }
                             }
                             else
@@ -2063,11 +2077,34 @@ namespace 調劑台管理系統
                                         }
                                         else
                                         {
-                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                            if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                            {
+                                                if (數量 == storage.Min_Package_Num.StringToDouble())
+                                                {
+                                                    this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                            }
                                         }
 
                                     }
-                                    else this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    else
+                                    {
+                                        if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                        {
+                                            if (數量 == storage.Min_Package_Num.StringToDouble())
+                                            {
+                                                this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                        }
+                                    }
                                 }
 
                             }
@@ -2329,6 +2366,7 @@ namespace 調劑台管理系統
                 string 顏色 = list_取藥堆疊母資料_buf_未亮燈[i][(int)enum_取藥堆疊母資料.顏色].ObjectToString();
                 if (藥品碼.StringIsEmpty() == false)
                 {
+
                     Function_儲位亮燈(new Main_Form.LightOn(藥品碼, 顏色.ToColor()));
                     if (顏色.ToColor() == Color.Black)
                     {

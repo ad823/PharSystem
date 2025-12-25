@@ -2212,14 +2212,44 @@ namespace batch_StackDataAccounting
                         {
                             if (storage.TOFON == false)
                             {
-                                storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                if (color == Color.Black)
+                                {
+                                    storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                }
+                                else
+                                {
+                                    if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                    {
+                                        if (數量 == storage.Min_Package_Num.StringToDouble())
+                                        {
+                                            storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    }
+
+                                }
+
+        
                             }
                             else
                             {
                                 if (color == Color.Black) storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                 else if (lightOn.flag_Refresh_LCD || lightOn.flag_Refresh_Light)
                                 {
-                                    storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                    {
+                                        if (數量 == storage.Min_Package_Num.StringToDouble())
+                                        {
+                                            storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    }
                                 }
 
                             }
@@ -3983,6 +4013,7 @@ namespace batch_StackDataAccounting
             string Device_GUID = "";
             string Num = "";
             string 藥品碼 = "";
+           
             Color color = Color.Black;
 
             List<string> list_已亮燈藥碼 = new List<string>();
@@ -4056,7 +4087,7 @@ namespace batch_StackDataAccounting
                 else if (flag_同藥碼全亮)
                 {
 
-                    Function_儲位亮燈(new LightOn(藥品碼, color), ref list_lock_IP); list_已亮燈藥碼.Add(藥品碼);
+                    Function_儲位亮燈(new LightOn(藥品碼, color,Math.Abs( 取藥堆疊資料[(int)enum_取藥堆疊子資料.異動量].StringToDouble())), ref list_lock_IP); list_已亮燈藥碼.Add(藥品碼);
                     for (int k = 0; k < list_lock_IP.Count; k++)
                     {
                         list_locker_table_value_buf = list_locker_table_value.GetRows((int)enum_lockerIndex.IP, list_lock_IP[k]);
