@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.25.12153")]
-[assembly: AssemblyFileVersion("1.0.25.12153")]
+[assembly: AssemblyVersion("1.0.25.12158")]
+[assembly: AssemblyFileVersion("1.0.25.12158")]
 namespace 勤務傳送櫃
 {
     public partial class Main_Form : Form
