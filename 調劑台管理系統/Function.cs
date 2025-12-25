@@ -293,7 +293,7 @@ namespace 調劑台管理系統
                                 }
                                 else
                                 {
-                                    if (orderClass.交易量 == orderClass.實際調劑量)
+                                    if (Math.Abs(orderClass.交易量.StringToDouble()) <= Math.Abs( orderClass.實際調劑量.StringToDouble()))
                                     {
                                         takeMedicineStackClass.狀態 = enum_取藥堆疊母資料_狀態.已領用過.GetEnumName();
                                     }
