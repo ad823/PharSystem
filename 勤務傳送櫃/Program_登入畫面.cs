@@ -294,7 +294,7 @@ namespace 勤務傳送櫃
                 this.Text = $"{this.FormText}";
                 Function_功能隱藏();
             }));
-            this.PLC_Device_主頁面頁碼.Value = 0;
+            PLC_Device_主頁面頁碼.Value = 0;
         }
         private void Function_功能顯示()
         {

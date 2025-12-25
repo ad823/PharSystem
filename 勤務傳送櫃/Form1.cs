@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.0.52")]
-[assembly: AssemblyFileVersion("1.0.0.52")]
+[assembly: AssemblyVersion("1.0.25.12153")]
+[assembly: AssemblyFileVersion("1.0.25.12153")]
 namespace 勤務傳送櫃
 {
     public partial class Main_Form : Form
@@ -172,9 +172,10 @@ namespace 勤務傳送櫃
         }
         #endregion
 
-        PLC_Device PLC_Device_主頁面頁碼 = new PLC_Device("D0");
-        PLC_Device PLC_Device_開門異常時間 = new PLC_Device("D3000");
-        PLC_Device PLC_Device_單層格數 = new PLC_Device("D3001");
+        static public PLC_Device PLC_Device_主頁面頁碼 = new PLC_Device("D0");
+        static public PLC_Device PLC_Device_開門異常時間 = new PLC_Device("D3000");
+        static public PLC_Device PLC_Device_單層格數 = new PLC_Device("D3001");
+        static public PLC_Device PLC_Device_勤務關門閃燈提醒 = new PLC_Device("S4510");
 
         public Main_Form()
         {
