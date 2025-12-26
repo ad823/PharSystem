@@ -1096,7 +1096,9 @@ namespace 調劑台管理系統
             {
                 if (list_value[i] is Device)
                 {
-                    庫存 += ((Device)list_value[i]).Inventory.StringToDouble();
+                    Device device = (Device)list_value[i];
+                    if (device.IsInventoryLocation) continue;
+                    庫存 += device.Inventory.StringToDouble();
                 }
             }
             if (list_value.Count == 0) return -999;
@@ -1229,7 +1231,6 @@ namespace 調劑台管理系統
 
             return stockDict.Values.ToList();
         }
-
         static public List<object[]> Function_取得異動儲位資訊從雲端資料(string 藥品碼, double 異動量, string 效期)
         {
             List<object> 儲位 = new List<object>();
@@ -1263,8 +1264,6 @@ namespace 調劑台管理系統
             }
             return 儲位資訊;
         }
-
-
         static public List<object[]> Function_取得異動儲位資訊從雲端資料(string 藥品碼, double 異動量)
         {
             bool debug = false;

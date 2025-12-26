@@ -133,6 +133,7 @@ namespace 調劑台管理系統
 
             this.plC_CheckBox_儲位管理_EPD266_儲位內容_顯示空白儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_顯示空白儲位_CheckStateChanged;
             this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
+            this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
             this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged += PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
 
 
@@ -144,6 +145,8 @@ namespace 調劑台管理系統
             this.comboBox_儲位管理_EPD266_儲位內容_儲位搜尋.SelectedIndex = 0;
             this.plC_UI_Init.Add_Method(this.Program_儲位管理_EPD266);
         }
+
+     
 
         private void StoragePanel_SizeChanged(object sender, EventArgs e)
         {
@@ -440,6 +443,7 @@ namespace 調劑台管理系統
                     }
                 }
                 this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged -= PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
+                this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged -= PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
                 this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged -= PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
 
                 rJ_TextBox_儲位管理_EPD266_儲位內容_語音.Texts = storage.Speaker;
@@ -448,9 +452,12 @@ namespace 調劑台管理系統
 
                 this.Invoke(new Action(delegate { plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.Checked = storage.TOFON; }));
                 plC_CheckBox_儲位管理_EPD266_警報.Checked = storage.AlarmEnable;
+                plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.Checked = storage.IsInventoryLocation;
 
                 this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
                 this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged += PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
+                this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
+
                 this.storagePanel.DrawToPictureBox(storage);
             }
 
@@ -531,6 +538,19 @@ namespace 調劑台管理系統
                 MyMessageBox.ShowDialog("[語音內容]更新成功");
 
             }
+        }
+        private void PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(delegate
+            {
+                Storage storage = this.storagePanel.CurrentStorage;
+                if (storage == null) return;
+                storage.IsInventoryLocation = plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.Checked;
+             
+                List_EPD266_本地資料.Add_NewStorage(storage);
+                this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
+                this.Function_設定雲端資料更新();
+            }));
         }
         private void PlC_RJ_Button_儲位管理_EPD266_藥品搜尋_藥品名稱_搜尋_MouseDownEvent(MouseEventArgs mevent)
         {

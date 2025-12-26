@@ -3554,9 +3554,9 @@ namespace 調劑台管理系統
                     }
                     else
                     {
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
-                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                        list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
+                        //list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                        //list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                        //list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
                     }
 
 

@@ -138,7 +138,7 @@ namespace batch_MQTT_Server
                     TimeSpan gap = now - uploadTimeRecords[clientId];
                     if (gap.TotalSeconds < 180)
                     {
-                        Console.WriteLine($"裝置 {clientId} 未達上傳間隔（{gap.TotalSeconds:F1} 秒），跳過上傳");
+                        Console.WriteLine($"裝置 ({uDP_READ_Basic.IP}){clientId} 未達上傳間隔（{gap.TotalSeconds:F1} 秒），跳過上傳");
                         return;
                     }
                 }
@@ -148,7 +148,7 @@ namespace batch_MQTT_Server
                 temperatureClass.IP = $"({uDP_READ_Basic.IP}){clientId}";
                 temperatureClass.溫度 = uDP_READ_Basic.dht_t.ToString();
                 temperatureClass.濕度 = uDP_READ_Basic.dht_h.ToString();
-                Console.WriteLine($"上傳溫濕度： 溫度 = {temperatureClass.溫度}°C，濕度 = {temperatureClass.濕度}%");
+                Console.WriteLine($"裝置 ({uDP_READ_Basic.IP}){clientId} 上傳溫濕度： 溫度 = {temperatureClass.溫度}°C，濕度 = {temperatureClass.濕度}%");
                 temperatureClass.add(dBConfigClass.Api_Server, temperatureClass);
             }
             catch (Exception ex)
