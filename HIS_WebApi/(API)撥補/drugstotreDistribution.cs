@@ -52,9 +52,37 @@ namespace HIS_WebApi
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
-        [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugStotreDistributionClass))]
+        [HttpPost("init")]
+        public string POST_init([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
 
+            try
+            {
+                //returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
+
+                returnData.Method = "POST_init";
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料!";
+                    returnData.TimeTaken = $"{myTimerBasic}";
+                    return returnData.JsonSerializationt();
+                }
+                return CheckCreatTable(sys_serverSettingClasses[0]);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                return returnData.JsonSerializationt();
+            }
+        }
         [Route("barcode")]
         [HttpPost]
         public async Task<string> barcode(returnData returnData)
@@ -119,36 +147,7 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-        [HttpPost]
-        public string POST_init([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            myTimerBasic.StartTickTime(50000);
-
-            try
-            {
-                //returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
-
-                returnData.Method = "POST_init";
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
-                if (sys_serverSettingClasses.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料!";
-                    returnData.TimeTaken = $"{myTimerBasic}";
-                    return returnData.JsonSerializationt();
-                }
-                return CheckCreatTable(sys_serverSettingClasses[0]);
-            }
-            catch (Exception e)
-            {
-                returnData.Code = -200;
-                returnData.Result = e.Message;
-                returnData.TimeTaken = $"{myTimerBasic}";
-                return returnData.JsonSerializationt();
-            }
-        }
+        
         /// <summary>
         /// 新增撥補資料
         /// </summary>
@@ -653,7 +652,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("update_by_guid")]
         [HttpPost]
-        public string POST_update_by_guid(returnData returnData)
+        public async Task<string> POST_update_by_guid(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -676,7 +675,26 @@ namespace HIS_WebApi
                 string Password = sys_serverSettingClass.Password;
                 uint Port = (uint)sys_serverSettingClass.Port.StringToInt32();
 
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_allocate_build", "撥補核撥預代簽收量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
+
                 List<drugStotreDistributionClass> drugstotreDistributions = returnData.Data.ObjToClass<List<drugStotreDistributionClass>>();
+                if (settingPages.設定值 == true.ToString() )
+                {
+                    foreach(var item in drugstotreDistributions)
+                    {
+                        if (item.狀態 == "已過帳") 
+                        {
+                            item.簽收量 = item.實撥量;
+                        }
+                    }
+                    
+                } 
 
                 SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
                 List<object[]> list_drugstotreDistributions = drugstotreDistributions.ClassToSQL<drugStotreDistributionClass, enum_drugStotreDistribution>();

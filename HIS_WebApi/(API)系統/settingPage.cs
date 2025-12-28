@@ -156,6 +156,7 @@ namespace HIS_WebApi._API_系統
         [HttpPost("get_by_page_name_cht")]
         public async Task<string> get_by_page_name_cht([FromBody] returnData returnData, CancellationToken ct)
         {
+            loadData();
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "get_by_page_name";
             try
