@@ -556,7 +556,7 @@ namespace HIS_WebApi
         }
         private (string StartTime, string Endtime) GetToday()
         {
-            string API = Method.GetServerAPI("Main", "網頁", "API01");
+            string API = "http://127.0.0.1:4433";
             List<settingPageClass> settingPageClasses = settingPageClass.get_all(API);
             settingPageClass settingPage = settingPageClasses.myFind("medicine_cart", "交車時間");
 

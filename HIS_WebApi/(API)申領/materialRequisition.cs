@@ -92,22 +92,29 @@ namespace HIS_WebApi
                 }
                 string barcode = returnData.ValueAry[0];
                 string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_barcode");
+                materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
+
                 if (VM_API.StringIsEmpty() == false)
                 {
                     string json_in = returnData.JsonSerializationt();
                     string json_out = Net.WEBApiPostJson(VM_API, json_in);
-                    return json_out;
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥袋條碼回傳錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_barcode = json_out.JsonDeserializet<returnData>();
+                    materialRequisitionClass materialRequisition = returnData_barcode.Data.ObjToClass<materialRequisitionClass>();
+                    if (materialRequisition != null && materialRequisition.藥碼.StringIsEmpty() == false)
+                    {
+                        materialRequisitionClass = materialRequisition;
+                    }
                 }
-                string[] ary = barcode.Split(';');
-                materialRequisitionClass materialRequisitionClass = new materialRequisitionClass();
-                if (ary.Length >= 2)
+                
+                if (materialRequisitionClass == null)
                 {
-                    materialRequisitionClass.藥碼 = ary[0] ;
-                    materialRequisitionClass.申領量 = ary[1] ;
-                }
-                if (ary.Length == 1)
-                {
-                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(ary[0]);
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
                     if (returnData_ != null && returnData_.Data != null)
                     {
                         medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
@@ -118,7 +125,7 @@ namespace HIS_WebApi
                     }
                 }
 
-                
+
 
 
 
@@ -245,7 +252,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]</returns>
         [Route("update_by_guid")]
         [HttpPost]
-        public string POST_update([FromBody] returnData returnData)
+        public async Task<string> POST_update([FromBody] returnData returnData)
         {
 
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -261,6 +268,13 @@ namespace HIS_WebApi
                     returnData.Result = $"找無Server資料!";
                     return returnData.JsonSerializationt();
                 }
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_request_build", "申領核撥預代簽收量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
                 string Server = sys_serverSettingClasses[0].Server;
                 string DB = sys_serverSettingClasses[0].DBName;
                 string UserName = sys_serverSettingClasses[0].User;
@@ -268,15 +282,24 @@ namespace HIS_WebApi
                 uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
 
                 List<materialRequisitionClass> materialRequisitionClasses = returnData.Data.ObjToClass<List<materialRequisitionClass>>();
-                List<materialRequisitionClass> materialRequisitionClasses_buf = new List<materialRequisitionClass>();
                 if (materialRequisitionClasses == null)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"傳入資料異常!";
                     return returnData.JsonSerializationt();
                 }
+                if (settingPages.設定值 == true.ToString())
+                {
+                    foreach (var item in materialRequisitionClasses)
+                    {
+                        if (item.狀態 == "已過帳")
+                        {
+                            item.簽收量 = item.實撥量;
+                        }
+                    }
 
-    
+                }
+
                 List<object[]> list_value = materialRequisitionClasses.ClassToSQL<materialRequisitionClass, enum_materialRequisition>();
                 Table table = new Table(new enum_materialRequisition());
                 SQLControl sQLControl_materialRequisition = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
@@ -284,7 +307,7 @@ namespace HIS_WebApi
                 returnData.Code = 200;
                 returnData.Result = $"更新申領資料共<{list_value.Count}>筆";
                 returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Data = materialRequisitionClasses_buf;
+                returnData.Data = materialRequisitionClasses;
                 return returnData.JsonSerializationt();
             }
             catch (Exception e)

@@ -37,6 +37,8 @@ namespace HIS_WebApi
             EPD583_3Color,
             EPD700_6Color,
             EPD730_7Color,
+            EDP730F
+            
         }
         private static List<RowsLED> rowsLEDs = new List<RowsLED>();
         private static List<Storage> storages = new List<Storage>();
@@ -147,7 +149,7 @@ namespace HIS_WebApi
         /// <returns>JSON 格式的回應字串，描述裝置亮燈結果</returns>
         [Route("light_action")]
         [HttpPost]
-        public string light_action(returnData returnData)
+        public async Task<string> light_action(returnData returnData)
         {
             try
             {
@@ -217,7 +219,8 @@ namespace HIS_WebApi
                 else if(device_type.Contains("EPD") == true)
                 {
                     int port = EPD_port;
-                    if (device_type.Contains("730") == true) port = 29005;
+                    if (device_type.Contains("EPD730F") == true) port = 29005;
+                    if (device_type.Contains("EPD730_7Color") == true) port = 29001;
                     UDP_Class uDP_Class = new UDP_Class(ip, port, false);
                     Storage storage = storages.Where(x => x.IP == ip).FirstOrDefault();
                     if (storage == null)
@@ -320,6 +323,15 @@ namespace HIS_WebApi
                 returnData.Result = $"Exception : {ex.Message}";
                 return returnData.JsonSerializationt(true);
             }
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> light_action(List<string> strings)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry = strings;
+
+            string result = await light_action(returnData);
+            return result.JsonDeserializet<returnData>();
         }
 
         static public byte[] Get_Rows_Empty_LEDBytes()

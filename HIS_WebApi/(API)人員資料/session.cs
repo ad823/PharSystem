@@ -967,7 +967,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("update_setting")]
         [HttpPost]
-        public string update_setting([FromBody] returnData returnData)
+        public async Task<string> update_setting([FromBody] returnData returnData)
         {
             try
             {
@@ -1012,8 +1012,16 @@ namespace HIS_WebApi
                     {
                         item.狀態 = permissionsClasses.狀態;
                     }
+
+
                 }
-                List<loginDataClass> loginDataClasses = HIS_DB_Lib.loginDataClass.get_permission_index(API);
+                returnData returnData1_log = await get_permission_index();
+
+
+                //List<loginDataClass> loginDataClasses = HIS_DB_Lib.loginDataClass.get_permission_index(API);
+                List<loginDataClass> loginDataClasses = returnData1_log.Data.ObjToClass<List<loginDataClass>>();
+
+
                 loginDataClass loginData = loginDataClasses.Where(item => item.權限等級 == level).FirstOrDefault();
                 if (loginData == null)
                 {
@@ -1052,7 +1060,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("get_permission_index")]
         [HttpPost]
-        public string get_permission_index([FromBody] returnData returnData)
+        public async Task<string> get_permission_index([FromBody] returnData returnData)
         {
             try
             {
@@ -1229,6 +1237,14 @@ namespace HIS_WebApi
             //string loadText = Basic.MyFileStream.LoadFileAllText(@"./excel_emg_tradding.txt", "utf-8");
             returnData returnData = data.JsonDeserializet<returnData>();
             update_login_data_index(returnData);
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_permission_index()
+        {
+            returnData returnData = new returnData();
+
+            string result = await get_permission_index(returnData);
+            return result.JsonDeserializet<returnData>();
         }
 
     }

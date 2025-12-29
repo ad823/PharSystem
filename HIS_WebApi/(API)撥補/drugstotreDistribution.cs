@@ -52,68 +52,8 @@ namespace HIS_WebApi
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
-        [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugStotreDistributionClass))]
-
-        [Route("barcode")]
-        [HttpPost]
-        public async Task<string> barcode(returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            myTimerBasic.StartTickTime(50000);
-            returnData.Method = "barcode";
-            try
-            {
-                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"ValueAry錯誤，應為[\"barcode\"]";
-                    return returnData.JsonSerializationt();
-                }
-                string barcode = returnData.ValueAry[0];
-                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
-                if (VM_API.StringIsEmpty() == false)
-                {
-                    string json_in = returnData.JsonSerializationt();
-                    string json_out = Net.WEBApiPostJson(VM_API, json_in);                    
-                    return json_out;
-                }
-                string[] ary = barcode.Split(';');
-                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
-                if (ary.Length >= 2)
-                {
-                    drugstotreDistributions.藥碼 = ary[0];
-                    drugstotreDistributions.撥發量 = ary[1];
-                }
-                if (ary.Length == 1)
-                {
-                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(ary[0]);
-                    if (returnData_ != null && returnData_.Data != null)
-                    {
-                        medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
-                        if (mED_PageClasses != null)
-                        {
-                            drugstotreDistributions.藥碼 = mED_PageClasses.藥品碼;
-                        }
-                    }
-                }
-
-
-                returnData.Result = $"撥補資料讀取成功";
-                returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Code = 200;
-                returnData.Data = drugstotreDistributions;
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception e)
-            {
-                returnData.Code = -200;
-                returnData.Data = null;
-                returnData.Result = $"{e.Message}";
-                return returnData.JsonSerializationt(true);
-            }
-        }
-        [HttpPost]
+        [HttpPost("init")]
         public string POST_init([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
@@ -143,6 +83,71 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt();
             }
         }
+        [Route("barcode")]
+        [HttpPost]
+        public async Task<string> barcode(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "barcode";
+            try
+            {
+                if (returnData.ValueAry == null || returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"barcode\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string barcode = returnData.ValueAry[0];
+                string VM_API = Method.GetServerAPI("Main", "網頁", "drugStotreDistribution_barcode");
+                drugStotreDistributionClass drugstotreDistributions = new drugStotreDistributionClass();
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥袋條碼回傳錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_barcode = json_out.JsonDeserializet<returnData>();
+                    drugStotreDistributionClass drugStotreDistributionClass = returnData_barcode.Data.ObjToClass<drugStotreDistributionClass>();
+                    if (drugStotreDistributionClass != null && drugStotreDistributionClass.藥碼.StringIsEmpty() == false)
+                    {
+                        drugstotreDistributions = drugStotreDistributionClass;
+                    }
+                }
+                if (drugstotreDistributions == null) 
+                {
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
+                    if (returnData_ != null && returnData_.Data != null)
+                    {
+                        medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
+                        if (mED_PageClasses != null)
+                        {
+                            drugstotreDistributions.藥碼 = mED_PageClasses.藥品碼;
+                        }
+                    }
+                }
+                
+
+
+                returnData.Result = $"撥補資料讀取成功";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                returnData.Data = drugstotreDistributions;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        
         /// <summary>
         /// 新增撥補資料
         /// </summary>
@@ -647,7 +652,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("update_by_guid")]
         [HttpPost]
-        public string POST_update_by_guid(returnData returnData)
+        public async Task<string> POST_update_by_guid(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -670,7 +675,26 @@ namespace HIS_WebApi
                 string Password = sys_serverSettingClass.Password;
                 uint Port = (uint)sys_serverSettingClass.Port.StringToInt32();
 
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("med_allocate_build", "撥補核撥預代簽收量");
+                if (settingPages == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "設定取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
+
                 List<drugStotreDistributionClass> drugstotreDistributions = returnData.Data.ObjToClass<List<drugStotreDistributionClass>>();
+                if (settingPages.設定值 == true.ToString() )
+                {
+                    foreach(var item in drugstotreDistributions)
+                    {
+                        if (item.狀態 == "已過帳") 
+                        {
+                            item.簽收量 = item.實撥量;
+                        }
+                    }
+                    
+                } 
 
                 SQLControl sQLControl_drugstotreDistribution = new SQLControl(Server, DB, new enum_drugStotreDistribution().GetEnumDescription(), UserName, Password, Port, SSLMode);
                 List<object[]> list_drugstotreDistributions = drugstotreDistributions.ClassToSQL<drugStotreDistributionClass, enum_drugStotreDistribution>();
