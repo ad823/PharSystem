@@ -129,15 +129,19 @@ namespace FADC
 
                     if (state != "庫存不足")
                     {
-                        for (int k = 0; k < (int)qty; k++)
+                        List<object[]> objects_ = Main_Form.Function_取得異動儲位資訊從本地資料(code, -qty);
+                        for (int k = 0; k < objects_.Count; k++)
                         {
-                            List<object[]> objects_ = Main_Form.Function_取得異動儲位資訊從本地資料(code, -1);
-                            if (objects_.Count > 0)
+                            int 異動量 = (int)Math.Abs(objects_[k][(int)Main_Form.enum_儲位資訊.異動量].StringToInt32());
+                            for(int m = 0; m < 異動量; m++)
                             {
-                                objects_[0][(int)Main_Form.enum_儲位資訊.藥碼] = code;
-                                objects_storages.Add(objects_[0]);
-                            }
+                                object[] obj = objects_[k].DeepClone();
+                                obj[(int)Main_Form.enum_儲位資訊.藥碼] = code;
+                                obj[(int)Main_Form.enum_儲位資訊.異動量] = -1;
+                                objects_storages.Add(obj);
+                            }                        
                         }
+                       
                     }
                     this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
                 }
