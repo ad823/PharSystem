@@ -21,8 +21,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.12253")]
-[assembly: AssemblyFileVersion("1.0.25.12253")]
+[assembly: AssemblyVersion("1.0.25.12311")]
+[assembly: AssemblyFileVersion("1.0.25.12311")]
 namespace 調劑台管理系統
 {
 
@@ -118,6 +118,8 @@ namespace 調劑台管理系統
         static public PLC_Device PLC_Device_藥單重複刷取要檢查 = new PLC_Device("S5058");
         static public PLC_Device PLC_Device_刷取藥單不要都開啟抽屜 = new PLC_Device("S5059");
         static public PLC_Device PLC_Device_刷取藥單要檢查回車 = new PLC_Device("S5060");
+        static public PLC_Device PLC_Device_盤點異常排除不改動庫存 = new PLC_Device("S5061");
+        static public PLC_Device PLC_Device_盤點異常排除要修正原因 = new PLC_Device("S5062");
 
 
         static public PLC_Device PLC_Device_使用藥品群組排序盤點 = new PLC_Device("S5051");

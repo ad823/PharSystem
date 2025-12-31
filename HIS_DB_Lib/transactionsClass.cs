@@ -821,6 +821,36 @@ namespace HIS_DB_Lib
             List<transactionsClass> transactionsClasses = returnData_out.Data.ObjToClass<List<transactionsClass>>();
             return transactionsClasses;
         }
+
+        static public transactionsClass get_by_guid(string API_Server, string guid, string serverName, string serverType)
+        {
+            string url = $"{API_Server}/api/transactions/get_by_guid";
+            string str_serverNames = "";
+            string str_serverTypes = "";
+        
+            returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+            returnData.Value = guid;
+
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            if (returnData_out == null)
+            {
+                return null;
+            }
+            if (returnData_out.Data == null)
+            {
+                return null;
+            }
+            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            transactionsClass transactions = returnData_out.Data.ObjToClass<transactionsClass>();
+            return transactions;
+        }
+
+
+
         static public void add(string API_Server, transactionsClass transactionsClass, string serverName, string serverType)
         {
             string url = $"{API_Server}/api/transactions/add";
@@ -873,6 +903,13 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
 
         }
+        static public void update_by_guid(string API_Server, transactionsClass transactions, string serverName, string serverType)
+        {
+            List<transactionsClass> transactionsClasses = new List<transactionsClass>();
+            transactionsClasses.Add(transactions);
+            update_by_guid(API_Server, transactionsClasses, serverName, serverType);
+        }
+
         static public void update_by_guid(string API_Server, List<transactionsClass> transactionsClasses, string serverName, string serverType)
         {
             string url = $"{API_Server}/api/transactions/update_by_guid";
@@ -900,6 +937,7 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
 
         }
+
 
         static public List<H_Pannel_lib.StockClass> get_stock_by_code(string API_Server, string 藥碼, string serverName, string serverType)
         {
