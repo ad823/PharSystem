@@ -237,11 +237,11 @@ namespace FADC
                         {
                             Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
                         }));
-                        medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, code);
+                        medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, storage.Code);
 
                         transactionsClass transactionsClass = new transactionsClass();
                         transactionsClass.GUID = Guid.NewGuid().ToString();
-                        transactionsClass.藥品碼 = code;
+                        transactionsClass.藥品碼 = storage.Code;
 
                         if (_medClass != null)
                         {
