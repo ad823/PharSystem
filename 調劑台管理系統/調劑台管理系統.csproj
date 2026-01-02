@@ -98,7 +98,8 @@
     <Reference Include="HF_ReaderLib">
       <HintPath>..\0.DLL\HF_ReaderLib.dll</HintPath>
     </Reference>
-    <Reference Include="HIS_DB_Lib">
+    <Reference Include="HIS_DB_Lib, Version=1.0.25.1101, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
     </Reference>
     <Reference Include="H_Pannel_lib">

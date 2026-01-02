@@ -709,7 +709,7 @@ namespace 調劑台管理系統
                             medRecheckLogClass.發生類別 = "交班對點";
                             medRecheckLogClass.藥碼 = 藥碼;
                             medRecheckLogClass.藥名 = 藥名;
-                            medRecheckLogClass.庫存值 = list_交班對點[i][(int)enum_交班藥品.庫存].ObjectToString();
+                            medRecheckLogClass.庫存值 = list_交班對點[i][(int)enum_交班藥品.盤點量].ObjectToString();
                             medRecheckLogClass.盤點值 = list_交班對點[i][(int)enum_交班藥品.盤點量].ObjectToString();
                             medRecheckLogClass.盤點藥師1 = personPageClass_盤點人員.姓名;
                             medRecheckLogClass.盤點藥師ID1 = personPageClass_盤點人員.ID;

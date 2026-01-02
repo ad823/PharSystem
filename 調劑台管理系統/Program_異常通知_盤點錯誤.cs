@@ -107,8 +107,11 @@ namespace 調劑台管理系統
                         transactions.收支原因 = $"{transactions.收支原因}({dialog_收支原因選擇.Value})";
                         transactionsClass.update_by_guid(API_Server, transactions, ServerName, ServerType);
 
-
-                        medRecheckLogClass.set_unresolved_data_by_guid(API_Server, medRecheckLog.GUID, Main_Form._登入者名稱);
+                        medRecheckLog.排除藥師 = Main_Form._登入者名稱;
+                        medRecheckLog.排除時間 = DateTime.Now.ToDateTimeString();
+                        medRecheckLog.異常原因 = transactions.收支原因;
+                        medRecheckLog.狀態 = "已排除";
+                        medRecheckLogClass.set_unresolved_data_by_guid(API_Server, Main_Form.ServerName, Main_Form.ServerType, medRecheckLog.GUID, Main_Form._登入者名稱);
                         this.sqL_DataGridView_異常通知_盤點錯誤.ClearGrid();
                         uC_調劑作業_TypeA_1.Logout();
                         uC_調劑作業_TypeA_2.Logout();
