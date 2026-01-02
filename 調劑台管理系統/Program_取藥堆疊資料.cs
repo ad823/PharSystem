@@ -203,12 +203,16 @@ namespace 調劑台管理系統
                     if (medClasses_cloud_buf.Count > 0)
                     {
                         string 料號 = medClasses_cloud_buf[0].料號;
-                        medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
-                        if (medClasses_cloud_buf.Count > 1)
+                        if(料號.StringIsEmpty() == false)
                         {
-                            藥品碼 = medClasses_cloud_buf[0].料號;
-                            takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                            medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
+                            if (medClasses_cloud_buf.Count > 1)
+                            {
+                                藥品碼 = medClasses_cloud_buf[0].料號;
+                                takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                            }
                         }
+                      
                     }
 
                     string 病歷號 = takeMedicineStackClasses[i].病歷號;
