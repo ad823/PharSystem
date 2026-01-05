@@ -1110,6 +1110,78 @@ namespace HIS_WebApi
             }
         }
         /// <summary>
+        ///更新處方備註
+        /// </summary>
+        /// <remarks>
+        /// 以下為JSON範例
+        /// <code>
+        ///     {
+        ///         
+        ///         "Data":[
+        ///         {
+        ///             "GUID":"",
+        ///              "note":""
+        ///         }
+        ///              ]
+        ///     }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+        [HttpPost("update_note")]
+        public async Task<string> update_note([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "update_note";
+            try
+            {
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+
+                SQLControl sQLControl_med_cpoe = new SQLControl(Server, DB, "med_cpoe", UserName, Password, Port, SSLMode);
+                List<medCpoeClass> medCpoeClasses= returnData.Data.ObjToClass<List<medCpoeClass>>();
+                if (medCpoeClasses == null)
+                {
+                    medCpoeClass medCpoeClass = returnData.Data.ObjToClass<medCpoeClass>();
+                    if (medCpoeClass == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"傳入Data資料異常";
+                        return returnData.JsonSerializationt();
+                    }
+                    medCpoeClasses = new List<medCpoeClass>() { medCpoeClass };
+                }
+
+                string[] GUID = medCpoeClasses.Select(x => x.GUID).ToArray();
+
+                List<object[]> list_med_cpoe = await sQLControl_med_cpoe.GetRowsByDefultAsync(null, (int)enum_med_cpoe.GUID, GUID);
+                List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
+                foreach(var item in sql_medCpoe)
+                {
+                    medCpoeClass medCpoe_buff = medCpoeClasses.FirstOrDefault(x => x.GUID == item.GUID);
+                    item.備註 = medCpoe_buff.備註;
+                }
+                
+                List<object[]> list_medCpoe_replace = sql_medCpoe.ClassToSQL<medCpoeClass, enum_med_cpoe>();
+                if (list_medCpoe_replace.Count > 0)
+                {
+                   await sQLControl_med_cpoe.UpdateRowsAsync(null, list_medCpoe_replace);
+                }
+
+                returnData.Code = 200;
+                returnData.TimeTaken = $"{myTimerBasic}";
+                returnData.Data = sql_medCpoe;
+                returnData.Result = $"更新處方備註成功";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+
+            }
+        }
+        /// <summary>
         ///更新處方DC/NEW紀錄資料
         /// </summary>
         /// <remarks>
