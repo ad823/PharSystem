@@ -408,8 +408,8 @@ namespace HIS_WebApi
                     returnData.Result = "輸入日期格式錯誤!";
                     return returnData.JsonSerializationt();
                 }
-                起始時間 = 起始時間.StringToDateTime().GetStartDate().ToDateTimeString();
-                結束時間 = 結束時間.StringToDateTime().GetEndDate().ToDateTimeString();
+                //起始時間 = 起始時間.StringToDateTime().GetStartDate().ToDateTimeString();
+                //結束時間 = 結束時間.StringToDateTime().GetEndDate().ToDateTimeString();
                 DateTime date_st = 起始時間.StringToDateTime();
                 DateTime date_end = 結束時間.StringToDateTime();
 
@@ -439,64 +439,113 @@ namespace HIS_WebApi
                     SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
 
                     string sql = @$"
-            SELECT 
-                t2.藥品碼,
-                t2.藥品名稱,
-                IFNULL(t1.交易量, 0) AS 交易量,
-                t2.結存量
-            FROM (
-                SELECT 藥品碼, 
-                       SUM(
-                           CASE 
-                               WHEN 交易量 REGEXP '^-?[0-9]+(\\.[0-9]+)?$' THEN CAST(交易量 AS DECIMAL(20,6))
-                               ELSE 0
-                           END
-                       ) AS 交易量
-                FROM {DB}.trading
-                WHERE 操作時間 BETWEEN '{起始時間}' AND '{結束時間}'
-                  AND 藥品碼 IS NOT NULL
-                  AND 藥品碼 <> ''
-                GROUP BY 藥品碼
-            ) t1
-            RIGHT JOIN (
-                SELECT a.*
-                FROM {DB}.trading a
-                LEFT JOIN {DB}.trading b
-                  ON a.藥品碼 = b.藥品碼
-                 AND a.操作時間 < b.操作時間
-                 AND b.操作時間 <= '{結束時間}'
-                WHERE a.操作時間 <= '{結束時間}'
-                  AND b.藥品碼 IS NULL
-                  AND a.藥品碼 IS NOT NULL
-                  AND a.藥品碼 <> ''
-            ) t2 ON t1.藥品碼 = t2.藥品碼
-        ";
-                    //string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL OR 交易量 <> '');";
-                    //List<object[]> value = await sQLControl_trading.WriteCommandAsync(sql);
-                    //List<transactionsClass> transactionsClasses = value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
-                    //List<List<transactionsClass>> transactions = transactionsClasses.GroupBy(g => g.藥品碼).Select(s => s.ToList()).ToList();
-                    //foreach (var item in transactions)
-                    //{
-                    //    if (item[0].藥品碼.StringIsEmpty()) continue;
-                    //    consumptionClass consumptionClass = new consumptionClass();
-                    //    consumptionClass.藥碼 = item[0].藥品碼;
-                    //    consumptionClass.藥名 = item[0].藥品名稱;
-                    //    consumptionClass.庫存量 = item.OrderByDescending(x => x.操作時間).FirstOrDefault().結存量;
-                    //    consumptionClass.消耗量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
-                    //    consumptionClass.實調量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
-                    //    consumptionClasses_.Add(consumptionClass);
-                    //}
-                    System.Data.DataTable dataTable = sQLControl_trading.WtrteCommandAndExecuteReader(sql);
-                    foreach (System.Data.DataRow row in dataTable.Rows)
+                SELECT 
+                    t2.藥品碼,
+                    t2.藥品名稱,
+                    IFNULL(t1.交易量, 0) AS 交易量,
+                    t2.結存量
+                FROM (
+                    -- 統計交易量（只加總為數字的交易量）
+                    SELECT 藥品碼, 
+                            SUM(
+                                CASE 
+                                    WHEN 交易量 REGEXP '^-?[0-9]+(\\.[0-9]+)?$' THEN CAST(交易量 AS DECIMAL(20,6))
+                                    ELSE 0
+                                END
+                            ) AS 交易量
+                    FROM {DB}.trading
+                    WHERE 操作時間 BETWEEN '{起始時間}' AND '{結束時間}'
+                        AND 藥品碼 IS NOT NULL
+                        AND 藥品碼 <> ''
+                    GROUP BY 藥品碼
+                ) t1
+                RIGHT JOIN (
+                    -- 取每個藥品碼在 {結束時間} 前的最新一筆完整資料
+                    SELECT a.*
+                    FROM {DB}.trading a
+                    LEFT JOIN {DB}.trading b
+                        ON a.藥品碼 = b.藥品碼
+                        AND a.操作時間 < b.操作時間
+                        AND b.操作時間 <= '{結束時間}'
+                    WHERE a.操作時間 <= '{結束時間}'
+                        AND b.藥品碼 IS NULL
+                        AND a.藥品碼 IS NOT NULL
+                        AND a.藥品碼 <> ''
+                ) t2 ON t1.藥品碼 = t2.藥品碼
+            ";
+                    //string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL AND 交易量 <> '');";
+                    string command = $@"
+            (
+                -- ① 時間區間內的交易紀錄
+                SELECT *
+                FROM {DB}.trading t
+                WHERE t.操作時間 >= '{起始時間}'
+                    AND t.操作時間 <= '{結束時間}'
+                    AND t.藥品碼 IS NOT NULL
+                    AND t.藥品碼 <> ''
+                    AND t.交易量 IS NOT NULL
+                    AND t.交易量 <> ''
+            )
+            UNION ALL
+            (
+                -- ② 補齊：時間區間內完全沒有資料的藥品碼 → 抓 endTime 以前(含)最新一筆
+                SELECT t1.*
+                FROM {DB}.trading t1
+                INNER JOIN (
+                    SELECT 藥品碼, MAX(操作時間) AS max_time
+                    FROM {DB}.trading
+                    WHERE 操作時間 <= '{結束時間}'
+                        AND 藥品碼 IS NOT NULL
+                        AND 藥品碼 <> ''
+                        AND 交易量 IS NOT NULL
+                        AND 交易量 <> ''
+                    GROUP BY 藥品碼
+                ) t2
+                    ON t1.藥品碼 = t2.藥品碼
+                    AND t1.操作時間 = t2.max_time
+                WHERE t1.藥品碼 IS NOT NULL
+                    AND t1.藥品碼 <> ''
+                    AND t1.交易量 IS NOT NULL
+                    AND t1.交易量 <> ''
+                    AND t1.操作時間 <= '{結束時間}'
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM {DB}.trading t3
+                        WHERE t3.藥品碼 = t1.藥品碼
+                        AND t3.操作時間 >= '{起始時間}'
+                        AND t3.操作時間 <= '{結束時間}'
+                        AND t3.藥品碼 IS NOT NULL
+                        AND t3.藥品碼 <> ''
+                        AND t3.交易量 IS NOT NULL
+                        AND t3.交易量 <> ''
+                    )
+            )";
+
+                    List<object[]> value = await sQLControl_trading.WriteCommandAsync(command);
+                    List<transactionsClass> transactionsClasses = value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
+                    List<List<transactionsClass>> transactions = transactionsClasses.GroupBy(g => g.藥品碼).Select(s => s.ToList()).ToList();
+                    foreach (var item in transactions)
                     {
+                        if (item[0].藥品碼.StringIsEmpty()) continue;
                         consumptionClass consumptionClass = new consumptionClass();
-                        consumptionClass.藥碼 = row["藥品碼"].ToString();
-                        consumptionClass.藥名 = row["藥品名稱"].ToString();
-                        consumptionClass.庫存量 = row["結存量"].ToString();
-                        consumptionClass.消耗量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
-                        consumptionClass.實調量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
+                        consumptionClass.藥碼 = item[0].藥品碼;
+                        consumptionClass.藥名 = item[0].藥品名稱;
+                        consumptionClass.庫存量 = item.OrderByDescending(x => x.操作時間).FirstOrDefault().結存量;
+                        consumptionClass.消耗量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
+                        consumptionClass.實調量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
                         consumptionClasses_.Add(consumptionClass);
                     }
+                    //System.Data.DataTable dataTable = sQLControl_trading.WtrteCommandAndExecuteReader(command);
+                    //foreach (System.Data.DataRow row in dataTable.Rows)
+                    //{
+                    //    consumptionClass consumptionClass = new consumptionClass();
+                    //    consumptionClass.藥碼 = row["藥品碼"].ToString();
+                    //    consumptionClass.藥名 = row["藥品名稱"].ToString();
+                    //    consumptionClass.庫存量 = row["結存量"].ToString();
+                    //    consumptionClass.消耗量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
+                    //    consumptionClass.實調量 = (row["交易量"].ToString().StringToDouble() * -1).ToString("0.00");
+                    //    consumptionClasses_.Add(consumptionClass);
+                    //}
 
                     list_consumptionClasses.Add(consumptionClasses_);
 
@@ -530,7 +579,6 @@ namespace HIS_WebApi
                             consumptionClasse_buf[0].消耗量 = (consumptionClasse_buf[0].消耗量.StringToDouble() + value.消耗量.StringToDouble()).ToString("0.00");
                             consumptionClasse_buf[0].實調量 = (consumptionClasse_buf[0].實調量.StringToDouble() + value.實調量.StringToDouble()).ToString("0.00");
                             consumptionClasse_buf[0].庫存量 = (consumptionClasse_buf[0].庫存量.StringToDouble() + value.庫存量.StringToDouble()).ToString("0.00");
-                        
                         }
                         else
                         {
@@ -540,12 +588,7 @@ namespace HIS_WebApi
                         }
                     }
                 }
-                for(int i = 0; i < consumptionClasses.Count; i++)
-                {
-                    if (consumptionClasses[i].實調量.StringToDouble() == 0) consumptionClasses[i].實調量 = "0";
-                    if (consumptionClasses[i].消耗量.StringToDouble() == 0) consumptionClasses[i].消耗量 = "0";
-                    if (consumptionClasses[i].庫存量.StringToDouble() == 0) consumptionClasses[i].庫存量 = "0";
-                }
+
                 returnData.Code = 200;
                 returnData.Result = $"取得總消耗量表成功,{returnData.ValueAry[2]}";
                 returnData.Data = consumptionClasses;
