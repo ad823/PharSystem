@@ -249,6 +249,26 @@
             備註
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medComboClass.GUID">
+            <summary>
+            唯一KEY。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.序列號">
+            <summary>
+            序列號。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.藥碼">
+            <summary>
+            藥碼。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.藥名">
+            <summary>
+            藥名。
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.bedStatusClass.GUID">
             <summary>
             唯一KEY
