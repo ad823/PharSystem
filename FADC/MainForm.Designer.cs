@@ -134,6 +134,7 @@
             this.panel23 = new System.Windows.Forms.Panel();
             this.plC_RJ_Button10 = new MyUI.PLC_RJ_Button();
             this.rJ_Pannel24 = new MyUI.RJ_Pannel();
+            this.plC_RJ_Button_調劑作業_藥品組合 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_調劑作業_入庫作業 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_醫令檢索 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_手輸醫令 = new MyUI.PLC_RJ_Button();
@@ -2923,6 +2924,7 @@
             this.rJ_Pannel24.BorderColor = System.Drawing.Color.White;
             this.rJ_Pannel24.BorderRadius = 20;
             this.rJ_Pannel24.BorderSize = 10;
+            this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_調劑作業_藥品組合);
             this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_調劑作業_入庫作業);
             this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_醫令檢索);
             this.rJ_Pannel24.Controls.Add(this.plC_RJ_Button_手輸醫令);
@@ -2937,6 +2939,60 @@
             this.rJ_Pannel24.ShadowSize = 5;
             this.rJ_Pannel24.Size = new System.Drawing.Size(1653, 125);
             this.rJ_Pannel24.TabIndex = 11;
+            // 
+            // plC_RJ_Button_調劑作業_藥品組合
+            // 
+            this.plC_RJ_Button_調劑作業_藥品組合.AutoResetState = true;
+            this.plC_RJ_Button_調劑作業_藥品組合.BackgroundColor = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_藥品組合.Bool = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_藥品組合.BorderRadius = 15;
+            this.plC_RJ_Button_調劑作業_藥品組合.BorderSize = 1;
+            this.plC_RJ_Button_調劑作業_藥品組合.but_press = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
+            this.plC_RJ_Button_調劑作業_藥品組合.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_調劑作業_藥品組合.Dock = System.Windows.Forms.DockStyle.Left;
+            this.plC_RJ_Button_調劑作業_藥品組合.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_調劑作業_藥品組合.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_調劑作業_藥品組合.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_藥品組合.GUID = "";
+            this.plC_RJ_Button_調劑作業_藥品組合.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_調劑作業_藥品組合.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
+            this.plC_RJ_Button_調劑作業_藥品組合.Location = new System.Drawing.Point(326, 10);
+            this.plC_RJ_Button_調劑作業_藥品組合.Name = "plC_RJ_Button_調劑作業_藥品組合";
+            this.plC_RJ_Button_調劑作業_藥品組合.OFF_文字內容 = "藥品組合";
+            this.plC_RJ_Button_調劑作業_藥品組合.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_藥品組合.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_藥品組合.OFF_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_藥品組合.ON_BorderSize = 1;
+            this.plC_RJ_Button_調劑作業_藥品組合.ON_文字內容 = "藥品組合";
+            this.plC_RJ_Button_調劑作業_藥品組合.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.plC_RJ_Button_調劑作業_藥品組合.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_藥品組合.ON_背景顏色 = System.Drawing.Color.White;
+            this.plC_RJ_Button_調劑作業_藥品組合.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_調劑作業_藥品組合.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_調劑作業_藥品組合.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_調劑作業_藥品組合.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_調劑作業_藥品組合.ShadowSize = 3;
+            this.plC_RJ_Button_調劑作業_藥品組合.ShowLoadingForm = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.Size = new System.Drawing.Size(102, 102);
+            this.plC_RJ_Button_調劑作業_藥品組合.State = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.TabIndex = 136;
+            this.plC_RJ_Button_調劑作業_藥品組合.Text = "藥品組合";
+            this.plC_RJ_Button_調劑作業_藥品組合.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_調劑作業_藥品組合.TextHeight = 35;
+            this.plC_RJ_Button_調劑作業_藥品組合.Texts = "藥品組合";
+            this.plC_RJ_Button_調劑作業_藥品組合.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.字型鎖住 = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_調劑作業_藥品組合.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_調劑作業_藥品組合.文字鎖住 = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.背景圖片 = global::FADC.Properties.Resources.調配排程;
+            this.plC_RJ_Button_調劑作業_藥品組合.讀取位元反向 = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.讀寫鎖住 = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.音效 = true;
+            this.plC_RJ_Button_調劑作業_藥品組合.顯示 = false;
+            this.plC_RJ_Button_調劑作業_藥品組合.顯示狀態 = false;
             // 
             // plC_RJ_Button_調劑作業_入庫作業
             // 
@@ -10651,6 +10707,7 @@
         private System.Windows.Forms.Panel panel33;
         private MyUI.PLC_RJ_Button plC_RJ_Button9;
         private SpeechRecognitionUserControl.SpeechRecognitionUserControl speechRecognitionUserControl;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_調劑作業_藥品組合;
     }
 }
 

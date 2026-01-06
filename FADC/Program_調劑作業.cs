@@ -54,6 +54,7 @@ namespace FADC
             this.plC_RJ_Button_調劑作業_入庫作業.MouseDownEvent += PlC_RJ_Button_調劑作業_入庫作業_MouseDownEvent;
             this.plC_RJ_Button_調劑作業_辨識登入.MouseDownEvent += PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent;
             this.plC_RJ_Button_調劑作業_指紋登入.MouseDownEvent += PlC_RJ_Button_調劑作業_指紋登入_MouseDownEvent;
+            this.plC_RJ_Button_調劑作業_藥品組合.MouseDownEvent += PlC_RJ_Button_調劑作業_藥品組合_MouseDownEvent;
             this.rJ_Button_調劑畫面_登出.MouseDownEvent += RJ_Button_調劑畫面_登出_MouseDownEvent;
             this.rJ_Button_調劑畫面_開始調劑.MouseDownEvent += RJ_Button_調劑畫面_開始調劑_MouseDownEvent;
 
@@ -462,6 +463,11 @@ namespace FADC
         {
             Dialog_單品入庫作業 dialog_入庫作業 = new Dialog_單品入庫作業();
             dialog_入庫作業.ShowDialog();
+        }
+        private void PlC_RJ_Button_調劑作業_藥品組合_MouseDownEvent(MouseEventArgs mevent)
+        {
+            Dialog_藥品組合 dialog_藥品組合 = new Dialog_藥品組合();
+            dialog_藥品組合.ShowDialog();
         }
 
         public class ICP_By_chemotherapyOrderClass_sn : IComparer<chemotherapyOrderClass>
