@@ -458,8 +458,20 @@ namespace FADC
         void cnt_Program_出貨一次_出料一次開始(ref int cnt)
         {
             PLC_Device_輸送帶反轉.Bool = true;
+           
+            List<storageMedBoxIOConfigClass> storageMedBoxIOConfigClasses = storageMedBoxIOConfigClass.get_all(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType);
+            storageMedBoxIOConfigClass storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP_出貨一次).FirstOrDefault();
             Console.WriteLine($"[出貨一次] - 出料一次開始");
-            this.storageUI_EPD_266.Set_ADCMotorTrigger(IP_出貨一次, 29000, 0);
+            int time = 0;
+            if (storageMedBoxIO!= null)
+            {
+                if (storageMedBoxIO.出料馬達輸入延遲時間.StringIsInt32())
+                {
+                    time = storageMedBoxIO.出料馬達輸入延遲時間.StringToInt32();
+                    if (time < 0) time = 0;
+                }
+            }
+            this.storageUI_EPD_266.Set_ADCMotorTrigger(IP_出貨一次, 29000, time);
             cnt++;
         }
         void cnt_Program_出貨一次_等待出料一次完成(ref int cnt)

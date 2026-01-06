@@ -55,7 +55,7 @@ namespace HIS_DB_Lib
         }
         static public (int code, string result, List<medComboClass> medCombos) get_by_code_full(string API_Server, string code, string serverName = "", string serverType = "")
         {
-            string url = $"{API_Server}/api/medCombo/get_by_code_full";
+            string url = $"{API_Server}/api/medCombo/get_by_code";
 
             returnData returnData = new returnData();
             returnData.ServerName = serverName;

@@ -40,6 +40,7 @@
             this.rJ_Button_加入 = new MyUI.RJ_Button();
             this.rJ_Button_確認組合 = new MyUI.RJ_Button();
             this.sqL_DataGridView_藥品組合 = new SQLUI.SQL_DataGridView();
+            this.rJ_Button_重新選擇組合 = new MyUI.RJ_Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -130,6 +131,7 @@
             this.comboBox_搜尋條件.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.comboBox_搜尋條件.FormattingEnabled = true;
             this.comboBox_搜尋條件.Items.AddRange(new object[] {
+            "有儲位藥品",
             "藥名",
             "藥碼",
             "中文名",
@@ -221,6 +223,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.rJ_Button_重新選擇組合);
             this.panel3.Controls.Add(this.rJ_Button_確認組合);
             this.panel3.Controls.Add(this.rJ_Button_刪除組合);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -383,6 +386,38 @@
             this.sqL_DataGridView_藥品組合.首列樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.sqL_DataGridView_藥品組合.首行樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             // 
+            // rJ_Button_重新選擇組合
+            // 
+            this.rJ_Button_重新選擇組合.AutoResetState = false;
+            this.rJ_Button_重新選擇組合.BackColor = System.Drawing.Color.Transparent;
+            this.rJ_Button_重新選擇組合.BackgroundColor = System.Drawing.Color.Red;
+            this.rJ_Button_重新選擇組合.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_Button_重新選擇組合.BorderRadius = 10;
+            this.rJ_Button_重新選擇組合.BorderSize = 0;
+            this.rJ_Button_重新選擇組合.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.rJ_Button_重新選擇組合.DisenableColor = System.Drawing.Color.Gray;
+            this.rJ_Button_重新選擇組合.FlatAppearance.BorderSize = 0;
+            this.rJ_Button_重新選擇組合.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rJ_Button_重新選擇組合.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Button_重新選擇組合.ForeColor = System.Drawing.Color.White;
+            this.rJ_Button_重新選擇組合.GUID = "";
+            this.rJ_Button_重新選擇組合.Image_padding = new System.Windows.Forms.Padding(0);
+            this.rJ_Button_重新選擇組合.Location = new System.Drawing.Point(16, 19);
+            this.rJ_Button_重新選擇組合.Name = "rJ_Button_重新選擇組合";
+            this.rJ_Button_重新選擇組合.ProhibitionBorderLineWidth = 1;
+            this.rJ_Button_重新選擇組合.ProhibitionLineWidth = 4;
+            this.rJ_Button_重新選擇組合.ProhibitionSymbolSize = 30;
+            this.rJ_Button_重新選擇組合.ShadowColor = System.Drawing.Color.DimGray;
+            this.rJ_Button_重新選擇組合.ShadowSize = 3;
+            this.rJ_Button_重新選擇組合.ShowLoadingForm = false;
+            this.rJ_Button_重新選擇組合.Size = new System.Drawing.Size(208, 63);
+            this.rJ_Button_重新選擇組合.State = false;
+            this.rJ_Button_重新選擇組合.TabIndex = 14;
+            this.rJ_Button_重新選擇組合.Text = "重新選擇組合";
+            this.rJ_Button_重新選擇組合.TextColor = System.Drawing.Color.White;
+            this.rJ_Button_重新選擇組合.TextHeight = 0;
+            this.rJ_Button_重新選擇組合.UseVisualStyleBackColor = false;
+            // 
             // Dialog_藥品組合
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -420,5 +455,6 @@
         private MyUI.RJ_Button rJ_Button_加入;
         private MyUI.RJ_Button rJ_Button_確認組合;
         private SQLUI.SQL_DataGridView sqL_DataGridView_藥品組合;
+        private MyUI.RJ_Button rJ_Button_重新選擇組合;
     }
 }
