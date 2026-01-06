@@ -57,9 +57,9 @@ namespace FADC
             for (int i = 0; i < stockClasses.Count; i++)
             {
                 List<medComboClass> medCombos = medComboClass.get_by_code(Main_Form.API_Server, stockClasses[i].Code);
-                if(medCombos.Count >= 2)
+                if (medCombos.Count >= 2)
                 {
-                    if (MyMessageBox.ShowDialog($"${stockClasses[i].Code}){stockClasses[i].Name}", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) continue;
+                    if (MyMessageBox.ShowDialog($"({stockClasses[i].Code}){stockClasses[i].Name},是否調整組合?", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) continue;
 
                     Dialog_藥品組合選擇 dialog_藥品組合選擇 = new Dialog_藥品組合選擇(stockClasses[i]);
                     if (dialog_藥品組合選擇.ShowDialog() != DialogResult.Yes) continue;
@@ -67,9 +67,9 @@ namespace FADC
                     stocks_add.LockAdd(dialog_藥品組合選擇.stocks);
                 }
             }
-            for (int i = 0; i < stockClasses.Count; i++)
+            for (int i = 0; i < stocks_delete.Count; i++)
             {
-                stockClasses.Remove(stockClasses[i]);
+                stockClasses.Remove(stocks_delete[i]);
             }
             stockClasses.LockAdd(stocks_add);
             List<object[]> objects = new List<object[]>();
@@ -131,6 +131,7 @@ namespace FADC
                     if (storage_qty < qty)
                     {
                         objects[i][(int)enum_處方藥品.狀態] = "庫存不足";
+                        Console.WriteLine($"code:{code} 庫存:{storage_qty} 消耗量:{qty}");
                     }
                     this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
                 }
@@ -153,15 +154,15 @@ namespace FADC
                         for (int k = 0; k < objects_.Count; k++)
                         {
                             int 異動量 = (int)Math.Abs(objects_[k][(int)Main_Form.enum_儲位資訊.異動量].StringToInt32());
-                            for(int m = 0; m < 異動量; m++)
+                            for (int m = 0; m < 異動量; m++)
                             {
                                 object[] obj = objects_[k].DeepClone();
                                 obj[(int)Main_Form.enum_儲位資訊.藥碼] = code;
                                 obj[(int)Main_Form.enum_儲位資訊.異動量] = -1;
                                 objects_storages.Add(obj);
-                            }                        
+                            }
                         }
-                       
+
                     }
                     this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
                 }

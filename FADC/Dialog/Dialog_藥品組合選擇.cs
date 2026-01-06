@@ -34,7 +34,7 @@ namespace FADC
         {
             form.Invoke(new Action(delegate { InitializeComponent(); }));
             stock = stockClass;
-            this.LoadFinishedEvent += Dialog_藥品組合選擇_LoadFinishedEvent;          
+            this.LoadFinishedEvent += Dialog_藥品組合選擇_LoadFinishedEvent;
         }
 
         private void Dialog_藥品組合選擇_LoadFinishedEvent(EventArgs e)
@@ -50,6 +50,8 @@ namespace FADC
             sqL_DataGridView_藥品組合.RowDoubleClickEvent += SqL_DataGridView_藥品組合_RowDoubleClickEvent;
 
             sqL_DataGridView_藥品組合.Set_ColumnVisible(false, new enum_藥品組合().GetEnumName());
+            sqL_DataGridView_藥品組合.Set_ColumnWidth(400, enum_藥品組合.藥名);
+
             for (int i = 0; i < medComboClasses.Count; i++)
             {
                 object[] value = new object[new enum_藥品組合().GetLength()];
@@ -68,6 +70,7 @@ namespace FADC
             if (dialog_NumPannel.ShowDialog() != DialogResult.Yes) return;
 
             RowValue[(int)enum_藥品組合.數量] = dialog_NumPannel.Value;
+            sqL_DataGridView_藥品組合.ReplaceExtra(RowValue, true);
         }
 
         private void RJ_Button_確認_MouseDownEvent(MouseEventArgs mevent)
@@ -88,11 +91,12 @@ namespace FADC
                 qty += stockClass.Qty.StringToDouble();
                 stockClasses.Add(stockClass);
             }
-            if(qty == 0)
+            if (qty == 0)
             {
                 MyMessageBox.ShowDialog($"數量皆為【0】,無法寫入");
                 return;
             }
+            stocks = stockClasses;
             this.DialogResult = DialogResult.Yes;
             this.Close();
         }
