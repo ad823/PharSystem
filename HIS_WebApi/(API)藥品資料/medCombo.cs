@@ -270,7 +270,7 @@ namespace HIS_WebApi
                     returnData.Code = 200;
                     returnData.Result = $"取得資料共<{list_value.Count}>筆";
                     returnData.TimeTaken = myTimerBasic.ToString();
-                    returnData.Data = new medComboClass();
+                    returnData.Data = new List<medComboClass>();
                     return returnData.JsonSerializationt();
                 }
                 string sn = list_value[0][(int)enum_medCombo.序列號].ObjectToString();
