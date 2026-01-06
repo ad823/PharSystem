@@ -377,6 +377,7 @@ namespace HIS_WebApi
                 }
 
                 List<object[]> update_textVisionClass = new List<object[]>();
+                //API_AI = "http://192.168.5.210:3100/po_vision";
                 returnData return_textVisionClass = ai_analyze(API_AI, textVisionClasses);
 
                 if (return_textVisionClass == null)
@@ -653,7 +654,7 @@ namespace HIS_WebApi
                 }
 
                 (string Server, string DB, string UserName, string Password, uint Port) = GetServerInfo("Main", "網頁", "VM端");
-                string API = GetServerAPI("Main", "網頁", "API01");
+                string API = "http://127.0.0.1:4433";
                 SQLControl sQLControl_textVision = new SQLControl(Server, DB, "textVision", UserName, Password, Port, SSLMode);
 
                 List<object[]> update_textVisionClass = new List<object[]>();

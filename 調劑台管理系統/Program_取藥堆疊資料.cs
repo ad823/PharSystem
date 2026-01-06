@@ -3543,7 +3543,13 @@ namespace 調劑台管理系統
                     IP = list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.IP].ObjectToString();
 
                     Storage storage = List_EPD266_雲端資料.SortByIP(IP);
-                    if (storage != null && (storage.DeviceIsStorage()))
+                    if(storage.DeviceType == DeviceType.Pannel35 || storage.DeviceType== DeviceType.Pannel35_lock)
+                    {
+                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                        list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                        list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
+                    }
+                    else if (storage != null && (storage.DeviceIsStorage()))
                     {
                         if (!storage.TOFON)
                         {
@@ -3558,9 +3564,9 @@ namespace 調劑台管理系統
                     }
                     else
                     {
-                        //list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
-                        //list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                        //list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
+                        //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
+                        //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
+                        //    list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
                     }
 
 
