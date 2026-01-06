@@ -3541,9 +3541,9 @@ namespace 調劑台管理系統
                     藥品碼 = list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.藥品碼].ObjectToString();
                     Master_GUID = list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.Master_GUID].ObjectToString();
                     IP = list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.IP].ObjectToString();
-
+                    string index_IP = Funcion_取得LCD114索引表_index_IP(IP);
                     Storage storage = List_EPD266_雲端資料.SortByIP(IP);
-                    if(storage.DeviceType == DeviceType.Pannel35 || storage.DeviceType== DeviceType.Pannel35_lock)
+                    if (index_IP.StringIsEmpty())
                     {
                         list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
                         list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
@@ -3562,12 +3562,7 @@ namespace 調劑台管理系統
                             flag_TOFON = true;
                         }
                     }
-                    else
-                    {
-                        //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
-                        //    list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.配藥完成] = true.ToString();
-                        //    list_取藥子堆疊資料_Replace.Add(list_取藥子堆疊資料_buf[i]);
-                    }
+      
 
 
                 }
