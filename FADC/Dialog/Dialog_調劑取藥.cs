@@ -52,6 +52,26 @@ namespace FADC
             this.sqL_DataGridView_處方藥品.Set_ColumnWidth(100, enum_處方藥品.已取量);
             this.sqL_DataGridView_處方藥品.Set_ColumnWidth(150, enum_處方藥品.狀態);
 
+            List<StockClass> stocks_add = new List<StockClass>();
+            List<StockClass> stocks_delete = new List<StockClass>();
+            for (int i = 0; i < stockClasses.Count; i++)
+            {
+                List<medComboClass> medCombos = medComboClass.get_by_code(Main_Form.API_Server, stockClasses[i].Code);
+                if(medCombos.Count >= 2)
+                {
+                    if (MyMessageBox.ShowDialog($"${stockClasses[i].Code}){stockClasses[i].Name}", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) continue;
+
+                    Dialog_藥品組合選擇 dialog_藥品組合選擇 = new Dialog_藥品組合選擇(stockClasses[i]);
+                    if (dialog_藥品組合選擇.ShowDialog() != DialogResult.Yes) continue;
+                    stocks_delete.Add(stockClasses[i]);
+                    stocks_add.LockAdd(dialog_藥品組合選擇.stocks);
+                }
+            }
+            for (int i = 0; i < stockClasses.Count; i++)
+            {
+                stockClasses.Remove(stockClasses[i]);
+            }
+            stockClasses.LockAdd(stocks_add);
             List<object[]> objects = new List<object[]>();
             for (int i = 0; i < stockClasses.Count; i++)
             {
