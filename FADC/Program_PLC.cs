@@ -211,6 +211,7 @@ namespace FADC
         int cnt_Program_出貨一次 = 65534;
         void sub_Program_出貨一次()
         {
+            if (PLC_Device_出貨到領藥平台.Bool) PLC_Device_出貨一次.Bool = false;
             if (cnt_Program_出貨一次 == 65534)
             {
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
@@ -501,6 +502,8 @@ namespace FADC
         int cnt_Program_出貨到領藥平台 = 65534;
         void sub_Program_出貨到領藥平台()
         {
+            if (PLC_Device_出貨一次.Bool) PLC_Device_出貨到領藥平台.Bool = false;
+
             if (cnt_Program_出貨到領藥平台 == 65534)
             {
                 this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);

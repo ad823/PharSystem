@@ -233,6 +233,12 @@
     <Compile Include="Dialog\Dialog_藥品組合.Designer.cs">
       <DependentUpon>Dialog_藥品組合.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_藥品組合選擇.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_藥品組合選擇.Designer.cs">
+      <DependentUpon>Dialog_藥品組合選擇.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program_PLC.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_藥品組合.resx">
       <DependentUpon>Dialog_藥品組合.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_藥品組合選擇.resx">
+      <DependentUpon>Dialog_藥品組合選擇.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\BatchExpiryControl.resx">
       <DependentUpon>BatchExpiryControl.cs</DependentUpon>

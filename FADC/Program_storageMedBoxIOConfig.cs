@@ -32,7 +32,17 @@ namespace FADC
 
             sqL_DataGridView_storageMedBoxIOConfig.MouseDown += SqL_DataGridView_storageMedBoxIOConfig_MouseDown;
 
+            sqL_DataGridView_storageMedBoxIOConfig.RowDoubleClickEvent += SqL_DataGridView_storageMedBoxIOConfig_RowDoubleClickEvent;
+
             plC_UI_Init.Add_Method(Program_storageMedBoxIOConfig);
+        }
+
+        private void SqL_DataGridView_storageMedBoxIOConfig_RowDoubleClickEvent(object[] RowValue)
+        {
+            Dialog_NumPannel dialog_NumPannel = new Dialog_NumPannel();
+            if (dialog_NumPannel.ShowDialog() != DialogResult.Yes) return;
+            RowValue[(int)enum_storageMedBoxIOConfig.出料馬達輸入延遲時間] = dialog_NumPannel.Value.ToString();
+            sqL_DataGridView_storageMedBoxIOConfig.SQL_ReplaceExtra(RowValue, true);
         }
 
         private void SqL_DataGridView_storageMedBoxIOConfig_MouseDown(object sender, MouseEventArgs e)
