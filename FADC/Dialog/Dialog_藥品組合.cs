@@ -40,15 +40,51 @@ namespace FADC
 
             sqL_DataGridView_藥品搜尋.RowEnterEvent += SqL_DataGridView_藥品搜尋_RowEnterEvent;
 
-            rJ_Button_搜尋.MouseDownEvent += RJ_Button_搜尋_MouseDownEvent;
+            table = new Table(new enum_medCombo());
+            sqL_DataGridView_藥品組合.Init(table);
+            sqL_DataGridView_藥品組合.Set_ColumnVisible(false, new enum_medCombo().GetEnumNames());
+            sqL_DataGridView_藥品組合.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleCenter, enum_medCombo.藥碼);
+            sqL_DataGridView_藥品組合.Set_ColumnWidth(300, DataGridViewContentAlignment.MiddleCenter, enum_medCombo.藥名);
 
+
+            rJ_Button_搜尋.MouseDownEvent += RJ_Button_搜尋_MouseDownEvent;
+            rJ_Button_刪除組合.MouseDownEvent += RJ_Button_刪除組合_MouseDownEvent;
+            rJ_Button_確認組合.MouseDownEvent += RJ_Button_確認組合_MouseDownEvent;
             this.comboBox_搜尋條件.SelectedIndex = 0;
         }
 
+     
         private void SqL_DataGridView_藥品搜尋_RowEnterEvent(object[] RowValue)
         {
-           
+            List<medComboClass> medCombos = medComboClass.get_by_code(Main_Form.API_Server, RowValue[(int)enum_雲端藥檔.藥品碼].ObjectToString());
+
+            sqL_DataGridView_藥品組合.RefreshGrid(medCombos.ClassToSQL<medComboClass, enum_medCombo>());
         }
+        private void RJ_Button_刪除組合_MouseDownEvent(MouseEventArgs mevent)
+        {
+            List<object[]> list_value = sqL_DataGridView_藥品組合.GetAllRows();
+            if(list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("請選擇資料");
+                return;
+            }
+
+            sqL_DataGridView_藥品組合.DeleteExtra(list_value, true);
+        }
+        private void RJ_Button_確認組合_MouseDownEvent(MouseEventArgs mevent)
+        {
+            List<object[]> list_value = sqL_DataGridView_藥品組合.GetAllRows();
+            if (list_value.Count == 0)
+            {
+                MyMessageBox.ShowDialog("無資料可上傳");
+                return;
+            }
+            List<medComboClass> medCombos = list_value.SQLToClass<medComboClass, enum_medCombo>();
+            medComboClass.delete_by_guid(Main_Form.API_Server, medCombos);
+
+            medComboClass.add(Main_Form.API_Server, medCombos);
+        }
+
         private void RJ_Button_搜尋_MouseDownEvent(MouseEventArgs mevent)
         {
             try

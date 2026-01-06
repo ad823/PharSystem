@@ -39,6 +39,7 @@
             this.rJ_Button_刪除組合 = new MyUI.RJ_Button();
             this.rJ_Button_加入 = new MyUI.RJ_Button();
             this.rJ_Button_確認組合 = new MyUI.RJ_Button();
+            this.sqL_DataGridView_藥品組合 = new SQLUI.SQL_DataGridView();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -49,9 +50,10 @@
             this.panel1.Controls.Add(this.sqL_DataGridView_藥品搜尋);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(4, 44);
+            this.panel1.Location = new System.Drawing.Point(7, 47);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(748, 768);
+            this.panel1.Padding = new System.Windows.Forms.Padding(3);
+            this.panel1.Size = new System.Drawing.Size(748, 762);
             this.panel1.TabIndex = 0;
             // 
             // panel2
@@ -61,9 +63,9 @@
             this.panel2.Controls.Add(this.rJ_Button_搜尋);
             this.panel2.Controls.Add(this.comboBox_搜尋條件);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 668);
+            this.panel2.Location = new System.Drawing.Point(3, 659);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(748, 100);
+            this.panel2.Size = new System.Drawing.Size(742, 100);
             this.panel2.TabIndex = 123;
             // 
             // textBox_搜尋內容
@@ -161,7 +163,7 @@
             this.sqL_DataGridView_藥品搜尋.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sqL_DataGridView_藥品搜尋.Font = new System.Drawing.Font("新細明體", 12F);
             this.sqL_DataGridView_藥品搜尋.ImageBox = false;
-            this.sqL_DataGridView_藥品搜尋.Location = new System.Drawing.Point(0, 0);
+            this.sqL_DataGridView_藥品搜尋.Location = new System.Drawing.Point(3, 3);
             this.sqL_DataGridView_藥品搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.sqL_DataGridView_藥品搜尋.Name = "sqL_DataGridView_藥品搜尋";
             this.sqL_DataGridView_藥品搜尋.OnlineState = SQLUI.SQL_DataGridView.OnlineEnum.Online;
@@ -179,7 +181,7 @@
             this.sqL_DataGridView_藥品搜尋.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_藥品搜尋.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_藥品搜尋.Server = "localhost";
-            this.sqL_DataGridView_藥品搜尋.Size = new System.Drawing.Size(748, 668);
+            this.sqL_DataGridView_藥品搜尋.Size = new System.Drawing.Size(742, 656);
             this.sqL_DataGridView_藥品搜尋.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_藥品搜尋.TabIndex = 125;
             this.sqL_DataGridView_藥品搜尋.UserName = "root";
@@ -207,11 +209,11 @@
             this.rJ_Lable1.Font = new System.Drawing.Font("微軟正黑體", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_Lable1.ForeColor = System.Drawing.Color.White;
             this.rJ_Lable1.GUID = "";
-            this.rJ_Lable1.Location = new System.Drawing.Point(752, 44);
+            this.rJ_Lable1.Location = new System.Drawing.Point(755, 47);
             this.rJ_Lable1.Name = "rJ_Lable1";
             this.rJ_Lable1.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable1.ShadowSize = 0;
-            this.rJ_Lable1.Size = new System.Drawing.Size(666, 86);
+            this.rJ_Lable1.Size = new System.Drawing.Size(660, 86);
             this.rJ_Lable1.TabIndex = 30;
             this.rJ_Lable1.Text = "藥品組合";
             this.rJ_Lable1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -222,9 +224,9 @@
             this.panel3.Controls.Add(this.rJ_Button_確認組合);
             this.panel3.Controls.Add(this.rJ_Button_刪除組合);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(752, 712);
+            this.panel3.Location = new System.Drawing.Point(755, 706);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(666, 100);
+            this.panel3.Size = new System.Drawing.Size(660, 103);
             this.panel3.TabIndex = 124;
             // 
             // rJ_Button_刪除組合
@@ -323,6 +325,64 @@
             this.rJ_Button_確認組合.TextHeight = 0;
             this.rJ_Button_確認組合.UseVisualStyleBackColor = false;
             // 
+            // sqL_DataGridView_藥品組合
+            // 
+            this.sqL_DataGridView_藥品組合.AutoSelectToDeep = false;
+            this.sqL_DataGridView_藥品組合.backColor = System.Drawing.Color.DarkGray;
+            this.sqL_DataGridView_藥品組合.BorderColor = System.Drawing.Color.DarkGray;
+            this.sqL_DataGridView_藥品組合.BorderRadius = 0;
+            this.sqL_DataGridView_藥品組合.BorderSize = 2;
+            this.sqL_DataGridView_藥品組合.CellBorderColor = System.Drawing.Color.Silver;
+            this.sqL_DataGridView_藥品組合.cellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.sqL_DataGridView_藥品組合.cellStylBackColor = System.Drawing.Color.Silver;
+            this.sqL_DataGridView_藥品組合.cellStyleFont = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.sqL_DataGridView_藥品組合.cellStylForeColor = System.Drawing.Color.Black;
+            this.sqL_DataGridView_藥品組合.checkedRowBackColor = System.Drawing.Color.YellowGreen;
+            this.sqL_DataGridView_藥品組合.columnHeaderBackColor = System.Drawing.SystemColors.Control;
+            this.sqL_DataGridView_藥品組合.columnHeaderBorderColor = System.Drawing.Color.Gainsboro;
+            this.sqL_DataGridView_藥品組合.columnHeaderFont = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
+            this.sqL_DataGridView_藥品組合.columnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.sqL_DataGridView_藥品組合.columnHeadersHeight = 18;
+            this.sqL_DataGridView_藥品組合.columnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.sqL_DataGridView_藥品組合.DataGridViewAutoSizeColumnMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.NotSet;
+            this.sqL_DataGridView_藥品組合.DataKeyEnable = false;
+            this.sqL_DataGridView_藥品組合.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sqL_DataGridView_藥品組合.Font = new System.Drawing.Font("新細明體", 12F);
+            this.sqL_DataGridView_藥品組合.ImageBox = false;
+            this.sqL_DataGridView_藥品組合.Location = new System.Drawing.Point(755, 133);
+            this.sqL_DataGridView_藥品組合.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sqL_DataGridView_藥品組合.Name = "sqL_DataGridView_藥品組合";
+            this.sqL_DataGridView_藥品組合.OnlineState = SQLUI.SQL_DataGridView.OnlineEnum.Online;
+            this.sqL_DataGridView_藥品組合.Password = "user82822040";
+            this.sqL_DataGridView_藥品組合.Port = ((uint)(3306u));
+            this.sqL_DataGridView_藥品組合.rowBorderStyleOption = SQLUI.SQL_DataGridView.RowBorderStyleOption.All;
+            this.sqL_DataGridView_藥品組合.rowHeaderBackColor = System.Drawing.Color.CornflowerBlue;
+            this.sqL_DataGridView_藥品組合.rowHeaderBorderStyleOption = SQLUI.SQL_DataGridView.RowBorderStyleOption.All;
+            this.sqL_DataGridView_藥品組合.rowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.sqL_DataGridView_藥品組合.RowsColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.sqL_DataGridView_藥品組合.RowsHeight = 50;
+            this.sqL_DataGridView_藥品組合.SaveFileName = "SQL_DataGridView";
+            this.sqL_DataGridView_藥品組合.selectedBorderSize = 0;
+            this.sqL_DataGridView_藥品組合.selectedRowBackColor = System.Drawing.Color.Blue;
+            this.sqL_DataGridView_藥品組合.selectedRowBorderColor = System.Drawing.Color.Blue;
+            this.sqL_DataGridView_藥品組合.selectedRowForeColor = System.Drawing.Color.White;
+            this.sqL_DataGridView_藥品組合.Server = "localhost";
+            this.sqL_DataGridView_藥品組合.Size = new System.Drawing.Size(660, 573);
+            this.sqL_DataGridView_藥品組合.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
+            this.sqL_DataGridView_藥品組合.TabIndex = 126;
+            this.sqL_DataGridView_藥品組合.UserName = "root";
+            this.sqL_DataGridView_藥品組合.可拖曳欄位寬度 = true;
+            this.sqL_DataGridView_藥品組合.可選擇多列 = true;
+            this.sqL_DataGridView_藥品組合.單格樣式 = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.sqL_DataGridView_藥品組合.自動換行 = true;
+            this.sqL_DataGridView_藥品組合.表單字體 = new System.Drawing.Font("新細明體", 12F);
+            this.sqL_DataGridView_藥品組合.邊框樣式 = System.Windows.Forms.BorderStyle.None;
+            this.sqL_DataGridView_藥品組合.顯示CheckBox = false;
+            this.sqL_DataGridView_藥品組合.顯示首列 = true;
+            this.sqL_DataGridView_藥品組合.顯示首行 = true;
+            this.sqL_DataGridView_藥品組合.首列樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.sqL_DataGridView_藥品組合.首行樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            // 
             // Dialog_藥品組合
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -331,11 +391,13 @@
             this.CaptionHeight = 40;
             this.ClientSize = new System.Drawing.Size(1422, 816);
             this.ControlBox = true;
+            this.Controls.Add(this.sqL_DataGridView_藥品組合);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.rJ_Lable1);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
             this.Name = "Dialog_藥品組合";
+            this.Padding = new System.Windows.Forms.Padding(3);
             this.Text = "藥品組合";
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -357,5 +419,6 @@
         private MyUI.RJ_Button rJ_Button_刪除組合;
         private MyUI.RJ_Button rJ_Button_加入;
         private MyUI.RJ_Button rJ_Button_確認組合;
+        private SQLUI.SQL_DataGridView sqL_DataGridView_藥品組合;
     }
 }
