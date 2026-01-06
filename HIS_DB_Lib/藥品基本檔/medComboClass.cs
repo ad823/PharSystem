@@ -10,17 +10,21 @@ using H_Pannel_lib;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-
+using System.ComponentModel;
 namespace HIS_DB_Lib
 {
-    [EnumDescription("medCombo")]
+    [EnumDescription("med_Combo")]
     public enum enum_medCombo
     {
+        [Description("GUID,VARCHAR,50,PRIMARY")]
         GUID,
+        [Description("序列號,VARCHAR,50,INDEX")]
         序列號,
+        [Description("藥碼,VARCHAR,10,INDEX")]
         藥碼,
+        [Description("藥名,VARCHAR,300,NONE")]
         藥名,
-        
+
     }
     public class medComboClass
     {
@@ -51,7 +55,7 @@ namespace HIS_DB_Lib
         }
         static public (int code, string result, List<medComboClass> medCombos) get_by_code_full(string API_Server, string code, string serverName = "", string serverType = "")
         {
-            string url = $"{API_Server}/api/medCombo/get_by_code";
+            string url = $"{API_Server}/api/medCombo/get_by_code_full";
 
             returnData returnData = new returnData();
             returnData.ServerName = serverName;
