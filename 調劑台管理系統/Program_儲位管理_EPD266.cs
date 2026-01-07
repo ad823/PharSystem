@@ -811,11 +811,14 @@ namespace 調劑台管理系統
                 double 原有庫存 = storage.取得庫存();
                 string 藥品碼 = storage.Code;
                 藥品碼 = Function_藥品碼檢查(藥品碼);
-                string 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 庫存量 = "";
+                if (storage.IsInventoryLocation == false) 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 庫存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 storage.效期庫存覆蓋(效期, 數量);
+
                 double 修正庫存 = storage.取得庫存();
                 this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
-                List_EPD266_本地資料.Add_NewStorage(storage);
+                if (storage.IsInventoryLocation == false) List_EPD266_本地資料.Add_NewStorage(storage);
 
 
                 string GUID = Guid.NewGuid().ToString();
@@ -823,7 +826,11 @@ namespace 調劑台管理系統
                 string 藥品名稱 = storage.Name;
                 string 藥袋序號 = "";
                 string 交易量 = (修正庫存 - 原有庫存).ToString();
-                string 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+
+                string 結存量 = "";
+                if (storage.IsInventoryLocation == false) 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 結存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
+
                 string 操作人 = this.登入者名稱;
                 string 病人姓名 = "";
                 string 病歷號 = "";
@@ -845,7 +852,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"庫存異動{(storage.IsInventoryLocation ? "(庫儲)" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -914,7 +921,9 @@ namespace 調劑台管理系統
                 double 原有庫存 = storage.取得庫存();
                 string 藥品碼 = storage.Code;
                 藥品碼 = Function_藥品碼檢查(藥品碼);
-                string 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 庫存量 = "";
+                if (storage.IsInventoryLocation == false) 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 庫存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 storage.效期庫存覆蓋(效期, 批號, 數量);
                 double 修正庫存 = storage.取得庫存();
                 this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
@@ -924,7 +933,9 @@ namespace 調劑台管理系統
                 string 藥品名稱 = storage.Name;
                 string 藥袋序號 = "";
                 string 交易量 = (修正庫存 - 原有庫存).ToString();
-                string 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 結存量 = "";
+                if (storage.IsInventoryLocation == false) 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 結存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 string 操作人 = this.登入者名稱;
                 string 病人姓名 = "";
                 string 病歷號 = "";
@@ -947,7 +958,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"庫存異動{(storage.IsInventoryLocation ? "(庫儲)" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -1035,7 +1046,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"修正批號{(storage.IsInventoryLocation ? "(庫儲)" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 

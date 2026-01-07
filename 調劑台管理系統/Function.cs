@@ -915,6 +915,8 @@ namespace 調劑台管理系統
                     MyTimer myTimer1 = new MyTimer();
                     myTimer1.StartTickTime(50000);
                     List_EPD266_雲端資料 = _storageUI_EPD_266.SQL_GetAllStorage();
+                    List_EPD266_雲端資料 = List_EPD266_雲端資料.Where(x => x.IsInventoryLocation == false).ToList();
+
                     Console.WriteLine($"讀取EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
 
                 }));
@@ -934,21 +936,12 @@ namespace 調劑台管理系統
                     Console.WriteLine($"讀取Pannel35資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
 
                 }));
-                //taskList.Add(Task.Run(() =>
-                //{
-                //    MyTimer myTimer2 = new MyTimer();
-                //    myTimer2.StartTickTime(50000);
-                //    List_RFID_雲端資料 = _rfiD_UI.SQL_GetAllRFIDClass();
-                //    Console.WriteLine($"外部設備資料資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
-
-                //}));
+          
                 taskList.Add(Task.Run(() =>
                 {
                     MyTimer myTimer2 = new MyTimer();
                     myTimer2.StartTickTime(50000);
                     commonSapceClasses = Function_取得共用區所有儲位();
-
-
                 }));
                 Task allTask = Task.WhenAll(taskList);
                 allTask.Wait();
@@ -1840,6 +1833,7 @@ namespace 調劑台管理系統
                 MyTimer myTimer1 = new MyTimer();
                 myTimer1.StartTickTime(50000);
                 List_EPD266_本地資料 = _storageUI_EPD_266.SQL_GetAllStorage();
+                List_EPD266_本地資料 = List_EPD266_本地資料.Where(x => x.IsInventoryLocation == false).ToList();
                 Console.WriteLine($"讀取EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
 
             }));
@@ -1979,6 +1973,7 @@ namespace 調劑台管理系統
             for (int i = 0; i < boxes.Count; i++)
             {
                 Box box = _drawerUI_EPD_583.SQL_GetBox(boxes[i]);
+                if (box.IsInventoryLocation == true) continue;
                 List_EPD583_本地資料.Add_NewDrawer(box);
                 list_value.Add(box);
             }
@@ -1986,30 +1981,38 @@ namespace 調劑台管理系統
             for (int i = 0; i < boxes_1020.Count; i++)
             {
                 Box box = _drawerUI_EPD_1020.SQL_GetBox(boxes_1020[i]);
+                if (box.IsInventoryLocation == true) continue;
                 List_EPD1020_本地資料.Add_NewDrawer(box);
                 list_value.Add(box);
             }
             for (int i = 0; i < storages.Count; i++)
             {
                 Storage storage = _storageUI_EPD_266.SQL_GetStorage(storages[i]);
+                if (storage.IsInventoryLocation == true) continue;
                 List_EPD266_本地資料.Add_NewStorage(storage);
                 list_value.Add(storage);
             }
             for (int i = 0; i < pannels.Count; i++)
             {
                 Storage pannel = _storageUI_WT32.SQL_GetStorage(pannels[i]);
+                if (pannel.IsInventoryLocation == true) continue;
+
                 List_Pannel35_本地資料.Add_NewStorage(pannel);
                 list_value.Add(pannel);
             }
             for (int i = 0; i < rowsDevices.Count; i++)
             {
                 RowsDevice rowsDevice = _rowsLEDUI.SQL_GetRowsDevice(rowsDevices[i]);
+                if (rowsDevice.IsInventoryLocation == true) continue;
+
                 List_RowsLED_本地資料.Add_NewRowsLED(rowsDevice);
                 list_value.Add(rowsDevice);
             }
             for (int i = 0; i < rFIDDevices.Count; i++)
             {
                 RFIDDevice rFIDDevice = _rFID_UI.SQL_GetDevice(rFIDDevices[i]);
+                if (rFIDDevice.IsInventoryLocation == true) continue;
+
                 list_value.Add(rFIDDevice);
             }
             return list_value;
@@ -2032,6 +2035,57 @@ namespace 調劑台管理系統
             }
             return 庫存;
         }
+        static public double Function_從SQL取得庫儲區庫存(string 藥品碼)
+        {
+            double 庫存 = 0;
+            var taskBoxes = Task.Run(() =>
+                 _drawerUI_EPD_583.SQL_GetAllDrawers()
+                     .SortByCode(藥品碼)
+                     .Where(x => x.IsInventoryLocation)
+                     .ToList()
+             );
+
+            var taskStorages = Task.Run(() =>
+                _storageUI_EPD_266.SQL_GetAllStorage()
+                    .SortByCode(藥品碼)
+                    .Where(x => x.IsInventoryLocation)
+                    .ToList()
+            );
+
+            var taskRows = Task.Run(() =>
+                _rowsLEDUI.SQL_GetAllRowsLED()
+                    .SortByCode(藥品碼)
+                    .Where(x => x.IsInventoryLocation)
+                    .ToList()
+            );
+
+            Task.WaitAll(taskBoxes, taskStorages, taskRows);
+
+            List<Box> boxes = taskBoxes.Result;
+            List<Storage> storages = taskStorages.Result;
+            List<RowsDevice> rowsDevice = taskRows.Result;
+            List<object> list_value = new List<object>();
+            foreach (var temp in boxes) list_value.Add(temp);
+            foreach (var temp in storages) list_value.Add(temp);
+            foreach (var temp in rowsDevice) list_value.Add(temp);
+ 
+
+            for (int i = 0; i < list_value.Count; i++)
+            {
+                if (list_value[i] is Device)
+                {
+                    Device device = list_value[i] as Device;
+                    if (device != null)
+                    {
+                        庫存 += device.Inventory.StringToDouble();
+                    }
+                }
+            }
+            return 庫存;
+        }
+
+
+
         static public long Function_從SQL取得排列號(string 藥品碼)
         {
             long index = 0;
