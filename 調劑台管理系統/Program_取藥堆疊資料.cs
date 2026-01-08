@@ -2046,18 +2046,7 @@ namespace 調劑台管理系統
                                 }
                                 else
                                 {
-                                    if(storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
-                                    {
-                                        if(數量 == storage.Min_Package_Num.StringToDouble())
-                                        {
-                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                    }
-                                        
+                                    this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                 }
                             }
                             else
@@ -2085,34 +2074,11 @@ namespace 調劑台管理系統
                                         }
                                         else
                                         {
-                                            if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
-                                            {
-                                                if (數量 == storage.Min_Package_Num.StringToDouble())
-                                                {
-                                                    this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                            }
+                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                         }
 
                                     }
-                                    else
-                                    {
-                                        if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
-                                        {
-                                            if (數量 == storage.Min_Package_Num.StringToDouble())
-                                            {
-                                                this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                        }
-                                    }
+                                    else this.storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                 }
 
                             }
@@ -2123,13 +2089,7 @@ namespace 調劑台管理系統
                             {
                                 Color color_fore = Color.White;
                                 if (lightOn.LCD_Color.R > 230 && lightOn.LCD_Color.G > 230 && lightOn.LCD_Color.B > 230) color_fore = Color.Black;
-                                string text = 數量.ToString();
-                                Font font = new Font("標楷體", 70, FontStyle.Bold);
-                                if(text.Contains(".") || text.Length >= 4)
-                                {
-                                    font = new Font("標楷體", 55, FontStyle.Bold);
-                                }
-                                storageUI_LCD_114.DrawImage(index_IP, 29008, 數量.ToString(), font, color_fore, lightOn.LCD_Color);
+                                storageUI_LCD_114.DrawImage(index_IP, 29008, 數量.ToString(), new Font("標楷體", 70, FontStyle.Bold), color_fore, lightOn.LCD_Color);
                             }
 
                         }));
