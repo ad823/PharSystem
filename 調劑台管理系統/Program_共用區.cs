@@ -262,7 +262,7 @@ namespace 調劑台管理系統
                 Console.WriteLine($"API 連結失敗 : {dBConfigClass.Api_Server}/api/ServerSetting");
                 return new List<sys_serverSettingClass>();
             }
-            Console.WriteLine(json_result);
+            //Console.WriteLine(json_result);
             returnData returnData = json_result.JsonDeserializet<returnData>();
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses_buf = new List<sys_serverSettingClass>();

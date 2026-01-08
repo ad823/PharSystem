@@ -403,7 +403,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             List<string> strs = returnData_out.Data.ObjToClass<List<string>>();
             return strs;
         }
@@ -423,7 +423,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             List<sys_serverSettingClass> strs = returnData_out.Data.ObjToClass<List<sys_serverSettingClass>>();
             return strs;
         }
@@ -444,7 +444,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             sys_serverSettingClass sys_serverSettingClass = returnData_out.Data.ObjToClass<sys_serverSettingClass>();
             return sys_serverSettingClass;
         }
@@ -494,7 +494,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             List<sys_serverSettingClass> value = returnData_out.Data.ObjToClass<List<sys_serverSettingClass>>();
             return value;
         }
@@ -517,7 +517,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             sys_serverSettingClass value = returnData_out.Data.ObjToClass<sys_serverSettingClass>();
             return value;
         }
@@ -540,7 +540,7 @@ namespace HIS_DB_Lib
             {
                 return null;
             }
-            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            //Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             sys_serverSettingClass value = returnData_out.Data.ObjToClass<sys_serverSettingClass>();
             if (value == null) return null;
             return value.Server;

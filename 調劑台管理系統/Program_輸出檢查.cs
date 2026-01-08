@@ -436,7 +436,7 @@ namespace 調劑台管理系統
                 if (storage != null)
                 {
                     if(storage.DeviceType == DeviceType.EPD266_lock || storage.DeviceType == DeviceType.EPD290_lock || storage.DeviceType == DeviceType.EPD420_lock
-                        || storage.DeviceType == DeviceType.EPD420G || storage.DeviceType == DeviceType.EPD360E_lock)
+                        || storage.DeviceType == DeviceType.EPD420G_lock || storage.DeviceType == DeviceType.EPD360E_lock)
                     {
                         flag_state = this.storageUI_EPD_266.GetInput(storage.IP);
                         this.PLC.properties.device_system.Set_Device(Input, flag_state);
