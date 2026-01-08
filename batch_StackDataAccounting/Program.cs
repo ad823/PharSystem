@@ -378,6 +378,7 @@ namespace batch_StackDataAccounting
             public int LCD114_Port { get => lCD114_Port; set => lCD114_Port = value; }
             public string Voice_IP { get => voice_IP; set => voice_IP = value; }
             public int Voice_port { get => voice_port; set => voice_port = value; }
+            public bool 舊版晶片 { get; set; } = false;
         }
         static private void LoadMyConfig()
         {
@@ -2214,46 +2215,50 @@ namespace batch_StackDataAccounting
                             {
                                 if (color == Color.Black)
                                 {
-                                    storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    if (myConfigClass.舊版晶片 == false)
+                                    {
+                                        storageUI_EPD_266.Set_WS2812B_breathing(storage, 30, 30, color);
+                                    }
+                                    else
+                                    {
+                                        storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    }
                                 }
                                 else
                                 {
-                                    if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
-                                    {
-                                        if (數量 == storage.Min_Package_Num.StringToDouble())
-                                        {
-                                            storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                    }
-
+                                    storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                 }
-
-        
                             }
                             else
                             {
-                                if (color == Color.Black) storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                else if (lightOn.flag_Refresh_LCD || lightOn.flag_Refresh_Light)
+                                if (color == Color.Black)
                                 {
-                                    if (storage.Min_Package_Num.StringToDouble() > 0 && storage.Min_Package_Num.StringIsEmpty() == false)
+                                    if (myConfigClass.舊版晶片 == false)
                                     {
-                                        if (數量 == storage.Min_Package_Num.StringToDouble())
-                                        {
-                                            storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
-                                        }
+                                        storageUI_EPD_266.Set_WS2812B_breathing(storage, 30, 30, color);
                                     }
                                     else
                                     {
                                         storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+
                                     }
+
+                                }
+                                else if (lightOn.flag_Refresh_LCD || lightOn.flag_Refresh_Light)
+                                {
+                                    storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
                                 }
 
                             }
-
+                            string index_IP = Funcion_取得LCD114索引表_index_IP(storage.IP);
+                            if (index_IP.StringIsEmpty()) return;
+                            if (color == Color.Black) storageUI_LCD_114.ClearCanvas(index_IP, 29008);
+                            if (lightOn.flag_Refresh_LCD)
+                            {
+                                Color color_fore = Color.White;
+                                if (lightOn.LCD_Color.R > 230 && lightOn.LCD_Color.G > 230 && lightOn.LCD_Color.B > 230) color_fore = Color.Black;
+                                storageUI_LCD_114.DrawImage(index_IP, 29008, 數量.ToString(), new Font("標楷體", 70, FontStyle.Bold), color_fore, lightOn.LCD_Color);
+                            }
 
                         }));
 
