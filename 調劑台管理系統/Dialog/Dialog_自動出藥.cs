@@ -19,6 +19,7 @@ namespace 調劑台管理系統
     public partial class Dialog_自動出藥 : MyDialog
     {
         private MyThread myThread = new MyThread();
+        public personPageClass personPage = new personPageClass();
         public List<takeMedicineStackClass> takeMedicines = new List<takeMedicineStackClass>();
         public enum enum_出藥資訊
         {
@@ -36,14 +37,15 @@ namespace 調劑台管理系統
             實出,
             [Description("狀態,VARCHAR,50,NONE")]
             狀態,
+            [Description("Value,VARCHAR,50,NONE")]
+            Value,
         }
         public Dialog_自動出藥(List<takeMedicineStackClass> takeMedicines)
         {
             form.Invoke(new Action(delegate { InitializeComponent(); }));
-
-            sqL_DataGridView_出藥資訊.Init(new Table(new enum_出藥資訊()));
-            sqL_DataGridView_出藥資訊.Set_ColumnVisible(false, new enum_出藥資訊().GetEnumNames());
             sqL_DataGridView_出藥資訊.RowsHeight = 60;
+            sqL_DataGridView_出藥資訊.Init(new Table(new enum_出藥資訊()));
+            sqL_DataGridView_出藥資訊.Set_ColumnVisible(false, new enum_出藥資訊().GetEnumNames());        
             sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥碼);
             sqL_DataGridView_出藥資訊.Set_ColumnWidth(600, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥名);
             sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.應出);
@@ -82,227 +84,174 @@ namespace 調劑台管理系統
         {
 
         }
-        List<object[]> objects_storages = new List<object[]>();
-        object[] objects_storage;
+        private List<object[]> objects_storages = new List<object[]>();
+        private object[] objects_storage;
+        private object[] objects_出藥資訊;
+        private storageMedBoxIOConfigClass storageMedBoxIO;
+        private int MotorCnt;
         private int cnt = 1;
+        private bool flag_有藥品要取 = false;
         private void sub_program()
         {
-            //if (cnt == 1)
-            //{
-            //    List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
-            //    for (int i = 0; i < objects.Count; i++)
-            //    {
-            //        string code = objects[i][(int)enum_出藥資訊.藥碼].ObjectToString();
-            //        double storage_qty = Main_Form.Function_從SQL取得庫存(code);
-            //        int qty = Math.Abs(objects[i][(int)enum_出藥資訊.應出].StringToInt32());
-            //        if (storage_qty < qty)
-            //        {
-            //            objects[i][(int)enum_出藥資訊.狀態] = "庫存不足";
-            //            Console.WriteLine($"code:{code} 庫存:{storage_qty} 消耗量:{qty}");
-            //        }
-            //        this.sqL_DataGridView_出藥資訊.RefreshGrid(objects);
-            //    }
-            //    cnt++;
-            //}
-            //if (cnt == 2)
-            //{
-            //    objects_storages.Clear();
-            //    List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
-            //    Main_Form.Function_從SQL取得儲位到本地資料();
-            //    for (int i = 0; i < objects.Count; i++)
-            //    {
-            //        string code = objects[i][(int)enum_出藥資訊.藥碼].ObjectToString();
-            //        string state = objects[i][(int)enum_出藥資訊.狀態].ObjectToString();
-            //        int qty = objects[i][(int)enum_出藥資訊.應出].StringToInt32();
+            return;
+            if (cnt == 1)
+            {
+                List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
 
-            //        if (state != "庫存不足")
-            //        {
-            //            List<object[]> objects_ = Main_Form.Function_取得異動儲位資訊從本地資料(code, -qty);
-            //            for (int k = 0; k < objects_.Count; k++)
-            //            {
-            //                int 異動量 = (int)Math.Abs(objects_[k][(int)Main_Form.enum_儲位資訊.異動量].StringToInt32());
-            //                for (int m = 0; m < 異動量; m++)
-            //                {
-            //                    object[] obj = objects_[k].DeepClone();
-            //                    obj[(int)Main_Form.enum_儲位資訊.藥碼] = code;
-            //                    obj[(int)Main_Form.enum_儲位資訊.異動量] = -1;
-            //                    objects_storages.Add(obj);
-            //                }
-            //            }
+                cnt++;
+            }
+            if (cnt == 2)
+            {
+                objects_storages.Clear();
+                List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
+                Main_Form.Function_從SQL取得儲位到本地資料();
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    string code = objects[i][(int)enum_出藥資訊.藥碼].ObjectToString();
+                    string state = objects[i][(int)enum_出藥資訊.狀態].ObjectToString();
+                    int qty = objects[i][(int)enum_出藥資訊.應出].StringToInt32();
 
-            //        }
-            //        this.sqL_DataGridView_出藥資訊.RefreshGrid(objects);
-            //    }
-            //    cnt++;
-            //}
-            //if (cnt == 3)
-            //{
-            //    bool flag_有藥品要取 = false;
-            //    objects_storage = null;
-            //    for (int i = 0; i < objects_storages.Count; i++)
-            //    {
-            //        if (objects_storages[i][(int)Main_Form.enum_儲位資訊.狀態].ObjectToString() == "已領過") continue;
+                    List<object[]> objects_ = Main_Form.Function_取得異動儲位資訊從本地資料(code, -qty);
+                    if (objects_.Count == 0)
+                    {
+                        objects[i][(int)enum_出藥資訊.狀態] = "庫存不足";
+                        this.sqL_DataGridView_出藥資訊.ReplaceExtra(objects[i], true);
+                    }
+                    objects[i][(int)enum_出藥資訊.Value] = objects_[0];
+                
+                    this.sqL_DataGridView_出藥資訊.RefreshGrid(objects);
+                }
+                cnt++;
+            }
+            if (cnt == 3)
+            {
+                string IP = "";
+                List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
+                objects_出藥資訊 = null;
+                for (int i = 0; i < objects.Count; i++)
+                {
+                    if (objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "已領過" || objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "連線異常") continue;
+                    objects[i][(int)enum_出藥資訊.狀態] = "領用中";
+                    objects_出藥資訊 = objects[i];
+           
+                    objects_storage = (object[])objects[i][(int)enum_出藥資訊.Value];
+                    IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
+             
 
-            //        string IP = objects_storages[i][(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
-            //        List<storageMedBoxIOConfigClass> storageMedBoxIOConfigClasses = storageMedBoxIOConfigClass.get_all(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType);
-            //        storageMedBoxIOConfigClass storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP).FirstOrDefault();
-            //        if (storageMedBoxIO == null) continue;
-            //        Console.WriteLine($"{IP} : {storageMedBoxIO.出料位置X},{storageMedBoxIO.出料位置Y}");
-            //        if (list_取過X格數.Contains(storageMedBoxIO.出料位置X.StringToInt32()) == false)
-            //        {
-            //            objects_storage = objects_storages[i];
-            //            list_取過X格數.Add(storageMedBoxIO.出料位置X.StringToInt32());
-            //            Main_Form.IP_出貨一次 = IP;
-            //            flag_有藥品要取 = true;
-            //            break;
-            //        }
-            //        else
-            //        {
+                    List<storageMedBoxIOConfigClass> storageMedBoxIOConfigClasses = storageMedBoxIOConfigClass.get_all(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType);
+                    storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP).FirstOrDefault();
+                    if (storageMedBoxIO == null)
+                    {
+                        Console.WriteLine($"[出貨一次] - 未建立馬達索引表");
+                        objects[i][(int)enum_出藥資訊.狀態] = "連線異常";
+                        continue;
+                    }
+                    string udp_json = Main_Form._storageUI_EPD_266.GetUDPJsonString(IP);
+                    if (udp_json.StringIsEmpty())
+                    {
+                        Console.WriteLine($"[出貨一次] - UdpJson異常");
+                        objects[i][(int)enum_出藥資訊.狀態] = "連線異常";
+                        continue;
+                    }
+                    UDP_READ_basic uDP_READ_Basic = udp_json.JsonDeserializet<UDP_READ_basic>();
+                    MotorCnt = uDP_READ_Basic.FADC_motorCnt;
+                    break;
+               
+                }
 
-            //        }
-            //    }
-            //    if (flag_有藥品要取)
-            //    {
-            //        cnt = 500;
-            //    }
-            //    else
-            //    {
-            //        cnt = 1000;
-            //    }
-            //}
-            //if (cnt == 500)
-            //{
-            //    if (Main_Form.PLC_Device_出貨一次.Bool == false)
-            //    {
-            //        List<object[]> objects = this.sqL_DataGridView_處方藥品.GetAllRows();
-            //        for (int i = 0; i < objects.Count; i++)
-            //        {
-            //            string code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
-            //            if (code == objects_storage[(int)Main_Form.enum_儲位資訊.藥碼].ObjectToString())
-            //            {
-            //                objects[i][(int)enum_處方藥品.狀態] = "取藥中";
-            //            }
+                if(objects_出藥資訊 == null)
+                {
+                    cnt = 65500;
+                    return;
+                }
+                IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
+                Console.WriteLine($"[出貨一次] - {IP} ,MotorCnt({MotorCnt})參數 , 馬達延遲({storageMedBoxIO.出料馬達輸入延遲時間})");
+                int time = 0;
+                if (storageMedBoxIO != null)
+                {
+                    if (storageMedBoxIO.出料馬達輸入延遲時間.StringIsInt32())
+                    {
+                        time = storageMedBoxIO.出料馬達輸入延遲時間.StringToInt32();
+                        if (time < 0) time = 0;
+                    }
+                }
+                Main_Form._storageUI_EPD_266.Set_ADCMotorTrigger(IP, 29000, time);
 
-            //        }
-            //        this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
-            //        Main_Form.PLC_Device_出貨一次.Bool = true;
-            //        cnt++;
-            //        return;
-            //    }
-            //}
-            //if (cnt == 501)
-            //{
-            //    if (Main_Form.PLC_Device_出貨一次.Bool == false)
-            //    {
-            //        string code = "";
-            //        objects_storage[(int)Main_Form.enum_儲位資訊.狀態] = "已領過";
-            //        List<object[]> objects = this.sqL_DataGridView_處方藥品.GetAllRows();
-            //        for (int i = 0; i < objects.Count; i++)
-            //        {
-            //            code = objects[i][(int)enum_處方藥品.藥碼].ObjectToString();
-            //            if (code == objects_storage[(int)Main_Form.enum_儲位資訊.藥碼].ObjectToString())
-            //            {
-            //                objects[i][(int)enum_處方藥品.已取量] = (objects[i][(int)enum_處方藥品.已取量].StringToInt32() + 1).ToString();
-            //                if (objects[i][(int)enum_處方藥品.已取量].ObjectToString() == objects[i][(int)enum_處方藥品.領藥量].ObjectToString())
-            //                {
-            //                    objects[i][(int)enum_處方藥品.狀態] = "取藥完成";
-            //                }
-            //                else
-            //                {
-            //                    objects[i][(int)enum_處方藥品.狀態] = "待命中";
-            //                }
-            //            }
+            
+            }
+            if (cnt == 4)
+            {
+                string IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
 
-            //        }
-            //        Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(Main_Form.IP_出貨一次);
-            //        if (storage != null)
-            //        {
-            //            string 庫存量 = storage.Inventory;
-            //            string 備註 = "";
-            //            List<StockClass> stockClasses = storage.庫存異動(-1, true);
-            //            Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
-            //            Task.Run(new Action(delegate
-            //            {
-            //                Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
-            //            }));
-            //            medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, storage.Code);
+                string udp_json = Main_Form._storageUI_EPD_266.GetUDPJsonString(IP);
+                UDP_READ_basic uDP_READ_Basic = udp_json.JsonDeserializet<UDP_READ_basic>();
+                if (uDP_READ_Basic != null)
+                {
+                    if (uDP_READ_Basic.FADC_motorCnt != MotorCnt)
+                    {
+                        Console.WriteLine($"[出貨一次] - 出料一次完成");
+                        cnt++;
+                    }
 
-            //            transactionsClass transactionsClass = new transactionsClass();
-            //            transactionsClass.GUID = Guid.NewGuid().ToString();
-            //            transactionsClass.藥品碼 = storage.Code;
+                }
+            }
+            if (cnt == 5)
+            {
+                string IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
+                Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(IP);
+                if (storage != null)
+                {
+                    string 庫存量 = storage.Inventory;
+                    string 備註 = "";
+                    List<StockClass> stockClasses = storage.庫存異動(-1, true);
+                    Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
+                    Task.Run(new Action(delegate
+                    {
+                        Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
+                    }));
+                    medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, storage.Code);
 
-            //            if (_medClass != null)
-            //            {
-            //                transactionsClass.藥品名稱 = _medClass.藥品名稱;
-            //            }
-            //            transactionsClass.動作 = enum_交易記錄查詢動作.掃碼領藥.GetEnumName();
-            //            transactionsClass.庫存量 = 庫存量;
-            //            transactionsClass.交易量 = "-1";
-            //            transactionsClass.結存量 = storage.Inventory;
+                    transactionsClass transactionsClass = new transactionsClass();
+                    transactionsClass.GUID = Guid.NewGuid().ToString();
+                    transactionsClass.藥品碼 = storage.Code;
 
-            //            for (int i = 0; i < stockClasses.Count; i++)
-            //            {
-            //                備註 += $"[效期]:{stockClasses[i].Validity_period},[批號]:{stockClasses[i].Lot_number}";
-            //                if (i != stockClasses.Count - 1) 備註 += "\n";
-            //            }
-            //            transactionsClass.備註 = 備註;
+                    if (_medClass != null)
+                    {
+                        transactionsClass.藥品名稱 = _medClass.藥品名稱;
+                    }
+                    transactionsClass.動作 = enum_交易記錄查詢動作.掃碼領藥.GetEnumName();
+                    transactionsClass.庫存量 = 庫存量;
+                    transactionsClass.交易量 = "-1";
+                    transactionsClass.結存量 = storage.Inventory;
 
-            //            if (Main_Form.personpageClass_調劑畫面 != null)
-            //            {
-            //                transactionsClass.操作人 = Main_Form.personpageClass_調劑畫面.姓名;
-            //                transactionsClass.藥師證字號 = Main_Form.personpageClass_調劑畫面.藥師證字號;
-            //                transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
-            //            }
-            //            transactionsClass.add(Main_Form.API_Server, transactionsClass, Main_Form.ServerName, Main_Form.ServerType);
-            //        }
+                    for (int i = 0; i < stockClasses.Count; i++)
+                    {
+                        備註 += $"[效期]:{stockClasses[i].Validity_period},[批號]:{stockClasses[i].Lot_number}";
+                        if (i != stockClasses.Count - 1) 備註 += "\n";
+                    }
+                    transactionsClass.備註 = 備註;
 
-            //        this.sqL_DataGridView_處方藥品.RefreshGrid(objects);
-            //        cnt++;
-            //        return;
-            //    }
-            //}
-            //if (cnt == 502) cnt = 3;
-            //if (cnt == 1000)
-            //{
-            //    if (Main_Form.PLC_Device_出貨到領藥平台.Bool == false)
-            //    {
-            //        Main_Form.PLC_Device_出貨到領藥平台.Bool = true;
-            //        cnt++;
-            //        return;
-            //    }
-            //}
-            //if (cnt == 1001)
-            //{
-            //    if (Main_Form.PLC_Device_出貨到領藥平台.Bool == false)
-            //    {
-            //        list_取過X格數.Clear();
-            //        bool flag_已完成 = true;
-            //        for (int i = 0; i < objects_storages.Count; i++)
-            //        {
-            //            if (objects_storages[i][(int)Main_Form.enum_儲位資訊.狀態].ObjectToString() == "已領過") continue;
-            //            flag_已完成 = false;
-
-            //        }
-            //        if (flag_已完成)
-            //        {
-            //            cnt = 65500;
-            //            return;
-            //        }
-            //        else
-            //        {
-            //            cnt = 3;
-            //            return;
-            //        }
-
-            //    }
-            //}
-            //if (cnt == 65500)
-            //{
-            //    "取藥完成".PlayGooleVoiceAsync(Main_Form.API_Server);
-            //    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("取藥完成", 1500, Color.Green);
-            //    DialogResult = DialogResult.Yes;
-            //    this.Close();
-            //}
+                    if (personPage != null)
+                    {
+                        transactionsClass.操作人 = personPage.姓名;
+                        transactionsClass.藥師證字號 = personPage.藥師證字號;
+                        transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
+                    }
+                    transactionsClass.add(Main_Form.API_Server, transactionsClass, Main_Form.ServerName, Main_Form.ServerType);
+                }
+                objects_出藥資訊[(int)enum_出藥資訊.狀態] = "已領過";
+                this.sqL_DataGridView_出藥資訊.ReplaceExtra(objects_出藥資訊 , true);
+                cnt = 3;
+                return;
+            }
+           
+            if (cnt == 65500)
+            {
+                "取藥完成".PlayGooleVoiceAsync(Main_Form.API_Server);
+                Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("取藥完成", 1500, Color.Green);
+                DialogResult = DialogResult.Yes;
+                this.Close();
+            }
         }
       
     }
