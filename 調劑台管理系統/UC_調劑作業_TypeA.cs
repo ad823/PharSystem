@@ -610,14 +610,15 @@ namespace 調劑台管理系統
             if (cnt_Program_刷新領藥內容 == 3) cnt_Program_刷新領藥內容_取得資料(ref cnt_Program_刷新領藥內容);
             if (cnt_Program_刷新領藥內容 == 4) cnt_Program_刷新領藥內容_檢查雙人覆核(ref cnt_Program_刷新領藥內容);
             if (cnt_Program_刷新領藥內容 == 5) cnt_Program_刷新領藥內容_檢查RFID使用(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 6) cnt_Program_刷新領藥內容_檢查盲盤作業(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 7) cnt_Program_刷新領藥內容_檢查複盤作業(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 8) cnt_Program_刷新領藥內容_檢查作業完成(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 9) cnt_Program_刷新領藥內容_檢查是否需輸入效期(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 10) cnt_Program_刷新領藥內容_檢查是否需選擇效期(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 11) cnt_Program_刷新領藥內容_檢查自動登出(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 12) cnt_Program_刷新領藥內容_等待刷新間隔(ref cnt_Program_刷新領藥內容);
-            if (cnt_Program_刷新領藥內容 == 13) cnt_Program_刷新領藥內容 = 65500;
+            if (cnt_Program_刷新領藥內容 == 6) cnt_Program_刷新領藥內容_檢查自動出藥(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 7) cnt_Program_刷新領藥內容_檢查盲盤作業(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 8) cnt_Program_刷新領藥內容_檢查複盤作業(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 9) cnt_Program_刷新領藥內容_檢查作業完成(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 10) cnt_Program_刷新領藥內容_檢查是否需輸入效期(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 11) cnt_Program_刷新領藥內容_檢查是否需選擇效期(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 12) cnt_Program_刷新領藥內容_檢查自動登出(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 13) cnt_Program_刷新領藥內容_等待刷新間隔(ref cnt_Program_刷新領藥內容);
+            if (cnt_Program_刷新領藥內容 == 14) cnt_Program_刷新領藥內容 = 65500;
             if (cnt_Program_刷新領藥內容 > 1) cnt_Program_刷新領藥內容_檢查放開(ref cnt_Program_刷新領藥內容);
 
             if (cnt_Program_刷新領藥內容 == 65500)
@@ -915,6 +916,52 @@ namespace 調劑台管理系統
 
                 list_取藥堆疊母資料_add = dialog_HFRFID調劑作業.takeMedicineStackClasses.ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
                 list_取藥堆疊母資料_delete.LockAdd(list_取藥堆疊母資料);
+            }
+
+            if (list_取藥堆疊母資料_delete.Count > 0)
+            {
+                Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_DeleteExtra(list_取藥堆疊母資料_delete, false);
+                cnt = 1;
+            }
+            if (list_取藥堆疊母資料_add.Count > 0)
+            {
+                Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_AddRows(list_取藥堆疊母資料_add, false);
+                cnt = 1;
+            }
+            if (list_取藥堆疊母資料_replace.Count > 0)
+            {
+                Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_ReplaceExtra(list_取藥堆疊母資料_replace, false);
+                cnt = 1;
+            }
+
+            if (cnt == 1) return;
+            cnt++;
+
+        }
+        void cnt_Program_刷新領藥內容_檢查自動出藥(ref int cnt)
+        {
+            List<object[]> list_取藥堆疊母資料 = Main_Form.Function_取藥堆疊資料_取得指定調劑台名稱母資料(調劑台名稱);
+            List<object[]> list_取藥堆疊母資料_add = new List<object[]>();
+            List<object[]> list_取藥堆疊母資料_replace = new List<object[]>();
+            List<object[]> list_取藥堆疊母資料_delete = new List<object[]>();
+
+            list_取藥堆疊母資料 = list_取藥堆疊母資料.GetRows((int)enum_取藥堆疊母資料.狀態, enum_取藥堆疊母資料_狀態.自動出藥.GetEnumName());
+            if (list_取藥堆疊母資料.Count > 0)
+            {
+            
+                List<takeMedicineStackClass> takeMedicineStackClasses = list_取藥堆疊母資料.ToTakeMedicineStackClassList();
+                Dialog_自動出藥 dialog_自動出藥 = new Dialog_自動出藥(takeMedicineStackClasses);
+                if (dialog_自動出藥.ShowDialog() != DialogResult.Yes)
+                {
+                    Main_Form._sqL_DataGridView_取藥堆疊母資料.SQL_DeleteExtra(list_取藥堆疊母資料, false);
+                    Fuction_時間重置();
+                    cnt = 1;
+                    return;
+                }
+                Fuction_時間重置();
+
+                //list_取藥堆疊母資料_add = dialog_HFRFID調劑作業.takeMedicineStackClasses.ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
+                //list_取藥堆疊母資料_delete.LockAdd(list_取藥堆疊母資料);
             }
 
             if (list_取藥堆疊母資料_delete.Count > 0)

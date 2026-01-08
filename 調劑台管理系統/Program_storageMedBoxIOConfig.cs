@@ -12,10 +12,12 @@ using Basic;
 using System.Diagnostics;//記得取用 FileVersionInfo繼承
 using System.Reflection;//記得取用 Assembly繼承
 using HIS_DB_Lib;
+using System.Runtime.InteropServices;
+using NPOI.SS.Formula.Functions;
 using SQLUI;
 using MyOffice;
 
-namespace FADC
+namespace 調劑台管理系統
 {
     public partial class Main_Form : Form
     {
@@ -49,7 +51,7 @@ namespace FADC
 
         private void PlC_RJ_Button_storageMedBoxIOConfig_匯出_MouseDownEvent(MouseEventArgs mevent)
         {
-            this.Invoke(new Action(delegate 
+            this.Invoke(new Action(delegate
             {
                 try
                 {
@@ -76,7 +78,7 @@ namespace FADC
                 {
 
                 }
-            
+
 
             }));
         }
@@ -106,13 +108,13 @@ namespace FADC
             {
 
             }
-       
+
         }
-     
+
 
         public void Program_storageMedBoxIOConfig()
         {
-           
+
         }
     }
 }

@@ -37,6 +37,7 @@ namespace HIS_DB_Lib
         DC處方,
         NEW處方,
         RFID使用,
+        自動出藥,
         無可匹配數量,
         未授權,
     }
@@ -49,6 +50,7 @@ namespace HIS_DB_Lib
         獨立作業,
         庫存不足語音提示,
         RFID使用,
+        自動出藥,
     }
     [EnumDescription("take_medicine_stack_new")]
     public enum enum_取藥堆疊母資料

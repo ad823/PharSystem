@@ -192,6 +192,7 @@ namespace 調劑台管理系統
                 bool flag_效期管理 = false;
                 bool flag_雙人覆核 = false;
                 bool flag_RFID使用 = false;
+                bool flag_自動出藥 = false;
 
 
                 string 顏色 = "";
@@ -199,24 +200,7 @@ namespace 調劑台管理系統
                 {
                     List<object[]> list_堆疊母資料_buf = new List<object[]>();
                     string 藥品碼 = takeMedicineStackClasses[i].藥品碼;
-                    if(PLC_Device_亮燈要檢查料號.Bool)
-                    {
-                        medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.藥品碼 == 藥品碼).ToList();
-                        if (medClasses_cloud_buf.Count > 0)
-                        {
-                            string 料號 = medClasses_cloud_buf[0].料號;
-                            if (料號.StringIsEmpty() == false)
-                            {
-                                medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
-                                if (medClasses_cloud_buf.Count > 1)
-                                {
-                                    藥品碼 = medClasses_cloud_buf[0].料號;
-                                    takeMedicineStackClasses[i].藥品碼 = 藥品碼;
-                                }
-                            }
-
-                        }
-                    }
+                                                                                                                                                                                              
                  
 
                     string 病歷號 = takeMedicineStackClasses[i].病歷號;
@@ -270,6 +254,7 @@ namespace 調劑台管理系統
                         if (medClasses_cloud_buf.Count > 0)
                         {
                             flag_RFID使用 = Function_藥品設定表_取得管制方式(list_藥品設定表, enum_medConfig.使用RFID, 藥品碼);
+                            flag_自動出藥 = (List_EPD266_本地資料.Where(x => x.IsFADC).ToList().Count > 0);
                             if (Function_藥品設定表_取得是否自訂義(list_藥品設定表, 藥品碼))
                             {
                                 flag_複盤 = Function_藥品設定表_取得管制方式(list_藥品設定表, enum_medConfig.複盤, 藥品碼);
@@ -294,7 +279,8 @@ namespace 調劑台管理系統
                             if (flag_效期管理) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.效期管控);
                             if (flag_雙人覆核) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.雙人覆核);
                             if (flag_RFID使用) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.RFID使用);
-                            if (flag_複盤 || flag_盲盤 || flag_雙人覆核 || flag_RFID使用) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.獨立作業);
+                            if (flag_自動出藥) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.自動出藥);
+                            if (flag_複盤 || flag_盲盤 || flag_雙人覆核 || flag_RFID使用 || flag_自動出藥) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.獨立作業);
 
                         }
                         takeMedicineStackClasses[i].作業模式 = value[(int)enum_取藥堆疊母資料.作業模式].ObjectToString();
@@ -2634,6 +2620,7 @@ namespace 調劑台管理系統
                 bool flag_獨立作業 = false;
                 bool flag_雙人覆核 = false;
                 bool flag_RFID使用 = false;
+                bool flag_自動出藥 = false;
                 string GUID = "";
                 string 藥品碼 = "";
                 string 調劑台名稱 = "";
@@ -2652,6 +2639,7 @@ namespace 調劑台管理系統
                     flag_獨立作業 = Function_取藥堆疊資料_取得作業模式(this.list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.獨立作業);
                     flag_雙人覆核 = Function_取藥堆疊資料_取得作業模式(this.list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.雙人覆核);
                     flag_RFID使用 = Function_取藥堆疊資料_取得作業模式(this.list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.RFID使用);
+                    flag_自動出藥 = Function_取藥堆疊資料_取得作業模式(this.list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.自動出藥);
                     if (庫存量 == -999)
                     {
 
@@ -2685,17 +2673,10 @@ namespace 調劑台管理系統
                                 return;
                             }
                         }
-                        //if(flag_RFID使用)
-                        //{
-                        //    if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.等待刷新.GetEnumName())
-                        //    {
-                        //        this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態] = enum_取藥堆疊母資料_狀態.RFID使用.GetEnumName();
-                        //        this.sqL_DataGridView_取藥堆疊母資料.SQL_ReplaceExtra(this.list_取藥堆疊母資料[i], false);
-                        //        return;
-                        //    }
-                        //}
+        
                         bool flag_單循環取藥 = false;
                         if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.RFID使用.GetEnumName()) flag_單循環取藥 = true;
+                        if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.自動出藥.GetEnumName()) flag_單循環取藥 = true;
                         if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.雙人覆核.GetEnumName()) flag_單循環取藥 = true;
                         if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.等待作業.GetEnumName()) flag_單循環取藥 = true;
                         if (this.list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.等待入賬.GetEnumName()) flag_單循環取藥 = true;
@@ -3327,6 +3308,7 @@ namespace 調劑台管理系統
                         if (Function_取藥堆疊資料_取得作業模式(_list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.複盤)) 狀態_buf = enum_取藥堆疊母資料_狀態.等待複盤.GetEnumName();
                         else if (Function_取藥堆疊資料_取得作業模式(_list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.盲盤)) 狀態_buf = enum_取藥堆疊母資料_狀態.等待盲盤.GetEnumName();
                         else if (Function_取藥堆疊資料_取得作業模式(_list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.RFID使用)) 狀態_buf = enum_取藥堆疊母資料_狀態.RFID使用.GetEnumName();
+                        else if (Function_取藥堆疊資料_取得作業模式(_list_取藥堆疊母資料[i], enum_取藥堆疊母資料_作業模式.自動出藥)) 狀態_buf = enum_取藥堆疊母資料_狀態.自動出藥.GetEnumName();
                         else 狀態_buf = enum_取藥堆疊母資料_狀態.等待作業.GetEnumName();
                     }
                     if (_list_取藥堆疊母資料[i][(int)enum_取藥堆疊母資料.動作].ObjectToString().Contains("系統"))
@@ -3467,6 +3449,7 @@ namespace 調劑台管理系統
                     if (_list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.等待複盤.GetEnumName()) flag_remove = true;
                     if (_list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.等待盲盤.GetEnumName()) flag_remove = true;
                     if (_list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.RFID使用.GetEnumName()) flag_remove = true;
+                    if (_list_取藥母堆疊資料_buf[0][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.自動出藥.GetEnumName()) flag_remove = true;
                     if (flag_remove)
                     {
                         list_取藥母堆疊資料.RemoveByGUID(_list_取藥母堆疊資料_buf[0]);

@@ -23,14 +23,7 @@ namespace 調劑台管理系統
         private void Program_醫令資料_Init()
         {
 
-
-            string url = $"{dBConfigClass.Api_URL}/api/order/init";
-            returnData returnData = new returnData();
-            returnData.ServerType = enum_sys_serverSetting_Type.調劑台.GetEnumName();
-            returnData.ServerName = $"{dBConfigClass.Name}";
-            string json_in = returnData.JsonSerializationt();
-            string json = Basic.Net.WEBApiPostJson($"{url}", json_in);
-            Table table = json.JsonDeserializet<Table>();
+            Table table = OrderClass.init(API_Server);
             if (table == null)
             {
                 MyMessageBox.ShowDialog($"醫令資料表單建立失敗!! Api_URL:{dBConfigClass.Api_URL}");
@@ -406,7 +399,7 @@ namespace 調劑台管理系統
         static public List<OrderClass> Function_醫令資料_API呼叫(string url, string barcode, OrderAction action)
         {
             barcode = barcode.Replace("\r\n", "");
-            barcode = Uri.EscapeDataString(barcode);
+            barcode = System.Uri.EscapeDataString(barcode);
             List<OrderClass> orderClasses = new List<OrderClass>();
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);

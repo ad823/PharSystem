@@ -654,6 +654,7 @@ namespace 調劑台管理系統
             this.sub_Program_盤點作業_單號查詢_Init();
             this.sub_Program_盤點作業_資料庫_Init();
             this.Program_異常通知_Init();
+            this.Program_storageMedBoxIOConfig_Init();
 
             if (!this.ControlMode) this.Program_輸出入檢查_Init();
             this.Program_收支作業_Init();

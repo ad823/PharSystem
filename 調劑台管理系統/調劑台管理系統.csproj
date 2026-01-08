@@ -278,6 +278,12 @@
     <Compile Include="Dialog\Dialog_等待RFID感應.Designer.cs">
       <DependentUpon>Dialog_等待RFID感應.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_自動出藥.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_自動出藥.Designer.cs">
+      <DependentUpon>Dialog_自動出藥.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_輸入效期.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -599,6 +605,9 @@
     <Compile Include="Program_LCD114_索引表.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Program_storageMedBoxIOConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program_交易紀錄查詢_結存量.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -823,6 +832,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_申領.resx">
       <DependentUpon>Dialog_申領.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_自動出藥.resx">
+      <DependentUpon>Dialog_自動出藥.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\藥品群組\Dialog_藥品群組設定.resx">
       <DependentUpon>Dialog_藥品群組設定.cs</DependentUpon>
