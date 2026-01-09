@@ -250,7 +250,7 @@ namespace FADC
                     Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(Main_Form.IP_出貨一次);
                     if (storage != null)
                     {
-                        string 庫存量 = storage.Inventory;
+                        string 庫存量 = Main_Form.Function_從SQL取得庫存(storage.Code).ToString();
                         string 備註 = "";
                         List<StockClass> stockClasses = storage.庫存異動(-1, true);
                         Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
@@ -271,7 +271,7 @@ namespace FADC
                         transactionsClass.動作 = enum_交易記錄查詢動作.掃碼領藥.GetEnumName();
                         transactionsClass.庫存量 = 庫存量;
                         transactionsClass.交易量 = "-1";
-                        transactionsClass.結存量 = storage.Inventory;
+                        transactionsClass.結存量 = (庫存量.StringToDouble() - 1).ToString();
 
                         for (int i = 0; i < stockClasses.Count; i++)
                         {

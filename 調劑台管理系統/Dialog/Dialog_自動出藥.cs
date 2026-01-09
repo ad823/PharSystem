@@ -133,6 +133,15 @@ namespace 調劑台管理系統
                     {
                         objects[i][(int)enum_出藥資訊.狀態] = "庫存不足";
                         this.sqL_DataGridView_出藥資訊.ReplaceExtra(objects[i], true);
+
+                        if (MyMessageBox.ShowDialog("庫存無法完全取藥,是否繼續?", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) == DialogResult.No)
+                        {
+                            Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("中斷取藥", 1500, Color.Red);
+                            DialogResult = DialogResult.Yes;
+                            dialog_AlarmForm.ShowDialog();
+                            this.Close();
+                            return;
+                        }
                         continue;
                     }
                     objects[i][(int)enum_出藥資訊.Value] = objects_[0];
@@ -148,11 +157,15 @@ namespace 調劑台管理系統
                 objects_出藥資訊 = null;
                 for (int i = 0; i < objects.Count; i++)
                 {
-                    if (objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "已領過" || objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "連線異常") continue;
+                    if (objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "已領過" || objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "連線異常" || objects[i][(int)enum_出藥資訊.狀態].ObjectToString() == "庫存不足") continue;
                     objects[i][(int)enum_出藥資訊.狀態] = "領用中";
                     objects_出藥資訊 = objects[i];
            
                     objects_storage = (object[])objects[i][(int)enum_出藥資訊.Value];
+                    if(objects_storage == null)
+                    {
+                        continue;
+                    }
                     IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
              
 
@@ -220,7 +233,7 @@ namespace 調劑台管理系統
                 refresh_ip.Add(IP);
                 if (storage != null)
                 {
-                    string 庫存量 = storage.Inventory;
+                    string 庫存量 = Main_Form.Function_從SQL取得庫存(storage.Code).ToString();
                     string 備註 = "";
                     List<StockClass> stockClasses = storage.庫存異動(-1, true);
                     Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
@@ -238,7 +251,7 @@ namespace 調劑台管理系統
                     transactionsClass.動作 = enum_交易記錄查詢動作.掃碼領藥.GetEnumName();
                     transactionsClass.庫存量 = 庫存量;
                     transactionsClass.交易量 = "-1";
-                    transactionsClass.結存量 = storage.Inventory;
+                    transactionsClass.結存量 = (庫存量.StringToDouble() - 1).ToString();
 
                     for (int i = 0; i < stockClasses.Count; i++)
                     {
