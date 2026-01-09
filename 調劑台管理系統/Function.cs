@@ -2029,7 +2029,7 @@ namespace 調劑台管理系統
         }
         static public List<object[]> Function_取得異動儲位資訊從本地資料(string 藥品碼, double 異動量)
         {
-            bool debug = false;
+            bool debug = true;
             if (debug) Console.WriteLine($"[取得異動儲位資訊] 藥品碼={藥品碼}, 異動量={異動量}");
 
             List<object> 儲位 = new List<object>();
@@ -2081,14 +2081,14 @@ namespace 調劑台管理系統
                 transactionsClass latest =
                     transactionsClasses
                         .Where(x => x.收支原因 != null && x.收支原因.Contains(ip))
-                        .Where(x => x.備註.Replace("-", "/").Contains(stock.Replace("-", "/")))
+                        .Where(x => x.備註.Replace("-", "/").Contains(exp.Replace("-", "/")))
                         .OrderByDescending(x => x.操作時間)
                         .FirstOrDefault();
                 if (latest != null)
                 {
                     儲位資訊[i][(int)enum_儲位資訊.近期入庫時間] = latest.操作時間;
                 }
-                if (debug) Console.WriteLine($"[儲位明細] IP={ip}, TYPE={type}, 包裝量={pack}, 效期={exp}, 批號={lot}, 庫存={stock}");
+                if (debug) Console.WriteLine($"[儲位明細] IP={ip}, TYPE={type}, 包裝量={pack}, 效期={exp}, 批號={lot}, 庫存={stock} ,近期入庫時間 = {  儲位資訊[i][(int)enum_儲位資訊.近期入庫時間].ObjectToString()}");
             }
 
             if (異動量 == 0)
@@ -2102,22 +2102,34 @@ namespace 調劑台管理系統
 
             // 分組
             var 儲位_大包裝 = 儲位資訊
-                                .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() > 1)
-                                .OrderByDescending(r => r[(int)enum_儲位資訊.包裝量].StringToDouble())
-                                .ThenBy(r => TryParseDateTimeOrMax(r[(int)enum_儲位資訊.效期].ToDateString()))
-                                .ThenBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
-                                .ThenBy(r => TryParseDateTimeOrMax(
-                                    r[(int)enum_儲位資訊.近期入庫時間]?.ToString())) // 越早越前
-                                .ToList();
+                               .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() > 1)
+                               .GroupBy(r => TryParseDateTimeOrMax(
+                                   r[(int)enum_儲位資訊.效期].ToDateString()))
+                               // 效期越早的組越前
+                               .OrderBy(g => g.Key)
+                               // 展平成一個 List
+                               .SelectMany(g => g
+                                   .OrderBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
+                                   .ThenBy(r => TryParseDateTimeOrMax(
+                                       r[(int)enum_儲位資訊.近期入庫時間]?.ObjectToString()))
+                               )
+                               .ToList();
 
 
             var 儲位_單包裝 = 儲位資訊
-                                .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() == 1)
-                                .OrderBy(r => TryParseDateTimeOrMax(r[(int)enum_儲位資訊.效期].ToDateString()))
-                                .ThenBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
-                                .ThenBy(r => TryParseDateTimeOrMax(
-                                    r[(int)enum_儲位資訊.近期入庫時間]?.ToString())) // 越早越前
-                                .ToList();
+                               .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() == 1)
+                               .GroupBy(r => TryParseDateTimeOrMax(
+                                   r[(int)enum_儲位資訊.效期].ToDateString()))
+                               // 效期越早的組越前
+                               .OrderBy(g => g.Key)
+                               // 展平成一個 List
+                               .SelectMany(g => g
+                                   .OrderBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
+                                   .ThenBy(r => TryParseDateTimeOrMax(
+                                       r[(int)enum_儲位資訊.近期入庫時間]?.ObjectToString()))
+                               )
+                               .ToList();
+
 
 
             if (debug) Console.WriteLine($"[大包裝儲位] {儲位_大包裝.Count} 筆");
@@ -2174,6 +2186,92 @@ namespace 調劑台管理系統
 
             if (debug) Console.WriteLine($"[異動完成] 已異動儲位數={儲位資訊_buf.Count}");
             return 儲位資訊_buf;
+        }
+        static public object Function_庫存異動至本地資料(object[] 儲位資訊)
+        {
+            return Function_庫存異動至本地資料(儲位資訊, false);
+        }
+        static public object Function_庫存異動至本地資料(object[] 儲位資訊, bool upToSQL)
+        {
+            object Value = 儲位資訊[(int)enum_儲位資訊.Value];
+            string 效期 = 儲位資訊[(int)enum_儲位資訊.效期].ObjectToString();
+            string 異動量 = 儲位資訊[(int)enum_儲位資訊.異動量].ObjectToString();
+            string TYPE = 儲位資訊[(int)enum_儲位資訊.TYPE].ObjectToString();
+            if (Value is Storage)
+            {
+                if (TYPE == DeviceType.EPD266.GetEnumName() || TYPE == DeviceType.EPD266_lock.GetEnumName()
+                 || TYPE == DeviceType.EPD213.GetEnumName() || TYPE == DeviceType.EPD213_lock.GetEnumName()
+                 || TYPE == DeviceType.EPD290.GetEnumName() || TYPE == DeviceType.EPD290_lock.GetEnumName()
+                 || TYPE == DeviceType.EPD420.GetEnumName() || TYPE == DeviceType.EPD420_lock.GetEnumName()
+                 || TYPE == DeviceType.EPD420G.GetEnumName() || TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                 || TYPE == DeviceType.EPD360E.GetEnumName() || TYPE == DeviceType.EPD360E_lock.GetEnumName())
+                {
+                    Storage storage = (Storage)Value;
+                    storage = List_EPD266_本地資料.SortByIP(storage.IP);
+                    if (storage != null)
+                    {
+                        storage.效期庫存異動(效期, 異動量, false);
+                        List_EPD266_本地資料.Add_NewStorage(storage);
+                        if (upToSQL) _storageUI_EPD_266.SQL_ReplaceStorage(storage);
+                        storage.UpToSQL = true;
+                        return storage;
+                    }
+                }
+                if (TYPE == DeviceType.Pannel35.GetEnumName() || TYPE == DeviceType.Pannel35_lock.GetEnumName())
+                {
+                    Storage storage = (Storage)Value;
+                    storage = List_Pannel35_本地資料.SortByIP(storage.IP);
+                    if (storage != null)
+                    {
+                        storage.效期庫存異動(效期, 異動量, false);
+                        List_Pannel35_本地資料.Add_NewStorage(storage);
+                        if (upToSQL) _storageUI_WT32.SQL_ReplaceStorage(storage);
+                        storage.UpToSQL = true;
+                        return storage;
+                    }
+                }
+            }
+            else if (Value is Box)
+            {
+                if (TYPE == DeviceType.EPD583.GetEnumName() || TYPE == DeviceType.EPD583_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD420_D.GetEnumName() || TYPE == DeviceType.EPD420_D_lock.GetEnumName()
+                    || TYPE == DeviceType.EPD730E.GetEnumName() || TYPE == DeviceType.EPD730E_lock.GetEnumName())
+                {
+                    Box box = (Box)Value;
+                    box.效期庫存異動(效期, 異動量, false);
+                    List_EPD583_本地資料.ReplaceBox(box);
+                    Drawer drawer = List_EPD583_本地資料.SortByIP(box.IP);
+                    if (upToSQL) _drawerUI_EPD_583.SQL_ReplaceDrawer(drawer);
+                    drawer.UpToSQL = true;
+                    return drawer;
+                }
+                if (TYPE == DeviceType.EPD1020.GetEnumName() || TYPE == DeviceType.EPD1020_lock.GetEnumName())
+                {
+                    Box box = (Box)Value;
+                    box.效期庫存異動(效期, 異動量, false);
+                    List_EPD1020_本地資料.ReplaceByGUID(box);
+                    Drawer drawer = List_EPD1020_本地資料.SortByIP(box.IP);
+                    if (upToSQL) _drawerUI_EPD_1020.SQL_ReplaceDrawer(drawer);
+                    drawer.UpToSQL = true;
+                    return drawer;
+                }
+            }
+            else if (Value is RowsDevice)
+            {
+                if (TYPE == DeviceType.RowsLED.GetEnumName())
+                {
+                    RowsDevice rowsDevice = Value as RowsDevice;
+                    rowsDevice.效期庫存異動(效期, 異動量, false);
+                    List_RowsLED_本地資料.Add_NewRowsLED(rowsDevice);
+                    RowsLED rowsLED = List_RowsLED_本地資料.SortByIP(rowsDevice.IP);
+                    if (upToSQL) _rowsLEDUI.SQL_ReplaceRowsLED(rowsLED);
+                    rowsLED.UpToSQL = true;
+                    return rowsLED;
+                }
+
+            }
+       
+            return null;
         }
 
         static public List<object> Function_從SQL取得儲位到本地資料(string 藥品碼)

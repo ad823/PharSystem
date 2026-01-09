@@ -283,6 +283,8 @@ namespace 調劑台管理系統
                             if (flag_複盤 || flag_盲盤 || flag_雙人覆核 || flag_RFID使用 || flag_自動出藥) Function_取藥堆疊資料_設定作業模式(value, enum_取藥堆疊母資料_作業模式.獨立作業);
 
                         }
+                        if (flag_自動出藥) value[(int)enum_取藥堆疊母資料.狀態] = enum_取藥堆疊母資料_狀態.自動出藥.GetEnumName();
+
                         takeMedicineStackClasses[i].作業模式 = value[(int)enum_取藥堆疊母資料.作業模式].ObjectToString();
                     }
 

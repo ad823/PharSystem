@@ -21,6 +21,7 @@ namespace 調劑台管理系統
         private MyThread myThread = new MyThread();
         public personPageClass personPage = new personPageClass();
         public List<takeMedicineStackClass> takeMedicines = new List<takeMedicineStackClass>();
+        List<string> refresh_ip = new List<string>();
         public enum enum_出藥資訊
         {
             [Description("GUID,VARCHAR,50,NONE")]
@@ -42,15 +43,19 @@ namespace 調劑台管理系統
         }
         public Dialog_自動出藥(List<takeMedicineStackClass> takeMedicines)
         {
-            form.Invoke(new Action(delegate { InitializeComponent(); }));
-            sqL_DataGridView_出藥資訊.RowsHeight = 60;
-            sqL_DataGridView_出藥資訊.Init(new Table(new enum_出藥資訊()));
-            sqL_DataGridView_出藥資訊.Set_ColumnVisible(false, new enum_出藥資訊().GetEnumNames());        
-            sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥碼);
-            sqL_DataGridView_出藥資訊.Set_ColumnWidth(600, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥名);
-            sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.應出);
-            sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.實出);
-            sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.狀態);
+            form.Invoke(new Action(delegate 
+            {
+                InitializeComponent();
+                sqL_DataGridView_出藥資訊.RowsHeight = 60;
+                sqL_DataGridView_出藥資訊.Init(new Table(new enum_出藥資訊()));
+                sqL_DataGridView_出藥資訊.Set_ColumnVisible(false, new enum_出藥資訊().GetEnumNames());
+                sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥碼);
+                sqL_DataGridView_出藥資訊.Set_ColumnWidth(600, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.藥名);
+                sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.應出);
+                sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.實出);
+                sqL_DataGridView_出藥資訊.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleLeft, enum_出藥資訊.狀態);
+            }));
+        
 
             this.takeMedicines = takeMedicines;
             List<object[]> list_value = new List<object[]>();
@@ -79,7 +84,20 @@ namespace 調劑台管理系統
             myThread.Trigger();
 
             this.LoadFinishedEvent += Dialog_自動出藥_LoadFinishedEvent;
+            this.FormClosed += Dialog_自動出藥_FormClosed;
         }
+
+        private void Dialog_自動出藥_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (myThread != null)
+            {
+                myThread.Abort();
+                myThread = null;
+            }
+         
+        }
+
+
         private void Dialog_自動出藥_LoadFinishedEvent(EventArgs e)
         {
 
@@ -93,7 +111,6 @@ namespace 調劑台管理系統
         private bool flag_有藥品要取 = false;
         private void sub_program()
         {
-            return;
             if (cnt == 1)
             {
                 List<object[]> objects = this.sqL_DataGridView_出藥資訊.GetAllRows();
@@ -116,9 +133,10 @@ namespace 調劑台管理系統
                     {
                         objects[i][(int)enum_出藥資訊.狀態] = "庫存不足";
                         this.sqL_DataGridView_出藥資訊.ReplaceExtra(objects[i], true);
+                        continue;
                     }
                     objects[i][(int)enum_出藥資訊.Value] = objects_[0];
-                
+                    Main_Form.Function_庫存異動至本地資料(objects_[0]);
                     this.sqL_DataGridView_出藥資訊.RefreshGrid(objects);
                 }
                 cnt++;
@@ -176,7 +194,7 @@ namespace 調劑台管理系統
                     }
                 }
                 Main_Form._storageUI_EPD_266.Set_ADCMotorTrigger(IP, 29000, time);
-
+                cnt++;
             
             }
             if (cnt == 4)
@@ -199,16 +217,14 @@ namespace 調劑台管理系統
             {
                 string IP = objects_storage[(int)Main_Form.enum_儲位資訊.IP].ObjectToString();
                 Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(IP);
+                refresh_ip.Add(IP);
                 if (storage != null)
                 {
                     string 庫存量 = storage.Inventory;
                     string 備註 = "";
                     List<StockClass> stockClasses = storage.庫存異動(-1, true);
                     Main_Form._storageUI_EPD_266.SQL_ReplaceStorage(storage);
-                    Task.Run(new Action(delegate
-                    {
-                        Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
-                    }));
+              
                     medClass _medClass = medClass.get_med_clouds_by_code(Main_Form.API_Server, storage.Code);
 
                     transactionsClass transactionsClass = new transactionsClass();
@@ -248,8 +264,23 @@ namespace 調劑台管理系統
             if (cnt == 65500)
             {
                 "取藥完成".PlayGooleVoiceAsync(Main_Form.API_Server);
+                refresh_ip = refresh_ip.Select(x => x).Distinct().ToList();
+
+                List<Task> tasks = new List<Task>();
+                foreach (var IP in refresh_ip)
+                {
+                    Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(IP);
+                    tasks.Add(Task.Run(new Action(delegate
+                    {
+                        if (storage != null) Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
+                    })));
+                }
+
                 Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("取藥完成", 1500, Color.Green);
                 DialogResult = DialogResult.Yes;
+                dialog_AlarmForm.ShowDialog();
+                Task.WhenAll(tasks).Wait();
+
                 this.Close();
             }
         }

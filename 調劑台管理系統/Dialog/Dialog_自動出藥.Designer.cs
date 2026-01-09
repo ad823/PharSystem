@@ -49,7 +49,7 @@ namespace 調劑台管理系統
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(4, 44);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1348, 56);
+            this.panel5.Size = new System.Drawing.Size(590, 56);
             this.panel5.TabIndex = 33;
             // 
             // rJ_Lable_病房號
@@ -190,7 +190,7 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_出藥資訊.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_出藥資訊.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_出藥資訊.Server = "127.0.0.0";
-            this.sqL_DataGridView_出藥資訊.Size = new System.Drawing.Size(1348, 695);
+            this.sqL_DataGridView_出藥資訊.Size = new System.Drawing.Size(590, 695);
             this.sqL_DataGridView_出藥資訊.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_出藥資訊.TabIndex = 160;
             this.sqL_DataGridView_出藥資訊.UserName = "root";
@@ -212,7 +212,7 @@ namespace 調劑台管理系統
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CaptionHeight = 40;
-            this.ClientSize = new System.Drawing.Size(1356, 799);
+            this.ClientSize = new System.Drawing.Size(598, 799);
             this.ControlBox = true;
             this.Controls.Add(this.sqL_DataGridView_出藥資訊);
             this.Controls.Add(this.panel5);

@@ -960,8 +960,7 @@ namespace 調劑台管理系統
                 }
                 Fuction_時間重置();
 
-                //list_取藥堆疊母資料_add = dialog_HFRFID調劑作業.takeMedicineStackClasses.ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
-                //list_取藥堆疊母資料_delete.LockAdd(list_取藥堆疊母資料);
+                list_取藥堆疊母資料_delete.LockAdd(list_取藥堆疊母資料);
             }
 
             if (list_取藥堆疊母資料_delete.Count > 0)

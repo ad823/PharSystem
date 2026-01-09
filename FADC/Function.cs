@@ -251,7 +251,7 @@ namespace FADC
                 transactionsClass latest =
                     transactionsClasses
                         .Where(x => x.收支原因 != null && x.收支原因.Contains(ip))
-                        .Where(x => x.備註.Replace("-","/").Contains(stock.Replace("-","/")))
+                        .Where(x => x.備註.Replace("-","/").Contains(exp.Replace("-","/")))
                         .OrderByDescending(x => x.操作時間)
                         .FirstOrDefault();
                 if(latest != null)
@@ -271,23 +271,35 @@ namespace FADC
             儲位資訊_buf.Clear();
 
             // 分組
+            // 分組
             var 儲位_大包裝 = 儲位資訊
-                                .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() > 1)
-                                .OrderByDescending(r => r[(int)enum_儲位資訊.包裝量].StringToDouble())
-                                .ThenBy(r => TryParseDateTimeOrMax(r[(int)enum_儲位資訊.效期].ToDateString()))
-                                .ThenBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
-                                .ThenBy(r => TryParseDateTimeOrMax(
-                                    r[(int)enum_儲位資訊.近期入庫時間]?.ToString())) // 越早越前
-                                .ToList();
+                               .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() > 1)
+                               .GroupBy(r => TryParseDateTimeOrMax(
+                                   r[(int)enum_儲位資訊.效期].ToDateString()))
+                               // 效期越早的組越前
+                               .OrderBy(g => g.Key)
+                               // 展平成一個 List
+                               .SelectMany(g => g
+                                   .OrderBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
+                                   .ThenBy(r => TryParseDateTimeOrMax(
+                                       r[(int)enum_儲位資訊.近期入庫時間]?.ObjectToString()))
+                               )
+                               .ToList();
 
 
             var 儲位_單包裝 = 儲位資訊
-                                .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() == 1)
-                                .OrderBy(r => TryParseDateTimeOrMax(r[(int)enum_儲位資訊.效期].ToDateString()))
-                                .ThenBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
-                                .ThenBy(r => TryParseDateTimeOrMax(
-                                    r[(int)enum_儲位資訊.近期入庫時間]?.ToString())) // 越早越前
-                                .ToList();
+                               .Where(r => r[(int)enum_儲位資訊.包裝量].StringToDouble() == 1)
+                               .GroupBy(r => TryParseDateTimeOrMax(
+                                   r[(int)enum_儲位資訊.效期].ToDateString()))
+                               // 效期越早的組越前
+                               .OrderBy(g => g.Key)
+                               // 展平成一個 List
+                               .SelectMany(g => g
+                                   .OrderBy(r => r[(int)enum_儲位資訊.近期入庫時間] == null) // null 往後
+                                   .ThenBy(r => TryParseDateTimeOrMax(
+                                       r[(int)enum_儲位資訊.近期入庫時間]?.ObjectToString()))
+                               )
+                               .ToList();
 
 
             if (debug) Console.WriteLine($"[大包裝儲位] {儲位_大包裝.Count} 筆");
