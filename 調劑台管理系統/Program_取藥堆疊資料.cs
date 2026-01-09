@@ -3507,7 +3507,7 @@ namespace 調劑台管理系統
                     IP = list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.IP].ObjectToString();
                     string index_IP = Funcion_取得LCD114索引表_index_IP(IP);
                     Storage storage = List_EPD266_雲端資料.SortByIP(IP);
-                    if (index_IP.StringIsEmpty())
+                    if (storage != null && index_IP.StringIsEmpty())
                     {
                     
                         list_取藥子堆疊資料_buf[i][(int)enum_取藥堆疊子資料.流程作業完成] = true.ToString();
