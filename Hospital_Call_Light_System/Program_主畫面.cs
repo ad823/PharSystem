@@ -325,17 +325,21 @@ namespace Hospital_Call_Light_System
                     object[] value = list_value[0];
                   
 
-                    if (value[(int)enum_參數.Value].ObjectToString().StringIsEmpty())
+                    if (value[(int)enum_參數.Value].ObjectToString().StringIsEmpty() == false)
                     {
                         try
                         {
                             string text = value[(int)enum_參數.Value].ObjectToString();
                             voice.Speak($"{text}");
-                            sp = new System.Media.SoundPlayer(".//RING.wav");
-                            sp.Stop();
+                            //sp = new System.Media.SoundPlayer(".//RING.wav");
+                            //sp.Stop();
 
-                            sp.Play();
+                            //sp.Play();
 
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine($"Exception : {ex.Message}");
                         }
                         finally
                         {
@@ -453,6 +457,7 @@ namespace Hospital_Call_Light_System
                         {
                             if (叫號台01_號碼 != list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32())
                             {
+                                Function_主畫面_叫號音效輸出(list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32());
                                 flag_RING_1 = true;
                             }
                             叫號台01_號碼 = list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32();
@@ -474,6 +479,7 @@ namespace Hospital_Call_Light_System
                         {
                             if (叫號台02_號碼 != list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32())
                             {
+                                Function_主畫面_叫號音效輸出(list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32());
                                 flag_RING_2 = true;
                             }
 
@@ -602,8 +608,8 @@ namespace Hospital_Call_Light_System
                     if (flag_RING_1 || flag_RING_2)
                     {
                         Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
-                        if (flag_RING_1) Function_主畫面_叫號音效輸出(叫號台01_號碼);
-                        else if(flag_RING_2)Function_主畫面_叫號音效輸出(叫號台02_號碼);
+                        //if (flag_RING_1) Function_主畫面_叫號音效輸出(叫號台01_號碼);
+                        //else if(flag_RING_2)Function_主畫面_叫號音效輸出(叫號台02_號碼);
 
                     }
 
