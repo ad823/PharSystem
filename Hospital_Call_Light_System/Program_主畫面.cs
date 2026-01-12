@@ -569,7 +569,7 @@ namespace Hospital_Call_Light_System
                         g.DrawImage(bitmap_標題_0, new PointF(posx, 0));
                         g.DrawImage(bitmap_英文標題_0, new PointF(posx, bitmap_標題_0.Height));
                         if (bitmap_叫號_0 != null) g.DrawImage(bitmap_叫號_0, new PointF(posx, bitmap_標題_0.Height + bitmap_英文標題_0.Height));
-                        g.DrawImage(bitmap_叫號備註_0, new PointF(posx, bitmap_標題_0.Height + bitmap_英文標題_0.Height + (bitmap_叫號_0 == null ? 0 : bitmap_叫號_0.Height)));
+                        if (bitmap_叫號備註_0 != null) g.DrawImage(bitmap_叫號備註_0, new PointF(posx, bitmap_標題_0.Height + bitmap_英文標題_0.Height + (bitmap_叫號_0 == null ? 0 : bitmap_叫號_0.Height)));
                     }
 
 
@@ -578,7 +578,7 @@ namespace Hospital_Call_Light_System
                         g.DrawImage(bitmap_標題_1, new PointF(posx + bitmap_標題_1.Width, 0));
                         g.DrawImage(bitmap_英文標題_1, new PointF(posx + bitmap_標題_1.Width, bitmap_標題_1.Height));
                         if (bitmap_叫號_1 != null) g.DrawImage(bitmap_叫號_1, new PointF(posx + bitmap_標題_1.Width, bitmap_標題_1.Height + bitmap_英文標題_1.Height));
-                        g.DrawImage(bitmap_叫號備註_1, new PointF(posx + bitmap_標題_1.Width, bitmap_標題_1.Height + bitmap_英文標題_1.Height + (bitmap_叫號_1 == null ? 0 : bitmap_叫號_1.Height)));
+                        if (bitmap_叫號備註_1 != null) g.DrawImage(bitmap_叫號備註_1, new PointF(posx + bitmap_標題_1.Width, bitmap_標題_1.Height + bitmap_英文標題_1.Height + (bitmap_叫號_1 == null ? 0 : bitmap_叫號_1.Height)));
                     }
                     if (bitmap_圖片_0 != null && radioButton_一號台_圖片.Checked)
                     {
