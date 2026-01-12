@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Text.RegularExpressions;
 using hcls_DB_Lib;
+using HIS_DB_Lib;
 
 namespace Hospital_Call_Light_System
 {
@@ -329,10 +330,21 @@ namespace Hospital_Call_Light_System
                         try
                         {
 
-                            sp = new System.Media.SoundPlayer(".//RING.wav");
-                            sp.Stop();
+                            //sp = new System.Media.SoundPlayer(".//RING.wav");
+                            //sp.Stop();
 
-                            sp.Play();
+                            //sp.Play();
+                            //string 機台名稱 = this.comboBox_一號台名稱.Text;
+                            //List<object[]> list_value_ = this.sqL_DataGridView_叫號內容設定.SQL_GetAllRows(false);
+                            //list_value_ = list_value_.GetRows((int)enum_叫號內容設定.名稱, 機台名稱);
+                            //if (list_value_.Count == 0)
+                            //{
+                            //    MyMessageBox.ShowDialog("找無資料!");
+                            //    return;
+                            //}
+                            $"領藥號{叫號台01_號碼}前請領藥".PlayGooleVoiceAsync($"http://192.168.12.164:4433");
+                       
+                            
 
                         }
                         finally

@@ -253,7 +253,7 @@ namespace HIS_DB_Lib
                     }
 
                     Console.WriteLine("成功取得 Base64 音訊資料，開始播放...");
-                    await Task.Run(() => AudioProcessingLibrary.Voice.PlayBase64Mp3(base64));
+                    await Task.Run(() => AudioProcessingLibrary.Voice.PlayBase64Mp3(base64, 1.8f));
                     Console.WriteLine("播放完成。");
                 }
             }
