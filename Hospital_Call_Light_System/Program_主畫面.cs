@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Text.RegularExpressions;
 using hcls_DB_Lib;
+using NPOI.SS.Formula.Functions;
 
 namespace Hospital_Call_Light_System
 {
@@ -45,7 +46,7 @@ namespace Hospital_Call_Light_System
             sub_Program_刷新音效();
             sub_Program_資料刷新();
         }
-        private void Function_主畫面_叫號音效輸出()
+        private void Function_主畫面_叫號音效輸出(int num)
         {
             List<object[]> list_value = this.sqL_DataGridView_參數.SQL_GetAllRows(false);
             list_value = list_value.GetRows((int)enum_參數.Name, "音效");
@@ -54,14 +55,14 @@ namespace Hospital_Call_Light_System
                 object[] value = new object[new enum_參數().GetLength()];
                 value[(int)enum_參數.GUID] = Guid.NewGuid().ToString();
                 value[(int)enum_參數.Name] = "音效";
-                value[(int)enum_參數.Value] = "true";
+                value[(int)enum_參數.Value] = $"領藥號 {num} 以前可以領藥";
                 this.sqL_DataGridView_參數.SQL_AddRow(value, false);
             }
             else
             {
                 object[] value = list_value[0];
                 value[(int)enum_參數.Name] = "音效";
-                value[(int)enum_參數.Value] = "true";
+                value[(int)enum_參數.Value] = $"領藥號 {num} 以前可以領藥";
                 this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
             }
 
@@ -71,11 +72,11 @@ namespace Hospital_Call_Light_System
             {
                 try
                 {
+                    voice.Speak($"領藥號 {num} 以前可以領藥");
+                    //sp = new System.Media.SoundPlayer(".//RING.wav");
+                    //sp.Stop();
 
-                    sp = new System.Media.SoundPlayer(".//RING.wav");
-                    sp.Stop();
-
-                    sp.Play();
+                    //sp.Play();
 
                 }
                 finally
@@ -324,11 +325,12 @@ namespace Hospital_Call_Light_System
                     object[] value = list_value[0];
                   
 
-                    if (value[(int)enum_參數.Value].ObjectToString().ToUpper() == true.ToString().ToUpper())
+                    if (value[(int)enum_參數.Value].ObjectToString().StringIsEmpty())
                     {
                         try
                         {
-
+                            string text = value[(int)enum_參數.Value].ObjectToString();
+                            voice.Speak($"{text}");
                             sp = new System.Media.SoundPlayer(".//RING.wav");
                             sp.Stop();
 
@@ -342,7 +344,7 @@ namespace Hospital_Call_Light_System
                     }
 
                     value[(int)enum_參數.Name] = "音效";
-                    value[(int)enum_參數.Value] = "false";
+                    value[(int)enum_參數.Value] = "";
                     this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
                 }
             }
@@ -394,7 +396,8 @@ namespace Hospital_Call_Light_System
                     {
                         公告高度 = list_公告設定_buf[0][(int)enum_公告設定.高度].StringToInt32();
                     }
-                    bool flag_RING = false;
+                    bool flag_RING_1 = false;
+                    bool flag_RING_2 = false;
                     for (int i = 0; i < list_樣式設定.Count; i++)
                     {
                         if (i == 0)
@@ -450,7 +453,7 @@ namespace Hospital_Call_Light_System
                         {
                             if (叫號台01_號碼 != list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32())
                             {
-                                flag_RING = true;
+                                flag_RING_1 = true;
                             }
                             叫號台01_號碼 = list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32();
                             bitmap_標題_0 = GetTextBitmap(titleName, titleFont, new Size(panel_width, titleHeight), titleTextWidth, titleFontColor, titleBackColor);
@@ -471,7 +474,7 @@ namespace Hospital_Call_Light_System
                         {
                             if (叫號台02_號碼 != list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32())
                             {
-                                flag_RING = true;
+                                flag_RING_2 = true;
                             }
 
                             叫號台02_號碼 = list_叫號內容設定_buf[0][(int)enum_叫號內容設定.號碼].StringToInt32();
@@ -596,10 +599,12 @@ namespace Hospital_Call_Light_System
                         }
                     }
                     //叫號聲音
-                    if (flag_RING)
+                    if (flag_RING_1 || flag_RING_2)
                     {
                         Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
-                        Function_主畫面_叫號音效輸出();
+                        if (flag_RING_1) Function_主畫面_叫號音效輸出(叫號台01_號碼);
+                        else if(flag_RING_2)Function_主畫面_叫號音效輸出(叫號台02_號碼);
+
                     }
 
 
