@@ -339,7 +339,7 @@ namespace HIS_WebApi
                 }
                 else
                 {
-                    medCartList_sql = medCartList_sql.OrderBy(x => x.排序).ToList();
+                    medCartList_sql = medCartList_sql.OrderBy(x => x.排序.StringToInt32()).ToList();
                 }
 
                 returnData.Code = 200;

@@ -1005,6 +1005,7 @@ namespace HIS_WebApi
                 List<object[]> list_medCpoe_add = medCpoe_sql_add.ClassToSQL<medCpoeClass, enum_med_cpoe>();
                 List<object[]> list_medCpoe_replace = medCpoe_sql_replace.ClassToSQL<medCpoeClass, enum_med_cpoe>();
                 List<object[]> list_medCpoe_delete = medCpoe_sql_delete.ClassToSQL<medCpoeClass, enum_med_cpoe>();
+                medCpoe_sql_add = medCpoe_sql_add.GroupBy(x => new { x.Master_GUID, x.PRI_KEY }).Select(g => g.First()).ToList();
 
                 if (list_medCpoe_add.Count > 0)
                 {
