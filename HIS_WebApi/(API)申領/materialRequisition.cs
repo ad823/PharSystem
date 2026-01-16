@@ -112,7 +112,7 @@ namespace HIS_WebApi
                     }
                 }
                 
-                if (materialRequisitionClass == null)
+                if (materialRequisitionClass == null || materialRequisitionClass.藥碼.StringIsEmpty())
                 {
                     returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
                     if (returnData_ != null && returnData_.Data != null)
