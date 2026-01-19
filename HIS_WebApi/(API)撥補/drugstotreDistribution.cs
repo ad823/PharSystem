@@ -171,7 +171,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("add")]
         [HttpPost]
-        public async Task<string> POST_add(returnData returnData)
+        public async Task<string> add(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
@@ -900,13 +900,39 @@ namespace HIS_WebApi
         }
         [Route("excel_upload")]
         [HttpPost]
-        public async Task<string> POST_excel_upload([FromForm] IFormFile file, [FromForm] string IC_NAME, [FromForm] string CT, [FromForm] string DEFAULT_OP)
+        public async Task<string> POST_excel_upload([FromForm] IFormFile file,[FromForm] string op_name)
         {
             returnData returnData = new returnData();
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
             try
             {
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_drugDistribute_excel_upload");
+                string VM_API = string.Empty;
+                if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    using (var client = new HttpClient())
+                    using (var form = new MultipartFormDataContent())
+                    {
+                        // 把 IFormFile 轉成 StreamContent
+                        using (var stream = file.OpenReadStream())
+                        {
+                            var fileContent = new StreamContent(stream);
+                            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType ?? "application/octet-stream");
+
+                            // 加入到 multipart form，name 要和 API 預期的欄位名一致
+                            form.Add(fileContent, "file", file.FileName);
+                            form.Add(new StringContent(op_name ?? string.Empty), "op_name");
+                            // 發送 POST 請求
+                            var response = await client.PostAsync(VM_API, form);
+                            response.EnsureSuccessStatusCode();
+
+                            // 讀取回應內容
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                    }
+                }
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
 
                 List<medClass> medClasses = medClass.get_med_cloud("http://127.0.0.1:4433");
@@ -932,6 +958,7 @@ namespace HIS_WebApi
                 inventoryClass.creat creat = new inventoryClass.creat();
                 string error = "";
                 List<distribution_excel> distributionList = new List<distribution_excel>();
+                List< drugStotreDistributionClass> drugStotreDistributionClasses = new List<drugStotreDistributionClass>();
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     await formFile.CopyToAsync(memoryStream);
@@ -945,10 +972,7 @@ namespace HIS_WebApi
                     }
                     List<object[]> list_value = dt.DataTableToRowList();
 
-                    if (IC_NAME.StringIsEmpty())
-                    {
-                        IC_NAME = Path.GetFileNameWithoutExtension(file.FileName);
-                    }
+                    
                     for (int i = 0; i < list_value.Count; i++)
                     {
 
@@ -965,13 +989,8 @@ namespace HIS_WebApi
 
                     }
                 }
-                returnData.Data = distributionList;
-                returnData.Code = 200;
-                returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Result = "接收上傳文件成功";
-                return returnData.JsonSerializationt(true);
+                return add(drugStotreDistributionClasses).JsonSerializationt(true);
             }
-
             catch (Exception e)
             {
                 returnData.Code = -200;
@@ -1072,5 +1091,13 @@ namespace HIS_WebApi
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClass, new enum_drugStotreDistribution()));
             return tables.JsonSerializationt(true);
         }
+        private async Task<returnData>  add(List<drugStotreDistributionClass> drugStotreDistributionClasses)
+        {
+            returnData returnData = new returnData();
+            returnData.Data = drugStotreDistributionClasses;
+            string result = await add(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
+
     }
 }
