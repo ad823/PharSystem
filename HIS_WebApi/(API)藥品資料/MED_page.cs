@@ -21,6 +21,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 
 namespace HIS_WebApi
@@ -4021,6 +4022,31 @@ namespace HIS_WebApi
             myTimerBasic.StartTickTime(50000);
             try
             {
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("網頁", "API_medCloud_download");
+                string VM_API = string.Empty;
+                if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    using (var client = new HttpClient())
+                    using (var form = new MultipartFormDataContent())
+                    {
+                        // 把 IFormFile 轉成 StreamContent
+                        using (var stream = file.OpenReadStream())
+                        {
+                            var fileContent = new StreamContent(stream);
+                            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType ?? "application/octet-stream");
+
+                            // 加入到 multipart form，name 要和 API 預期的欄位名一致
+                            form.Add(fileContent, "file", file.FileName);
+                            // 發送 POST 請求
+                            var response = await client.PostAsync(VM_API, form);
+                            response.EnsureSuccessStatusCode();
+
+                            // 讀取回應內容
+                            return await response.Content.ReadAsStringAsync();
+                        }
+                    }
+                }
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
 
 
