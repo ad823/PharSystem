@@ -17,8 +17,8 @@ using System.Text.Json.Serialization;
 using HIS_DB_Lib;
 using System.Reflection;
 using System.Runtime.InteropServices;
-[assembly: AssemblyVersion("1.0.0.9")]
-[assembly: AssemblyFileVersion("1.0.0.9")]
+[assembly: AssemblyVersion("1.0.0.10")]
+[assembly: AssemblyFileVersion("1.0.0.10")]
 namespace Hospital_Call_Light_System
 {
 
@@ -318,6 +318,8 @@ namespace Hospital_Call_Light_System
 
             private bool _本地音效 = false;
             private bool _全局音效 = false;
+            private bool _推撥語音至資料庫 = false;
+            
             private string _公告名稱 = "";
 
             private string _第一台加一號 = "";
@@ -357,6 +359,7 @@ namespace Hospital_Call_Light_System
             public int 二號台_顯示圖片控制 { get => _二號台_顯示圖片控制; set => _二號台_顯示圖片控制 = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public bool 鍵盤掃碼模式 { get => _鍵盤掃碼模式; set => _鍵盤掃碼模式 = value; }
+            public bool 推撥語音至資料庫 { get => _推撥語音至資料庫; set => _推撥語音至資料庫 = value; }
         }
         private void LoadMyConfig()
         {
@@ -433,6 +436,7 @@ namespace Hospital_Call_Light_System
             this.rJ_TextBox_第二台_減十號.Text = myConfigClass.第二台減十號;
 
             this.checkBox_本地音效.Checked = myConfigClass.本地音效;
+            this.checkBox_推撥語音至資料庫.Checked = myConfigClass.推撥語音至資料庫;
             this.checkBox_全局音效.Checked = myConfigClass.全局音效;
 
             _scanner = new GlobalKeyboardScanner(200);

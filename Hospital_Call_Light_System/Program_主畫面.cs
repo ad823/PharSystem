@@ -53,26 +53,29 @@ namespace Hospital_Call_Light_System
             value[(int)enum_參數.GUID] = Guid.NewGuid().ToString();
             value[(int)enum_參數.Name] = "叫號輸出音效";
             value[(int)enum_參數.Value] = $"領藥號 {num} 前，請領藥";
-            this.sqL_DataGridView_參數.SQL_AddRow(value, false);
-            //else
-            //{
-            //    object[] value = list_value[0];
-            //    value[(int)enum_參數.Name] = "音效";
-            //    value[(int)enum_參數.Value] = $"領藥號 {num} 前，請領藥";
-            //    this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
-            //}
+            if (this.myConfigClass.推撥語音至資料庫 == true) this.sqL_DataGridView_參數.SQL_AddRow(value, false);
+   
 
             System.Media.SoundPlayer sp = null;
 
-            if (this.myConfigClass.本地音效)
+            if (this.myConfigClass.本地音效 == true)
             {
                 try
                 {
-                    voice.Speak($"領藥號 {num} 前，請領藥");
-                    //sp = new System.Media.SoundPlayer(".//RING.wav");
-                    //sp.Stop();
+                    using (var tts = new AudioProcessingLibrary.MsTtsNaudioBoostPlayer())
+                    {
+                        // tts.ListInstalledVoices(); // 若想列語音
 
-                    //sp.Play();
+                        tts.Volume = 100;      // TTS 最大音量
+                        tts.Rate = 0;          // 語速
+                        tts.BoostGain = 3.0;   // ✅ 音量放大（>100效果）
+                        tts.CompressionAmount = 0.45F;
+                        tts.LimiterThreshold = 0.95F;
+
+
+                        tts.Speak($"領藥號 {num} 前，請領藥");
+                    }
+
 
                 }
                 finally
@@ -311,7 +314,7 @@ namespace Hospital_Call_Light_System
 
         private void PlC_RJ_Button_刷新音效_MouseDownEvent(MouseEventArgs mevent)
         {
-            if (this.myConfigClass.全局音效)
+            if (this.myConfigClass.全局音效 == true)
             {
                 List<object[]> list_value = this.sqL_DataGridView_參數.SQL_GetAllRows(false);
                 list_value = list_value.GetRows((int)enum_參數.Name, "叫號輸出音效");
@@ -324,7 +327,19 @@ namespace Hospital_Call_Light_System
                         try
                         {
                             string text = value[(int)enum_參數.Value].ObjectToString();
-                            voice.Speak($"{text}");
+                            using (var tts = new AudioProcessingLibrary.MsTtsNaudioBoostPlayer())
+                            {
+                                // tts.ListInstalledVoices(); // 若想列語音
+
+                                tts.Volume = 100;      // TTS 最大音量
+                                tts.Rate = 0;          // 語速
+                                tts.BoostGain = 3.0;   // ✅ 音量放大（>100效果）
+                                tts.CompressionAmount = 0.45F;
+                                tts.LimiterThreshold = 0.95F;
+
+
+                                tts.Speak($"{text}");
+                            }
 
                         }
                         catch (Exception ex)

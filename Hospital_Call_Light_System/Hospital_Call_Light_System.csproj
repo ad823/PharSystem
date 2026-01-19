@@ -40,6 +40,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AudioProcessingLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\AudioProcessingLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Basic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\Basic.dll</HintPath>
@@ -50,10 +54,6 @@
     </Reference>
     <Reference Include="cjwdev.windowsapi">
       <HintPath>..\0.DLL\cjwdev.windowsapi.dll</HintPath>
-    </Reference>
-    <Reference Include="CSkin, Version=10.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\0.DLL\CSkin.dll</HintPath>
     </Reference>
     <Reference Include="DeltaMotor485">
       <HintPath>..\0.DLL\DeltaMotor485.dll</HintPath>
