@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Basic;
+using hcls_DB_Lib;
+using MyUI;
+using NPOI.SS.Formula.Functions;
+using NPOI.XSSF.Streaming.Values;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using MyUI;
-using Basic;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using hcls_DB_Lib;
-using NPOI.SS.Formula.Functions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Hospital_Call_Light_System
 {
@@ -48,23 +49,18 @@ namespace Hospital_Call_Light_System
         }
         private void Function_主畫面_叫號音效輸出(int num)
         {
-            List<object[]> list_value = this.sqL_DataGridView_參數.SQL_GetAllRows(false);
-            list_value = list_value.GetRows((int)enum_參數.Name, "音效");
-            if (list_value.Count == 0)
-            {
-                object[] value = new object[new enum_參數().GetLength()];
-                value[(int)enum_參數.GUID] = Guid.NewGuid().ToString();
-                value[(int)enum_參數.Name] = "音效";
-                value[(int)enum_參數.Value] = $"領藥號 {num} 以前可以領藥";
-                this.sqL_DataGridView_參數.SQL_AddRow(value, false);
-            }
-            else
-            {
-                object[] value = list_value[0];
-                value[(int)enum_參數.Name] = "音效";
-                value[(int)enum_參數.Value] = $"領藥號 {num} 以前可以領藥";
-                this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
-            }
+            object[] value = new object[new enum_參數().GetLength()];
+            value[(int)enum_參數.GUID] = Guid.NewGuid().ToString();
+            value[(int)enum_參數.Name] = "叫號輸出音效";
+            value[(int)enum_參數.Value] = $"領藥號 {num} 前，請領藥";
+            this.sqL_DataGridView_參數.SQL_AddRow(value, false);
+            //else
+            //{
+            //    object[] value = list_value[0];
+            //    value[(int)enum_參數.Name] = "音效";
+            //    value[(int)enum_參數.Value] = $"領藥號 {num} 前，請領藥";
+            //    this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
+            //}
 
             System.Media.SoundPlayer sp = null;
 
@@ -72,7 +68,7 @@ namespace Hospital_Call_Light_System
             {
                 try
                 {
-                    voice.Speak($"領藥號 {num} 以前可以領藥");
+                    voice.Speak($"領藥號 {num} 前，請領藥");
                     //sp = new System.Media.SoundPlayer(".//RING.wav");
                     //sp.Stop();
 
@@ -317,39 +313,34 @@ namespace Hospital_Call_Light_System
         {
             if (this.myConfigClass.全局音效)
             {
-                System.Media.SoundPlayer sp = null;
                 List<object[]> list_value = this.sqL_DataGridView_參數.SQL_GetAllRows(false);
-                list_value = list_value.GetRows((int)enum_參數.Name, "音效");
+                list_value = list_value.GetRows((int)enum_參數.Name, "叫號輸出音效");
                 if (list_value.Count > 0)
                 {
-                    object[] value = list_value[0];
-                  
-
-                    if (value[(int)enum_參數.Value].ObjectToString().StringIsEmpty() == false)
+                    for (int i = 0; i < list_value.Count; i++)
                     {
+                        object[] value = list_value[i];
+
                         try
                         {
                             string text = value[(int)enum_參數.Value].ObjectToString();
                             voice.Speak($"{text}");
-                            //sp = new System.Media.SoundPlayer(".//RING.wav");
-                            //sp.Stop();
-
-                            //sp.Play();
 
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine($"Exception : {ex.Message}");
                         }
                         finally
                         {
-                            if (sp != null) sp.Dispose();
-                        }
-                    }
 
-                    value[(int)enum_參數.Name] = "音效";
-                    value[(int)enum_參數.Value] = "";
-                    this.sqL_DataGridView_參數.SQL_ReplaceExtra(value, false);
+                        }
+
+
+                    }
+                    this.sqL_DataGridView_參數.SQL_DeleteExtra(list_value, false);
+
+
                 }
             }
         }
