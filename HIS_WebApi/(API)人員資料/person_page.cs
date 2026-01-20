@@ -307,51 +307,58 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]</returns>
         [Route("add")]
         [HttpPost]
-        public string POST_add([FromBody] returnData returnData)
+        public async Task<string> POST_add([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "serch_by_add";
             try
             {
-
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                if (returnData.ServerType.StringIsEmpty() || returnData.ServerName.StringIsEmpty()) sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "人員資料");
-                if (sys_serverSettingClasses.Count == 0)
+                List<personPageClass> personPageClasses = returnData.Data.ObjToClass<List<personPageClass>>();
+                if (personPageClasses == null || personPageClasses.Count == 0)
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料!";
-                    return returnData.JsonSerializationt();
-                }
-                string Server = sys_serverSettingClasses[0].Server;
-                string DB = sys_serverSettingClasses[0].DBName;
-                string UserName = sys_serverSettingClasses[0].User;
-                string Password = sys_serverSettingClasses[0].Password;
-                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
-                SQLControl sQLControl_personPage = new SQLControl(Server, DB, "person_page", UserName, Password, Port, SSLMode);
-                List<object[]> list_value = sQLControl_personPage.GetAllRows(null);
-                List<object[]> list_value_buf = new List<object[]>();
-                List<object[]> list_src = returnData.Data.ObjToListSQL<personPageClass, enum_人員資料>();
-                List<object[]> list_add = new List<object[]>();
-                List<object[]> list_replace = new List<object[]>();
-                for (int i = 0; i < list_src.Count; i++)
-                {
-                    string ID = list_src[i][(int)enum_人員資料.ID].ObjectToString();
-                    list_value_buf = list_value.GetRows((int)enum_人員資料.ID, ID);
-                    if (list_value_buf.Count > 0)
+                    personPageClass personPage = returnData.Data.ObjToClass<personPageClass>();
+                    if (personPage == null)
                     {
-                        list_replace.Add(list_src[i]);
+                        returnData.Code = -200;
+                        returnData.Result = $"Data不可為空!";
+                        return returnData.JsonSerializationt();
+                    }
+                    personPageClasses = new List<personPageClass>() { personPage };
+                }
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "人員資料");
+
+                SQLControl sQLControl_personPage = new SQLControl(Server, DB, "person_page", UserName, Password, Port, SSLMode);
+                string[] list_id = personPageClasses.Select(x => x.ID).ToArray();
+                List<object[]> list_value = await sQLControl_personPage.GetRowsByDefultAsync(null, (int)enum_人員資料.ID, list_id);
+                List<personPageClass> personPages_sql = list_value.SQLToClass<personPageClass, enum_人員資料>();
+
+                List<personPageClass> add = new List<personPageClass>();
+                List<personPageClass> update = new List<personPageClass>();
+
+                for (int i = 0; i < personPageClasses.Count; i++)
+                {
+                    personPageClass personPage_buff = personPages_sql.FirstOrDefault(x => x.ID == personPageClasses[i].ID);
+                    if (personPage_buff == null)
+                    {
+                        personPageClasses[i].GUID = Guid.NewGuid().ToString();
+                        add.Add(personPageClasses[i]);
                     }
                     else
                     {
-                        list_src[i][(int)enum_人員資料.GUID] = Guid.NewGuid().ToString();
-                        list_add.Add(list_src[i]);
+                        personPageClasses[i].GUID = personPage_buff.GUID;
+                        update.Add(personPageClasses[i]);
                     }
                 }
-                if (list_replace.Count > 0) sQLControl_personPage.UpdateByDefulteExtra(null, list_replace);
-                if (list_add.Count > 0) sQLControl_personPage.AddRows(null, list_add);
+                List<object[]> list_add = add.ClassToSQL<personPageClass, enum_人員資料>();
+                List<object[]> list_update = update.ClassToSQL<personPageClass, enum_人員資料>();
 
+                if (list_add.Count > 0) await sQLControl_personPage.AddRowsAsync(null, list_add);
+                if (list_update.Count > 0) await sQLControl_personPage.UpdateRowsAsync(null, list_update);
+
+                returnData.Data = personPageClasses;
                 returnData.Code = 200;
-                returnData.Result = $"更動人員資料成功,新增<{list_add.Count}>筆,修正<{list_replace.Count}>筆!";
+                returnData.Result = $"更動人員資料成功,新增<{list_add.Count}>筆,修正<{list_update.Count}>筆!";
                 returnData.TimeTaken = myTimerBasic.ToString();
                 return returnData.JsonSerializationt();
             }

@@ -440,7 +440,18 @@ namespace HIS_DB_Lib
             SQLUI.Table table = json_out.JsonDeserializet<SQLUI.Table>();
             return table;
         }
-
+        static public returnData add (string API_Server, List<personPageClass> personPageClasses)
+        {
+            string url = $"{API_Server}/api/person_page/add";
+           
+            returnData returnData = new returnData();
+            returnData.Data = personPageClasses;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            return returnData_out;
+           
+        }
     }
     public static class personPageClassMethod
     {
