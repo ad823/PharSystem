@@ -193,6 +193,22 @@
             "option_str": "",
             "value_db": "True"
         },
+        { 
+            "page_name": "medicine_cart", 
+            "cht": "大瓶藥下拉選單功能開啟", 
+            "name": "large_bottle_location", 
+            "value_type": "checkbox", 
+            "option_str": "",
+            "value_db": "False"
+        },
+        {
+            "page_name": "medicine_cart",
+            "cht": "大瓶藥下拉選單內容",
+            "name": "large_bottle_location_options",
+            "value_type": "text",
+            "option_str": "",
+            "value_db": "台上;台下;中央台"
+        },
         {
             "page_name": "medicine_cart",
             "cht": "出院退藥預設調劑台",
