@@ -1631,7 +1631,7 @@ namespace HIS_WebApi
                         cpoe.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, cpoe.藥碼);
                         cpoe.藥品價格 = medPriceClass.GetByCode(medPriceDict, cpoe.藥碼);
                         cpoe.調劑紀錄 = medInventoryLogClass.SortDictByMasterGUID(medInvenDict, cpoe.GUID);
-                        cpoe.stock = stockDict.GetByCode(cpoe.藥碼).FirstOrDefault();
+                        cpoe.stock = stockDict.GetByCode(cpoe.藥碼).FirstOrDefault() != null ? stockDict.GetByCode(cpoe.藥碼).FirstOrDefault():new stockClass();
                         nearMissClass nearMiss = nearMisses.Where(temp => temp.cpoe_GUID == cpoe.GUID).FirstOrDefault();
                         if (nearMiss != null) cpoe.nearmiss = nearMiss;
                         else cpoe.nearmiss = new nearMissClass();
