@@ -469,5 +469,16 @@ namespace HIS_WebApi
             string result = await get_stock_all_server(returnData);
             return result.JsonDeserializet<returnData>();
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_stock_by_code(List<string> codes ,string serverName, string serverType)
+        {
+            returnData returnData = new returnData();
+            string code_str = string.Join(";", codes);
+            returnData.ValueAry.Add(code_str);
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+            string result = await get_stock_by_code(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
     }
 }

@@ -1823,6 +1823,11 @@
             備註
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medCpoeClass.批號效期">
+            <summary>
+            批號效期
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.medCpoeClass.調劑台">
             <summary>
             調劑台

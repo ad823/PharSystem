@@ -1521,7 +1521,7 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 string GUID = returnData.ValueAry[0];
-                Task<string> taskApi = HIS_WebApi.Method.GetServerApiAsync("Main", "網頁", "API01");
+                //Task<string> taskApi = HIS_WebApi.Method.GetServerApiAsync("Main", "網頁", "API01");
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
                 SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
@@ -1600,6 +1600,7 @@ namespace HIS_WebApi
                     List<medPriceClass> med_price = new List<medPriceClass>();
                     List<medInventoryLogClass> med_InvenLog = new List<medInventoryLogClass>();
                     tasks.Clear();
+                    Task<returnData>  task_returnData_stock = new stock().get_stock_by_code(Codes,"住院藥局", "住院藥局");
                     tasks.Add(Task.Run(new Action(delegate
                     {
                         med_cloud = medClass.get_med_clouds_by_codes(API, Codes);
@@ -1618,15 +1619,19 @@ namespace HIS_WebApi
                         str_result_temp += $"取得調劑紀錄 , {myTimerBasic}ms \n";
                     })));
                     Task.WhenAll(tasks).Wait();
+                    returnData returnData_stock = await task_returnData_stock;
+                    List<stockClass> stockClasses = returnData_stock.Data.ObjToClass<List<stockClass>>();
                     //轉換字典搜尋
                     Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
                     Dictionary<string, List<medPriceClass>> medPriceDict = medPriceClass.CoverToDicByCode(med_price);
                     Dictionary<string, List<medInventoryLogClass>> medInvenDict = medInventoryLogClass.CoverToDictionaryMasterGUID(med_InvenLog);
+                    Dictionary<string, List<stockClass>> stockDict = stockClasses.ToDictByCode();
                     foreach (var cpoe in sql_medCpoe)
                     {
                         cpoe.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, cpoe.藥碼);
                         cpoe.藥品價格 = medPriceClass.GetByCode(medPriceDict, cpoe.藥碼);
                         cpoe.調劑紀錄 = medInventoryLogClass.SortDictByMasterGUID(medInvenDict, cpoe.GUID);
+                        cpoe.stock = stockDict.GetByCode(cpoe.藥碼).FirstOrDefault();
                         nearMissClass nearMiss = nearMisses.Where(temp => temp.cpoe_GUID == cpoe.GUID).FirstOrDefault();
                         if (nearMiss != null) cpoe.nearmiss = nearMiss;
                         else cpoe.nearmiss = new nearMissClass();

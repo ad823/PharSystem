@@ -467,17 +467,70 @@ namespace HIS_WebApi
                                 AND a.藥品碼 <> ''
                         ) t2 ON t1.藥品碼 = t2.藥品碼
                     ";
-                    string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL AND 交易量 <> '');";
+                    string command = $@"
+                    (
+                        -- ① 時間區間內的交易紀錄
+                        SELECT *
+                        FROM {DB}.trading t
+                        WHERE t.操作時間 >= '{起始時間}'
+                          AND t.操作時間 <= '{結束時間}'
+                          AND t.藥品碼 IS NOT NULL
+                          AND t.藥品碼 <> ''
+                          AND t.交易量 IS NOT NULL
+                          AND t.交易量 <> ''
+                    )
+                    UNION ALL
+                    (
+                        -- ② 補齊：時間區間內完全沒有資料的藥品碼 → 抓 endTime 以前(含)最新一筆
+                        SELECT t1.*
+                        FROM {DB}.trading t1
+                        INNER JOIN (
+                            SELECT 藥品碼, MAX(操作時間) AS max_time
+                            FROM {DB}.trading
+                            WHERE 操作時間 <= '{結束時間}'
+                              AND 藥品碼 IS NOT NULL
+                              AND 藥品碼 <> ''
+                              AND 交易量 IS NOT NULL
+                              AND 交易量 <> ''
+                            GROUP BY 藥品碼
+                        ) t2
+                            ON t1.藥品碼 = t2.藥品碼
+                           AND t1.操作時間 = t2.max_time
+                        WHERE t1.藥品碼 IS NOT NULL
+                          AND t1.藥品碼 <> ''
+                          AND t1.交易量 IS NOT NULL
+                          AND t1.交易量 <> ''
+                          AND t1.操作時間 <= '{結束時間}'
+                          AND NOT EXISTS (
+                              SELECT 1
+                              FROM {DB}.trading t3
+                              WHERE t3.藥品碼 = t1.藥品碼
+                                AND t3.操作時間 >= '{起始時間}'
+                                AND t3.操作時間 <= '{結束時間}'
+                                AND t3.藥品碼 IS NOT NULL
+                                AND t3.藥品碼 <> ''
+                                AND t3.交易量 IS NOT NULL
+                                AND t3.交易量 <> ''
+                          )
+                    )";
+
+                    //string command = $@"SELECT * FROM {DB}.trading WHERE 操作時間 >= '{起始時間}' AND 操作時間 <= '{結束時間}' AND (交易量 IS NOT NULL AND 交易量 <> '');";
                     List<object[]> value = await sQLControl_trading.WriteCommandAsync(command);
                     List<transactionsClass> transactionsClasses = value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                     List<List<transactionsClass>> transactions = transactionsClasses.GroupBy(g => g.藥品碼).Select(s => s.ToList()).ToList();
                     foreach (var item in transactions)
                     {
                         if (item[0].藥品碼.StringIsEmpty()) continue;
+                        string latest = item.Max(x => x.操作時間);
+                        transactionsClass transactionsClass_buff = item
+                            .Where(x => x.操作時間 == latest)
+                            .OrderBy(x => x.結存量.StringIsDouble()).FirstOrDefault();
                         consumptionClass consumptionClass = new consumptionClass();
                         consumptionClass.藥碼 = item[0].藥品碼;
                         consumptionClass.藥名 = item[0].藥品名稱;
-                        consumptionClass.庫存量 = item.OrderByDescending(x => x.操作時間).FirstOrDefault().結存量;
+                        //consumptionClass.庫存量 = item.OrderByDescending(x => x.操作時間).FirstOrDefault().結存量;
+                        consumptionClass.庫存量 = transactionsClass_buff.結存量;
+
                         consumptionClass.消耗量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
                         consumptionClass.實調量 = (item.Average(x => x.交易量.StringToDouble()) * -1).ToString("0.00");
                         consumptionClasses_.Add(consumptionClass);
