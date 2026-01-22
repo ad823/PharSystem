@@ -907,7 +907,7 @@ namespace HIS_WebApi
             myTimerBasic.StartTickTime(50000);
             try
             {
-                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("藥庫", "API_drugDistribute_excel_upload");
+                List<sys_serverSettingClass> serverSettingClasses = await Method.GetListServerByTypeAsync("網頁", "API_drugDistribute_excel_upload");
                 string VM_API = string.Empty;
                 if (serverSettingClasses.Count > 0) VM_API = serverSettingClasses[0].Server;
                 if (VM_API.StringIsEmpty() == false)
