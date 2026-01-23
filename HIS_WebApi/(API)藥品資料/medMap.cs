@@ -3033,7 +3033,8 @@ namespace HIS_WebApi._API_藥品資料
                 {
                     stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
                     if (medMap_stock_buff == null) continue;
-                    if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
+                    //if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false)
+                    item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
                     if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
                     if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
                     if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
