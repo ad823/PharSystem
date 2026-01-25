@@ -106,7 +106,10 @@ namespace HIS_WebApi
                 List<List<stockClass>> groupedList = stockClasses
                     .GroupBy(s => s.Classify_GUID)  
                     .Select(g => g.ToList())        
-                    .ToList();                     
+                    .ToList();            
+                List<stockClass> stock_delete = new List<stockClass>();
+                List<stockClass> stock_result = new List<stockClass>();
+
                 foreach (var list in groupedList)
                 {
                     string classify_GUID = list[0].Classify_GUID;
@@ -114,9 +117,15 @@ namespace HIS_WebApi
                     if (medClassifyClass == null) medClassifyClass = new medClassifyClass();
                     foreach (var stock in list)
                     {
-                        List<medClass> medClasses = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼);
+                        medClass medClass = medClass.SortDictionaryByCode(medCloudDict, stock.藥碼).FirstOrDefault();
+                        if (medClass == null) 
+                        {
+                            stock_delete.Add(stock);
+                            continue;
+                        } 
+
                         List<inspectionClass.content> contents_buff = contentDict.GetByCode(stock.藥碼);
-                        string med_GUID = medClasses.Count > 0 ? medClasses[0].GUID : "";
+                        string med_GUID = medClass.GUID;
                         List<medUnitClass> medUnits = medUnitDict.GetByMasterGUID(med_GUID);
                         string value = stock.Value;
                         if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
@@ -125,18 +134,23 @@ namespace HIS_WebApi
                         stock.數量 = deviceBasic.List_Inventory;
                         stock.批號 = deviceBasic.List_Lot_number;
                         stock.Classify = medClassifyClass;
-                        stock.med_cloud = medClasses.Count > 0 ? medClasses[0] : null;
-                        stock.藥名 = medClasses.Count > 0 ? medClasses[0].藥品名稱 : "";
-                        stock.料號 = medClasses.Count > 0 ? medClasses[0].料號 : "";
+                        stock.med_cloud = medClass;
+                        stock.藥名 = medClass.藥品名稱;
+                        stock.料號 = medClass.料號;
                         stock.med_unit = medUnits;
                         stock.content = contents_buff;
                         stock.serverName = ServerName;
-                        stock.serverType = ServerType;                      
+                        stock.serverType = ServerType;
+                        stock_result.Add(stock);
                     }
                 }
-
+                if (stock_delete.Count > 0)
+                {
+                    List<object[]> list_delete = stock_delete.ClassToSQL<stockClass>();
+                    await sQLControl.DeleteRowsAsync(null, list_delete);
+                }
                 returnData.Code = 200;
-                returnData.Data = stockClasses;
+                returnData.Data = stock_result;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "get_stock";
                 returnData.Result = $"取得ServerName{ServerName} ServerType{ServerType}儲位資料，共{stockClasses.Count}筆!";
