@@ -22,6 +22,8 @@ namespace Hospital_Call_Light_System
     {
         int 叫號台01_號碼 = 0;
         int 叫號台02_號碼 = 0;
+        string 叫號台1標題 = "";
+        string 叫號台2標題 = "";
         MyTimerBasic MyTimerBasic_第一台_圖片計時 = new MyTimerBasic(1000);
         MyTimerBasic MyTimerBasic_第二台_圖片計時 = new MyTimerBasic(1000);
         int 第一台_圖片索引 = 1;
@@ -613,7 +615,7 @@ namespace Hospital_Call_Light_System
                     //叫號聲音
                     if (flag_RING_1 || flag_RING_2)
                     {
-                        Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
+                        Dialog_小叫號台.Refresh(叫號台01_號碼, 一號台名稱, 叫號台02_號碼, 二號台名稱);
                         if (flag_RING_1) Function_主畫面_叫號音效輸出(叫號台01_號碼);
                         else if (flag_RING_2) Function_主畫面_叫號音效輸出(叫號台02_號碼);
 
@@ -699,7 +701,7 @@ namespace Hospital_Call_Light_System
                     try
                     {
                         Dialog_小叫號台.ShowForm();
-                        Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
+                        //Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
 
 
                         Basic.Screen.FullScreen(this.FindForm(), dialog_螢幕選擇.Value, true);

@@ -81,13 +81,16 @@ namespace Hospital_Call_Light_System
 
         }
 
-        static new public void Refresh(int 叫號號碼_1 ,int 叫號號碼_2)
+        static new public void Refresh(int 叫號號碼_1, string 叫號台1, int 叫號號碼_2, string 叫號台2)
         {
             //if (!IsShown) return;
             form.Invoke(new Action(delegate 
             {
                 form.label_第一台號碼.Text = 叫號號碼_1.ToString("0000");
                 form.label_第二台號碼.Text = 叫號號碼_2.ToString("0000");
+                form.rJ_Lable_第一台.Text = 叫號台1;
+                form.rJ_Lable_第二台.Text = 叫號台2;
+
             }));
         }
         private void Button_第二台號碼輸入_Click(object sender, EventArgs e)

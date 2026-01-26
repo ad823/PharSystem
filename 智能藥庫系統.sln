@@ -43,8 +43,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backgroundProgram", "backgr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bkp_drugStore", "bkp_drugStore\bkp_drugStore.csproj", "{550C4B14-6906-429A-AC55-FAE5BF6FBD0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_medpic_download_to_base64", "batch_medpic_download_to_base64\batch_medpic_download_to_base64.csproj", "{D052F6A1-7A59-4351-B2CC-F72D1CE81809}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_StackDataAccounting", "batch_StackDataAccounting\batch_StackDataAccounting.csproj", "{1EE88150-F781-470C-BFFA-3902125C3064}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "智能RFID燒錄系統", "智能RFID燒錄系統\智能RFID燒錄系統.csproj", "{E223D52A-5547-4EFB-8D13-258DC841E1D9}"
@@ -62,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_playVoice", "batch_playVoice\batch_playVoice.csproj", "{DAAA345E-32A5-4588-8179-C3CF8C8726A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdpVoiceTestSender", "UdpVoiceTestSender\UdpVoiceTestSender.csproj", "{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "batch_medpic_download_to_base64", "batch_medpic_download_to_base64\batch_medpic_download_to_base64.csproj", "{D052F6A1-7A59-4351-B2CC-F72D1CE81809}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,10 +129,6 @@ Global
 		{550C4B14-6906-429A-AC55-FAE5BF6FBD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{550C4B14-6906-429A-AC55-FAE5BF6FBD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{550C4B14-6906-429A-AC55-FAE5BF6FBD0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1EE88150-F781-470C-BFFA-3902125C3064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1EE88150-F781-470C-BFFA-3902125C3064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EE88150-F781-470C-BFFA-3902125C3064}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -169,6 +165,10 @@ Global
 		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C918ECA-40B2-44A3-91B8-9498F3A5CBB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D052F6A1-7A59-4351-B2CC-F72D1CE81809}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,10 +180,10 @@ Global
 		{E617E12B-9021-4311-8DAA-E6E3CFE5047F} = {A26FB20E-1042-41C8-BA46-0CB7E82757E8}
 		{89223B5D-E6E9-40DF-82AB-462048E6BEC7} = {BED408C5-A664-4417-812E-6486B776D33E}
 		{550C4B14-6906-429A-AC55-FAE5BF6FBD0A} = {A7E77C33-031E-4713-9B8B-A1972553EE94}
-		{D052F6A1-7A59-4351-B2CC-F72D1CE81809} = {E617E12B-9021-4311-8DAA-E6E3CFE5047F}
 		{1EE88150-F781-470C-BFFA-3902125C3064} = {BED408C5-A664-4417-812E-6486B776D33E}
 		{78F6D9F8-3160-4BEB-B716-25E26EEE8C99} = {A26FB20E-1042-41C8-BA46-0CB7E82757E8}
 		{DAAA345E-32A5-4588-8179-C3CF8C8726A2} = {E617E12B-9021-4311-8DAA-E6E3CFE5047F}
+		{D052F6A1-7A59-4351-B2CC-F72D1CE81809} = {A26FB20E-1042-41C8-BA46-0CB7E82757E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B921A9E-6909-4DAB-8E4C-5F9D26A5CEDE}
