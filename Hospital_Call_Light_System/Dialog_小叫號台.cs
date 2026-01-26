@@ -61,7 +61,7 @@ namespace Hospital_Call_Light_System
 
         private void Button1_LostFocus(object sender, EventArgs e)
         {
-            this.button1.Focus();
+            //this.button1.Focus();
         }
 
         private void Dialog_小叫號台_Shown(object sender, EventArgs e)
@@ -102,7 +102,7 @@ namespace Hospital_Call_Light_System
 
         private void Button_第二台號碼輸入_MouseDown(object sender, MouseEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void Button_第一台號碼輸入_MouseDown(object sender, MouseEventArgs e)

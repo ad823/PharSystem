@@ -52,7 +52,7 @@ namespace Hospital_Call_Light_System
             object[] value = new object[new enum_參數().GetLength()];
             value[(int)enum_參數.GUID] = Guid.NewGuid().ToString();
             value[(int)enum_參數.Name] = "叫號輸出音效";
-            value[(int)enum_參數.Value] = $"領藥號 {num} 前，請領藥";
+            value[(int)enum_參數.Value] = $"         領藥號 {num} 前，請領藥";
             if (this.myConfigClass.推撥語音至資料庫 == true) this.sqL_DataGridView_參數.SQL_AddRow(value, false);
    
 
@@ -73,7 +73,7 @@ namespace Hospital_Call_Light_System
                         tts.LimiterThreshold = 0.95F;
 
 
-                        tts.Speak($"領藥號 {num} 前，請領藥");
+                        tts.Speak($"         領藥號 {num} 前，請領藥");
                     }
 
 

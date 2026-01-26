@@ -428,4 +428,4 @@ C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.U
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.dll
 C:\Users\user\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.pdb
 C:\Users\HS\source\repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
-C:\Users\Administrator\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.Up2Date
+C:\Users\Administrator\Source\Repos\PharSystem\HIS_DB_Lib\obj\Release\HIS_DB_Lib.csproj.CopyComplete
