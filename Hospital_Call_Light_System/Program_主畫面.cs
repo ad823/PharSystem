@@ -701,7 +701,7 @@ namespace Hospital_Call_Light_System
                     try
                     {
                         Dialog_小叫號台.ShowForm();
-                        //Dialog_小叫號台.Refresh(叫號台01_號碼, 叫號台02_號碼);
+                        Dialog_小叫號台.Refresh(叫號台01_號碼, comboBox_一號台名稱.GetComboBoxText(), 叫號台02_號碼, comboBox_二號台名稱.GetComboBoxText());
 
 
                         Basic.Screen.FullScreen(this.FindForm(), dialog_螢幕選擇.Value, true);
