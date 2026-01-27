@@ -118,10 +118,10 @@ namespace HIS_WebApi
                         drugstotreDistributions = drugStotreDistributionClass;
                     }
                 }
-                if (drugstotreDistributions == null) 
+                if (drugstotreDistributions == null || drugstotreDistributions.藥碼.StringIsEmpty()) 
                 {
                     returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
-                    if (returnData_ != null && returnData_.Data != null)
+                    if (returnData_ != null && returnData_.Data != null && returnData_.Code == 200)
                     {
                         medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
                         if (mED_PageClasses != null)
