@@ -1046,7 +1046,8 @@ namespace HIS_WebApi
                         if (medClasses[i].開檔狀態.StringIsEmpty() == false) medClass_buf.開檔狀態 = medClasses[i].開檔狀態;
                         if (medClasses[i].儲位描述.StringIsEmpty() == false) medClass_buf.儲位描述 = medClasses[i].儲位描述;
                         if (medClasses[i].備註.StringIsEmpty() == false) medClass_buf.備註 = medClasses[i].備註;
-                        if (medClasses[i].藥品條碼2.StringIsEmpty() == false) medClass_buf.藥品條碼2 = medClasses[i].藥品條碼2;
+                        if (medClasses[i].藥品條碼2.StringIsEmpty() == false && medClasses[i].藥品條碼2.Length > 2) 
+                            medClass_buf.藥品條碼2 = medClasses[i].藥品條碼2;
 
                         medClasses_replace.Add(medClass_buf);
                     }
