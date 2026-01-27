@@ -208,7 +208,7 @@ namespace HIS_WebApi
                     materialRequisitionClasses[i].核撥時間 = DateTime.MinValue.ToDateTimeString_6();
                     materialRequisitionClasses[i].簽收時間 = DateTime.MinValue.ToDateTimeString_6();
 
-                    materialRequisitionClasses[i].申領庫庫存 = "";
+                    //materialRequisitionClasses[i].申領庫庫存 = "";
                     materialRequisitionClasses[i].申領庫結存 = "";
                     //materialRequisitionClasses[i].實撥庫庫存 = "";
                     materialRequisitionClasses[i].實撥庫結存 = "";
