@@ -2617,7 +2617,7 @@ namespace 調劑台管理系統
                         if (storage != null)
                         {
                             list_IP.Add(IP);
-                            if (device.DeviceType.GetEnumName().Contains("lock"))
+                            if (device.DeviceType.GetEnumName().Contains("lock") && storage.IsFADC == false)
                             {
                                 list_lock_IP.Add(IP);
                             }
