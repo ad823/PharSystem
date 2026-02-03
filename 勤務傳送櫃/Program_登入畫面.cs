@@ -332,7 +332,7 @@ namespace 勤務傳送櫃
         #region Event
         private void TextBox_登入畫面_帳號_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Tab)
             {
                 textBox_登入畫面_密碼.Focus();
             }

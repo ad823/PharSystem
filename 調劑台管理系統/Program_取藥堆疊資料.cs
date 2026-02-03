@@ -227,7 +227,10 @@ namespace 調劑台管理系統
                         && takeMedicineStackClasses[i].狀態 != enum_取藥堆疊母資料_狀態.未授權.GetEnumName()) takeMedicineStackClasses[i].狀態 = enum_取藥堆疊母資料_狀態.等待刷新.GetEnumName();
 
                     //if (takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.入庫作業.GetEnumName()) takeMedicineStackClasses[i].IP = "";
-                    if (takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.掃碼領藥.GetEnumName())
+                    if (takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.掃碼領藥.GetEnumName()
+                        && takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.撥入作業.GetEnumName()
+                        && takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.調入作業.GetEnumName()
+                          && takeMedicineStackClasses[i].動作 != enum_交易記錄查詢動作.入庫作業.GetEnumName())
                     {
                         if (takeMedicineStackClasses[i].總異動量.StringToDouble() > 0) takeMedicineStackClasses[i].動作 = enum_交易記錄查詢動作.掃碼退藥.GetEnumName();
                     }

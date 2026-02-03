@@ -1,1 +1,1 @@
-{"Name":"protal","Api_Server":"http://192.168.110.73:4433"}
+{"Name":"protal","Api_Server":"http://220.135.128.247:4433"}

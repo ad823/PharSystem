@@ -74,7 +74,7 @@ namespace 勤務傳送櫃
                 PLC_Device_配藥核對_刷入藥袋.Bool = false;
                 cnt_Program_配藥核對_刷入藥袋 = 65535;
             }
-            if (this.plC_ScreenPage_Main.PageText == "配藥核對") PLC_Device_配藥核對_刷入藥袋.Bool = true;
+            if (this.plC_ScreenPage_Main.PageText == "配藥核對" && tabControlEx_配藥核對.PageText == "配藥核對_單處方") PLC_Device_配藥核對_刷入藥袋.Bool = true;
             if (cnt_Program_配藥核對_刷入藥袋 == 65535) cnt_Program_配藥核對_刷入藥袋 = 1;
             if (cnt_Program_配藥核對_刷入藥袋 == 1) cnt_Program_配藥核對_刷入藥袋_檢查按下(ref cnt_Program_配藥核對_刷入藥袋);
             if (cnt_Program_配藥核對_刷入藥袋 == 2) cnt_Program_配藥核對_刷入藥袋_初始化(ref cnt_Program_配藥核對_刷入藥袋);
@@ -101,22 +101,6 @@ namespace 勤務傳送櫃
         void cnt_Program_配藥核對_刷入藥袋_初始化(ref int cnt)
         {
             Function_配藥核對_刷入藥袋();
-            //if (this.MyTimer_配藥核對_刷入藥袋_結束延遲.IsTimeOut())
-            //{
-            //    if (Task_配藥核對_刷入藥袋 == null)
-            //    {
-            //        Task_配藥核對_刷入藥袋 = new Task(new Action(delegate { Function_配藥核對_刷入藥袋(); }));
-            //    }
-            //    if (Task_配藥核對_刷入藥袋.Status == TaskStatus.RanToCompletion)
-            //    {
-            //        Task_配藥核對_刷入藥袋 = new Task(new Action(delegate { Function_配藥核對_刷入藥袋(); }));
-            //    }
-            //    if (Task_配藥核對_刷入藥袋.Status == TaskStatus.Created)
-            //    {
-            //        Task_配藥核對_刷入藥袋.Start();
-            //    }
-            //    cnt++;
-            //}
         }
 
         #endregion
@@ -190,6 +174,8 @@ namespace 勤務傳送櫃
                 text = text.Replace("\r\n", "");
                 Console.WriteLine($"接收掃碼內容:{text}");
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
+
+
                 if (orderClasses.Count == 0)
                 {
                     this.Invoke(new Action(delegate

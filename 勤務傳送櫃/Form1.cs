@@ -132,12 +132,16 @@ namespace 勤務傳送櫃
             private string scanner02_COMPort = "COM3";
             private string resetIP = "192.168.32.240";
             private bool show_login = true;
+            private bool _配藥核對單處方模式 = true;
+            private bool _勤務取藥單處方模式 = true;
 
             public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public string Scanner02_COMPort { get => scanner02_COMPort; set => scanner02_COMPort = value; }
             public bool Show_login { get => show_login; set => show_login = value; }
             public string ResetIP { get => resetIP; set => resetIP = value; }
+            public bool 配藥核對單處方模式 { get => _配藥核對單處方模式; set => _配藥核對單處方模式 = value; }
+            public bool 勤務取藥單處方模式 { get => _勤務取藥單處方模式; set => _勤務取藥單處方模式 = value; }
         }
         private void LoadMyConfig()
         {
@@ -217,7 +221,13 @@ namespace 勤務傳送櫃
                 this.textBox_登入畫面_密碼.PassWordChar = true;
                 this.plC_UI_Init.UI_Finished_Event += PlC_UI_Init_UI_Finished_Event;
                 StorageUI_EPD_266.Get_Storage_bmpChangeEvent += StorageUI_EPD_266_Get_Storage_bmpChangeEvent;
-              
+
+                if (myConfigClass.勤務取藥單處方模式) tabControlEx_勤務取藥.SelectTab("勤務取藥_單處方");
+                else tabControlEx_勤務取藥.SelectTab("勤務取藥_全處方");
+
+                if (myConfigClass.配藥核對單處方模式) tabControlEx_配藥核對.SelectTab("配藥核對_單處方");
+                else tabControlEx_配藥核對.SelectTab("配藥核對_全處方");
+
             }
         }
         private Bitmap StorageUI_EPD_266_Get_Storage_bmpChangeEvent(Storage storage)
