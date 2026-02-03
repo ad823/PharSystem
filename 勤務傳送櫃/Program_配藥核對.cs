@@ -20,14 +20,48 @@ using H_Pannel_lib;
 using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using DrawingClass;
+using NPOI.SS.Formula.Functions;
 
 namespace 勤務傳送櫃
 {
     public partial class Main_Form : Form
     {
         MyThread myThread_配藥核對;
+
+        private enum enum_配藥核對_處方
+        {
+
+            [Description("Value,VARCHAR,50,None")]
+            Value,
+    
+        }
+
         private void Program_配藥核對_Init()
         {
+            Table table = new Table(new enum_配藥核對_處方());
+            sqL_DataGridView_配藥核對_處方.RowsHeight = 60;
+            sqL_DataGridView_配藥核對_處方.顯示首列 = false;
+            sqL_DataGridView_配藥核對_處方.Init(table);
+            sqL_DataGridView_配藥核對_處方.Set_ColumnVisible(false, new enum_配藥核對_處方().GetEnumNames());
+            sqL_DataGridView_配藥核對_處方.RowPostPaintingEventEx += SqL_DataGridView_配藥核對_處方_RowPostPaintingEventEx;
+            sqL_DataGridView_配藥核對_處方.RowHeaderPostPaintingEvent += SqL_DataGridView_配藥核對_處方_RowHeaderPostPaintingEvent;
+            OrderClass orderClass = new OrderClass();
+            orderClass.藥品碼 = "EDUL2";
+            orderClass.藥品名稱 = "栓 BISADYL SUPP. 10MG";
+            orderClass.頻次 = "ST";
+            orderClass.交易量 = "-2";
+            sqL_DataGridView_配藥核對_處方.AddRow(new object[] { orderClass.JsonSerializationt() }, false);
+            orderClass = new OrderClass();
+            orderClass.藥品碼 = "INS6";
+            orderClass.藥品名稱 = "(袋裝) Sod. Chloride inj. 0.9% 500ml";
+            orderClass.頻次 = "STAT";
+            orderClass.交易量 = "-1";
+            sqL_DataGridView_配藥核對_處方.AddRow(new object[] { orderClass.JsonSerializationt() }, false);
+            sqL_DataGridView_配藥核對_處方.RefreshGrid();
+
+
+
             this.plC_UI_Init.Add_Method(this.Program_配藥核對);
             myThread_配藥核對 = new MyThread();
             myThread_配藥核對.AutoRun(true);
@@ -35,6 +69,72 @@ namespace 勤務傳送櫃
             myThread_配藥核對.SetSleepTime(10);
             myThread_配藥核對.Trigger();
         }
+
+        private void SqL_DataGridView_配藥核對_處方_RowHeaderPostPaintingEvent(object sender, Graphics g, Rectangle rect_hedder, Brush brush_background, Pen pen_border)
+        {
+            Brush brush = brush_background;
+            Pen pen = pen_border;
+
+            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+            Rectangle rectangle;
+            DataGridView dataGridView = this.sqL_DataGridView_配藥核對_處方.dataGridView;
+            DataGridViewColumnCollection columns = dataGridView.Columns;
+            using (Brush brush_title_background = new SolidBrush(Color.White))
+            using (Brush brush_hedder = new SolidBrush(Color.White))
+            {
+                rectangle = this.sqL_DataGridView_配藥核對_處方.GetColumnBounds(enum_配藥核對_處方.Value.GetEnumName());
+                rectangle.Width = this.sqL_DataGridView_配藥核對_處方.Width;
+                g.FillRectangle(brush_hedder, rectangle);
+                g.DrawRectangle(new Pen(new SolidBrush(Color.White)), rectangle);
+
+
+                //rectangle = this.sqL_DataGridView_庫存查詢.GetColumnBounds(enum_庫存查詢.藥碼.GetEnumName());
+                //g.DrawRectangle(pen, rectangle);
+                //DrawingClass.Draw.DrawString(g, "藥碼", new Font("微軟正黑體", 15, FontStyle.Bold), rectangle, Color.Black, DataGridViewContentAlignment.MiddleCenter);
+
+
+            }
+        }
+
+        private void SqL_DataGridView_配藥核對_處方_RowPostPaintingEventEx(SQL_DataGridView sQL_DataGridView, DataGridViewRowPostPaintEventArgs e)
+        {
+            Color row_Backcolor = Color.WhiteSmoke;
+            Color row_Forecolor = Color.Black;
+
+
+
+            using (Brush brush = new SolidBrush(row_Backcolor))
+            {
+                int x = e.RowBounds.Left;
+                int y = e.RowBounds.Top;
+                int width = e.RowBounds.Width;
+                int height = e.RowBounds.Height;
+                e.Graphics.FillRectangle(brush, e.RowBounds);
+                //DrawingClass.Draw.DrawRoundShadow(e.Graphics, new RectangleF(x - 1, y - 1, width, height), Color.Black, 1, 1);
+
+                e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)), new Rectangle(x - 0, y - 0, width +1 , height + 1));
+                Size size = new Size();
+                PointF pointF = new PointF();
+                object[] value = this.sqL_DataGridView_配藥核對_處方.GetRowsList()[e.RowIndex];
+                OrderClass order = value[0].ObjectToString().JsonDeserializet<OrderClass>();
+                string 序號 = $"{e.RowIndex + 1}.";
+                double val = order.交易量.StringToDouble() * -1;
+                size = val.ToString("0.00").MeasureText(new Font("標楷體", 30, FontStyle.Bold));
+
+                DrawingClass.Draw.文字左上繪製(序號, new PointF(10, y + 15), new Font("標楷體", 20), row_Forecolor, e.Graphics);
+                DrawingClass.Draw.文字左上繪製(order.藥品碼, new PointF(50, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
+                DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
+
+                DrawingClass.Draw.文字左上繪製(order.藥品名稱, new PointF(400, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
+
+                size = order.頻次.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
+                DrawingClass.Draw.文字左上繪製(order.頻次, new PointF(e.RowBounds.Width - size.Width - 10, y + 10), new Font("標楷體", 30, FontStyle.Regular), Color.Black, e.Graphics);
+            }
+        }
+
         bool flag_配藥核對_頁面更新_init = false;
         private void Program_配藥核對()
         {
@@ -55,7 +155,6 @@ namespace 勤務傳送櫃
                 flag_配藥核對_頁面更新_init = true;
             }
 
-            //sub_Program_配藥核對_刷入藥袋();
         }
 
         #region PLC_配藥核對_刷入藥袋
