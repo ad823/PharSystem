@@ -1,4 +1,4 @@
-﻿namespace 勤務傳送櫃
+﻿namespace 勤務傳送系統
 {
     partial class OpenDoorPermission_UI
     {

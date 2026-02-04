@@ -15,7 +15,7 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using H_Pannel_lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
 
     public partial class Pannel_Box : UserControl

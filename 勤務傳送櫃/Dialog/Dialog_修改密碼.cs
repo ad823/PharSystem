@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basic;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Dialog_修改密碼 : Form
     {

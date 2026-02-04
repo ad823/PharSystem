@@ -23,7 +23,7 @@ using System.Drawing.Text;
 using DrawingClass;
 using NPOI.SS.Formula.Functions;
 
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
@@ -46,8 +46,8 @@ namespace 勤務傳送櫃
             sqL_DataGridView_配藥核對_全處方.Set_ColumnVisible(false, new enum_配藥核對_處方().GetEnumNames());
             sqL_DataGridView_配藥核對_全處方.RowPostPaintingEventEx += SqL_DataGridView_配藥核對_全處方_RowPostPaintingEventEx;
             sqL_DataGridView_配藥核對_全處方.RowHeaderPostPaintingEvent += SqL_DataGridView_配藥核對_全處方_RowHeaderPostPaintingEvent;
-         
 
+            button_配藥核對_全處方_輸入醫令條碼.Click += Button_配藥核對_全處方_輸入醫令條碼_Click;
 
             this.plC_UI_Init.Add_Method(this.Program_配藥核對);
             myThread_配藥核對 = new MyThread();
@@ -56,6 +56,8 @@ namespace 勤務傳送櫃
             myThread_配藥核對.SetSleepTime(10);
             myThread_配藥核對.Trigger();
         }
+
+     
 
         private void SqL_DataGridView_配藥核對_全處方_RowHeaderPostPaintingEvent(object sender, Graphics g, Rectangle rect_hedder, Brush brush_background, Pen pen_border)
         {
@@ -159,7 +161,7 @@ namespace 勤務傳送櫃
                 PLC_Device_配藥核對_刷入藥袋.Bool = false;
                 cnt_Program_配藥核對_刷入藥袋 = 65535;
             }
-            if (this.plC_ScreenPage_Main.PageText == "配藥核對" && tabControlEx_配藥核對.PageText == "配藥核對_單處方") PLC_Device_配藥核對_刷入藥袋.Bool = true;
+            if (this.plC_ScreenPage_Main.PageText == "配藥核對") PLC_Device_配藥核對_刷入藥袋.Bool = true;
             if (cnt_Program_配藥核對_刷入藥袋 == 65535) cnt_Program_配藥核對_刷入藥袋 = 1;
             if (cnt_Program_配藥核對_刷入藥袋 == 1) cnt_Program_配藥核對_刷入藥袋_檢查按下(ref cnt_Program_配藥核對_刷入藥袋);
             if (cnt_Program_配藥核對_刷入藥袋 == 2) cnt_Program_配藥核對_刷入藥袋_初始化(ref cnt_Program_配藥核對_刷入藥袋);
@@ -191,6 +193,7 @@ namespace 勤務傳送櫃
 
         #endregion
 
+        private string 配藥核對_Keyin_barcode = "";
         #region Function
         MyTimerBasic MyTimerBasic_配藥核對_單處方_刷藥單結束計時 = new MyTimerBasic();
         private void Function_配藥核對_單處方_刷入藥袋()
@@ -419,46 +422,54 @@ namespace 勤務傳送櫃
                     }
                 }
                 string text = null;
-                int scn_load = 0;
-                if (text == null)
+                if(配藥核對_Keyin_barcode.StringIsEmpty())
                 {
-                    if (MySerialPort_Scanner01.IsConnected)
+                    int scn_load = 0;
+                    if (text == null)
                     {
-                        text = MySerialPort_Scanner01.ReadString();
-                        scn_load = 1;
+                        if (MySerialPort_Scanner01.IsConnected)
+                        {
+                            text = MySerialPort_Scanner01.ReadString();
+                            scn_load = 1;
+                        }
                     }
-                }
-                if (text == null)
-                {
-                    if (MySerialPort_Scanner02.IsConnected)
+                    if (text == null)
                     {
-                        text = MySerialPort_Scanner02.ReadString();
-                        scn_load = 2;
+                        if (MySerialPort_Scanner02.IsConnected)
+                        {
+                            text = MySerialPort_Scanner02.ReadString();
+                            scn_load = 2;
+                        }
                     }
-                }
-                if (text == null)
-                {
-                    return;
-                }
-                System.Threading.Thread.Sleep(200);
-                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
-                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(100000);
-                if (scn_load == 1) text = MySerialPort_Scanner01.ReadString();
-                if (scn_load == 2) text = MySerialPort_Scanner02.ReadString();
-                MySerialPort_Scanner01.ClearReadByte();
-                MySerialPort_Scanner02.ClearReadByte();
-                text = text.Replace("\0", "");
-                text = text.Replace("\n", "");
-                if (text.StringIsEmpty()) return;
-                if (text.Length <= 2 || text.Length > 500)
-                {
+                    if (text == null)
+                    {
+                        return;
+                    }
+                    System.Threading.Thread.Sleep(200);
+                    MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
+                    MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(100000);
+                    if (scn_load == 1) text = MySerialPort_Scanner01.ReadString();
+                    if (scn_load == 2) text = MySerialPort_Scanner02.ReadString();
                     MySerialPort_Scanner01.ClearReadByte();
                     MySerialPort_Scanner02.ClearReadByte();
+                    text = text.Replace("\0", "");
+                    text = text.Replace("\n", "");
+                    if (text.StringIsEmpty()) return;
+                    if (text.Length <= 2 || text.Length > 500)
+                    {
+                        MySerialPort_Scanner01.ClearReadByte();
+                        MySerialPort_Scanner02.ClearReadByte();
 
-                    return;
+                        return;
+                    }
+                    text = text.Replace("\r\n", "");
+                    Console.WriteLine($"接收掃碼內容:{text}");
                 }
-                text = text.Replace("\r\n", "");
-                Console.WriteLine($"接收掃碼內容:{text}");
+                else
+                {
+                    text = 配藥核對_Keyin_barcode;
+                    Console.WriteLine($"接收Keyin內容:{text}");
+                }
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
 
@@ -589,7 +600,12 @@ namespace 勤務傳送櫃
         }
         #endregion
         #region Event
-
+        private void Button_配藥核對_全處方_輸入醫令條碼_Click(object sender, EventArgs e)
+        {
+            Dialog_OrderKeyin dialog_OrderKeyin = new Dialog_OrderKeyin();
+            if (dialog_OrderKeyin.ShowDialog() != DialogResult.Yes) return;
+            配藥核對_Keyin_barcode = dialog_OrderKeyin.Value;
+        }
         #endregion
     }
 }

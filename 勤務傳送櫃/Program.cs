@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     static class Program
     {

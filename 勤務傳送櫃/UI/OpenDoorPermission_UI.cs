@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basic;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class OpenDoorPermission_UI : UserControl
     {

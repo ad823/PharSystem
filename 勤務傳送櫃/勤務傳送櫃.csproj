@@ -217,6 +217,12 @@
     <Compile Include="Dialog\Dialog_EPDPanel.Designer.cs">
       <DependentUpon>Dialog_EPDPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_OrderKeyin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_OrderKeyin.Designer.cs">
+      <DependentUpon>Dialog_OrderKeyin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_時段設定.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -299,6 +305,9 @@
     </Compile>
     <EmbeddedResource Include="Dialog\Dialog_EPDPanel.resx">
       <DependentUpon>Dialog_EPDPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_OrderKeyin.resx">
+      <DependentUpon>Dialog_OrderKeyin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_時段設定.resx">
       <DependentUpon>Dialog_時段設定.cs</DependentUpon>

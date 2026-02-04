@@ -1,4 +1,4 @@
-﻿namespace 勤務傳送櫃
+﻿namespace 勤務傳送系統
 {
     partial class Main_Form
     {
@@ -486,7 +486,8 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pannel_Box1 = new 勤務傳送櫃.Pannel_Box();
+            this.pannel_Box1 = new 勤務傳送系統.Pannel_Box();
+            this.button_配藥核對_全處方_輸入醫令條碼 = new System.Windows.Forms.Button();
             this.panel_Main.SuspendLayout();
             this.panel232.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -1889,7 +1890,7 @@
             this.勤務取藥_全處方.Location = new System.Drawing.Point(4, 22);
             this.勤務取藥_全處方.Margin = new System.Windows.Forms.Padding(0);
             this.勤務取藥_全處方.Name = "勤務取藥_全處方";
-            this.勤務取藥_全處方.Size = new System.Drawing.Size(475, 121);
+            this.勤務取藥_全處方.Size = new System.Drawing.Size(1660, 746);
             this.勤務取藥_全處方.TabIndex = 1;
             this.勤務取藥_全處方.Text = "勤務取藥_全處方";
             this.勤務取藥_全處方.UseVisualStyleBackColor = true;
@@ -2353,7 +2354,7 @@
             this.tabPage16.Controls.Add(this.flowLayoutPanel_PannelBox02);
             this.tabPage16.Location = new System.Drawing.Point(4, 25);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(475, 264);
+            this.tabPage16.Size = new System.Drawing.Size(1660, 889);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = "02";
             // 
@@ -2363,7 +2364,7 @@
             this.flowLayoutPanel_PannelBox02.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox02.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel_PannelBox02.Name = "flowLayoutPanel_PannelBox02";
-            this.flowLayoutPanel_PannelBox02.Size = new System.Drawing.Size(475, 264);
+            this.flowLayoutPanel_PannelBox02.Size = new System.Drawing.Size(1660, 889);
             this.flowLayoutPanel_PannelBox02.TabIndex = 1;
             // 
             // tabPage17
@@ -2372,7 +2373,7 @@
             this.tabPage17.Controls.Add(this.flowLayoutPanel_PannelBox03);
             this.tabPage17.Location = new System.Drawing.Point(4, 25);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(475, 264);
+            this.tabPage17.Size = new System.Drawing.Size(1660, 889);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "03";
             // 
@@ -2382,7 +2383,7 @@
             this.flowLayoutPanel_PannelBox03.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox03.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel_PannelBox03.Name = "flowLayoutPanel_PannelBox03";
-            this.flowLayoutPanel_PannelBox03.Size = new System.Drawing.Size(475, 264);
+            this.flowLayoutPanel_PannelBox03.Size = new System.Drawing.Size(1660, 889);
             this.flowLayoutPanel_PannelBox03.TabIndex = 1;
             // 
             // tabPage18
@@ -2391,7 +2392,7 @@
             this.tabPage18.Controls.Add(this.flowLayoutPanel_PannelBox04);
             this.tabPage18.Location = new System.Drawing.Point(4, 25);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(475, 264);
+            this.tabPage18.Size = new System.Drawing.Size(1660, 889);
             this.tabPage18.TabIndex = 3;
             this.tabPage18.Text = "04";
             // 
@@ -2401,7 +2402,7 @@
             this.flowLayoutPanel_PannelBox04.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox04.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel_PannelBox04.Name = "flowLayoutPanel_PannelBox04";
-            this.flowLayoutPanel_PannelBox04.Size = new System.Drawing.Size(475, 264);
+            this.flowLayoutPanel_PannelBox04.Size = new System.Drawing.Size(1660, 889);
             this.flowLayoutPanel_PannelBox04.TabIndex = 1;
             // 
             // panel_櫃體狀態_PannelBox
@@ -3189,6 +3190,7 @@
             this.rJ_Pannel_.BorderColor = System.Drawing.Color.White;
             this.rJ_Pannel_.BorderRadius = 30;
             this.rJ_Pannel_.BorderSize = 0;
+            this.rJ_Pannel_.Controls.Add(this.button_配藥核對_全處方_輸入醫令條碼);
             this.rJ_Pannel_.Controls.Add(this.sqL_DataGridView_配藥核對_全處方);
             this.rJ_Pannel_.Controls.Add(this.panel15);
             this.rJ_Pannel_.Controls.Add(this.rJ_Lable_配藥核對_全處方_病房);
@@ -8214,7 +8216,7 @@
             this.tabPage8.Controls.Add(this.flowLayoutPanel_開門權限_02);
             this.tabPage8.Location = new System.Drawing.Point(4, 25);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage8.Size = new System.Drawing.Size(1100, 307);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "02";
             // 
@@ -8233,7 +8235,7 @@
             this.tabPage9.Controls.Add(this.flowLayoutPanel_開門權限_03);
             this.tabPage9.Location = new System.Drawing.Point(4, 25);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage9.Size = new System.Drawing.Size(1100, 307);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "03";
             // 
@@ -8252,7 +8254,7 @@
             this.tabPage10.Controls.Add(this.flowLayoutPanel_開門權限_04);
             this.tabPage10.Location = new System.Drawing.Point(4, 25);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage10.Size = new System.Drawing.Size(1100, 307);
             this.tabPage10.TabIndex = 3;
             this.tabPage10.Text = "04";
             // 
@@ -8271,7 +8273,7 @@
             this.tabPage11.Controls.Add(this.flowLayoutPanel_開門權限_05);
             this.tabPage11.Location = new System.Drawing.Point(4, 25);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage11.Size = new System.Drawing.Size(1100, 307);
             this.tabPage11.TabIndex = 4;
             this.tabPage11.Text = "05";
             // 
@@ -8290,7 +8292,7 @@
             this.tabPage12.Controls.Add(this.flowLayoutPanel_開門權限_06);
             this.tabPage12.Location = new System.Drawing.Point(4, 25);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage12.Size = new System.Drawing.Size(1100, 307);
             this.tabPage12.TabIndex = 5;
             this.tabPage12.Text = "06";
             // 
@@ -8309,7 +8311,7 @@
             this.tabPage13.Controls.Add(this.flowLayoutPanel_開門權限_07);
             this.tabPage13.Location = new System.Drawing.Point(4, 25);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage13.Size = new System.Drawing.Size(1100, 307);
             this.tabPage13.TabIndex = 6;
             this.tabPage13.Text = "07";
             // 
@@ -8328,7 +8330,7 @@
             this.tabPage14.Controls.Add(this.flowLayoutPanel_開門權限_08);
             this.tabPage14.Location = new System.Drawing.Point(4, 25);
             this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Size = new System.Drawing.Size(1100, 0);
+            this.tabPage14.Size = new System.Drawing.Size(1100, 307);
             this.tabPage14.TabIndex = 7;
             this.tabPage14.Text = "08";
             // 
@@ -8676,7 +8678,7 @@
             this.tabPage3.Controls.Add(this.panel29);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1108, 0);
+            this.tabPage3.Size = new System.Drawing.Size(1108, 402);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "一般權限";
             // 
@@ -9808,7 +9810,7 @@
             this.plC_CheckBox1.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox1.Location = new System.Drawing.Point(205, 78);
             this.plC_CheckBox1.Name = "plC_CheckBox1";
-            this.plC_CheckBox1.Size = new System.Drawing.Size(154, 20);
+            this.plC_CheckBox1.Size = new System.Drawing.Size(155, 20);
             this.plC_CheckBox1.TabIndex = 200;
             this.plC_CheckBox1.Text = "勤務關門閃燈提醒";
             this.plC_CheckBox1.UseVisualStyleBackColor = true;
@@ -9859,7 +9861,7 @@
             this.plC_CheckBox_不檢查處方亮燈.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_不檢查處方亮燈.Location = new System.Drawing.Point(302, 13);
             this.plC_CheckBox_不檢查處方亮燈.Name = "plC_CheckBox_不檢查處方亮燈";
-            this.plC_CheckBox_不檢查處方亮燈.Size = new System.Drawing.Size(138, 20);
+            this.plC_CheckBox_不檢查處方亮燈.Size = new System.Drawing.Size(139, 20);
             this.plC_CheckBox_不檢查處方亮燈.TabIndex = 198;
             this.plC_CheckBox_不檢查處方亮燈.Text = "不檢查處方亮燈";
             this.plC_CheckBox_不檢查處方亮燈.UseVisualStyleBackColor = true;
@@ -9879,7 +9881,7 @@
             this.plC_CheckBox_氣送作業.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_氣送作業.Location = new System.Drawing.Point(399, 47);
             this.plC_CheckBox_氣送作業.Name = "plC_CheckBox_氣送作業";
-            this.plC_CheckBox_氣送作業.Size = new System.Drawing.Size(90, 20);
+            this.plC_CheckBox_氣送作業.Size = new System.Drawing.Size(91, 20);
             this.plC_CheckBox_氣送作業.TabIndex = 197;
             this.plC_CheckBox_氣送作業.Text = "氣送作業";
             this.plC_CheckBox_氣送作業.UseVisualStyleBackColor = true;
@@ -9899,7 +9901,7 @@
             this.plC_CheckBox_配藥核對.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_配藥核對.Location = new System.Drawing.Point(205, 47);
             this.plC_CheckBox_配藥核對.Name = "plC_CheckBox_配藥核對";
-            this.plC_CheckBox_配藥核對.Size = new System.Drawing.Size(90, 20);
+            this.plC_CheckBox_配藥核對.Size = new System.Drawing.Size(91, 20);
             this.plC_CheckBox_配藥核對.TabIndex = 196;
             this.plC_CheckBox_配藥核對.Text = "配藥核對";
             this.plC_CheckBox_配藥核對.UseVisualStyleBackColor = true;
@@ -9919,7 +9921,7 @@
             this.plC_CheckBox_勤務取藥.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_勤務取藥.Location = new System.Drawing.Point(302, 47);
             this.plC_CheckBox_勤務取藥.Name = "plC_CheckBox_勤務取藥";
-            this.plC_CheckBox_勤務取藥.Size = new System.Drawing.Size(90, 20);
+            this.plC_CheckBox_勤務取藥.Size = new System.Drawing.Size(91, 20);
             this.plC_CheckBox_勤務取藥.TabIndex = 195;
             this.plC_CheckBox_勤務取藥.Text = "勤務取藥";
             this.plC_CheckBox_勤務取藥.UseVisualStyleBackColor = true;
@@ -9939,7 +9941,7 @@
             this.plC_CheckBox_主機模式.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_主機模式.Location = new System.Drawing.Point(205, 13);
             this.plC_CheckBox_主機模式.Name = "plC_CheckBox_主機模式";
-            this.plC_CheckBox_主機模式.Size = new System.Drawing.Size(90, 20);
+            this.plC_CheckBox_主機模式.Size = new System.Drawing.Size(91, 20);
             this.plC_CheckBox_主機模式.TabIndex = 194;
             this.plC_CheckBox_主機模式.Text = "主機模式";
             this.plC_CheckBox_主機模式.UseVisualStyleBackColor = true;
@@ -10137,7 +10139,7 @@
             this.tabPage1.Controls.Add(this.plC_UI_Init);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(475, 300);
+            this.tabPage1.Size = new System.Drawing.Size(1660, 925);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "PLC";
             // 
@@ -10197,7 +10199,7 @@
             this.tabPage4.Controls.Add(this.rfiD_UI);
             this.tabPage4.Location = new System.Drawing.Point(4, 25);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(475, 300);
+            this.tabPage4.Size = new System.Drawing.Size(1660, 925);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "RFID";
             // 
@@ -10220,7 +10222,7 @@
             this.rfiD_UI.RFID_Enable = "0";
             this.rfiD_UI.Server_IP_Adress = "0.0.0.0";
             this.rfiD_UI.Server_Port = "0";
-            this.rfiD_UI.Size = new System.Drawing.Size(475, 300);
+            this.rfiD_UI.Size = new System.Drawing.Size(1660, 925);
             this.rfiD_UI.SSID = "";
             this.rfiD_UI.Station = "0";
             this.rfiD_UI.Subnet = "0.0.0.0";
@@ -10240,7 +10242,7 @@
             this.tabPage6.Controls.Add(this.plC_RJ_GroupBox9);
             this.tabPage6.Location = new System.Drawing.Point(4, 25);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(475, 300);
+            this.tabPage6.Size = new System.Drawing.Size(1660, 925);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "BoxIndex";
             // 
@@ -10474,7 +10476,7 @@
             this.plC_RJ_GroupBox9.ContentsPanel.Name = "ContentsPanel";
             this.plC_RJ_GroupBox9.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_GroupBox9.ContentsPanel.ShadowSize = 0;
-            this.plC_RJ_GroupBox9.ContentsPanel.Size = new System.Drawing.Size(475, 503);
+            this.plC_RJ_GroupBox9.ContentsPanel.Size = new System.Drawing.Size(1660, 503);
             this.plC_RJ_GroupBox9.ContentsPanel.TabIndex = 2;
             this.plC_RJ_GroupBox9.Dock = System.Windows.Forms.DockStyle.Top;
             this.plC_RJ_GroupBox9.GUID = "";
@@ -10484,7 +10486,7 @@
             this.plC_RJ_GroupBox9.PannelBorderColor = System.Drawing.Color.SkyBlue;
             this.plC_RJ_GroupBox9.PannelBorderRadius = 5;
             this.plC_RJ_GroupBox9.PannelBorderSize = 2;
-            this.plC_RJ_GroupBox9.Size = new System.Drawing.Size(475, 540);
+            this.plC_RJ_GroupBox9.Size = new System.Drawing.Size(1660, 540);
             this.plC_RJ_GroupBox9.TabIndex = 48;
             this.plC_RJ_GroupBox9.TitleBackColor = System.Drawing.Color.DeepSkyBlue;
             this.plC_RJ_GroupBox9.TitleBorderColor = System.Drawing.Color.PaleVioletRed;
@@ -10538,7 +10540,7 @@
             this.sqL_DataGridView_Box_Index_Table.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_Box_Index_Table.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_Box_Index_Table.Server = "127.0.0.0";
-            this.sqL_DataGridView_Box_Index_Table.Size = new System.Drawing.Size(475, 503);
+            this.sqL_DataGridView_Box_Index_Table.Size = new System.Drawing.Size(1660, 503);
             this.sqL_DataGridView_Box_Index_Table.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_Box_Index_Table.TabIndex = 28;
             this.sqL_DataGridView_Box_Index_Table.TableName = "box_index_table";
@@ -10561,7 +10563,7 @@
             this.tabPage2.Controls.Add(this.loginUI);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(475, 300);
+            this.tabPage2.Size = new System.Drawing.Size(1660, 925);
             this.tabPage2.TabIndex = 3;
             this.tabPage2.Text = "權限設定";
             // 
@@ -10590,7 +10592,7 @@
             this.tabPage19.Controls.Add(this.tabControl1);
             this.tabPage19.Location = new System.Drawing.Point(4, 25);
             this.tabPage19.Name = "tabPage19";
-            this.tabPage19.Size = new System.Drawing.Size(475, 300);
+            this.tabPage19.Size = new System.Drawing.Size(1660, 925);
             this.tabPage19.TabIndex = 4;
             this.tabPage19.Text = "資料庫";
             // 
@@ -10601,7 +10603,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(475, 300);
+            this.tabControl1.Size = new System.Drawing.Size(1660, 925);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage20
@@ -10609,7 +10611,7 @@
             this.tabPage20.Controls.Add(this.sqL_DataGridView_雲端藥檔);
             this.tabPage20.Location = new System.Drawing.Point(4, 22);
             this.tabPage20.Name = "tabPage20";
-            this.tabPage20.Size = new System.Drawing.Size(467, 274);
+            this.tabPage20.Size = new System.Drawing.Size(1652, 899);
             this.tabPage20.TabIndex = 0;
             this.tabPage20.Text = "雲端藥檔";
             this.tabPage20.UseVisualStyleBackColor = true;
@@ -10656,7 +10658,7 @@
             this.sqL_DataGridView_雲端藥檔.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_雲端藥檔.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_雲端藥檔.Server = "localhost";
-            this.sqL_DataGridView_雲端藥檔.Size = new System.Drawing.Size(467, 560);
+            this.sqL_DataGridView_雲端藥檔.Size = new System.Drawing.Size(1652, 560);
             this.sqL_DataGridView_雲端藥檔.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_雲端藥檔.TabIndex = 147;
             this.sqL_DataGridView_雲端藥檔.UserName = "root";
@@ -10678,7 +10680,7 @@
             this.tabPage21.Controls.Add(this.storageUI_EPD_266);
             this.tabPage21.Location = new System.Drawing.Point(4, 25);
             this.tabPage21.Name = "tabPage21";
-            this.tabPage21.Size = new System.Drawing.Size(475, 300);
+            this.tabPage21.Size = new System.Drawing.Size(1660, 925);
             this.tabPage21.TabIndex = 5;
             this.tabPage21.Text = "EPD290";
             // 
@@ -10699,7 +10701,7 @@
             this.storageUI_EPD_266.Port = ((uint)(3306u));
             this.storageUI_EPD_266.Server_IP_Adress = "0.0.0.0";
             this.storageUI_EPD_266.Server_Port = "0";
-            this.storageUI_EPD_266.Size = new System.Drawing.Size(475, 300);
+            this.storageUI_EPD_266.Size = new System.Drawing.Size(1660, 925);
             this.storageUI_EPD_266.SSID = "";
             this.storageUI_EPD_266.Station = "0";
             this.storageUI_EPD_266.Subnet = "0.0.0.0";
@@ -10994,7 +10996,7 @@
             // pannel_Box1
             // 
             this.pannel_Box1.Alarm_Time_Adress = "";
-            this.pannel_Box1.enum_Door_State = 勤務傳送櫃.Pannel_Box.enum_door_state.None;
+            this.pannel_Box1.enum_Door_State = 勤務傳送系統.Pannel_Box.enum_door_state.None;
             this.pannel_Box1.Input_Adress = "";
             this.pannel_Box1.LED_Adress = "";
             this.pannel_Box1.Led_output_num = -1;
@@ -11015,6 +11017,14 @@
             this.pannel_Box1.SQL_Write = false;
             this.pannel_Box1.TabIndex = 0;
             this.pannel_Box1.WardFont = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            // 
+            // button_配藥核對_全處方_輸入醫令條碼
+            // 
+            this.button_配藥核對_全處方_輸入醫令條碼.Location = new System.Drawing.Point(1593, 180);
+            this.button_配藥核對_全處方_輸入醫令條碼.Name = "button_配藥核對_全處方_輸入醫令條碼";
+            this.button_配藥核對_全處方_輸入醫令條碼.Size = new System.Drawing.Size(28, 30);
+            this.button_配藥核對_全處方_輸入醫令條碼.TabIndex = 139;
+            this.button_配藥核對_全處方_輸入醫令條碼.UseVisualStyleBackColor = true;
             // 
             // Main_Form
             // 
@@ -11632,6 +11642,7 @@
         private MyUI.RJ_Lable rJ_Lable35;
         private MyUI.RJ_Lable rJ_Lable_配藥核對_全處方_病房;
         private MyUI.RJ_Lable rJ_Lable_配藥核對_全處方_狀態;
+        private System.Windows.Forms.Button button_配藥核對_全處方_輸入醫令條碼;
     }
 }
 

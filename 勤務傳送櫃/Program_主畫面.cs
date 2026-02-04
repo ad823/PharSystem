@@ -18,7 +18,7 @@ using System.Text.Json.Serialization;
 using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
