@@ -544,6 +544,8 @@ namespace 勤務傳送櫃
                         sp.PlaySync();
                     }
                 }));
+
+                List<transactionsClass> transactionses = new List<transactionsClass>();
                 foreach(OrderClass order in orderClasses)
                 {
                     order.狀態 = "已過帳";
@@ -557,11 +559,30 @@ namespace 勤務傳送櫃
                     order.核對姓名 = this.登入者名稱;
                     order.核對ID = this.登入者ID;
 
+                    transactionsClass transactions = new transactionsClass();
+                    transactions.Order_GUID = order.GUID;
+                    transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
+                    transactions.藥品碼 = order.藥品碼;
+                    transactions.領藥號 = order.領藥號;
+                    transactions.藥品名稱 = order.藥品名稱;
+                    transactions.頻次 = order.頻次;
+                    transactions.病房號 = order.領藥號;
+                    transactions.交易量 = order.交易量;
+                    transactions.病人姓名 = order.病人姓名;
+                    transactions.病歷號 = order.病歷號;
+                    transactions.開方時間 = order.開方日期;
+                    transactions.領用人 = "未領用";
+                    transactions.領用時間 = "1999-01-01 00:00:00";
+                    transactions.操作時間 = DateTime.Now.ToDateTimeString_6();
+                    transactions.操作人 = this.登入者名稱;
+                    transactionses.Add(transactions);
                 }
-
+                transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
+                OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
+                Funtion_藥袋刷入API(orderClasses);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
