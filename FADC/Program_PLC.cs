@@ -6,11 +6,13 @@ using MyUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace FADC
 {
@@ -80,7 +82,7 @@ namespace FADC
         public byte deviceID = 1;
 
         private MyThread myThread_PLC;
-
+        private SerialPort serialPort = new SerialPort();
         public void Program_PLC()
         {
             if(flag_program_PLC_int == false)
@@ -1446,6 +1448,398 @@ namespace FADC
             flag_servoClearAlarm = true;
         }
 
+        public string open_rs232()
+        {
+            string result;
+            result = "";
+            try
+            {
+                if (serialPort.IsOpen == true) serialPort.Close();
+                //設定 Serial Port 參數
+                serialPort.PortName = myConfigClass.StepMotor_COMPort;
+                serialPort.BaudRate = 9600;
+                serialPort.DataBits = 8;
+                serialPort.Parity = System.IO.Ports.Parity.None;
+                serialPort.StopBits = System.IO.Ports.StopBits.One;
+                serialPort.Open();
+                result = "rs232 open ok";
+            }
+            catch (Exception ex)
+            {
 
+                result = ex.Message;
+                MyMessageBox.ShowDialog($"Exception : {result}");
+            }
+
+            return result;
+        }
+        public bool Home(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行歸零高速度設定 (0x3C, 150)");
+            if (modbus_write_funtion6(station, 0x3C, 150) == false)
+            {
+                Console.WriteLine($"[Station {station}] 執行歸零高速度設定失敗 (0x3C, 150)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 執行歸零指令 (0x3b, 0x15)");
+            if (modbus_write_funtion6(station, 0x3b, 0x15) == false)
+            {
+                Console.WriteLine($"[Station {station}] 歸零指令失敗 (0x3b, 0x15)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 開始移動歸零 (0x37, 0x08)");
+            if (modbus_write_funtion6(station, 0x37, 0x08) == false)
+            {
+                Console.WriteLine($"[Station {station}] 執行歸零動作失敗 (0x37, 0x08)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Acc(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定加速度 = {value} (0x31)");
+            if (modbus_write_funtion6(station, 0x31, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定加速度失敗 (0x31)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Dec(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定減速度 = {value} (0x32)");
+            if (modbus_write_funtion6(station, 0x32, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定減速度失敗 (0x32)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Speed(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定運轉速度 = {value} (0x33)");
+            if (modbus_write_funtion6(station, 0x33, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定運轉速度失敗 (0x33)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Position(int station, int value)
+        {
+            int data_H = Convert.ToInt32(value / 65536);
+            int data_L = Convert.ToInt32(value - value * 65536);
+            Console.WriteLine($"[Station {station}] 設定目標位置L = {data_L} (0x34)");
+            if (modbus_write_funtion6(station, 0x34, data_L) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定目標位置L失敗 (0x34)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 設定目標位置H = {data_H} (0x35)");
+            if (modbus_write_funtion6(station, 0x35, data_H) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定目標位置H失敗 (0x35)");
+                return false;
+            }
+            return true;
+        }
+        public bool AbsPosRun(int station)
+        {
+            Console.WriteLine($"[Station {station}] 開始絕對位置移動 = {0x04} (0x37)");
+            if (modbus_write_funtion6(station, 0x37, 0x04) == false)
+            {
+                Console.WriteLine($"[Station {station}] 開始絕對位置移動失敗 (0x37)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Speed(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG速度 = {value} (0x49)");
+            if (modbus_write_funtion6(station, 0x49, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG速度失敗 (0x49)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Acc(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG加速度 = {value} (0x47)");
+            if (modbus_write_funtion6(station, 0x47, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG加速度失敗 (0x47)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Dec(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG減速度 = {value} (0x48)");
+            if (modbus_write_funtion6(station, 0x48, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG減速度失敗 (0x48)");
+                return false;
+            }
+            return true;
+        }
+        public bool JOG_P(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行正向JOG (0x37, 0x40)");
+            if (modbus_write_funtion6(station, 0x37, 0x40) == false)
+            {
+                Console.WriteLine($"[Station {station}] 正向JOG失敗 (0x37, 0x40)");
+                return false;
+            }
+            return true;
+        }
+        public bool JOG_N(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行反向JOG (0x37, 0x80)");
+            if (modbus_write_funtion6(station, 0x37, 0x80) == false)
+            {
+                Console.WriteLine($"[Station {station}] 反向JOG失敗 (0x37, 0x80)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_IO_AbsMode(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行停止 (0x36, 0x01)");
+            if (modbus_write_funtion6(station, 0x36, 0x01) == false)
+            {
+                Console.WriteLine($"[Station {station}] 停止失敗 (0x36, 0x01)");
+                return false;
+            }
+            return true;
+        }
+        public bool Stop(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行停止 (0x38, 0x00)");
+            if (modbus_write_funtion6(station, 0x38, 0x00) == false)
+            {
+                Console.WriteLine($"[Station {station}] 停止失敗 (0x38, 0x00)");
+                return false;
+            }
+            return true;
+        }
+        public bool Motor_Enable(int station, bool enable)
+        {
+            Console.WriteLine($"[Station {station}] 執行激磁 (0x39, {(enable ? 0x03 : 0x00)})");
+            if (modbus_write_funtion6(station, 0x39, enable ? 0x03 : 0x00) == false)
+            {
+                Console.WriteLine($"[Station {station}] 激磁失敗 (0x39, {(enable ? 0x03 : 0x00)})");
+                return false;
+            }
+            return true;
+        }
+        public bool IsMotorMove(int station)
+        {
+            int result = modbus_read_funtion6(station, 0x04);
+            if (result.GetBit(1))
+            {
+                //Console.WriteLine($"[Station {station}] 馬達正在移動 (0x04) 回傳值: {result}");
+                return true;
+            }
+            else
+            {
+                //Console.WriteLine($"[Station {station}] 馬達未移動 (0x04) 回傳值: {result}");
+                return false;
+            }
+        }
+
+        public int modbus_read_funtion6(int station, int address)
+        {
+            byte[] tx = new byte[100];
+            byte[] rx = new byte[1000];
+            int crc;
+            int result = -1;
+            int 回傳的數量;
+            string st;
+            bool myresult;
+            if (serialPort.IsOpen == true)
+            {
+                tx[0] = (byte)(station);
+                tx[1] = 3;
+                tx[2] = (byte)((address & 0xFF00) >> 8);  //high byte
+                tx[3] = (byte)(address & 0x00FF);         //low byte
+                tx[4] = (byte)(0x00);  //high byte
+                tx[5] = (byte)(0x01);         //low byte
+                crc = CRC16(tx, 6);
+                tx[6] = (byte)(crc & 0x00FF);         //low byte
+                tx[7] = (byte)((crc & 0xFF00) >> 8);  //high byte
+                st = serialPort.ReadExisting();    //清除rs232的rx暫存器
+                serialPort.Write(tx, 0, 8);        //從rs232寫出
+                回傳的數量 = 7;
+                result = modbus_wait_datas(回傳的數量);
+                return result;
+            }
+
+            crc = 0;
+
+            return result;
+        }
+        public bool modbus_write_funtion6(int station, int address, int data)
+        {
+            byte[] tx = new byte[100];
+            byte[] rx = new byte[1000];
+            int crc;
+            bool result = false;
+            int 回傳的數量;
+            string st;
+            bool myresult;
+            if (serialPort.IsOpen == true)
+            {
+                tx[0] = (byte)(station);
+                tx[1] = 6;
+                tx[2] = (byte)((address & 0xFF00) >> 8);  //high byte
+                tx[3] = (byte)(address & 0x00FF);         //low byte
+                tx[4] = (byte)((data & 0xFF00) >> 8);  //high byte
+                tx[5] = (byte)(data & 0x00FF);         //low byte
+                crc = CRC16(tx, 6);
+                tx[6] = (byte)(crc & 0x00FF);         //low byte
+                tx[7] = (byte)((crc & 0xFF00) >> 8);  //high byte
+                st = serialPort.ReadExisting();    //清除rs232的rx暫存器
+                serialPort.Write(tx, 0, 8);        //從rs232寫出
+                回傳的數量 = 8;
+                myresult = modbus_回傳(回傳的數量);
+                if (myresult == true)
+                {
+                    result = true;
+                }
+            }
+
+            crc = 0;
+            if (result == false)
+            {
+                crc++;
+            }
+            return result;
+        }
+        private int modbus_wait_datas(int datas_num)
+        {
+            byte[] rx = new byte[1000];
+
+            long t1, t2;
+            bool myflag;
+            int i, j;
+            int result = -1;
+            t1 = DateTime.Now.Ticks / 10000;
+            myflag = false;
+            while (myflag == false)
+            {
+                t2 = DateTime.Now.Ticks / 10000;
+                if ((t2 - t1) > 100) myflag = true;
+
+                i = serialPort.BytesToRead;
+
+                if (i >= datas_num)
+                {
+                    for (j = 0; j < datas_num; j++) rx[j] = (byte)serialPort.ReadByte();
+                    myflag = true;
+
+                    result = rx[3] << 8 | rx[4]; // 解析返回数据的高低字节
+                    System.Threading.Thread.Sleep(1);
+                }
+                else
+                {
+
+                }
+
+            }
+
+            return result;
+        }
+        private bool modbus_回傳(int 回傳的數量)
+        {
+            byte[] rx = new byte[1000];
+
+            long t1, t2;
+            bool myflag, result;
+            int i, j;
+
+            t1 = DateTime.Now.Ticks / 10000;
+            result = false;
+            myflag = false;
+            while (myflag == false)
+            {
+                t2 = DateTime.Now.Ticks / 10000;
+                if ((t2 - t1) > 100) myflag = true;
+
+                i = serialPort.BytesToRead;
+
+                if (i >= 回傳的數量)
+                {
+                    for (j = 0; j < 回傳的數量; j++) rx[j] = (byte)serialPort.ReadByte();
+                    myflag = true;
+                    result = true;
+                    System.Threading.Thread.Sleep(1);
+
+                }
+
+            }
+
+            return result;
+        }
+
+        public static ushort CRC16(byte[] data, int len)
+        {
+            ushort crc = 0xFFFF;
+            for (int i = 0; i < len; i++)
+            {
+                crc = (ushort)(crc ^ (data[i]));
+                for (int j = 0; j < 8; j++)
+                {
+                    crc = (crc & 1) != 0 ? (ushort)((crc >> 1) ^ 0xA001) : (ushort)(crc >> 1);
+                }
+            }
+            return crc;
+        }
+
+        public bool UART_Command_RS485_SetOutputPIN(int station, int PIN, bool state)
+        {
+            try
+            {
+                Console.WriteLine($"[UART_Command] 設定輸出腳位 - Station: {station}, PIN: {PIN}, State: {(state ? "ON" : "OFF")}");
+
+                bool result = false;
+                List<byte> list_byte = new List<byte>();
+
+                // 建立指令
+                list_byte.Add((byte)(station));
+                list_byte.Add((byte)('G'));
+                list_byte.Add((byte)(PIN >> 0));
+                list_byte.Add((byte)(state ? 1 : 0));
+                list_byte.Add(3);  // 結尾標記
+
+                ushort CRC = Basic.MyConvert.Get_CRC16(list_byte.ToArray());
+                list_byte.Add((byte)(CRC >> 0));  // CRC低位元
+                list_byte.Add((byte)(CRC >> 8));  // CRC高位元
+
+                Console.WriteLine($"[UART_Command] 傳送指令: {BitConverter.ToString(list_byte.ToArray())}");
+
+                // 清除RS232接收緩衝區
+                serialPort.ReadExisting();
+
+                // 傳送指令
+                serialPort.Write(list_byte.ToArray(), 0, list_byte.Count);
+                Console.WriteLine($"[UART_Command] 指令已寫入 SerialPort");
+
+                // 等待回傳
+                bool myresult = modbus_回傳(7);
+                Console.WriteLine($"[UART_Command] 回傳接收結果: {(myresult ? "成功" : "失敗")}");
+
+                result = myresult;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UART_Command] 發生例外錯誤: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

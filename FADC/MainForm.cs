@@ -49,12 +49,14 @@ namespace FADC
             private string board_IP = "";
             private string scanner01_COMPort = "COM2";
             private string rFID_COMPort = "COM3";
+            private string stepMotor_COMPort = "COM4";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
             public string Board_IP { get => board_IP; set => board_IP = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
+            public string StepMotor_COMPort { get => stepMotor_COMPort; set => stepMotor_COMPort = value; }
         }
         private void LoadMyConfig()
         {
