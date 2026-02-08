@@ -499,6 +499,8 @@ namespace 勤務傳送系統
         private void Pannel_Box_Init()
         {
             int Num = PLC_Device_單層格數.Value;
+            int panel_max = Num * 8;
+            panel_max = panel_max + 1;
             if (Num <= 0) Num = 1;
             this.SuspendLayout();
 
@@ -508,18 +510,20 @@ namespace 勤務傳送系統
             flowLayoutPanels.Add(flowLayoutPanel_PannelBox03);
             flowLayoutPanels.Add(flowLayoutPanel_PannelBox04);
 
-            for (int i = 0; i < 160; i++)
+
+            for (int i = 0; i < panel_max * 4; i++)
             {
-                
+
+
                 Pannel_Box pannel_Box = new Pannel_Box();
-                pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266) ;
+                pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266);
                 pannel_Box.TabIndex = i + 5;
                 pannel_Box.Width = 195;
                 pannel_Box.Height = flowLayoutPanels[0].Height / Num - 10;
                 pannel_Box.Visible = false;
 
-                flowLayoutPanels[i / 40].Controls.Add(pannel_Box);
-              
+                flowLayoutPanels[i / panel_max].Controls.Add(pannel_Box);
+
                 Pannel_Box.Panels.Add(pannel_Box);
                 pannel_Box.AlarmEvent += Pannel_Box_AlarmEvent;
                 pannel_Box.CloseEvent += Pannel_Box_CloseEvent;
@@ -531,7 +535,7 @@ namespace 勤務傳送系統
             }
             this.ResumeLayout(false);
 
-         
+
 
         }
 
