@@ -986,12 +986,12 @@ namespace HIS_WebApi
                 SQLControl sQLControl = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
                 List<object[]> list_medCloud = await sQLControl.GetRowsByDefultAsync(null, (int)enum_雲端藥檔.藥品碼, codes);
                 List<medClass> medClasses_cloud = list_medCloud.SQLToClass<medClass, enum_雲端藥檔>();
-                if (medClasses_cloud == null || medClasses_cloud.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"取得藥檔失敗";
-                    return returnData.JsonSerializationt(true);
-                }
+                //if (medClasses_cloud == null || medClasses_cloud.Count == 0)
+                //{
+                //    returnData.Code = -200;
+                //    returnData.Result = $"取得藥檔失敗";
+                //    return returnData.JsonSerializationt(true);
+                //}
                 Dictionary<string, List<medClass>> keyValuePairs_med_cloud = medClasses_cloud.CoverToDictionaryByCode();
                 List<medClass> medClasses_add = new List<medClass>();
                 List<medClass> medClasses_replace = new List<medClass>();
