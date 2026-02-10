@@ -3704,7 +3704,6 @@ namespace HIS_WebApi._API_藥品資料
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap()));
             tables.Add(MethodClass.CheckCreatTable<medMap_sectionClass>(sys_serverSettingClasses[0]));
-            //tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_sub_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_shelf()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_drawer()));

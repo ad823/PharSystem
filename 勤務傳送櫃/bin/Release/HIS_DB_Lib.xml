@@ -1122,6 +1122,47 @@
             驗收項目
             </summary>
         </member>
+        <member name="T:HIS_DB_Lib.stockLightClass">
+            <summary>
+            貨品表資料結構  
+            用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.GUID">
+            <summary>
+            唯一識別碼 (GUID)
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.IP">
+            <summary>
+            IP
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.start_num">
+            <summary>
+            開始位置
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.end_num">
+            <summary>
+            結束位置
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.device_type">
+            <summary>
+            裝置類型
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.start_time">
+            <summary>
+            開始時間
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.end_time">
+            <summary>
+            結束時間
+            </summary>
+        </member>
         <member name="M:HIS_DB_Lib.deviceApiClass.combine_drawer_boxes(System.String,System.String,System.String,H_Pannel_lib.Drawer,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
             <summary>
             呼叫 API: 合併儲位 (CombineBoxes)

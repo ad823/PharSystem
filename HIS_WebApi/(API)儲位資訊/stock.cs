@@ -465,24 +465,73 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-        private List<stockClass> get_stockInfo(List<stockClass> medMap_stockClasses)
+        [HttpPost("add_stockLight")]
+        public async Task<string> add_stockLight([FromBody] returnData returnData)
         {
-            foreach (var stock in medMap_stockClasses)
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
             {
-                string value = stock.Value;
-                if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
-                DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-                stock.效期 = deviceBasic.List_Validity_period;
-                stock.數量 = deviceBasic.List_Inventory;
-                stock.批號 = deviceBasic.List_Lot_number;
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<stockLightClass> stockLightClasses = returnData.Data.ObjToClass<List<stockLightClass>>();
+                if (stockLightClasses == null)
+                {
+                    stockLightClass stockLightClass = returnData.Data.ObjToClass<stockLightClass>();
+                    if (stockLightClass == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockLightClass";
+                        return returnData.JsonSerializationt();
+                    }
+                    stockLightClasses = new List<stockLightClass>() { stockLightClass };
+                }
+                
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl_stock = new SQLControl(Server, DB, "stockLight", UserName, Password, Port, SSLMode);
+                foreach (var item in stockLightClasses)
+                {
+                    item.GUID = Guid.NewGuid().ToString();
+
+
+                   
+                }
+                List<object[]> add = stockLightClasses.ClassToSQL<stockLightClass>();
+                await sQLControl_stock.AddRowsAsync(null, add);
+
+                returnData.Code = 200;
+                returnData.Data = stockLightClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "add_stockLight";
+                returnData.Result = $"儲位寫入成功!";
+                return returnData.JsonSerializationt(true);
             }
-            return medMap_stockClasses;
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
         }
+
         private async Task<string> CheckCreatTable(returnData returnData)
         {
-            sys_serverSettingClass sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+            sys_serverSettingClass sys_ServerSettingClass = new sys_serverSettingClass();
+            if (returnData.ServerName.StringIsEmpty() && returnData.ServerType.StringIsEmpty())
+            {
+                sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync("Main", "網頁", "VM端");
+            }
+            else
+            {
+                sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+            }
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable<stockClass>(sys_ServerSettingClass));
+            tables.Add(MethodClass.CheckCreatTable<stockLightClass>(sys_ServerSettingClass));
+
             return tables.JsonSerializationt(true);
         }
         [ApiExplorerSettings(IgnoreApi = true)]
