@@ -251,11 +251,19 @@
         },
         {
             "page_name": "medicine_cart",
-            "cht": "藥品總量彈窗預選功能開啟",
+            "cht": "藥品總量彈窗預選功能開e啟",
             "name": "med_qty_popup_prefill",
             "value_type": "checkbox",
             "option_str": "",
             "value_db": "True"
+        },
+        {
+            "page_name": "medicine_cart",
+            "cht": "調劑錯誤選項",
+            "name": "dispense_error_options",
+            "value_type": "text",
+            "option_str": "",
+            "value_db": "配錯病患;配錯藥品-多種藥品混雜;配錯藥品-多種藥品混雜;無此醫囑，多配發藥品;藥物品質-藥物過期;藥物滲漏;藥物總量欠妥-不足;藥品標示不完整;配錯藥品-配錯藥品劑型;配錯藥品-配錯藥品廠牌;配錯藥品-配錯藥名;漏發藥品;藥物品質-藥物品質不良;藥物總量欠妥-過量;藥品放錯藥盒"
         },
         {
             "page_name": "med_map",

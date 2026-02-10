@@ -25,7 +25,7 @@ namespace HIS_DB_Lib
         欄位種類,
         [Description("選項,VARCHAR,50,NONE")]
         選項,
-        [Description("設定值,VARCHAR,100,NONE")]
+        [Description("設定值,VARCHAR,300,NONE")]
         設定值,
 
     }

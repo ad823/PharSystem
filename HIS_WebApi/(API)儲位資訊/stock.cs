@@ -358,7 +358,16 @@ namespace HIS_WebApi
 
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
-                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);                                                            
+                        if (效期.Contains(medMap_stock_buff.效期[i]) == false)
+                        {
+                            deviceBasic.新增效期(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                            效期.Add(medMap_stock_buff.效期[i]);
+                        }
+                        else
+                        {
+                            deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                        }
+                                                                              
                     }
                     for (int i = 0; i < 效期.Count; i++)
                     {
