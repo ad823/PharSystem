@@ -2746,6 +2746,7 @@ namespace 調劑台管理系統
                     {
                         if (TYPE[k] == DeviceType.EPD266_lock.GetEnumName() || TYPE[k] == DeviceType.EPD266.GetEnumName()
                             || TYPE[k] == DeviceType.EPD290_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290.GetEnumName()
+                             || TYPE[k] == DeviceType.EPD290G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD290G.GetEnumName()
                             || TYPE[k] == DeviceType.EPD420_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420.GetEnumName()
                             || TYPE[k] == DeviceType.EPD213_lock.GetEnumName() || TYPE[k] == DeviceType.EPD213.GetEnumName()
                             || TYPE[k] == DeviceType.EPD420G_lock.GetEnumName() || TYPE[k] == DeviceType.EPD420G.GetEnumName()
