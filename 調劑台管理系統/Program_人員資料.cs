@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Basic;
+using FingerprintLib;
+using HIS_DB_Lib;
+using MySQL_Login;
+using MyUI;
+using SQLUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;//記得取用 FileVersionInfo繼承
 using System.Drawing;
 using System.Linq;
+using System.Reflection;//記得取用 Assembly繼承
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SQLUI;
-using MyUI;
-using Basic;
-using System.Diagnostics;//記得取用 FileVersionInfo繼承
-using System.Reflection;//記得取用 Assembly繼承
-using MySQL_Login;
-using HIS_DB_Lib;
 namespace 調劑台管理系統
 {
     public partial class Main_Form : Form
@@ -55,6 +56,8 @@ namespace 調劑台管理系統
             刪除選取資料,
             [Description("M8000")]
             自動分配未配置顏色人員,
+            [Description("M8000")]
+            時段設定,
         }
 
 
@@ -790,6 +793,18 @@ namespace 調劑台管理系統
                             this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value, true);
                         }
                     }
+                    else if (dialog_ContextMenuStrip.Value == ContextMenuStrip_人員資料.時段設定.GetEnumName())
+                    {
+                        List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                        if(list_value.Count == 0)
+                        {
+                            MyMessageBox.ShowDialog("未選擇資料");
+                            return;
+                        }
+                        string ID = list_value[0][(int)enum_人員資料.ID].ObjectToString();
+                        Dialog_時段設定 dialog_時段設定 = new Dialog_時段設定(ID);
+                        dialog_時段設定.ShowDialog();
+                    }
                 }
             }
         }
@@ -1001,29 +1016,61 @@ namespace 調劑台管理系統
         }
         private void PlC_Button_人員資料_指紋註冊_MouseDownEvent(MouseEventArgs mevent)
         {
-            Dialog_AlarmForm dialog_AlarmForm;
-            List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
-            if (list_value.Count == 0)
+            if(Main_Form.fingerModle == FingerModleType.fpMatchSoket)
             {
-                dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
-                dialog_AlarmForm.ShowDialog();
-                return;
-            }
-            string name = list_value[0][(int)enum_人員資料.姓名].ObjectToString();
-            string id = list_value[0][(int)enum_人員資料.ID].ObjectToString();
-            if (fpMatchSoket.IsOpen == false && flag_指紋辨識_Init == false)
-            {
-                dialog_AlarmForm = new Dialog_AlarmForm("指紋模組未初始化", 2000);
-                dialog_AlarmForm.ShowDialog();
-                return;
-            }
-            Dialog_指紋建置 dialog_指紋建置 = new Dialog_指紋建置(name, id);
-            if (dialog_指紋建置.ShowDialog() != DialogResult.Yes) return;
-            list_value[0][(int)enum_人員資料.指紋辨識] = dialog_指紋建置.Value.feature;
+                Dialog_AlarmForm dialog_AlarmForm;
+                List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                if (list_value.Count == 0)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                string name = list_value[0][(int)enum_人員資料.姓名].ObjectToString();
+                string id = list_value[0][(int)enum_人員資料.ID].ObjectToString();
+                if (fpMatchSoket.IsOpen == false && flag_指紋辨識_Init == false)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("指紋模組未初始化", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                Dialog_指紋建置 dialog_指紋建置 = new Dialog_指紋建置(name, id);
+                if (dialog_指紋建置.ShowDialog() != DialogResult.Yes) return;
+                list_value[0][(int)enum_人員資料.指紋辨識] = dialog_指紋建置.Value.feature;
 
-            this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
-            dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
-            dialog_AlarmForm.ShowDialog();
+                this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
+                dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
+                dialog_AlarmForm.ShowDialog();
+            }
+            else
+            {
+                try
+                {
+                    Dialog_AlarmForm dialog_AlarmForm;
+                    List<object[]> list_value = this.sqL_DataGridView_人員資料.Get_All_Select_RowsValues();
+                    if (list_value.Count == 0)
+                    {
+                        dialog_AlarmForm = new Dialog_AlarmForm("未選取資料", 2000);
+                        dialog_AlarmForm.ShowDialog();
+                        return;
+                    }
+                    Dialog_HID指紋註冊 dialog_HID指紋註冊 = new Dialog_HID指紋註冊();
+                    if (dialog_HID指紋註冊.ShowDialog() != DialogResult.Yes) return;
+
+                    string fmd = dialog_HID指紋註冊.resultFmd.ToBase64();
+
+                    list_value[0][(int)enum_人員資料.指紋辨識] = fmd;
+                    this.sqL_DataGridView_人員資料.SQL_ReplaceExtra(list_value[0], false);
+                    this.sqL_DataGridView_人員資料.ReplaceExtra(list_value[0], true);
+                    dialog_AlarmForm = new Dialog_AlarmForm("設定完成", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+
+
+                }
+                finally
+                {
+                }
+            }
         }
         private void PlC_RJ_Button_人員資料_條碼註冊_MouseDownEvent(MouseEventArgs mevent)
         {

@@ -77,8 +77,7 @@ namespace HIS_DB_Lib
             returnData returnData = new returnData();
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
-            List<SQLUI.Table> tables = json_out.JsonDeserializet<List<SQLUI.Table>>();
-            SQLUI.Table table = SQLUI.TableMethod.GetTable(tables, new enum_medPic());
+            SQLUI.Table table = json_out.JsonDeserializet<SQLUI.Table>();
             return table;
         }
         static public void add(string API_Server, medPicClass medPicClass)

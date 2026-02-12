@@ -53,5 +53,43 @@ namespace FADC
         {
 
         }
+
+        public static byte[] Function_ReadBacodeScanner_pre(int index)
+        {
+            if (index == 0) return Main_Form.MySerialPort_Scanner01.ReadByte();
+            return null;
+        }
+        public static string Function_ReadBacodeScanner(int index)
+        {
+            if (index == 0) return Function_ReadBacodeScanner01();
+            return null;
+        }
+        public static string Function_ReadBacodeScanner01()
+        {
+            try
+            {
+                if (MySerialPort_Scanner01.IsConnected == false) return null;
+                System.Threading.Thread.Sleep(200);
+                string text = MySerialPort_Scanner01.ReadString();
+                if (text == null) return null;
+                text = text.Replace("\0", "");
+                if (text.StringIsEmpty()) return null;
+                if (text.Length <= 2 || text.Length > 200) return null;
+
+                text = text.Replace("\r\n", "");
+                return text;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                MySerialPort_Scanner01.ClearReadByte();
+            }
+
+        }
+  
     }
 }

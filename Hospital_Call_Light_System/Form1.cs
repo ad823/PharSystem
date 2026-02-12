@@ -14,16 +14,17 @@ using SQLUI;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
-
+using HIS_DB_Lib;
 using System.Reflection;
 using System.Runtime.InteropServices;
-[assembly: AssemblyVersion("1.0.0.7")]
-[assembly: AssemblyFileVersion("1.0.0.7")]
+[assembly: AssemblyVersion("1.0.0.11")]
+[assembly: AssemblyFileVersion("1.0.0.11")]
 namespace Hospital_Call_Light_System
 {
 
     public partial class Form1 : System.Windows.Forms.Form
     {
+        private GlobalKeyboardScanner _scanner;
         public enum enum_顯示方式
         {
             號碼,
@@ -31,7 +32,7 @@ namespace Hospital_Call_Light_System
             不顯示
         }
         public static string currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
+        public static Voice voice = new Voice();
         OpenFileDialog openFileDialog_LoadImage = new OpenFileDialog();
         private string last_keyData = "";
         private bool 全螢幕 = false;
@@ -258,8 +259,10 @@ namespace Hospital_Call_Light_System
         public class DBConfigClass
         {
             private SQL_DataGridView.ConnentionClass dB_Basic = new SQL_DataGridView.ConnentionClass();
+            private string orderApiURL = "";
 
             public SQL_DataGridView.ConnentionClass DB_Basic { get => dB_Basic; set => dB_Basic = value; }
+            public string OrderApiURL { get => orderApiURL; set => orderApiURL = value; }
         }
         private void LoadDBConfig()
         {
@@ -303,7 +306,8 @@ namespace Hospital_Call_Light_System
         public MyConfigClass myConfigClass = new MyConfigClass();
         public class MyConfigClass
         {
-
+            private string scanner01_COMPort = "COM1";
+            private bool _鍵盤掃碼模式 = true;
             private enum_顯示方式 _一號台_顯示方式 = enum_顯示方式.號碼;
             private enum_顯示方式 _二號台_顯示方式 = enum_顯示方式.號碼;
             private int _一號台_顯示圖片控制 = 0;
@@ -314,6 +318,8 @@ namespace Hospital_Call_Light_System
 
             private bool _本地音效 = false;
             private bool _全局音效 = false;
+            private bool _推撥語音至資料庫 = false;
+            
             private string _公告名稱 = "";
 
             private string _第一台加一號 = "";
@@ -351,6 +357,9 @@ namespace Hospital_Call_Light_System
             public enum_顯示方式 二號台_顯示方式 { get => _二號台_顯示方式; set => _二號台_顯示方式 = value; }
             public int 一號台_顯示圖片控制 { get => _一號台_顯示圖片控制; set => _一號台_顯示圖片控制 = value; }
             public int 二號台_顯示圖片控制 { get => _二號台_顯示圖片控制; set => _二號台_顯示圖片控制 = value; }
+            public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
+            public bool 鍵盤掃碼模式 { get => _鍵盤掃碼模式; set => _鍵盤掃碼模式 = value; }
+            public bool 推撥語音至資料庫 { get => _推撥語音至資料庫; set => _推撥語音至資料庫 = value; }
         }
         private void LoadMyConfig()
         {
@@ -427,9 +436,26 @@ namespace Hospital_Call_Light_System
             this.rJ_TextBox_第二台_減十號.Text = myConfigClass.第二台減十號;
 
             this.checkBox_本地音效.Checked = myConfigClass.本地音效;
+            this.checkBox_推撥語音至資料庫.Checked = myConfigClass.推撥語音至資料庫;
             this.checkBox_全局音效.Checked = myConfigClass.全局音效;
 
+            _scanner = new GlobalKeyboardScanner(200);
+            _scanner.OnScanCompleted += scan =>
+            {
+                Console.WriteLine($"掃碼完成: {scan}");
+                byte[] data = Encoding.UTF8.GetBytes(scan);
+                MySerialPort_Scanner01.SetReadByte(data);
+            };
+
+            _scanner.Start();
+            this.FormClosing += Form1_FormClosing;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _scanner?.Dispose();
+        }
+
         private void PlC_UI_Init_UI_Finished_Event()
         {
             PLC_UI_Init.Set_PLC_ScreenPage(this.panel_Main, this.plC_ScreenPage_Main);
@@ -444,9 +470,84 @@ namespace Hospital_Call_Light_System
             this.Program_系統_Init();
             this.Program_設定_Init();
             this.Program_主畫面_Init();
-           
 
+            this.plC_UI_Init.Add_Method(sub_program);
             //this.WindowState = FormWindowState.Maximized;
+
+        }
+        static public MySerialPort MySerialPort_Scanner01 = new MySerialPort();
+        private bool flag_mySerialPort = false;
+        private void sub_program()
+        {
+            if(dBConfigClass.OrderApiURL.StringIsEmpty() == false)
+            {
+                MySerialPort_Scanner01.ConsoleWrite = true;
+                if (myConfigClass.鍵盤掃碼模式 == false)
+                {
+                    if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false && flag_mySerialPort == false)
+                    {
+                        MySerialPort_Scanner01.Init(myConfigClass.Scanner01_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                        MySerialPort_Scanner01.SerialPortOpen();
+                        flag_mySerialPort = true;
+                    }
+                }
+                   
+                string text = Function_ReadBacodeScanner01();
+                if (text == null) return;
+                if (text.StringIsEmpty()) return;
+                List<OrderClass> orderClasses = Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
+                if (orderClasses == null) return;
+                if (orderClasses.Count == 0) return;
+                string 領藥號 = orderClasses[0].領藥號;
+                if (領藥號.StringIsInt32())
+                {
+                    if (領藥號.StringToInt32() > 0)
+                    {
+                        if (radioButton_一號台_號碼.Checked == false)
+                        {
+                            MyMessageBox.ShowDialog("第一台目前非叫號模式!");
+                            return;
+                        }
+                        string 機台名稱 = this.comboBox_一號台名稱.GetComboBoxText();
+                        List<object[]> list_value = this.sqL_DataGridView_叫號內容設定.SQL_GetAllRows(false);
+                        list_value = list_value.GetRows((int)enum_叫號內容設定.名稱, 機台名稱);
+                        if (list_value.Count == 0)
+                        {
+                            MyMessageBox.ShowDialog("找無資料!");
+                            return;
+                        }
+                        list_value[0][(int)enum_叫號內容設定.號碼] = 領藥號.StringToInt32().ToString("0000");
+                        this.sqL_DataGridView_叫號內容設定.SQL_ReplaceExtra(list_value, false);
+                    }
+                }
+            }
+        
+        }
+        public static string Function_ReadBacodeScanner01()
+        {
+            try
+            {
+
+                System.Threading.Thread.Sleep(200);
+                string text = MySerialPort_Scanner01.ReadString();
+                if (text == null) return null;
+                text = text.Replace("\0", "");
+                if (text.StringIsEmpty()) return null;
+                if (text.Length <= 2 || text.Length > 200) return null;
+                //if (PLC_Device_刷取藥單要檢查回車.Bool) if (text.Substring(text.Length - 2, 2) != "\r\n") return null;
+
+                text = text.Replace("\r\n", "");
+                return text;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("error", $"Function_ReadBacodeScanner01 : {ex.Message}");
+                return null;
+            }
+            finally
+            {
+                MySerialPort_Scanner01.ClearReadByte();
+            }
 
         }
         private void PlC_ScreenPage_Main_TabChangeEvent(string PageText)
@@ -527,5 +628,58 @@ namespace Hospital_Call_Light_System
 
 
         #endregion
+        public enum OrderAction
+        {
+            領藥 = 0, 退藥 = 1
+        }
+        static public List<OrderClass> Function_醫令資料_API呼叫(string url, string barcode, OrderAction action = OrderAction.領藥)
+        {
+            barcode = barcode.Replace("\r\n", "");
+            barcode = Uri.EscapeDataString(barcode);
+            List<OrderClass> orderClasses = new List<OrderClass>();
+            MyTimer myTimer = new MyTimer();
+            myTimer.StartTickTime(50000);
+            string apitext = $"{url}{barcode}&action={(int)action}";
+
+            Console.Write($"Call api : {apitext}\n");
+            string jsonString = Basic.Net.WEBApiGet(apitext);
+            Console.Write($"{jsonString}\n");
+            Console.Write($"耗時 {myTimer.ToString()}ms\n");
+            if (jsonString.StringIsEmpty())
+            {
+                voice.SpeakOnTask("網路異常");
+            
+                return orderClasses;
+            }
+            returnData returnData = jsonString.JsonDeserializet<returnData>();
+            if (returnData == null)
+            {
+                voice.SpeakOnTask("藥單條碼錯誤");
+         
+                return new List<OrderClass>();
+            }
+            if (returnData.Code == 100)
+            {
+                return new List<OrderClass>();
+            }
+            else if (returnData.Code != 200)
+            {
+              
+                return new List<OrderClass>();
+
+            }
+            orderClasses = returnData.Data.ObjToListClass<OrderClass>();
+            if (orderClasses == null)
+            {
+                Console.WriteLine($"串接資料傳回格式錯誤!");
+                voice.SpeakOnTask("資料錯誤");
+                orderClasses = new List<OrderClass>();
+
+            }
+
+            return orderClasses;
+        }
+
+ 
     }
 }

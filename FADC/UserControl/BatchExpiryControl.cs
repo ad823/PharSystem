@@ -82,6 +82,7 @@ namespace FADC
             {
                 object[] value = new object[] { stockClasses[i].JsonSerializationt() };
                 list_value.Add(value);
+                if (list_value.Count >= 3) break;
             }
             this.sqL_DataGridView_效期批號.RefreshGrid(list_value);
             rJ_DatePicker_效期.SetDefaultDate();

@@ -645,8 +645,9 @@ namespace 中藥調劑系統
                                 if (單位 == "BTL" || 藥名.Contains("BTL") || 藥碼.Contains("BTL"))
                                 {
                                     Voice.MediaPlayAsync($@"{currentDirectory}\此為罐裝調劑.wav");
-                                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("此為罐裝調劑", 1500);
-                                    dialog_AlarmForm.ShowDialog();
+                                    MyMessageBox.ShowDialog("此為罐裝調劑");
+                                    //Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("此為罐裝調劑", 1500);
+                                    //dialog_AlarmForm.ShowDialog();
                                 }
                                 else if (單位 == "錢") enum_Unit_Type = Port.enum_unit_type.hh;
                                 else if (單位 == "克") enum_Unit_Type = Port.enum_unit_type.g;

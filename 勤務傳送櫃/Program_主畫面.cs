@@ -18,7 +18,7 @@ using System.Text.Json.Serialization;
 using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
@@ -363,7 +363,7 @@ namespace 勤務傳送櫃
         private void PlC_RJ_Button_櫃體狀態_重置設備_MouseDownEvent(MouseEventArgs mevent)
         {
             UDP_Class uDP_Class = new UDP_Class("0.0.0.0", 29005);
-            H_Pannel_lib.Communication.Set_OutputPINTrigger(uDP_Class, "192.168.32.240", 1, true);
+            H_Pannel_lib.Communication.Set_OutputPINTrigger(uDP_Class, myConfigClass.ResetIP, 1, true);
             uDP_Class.Dispose();
         }
     }

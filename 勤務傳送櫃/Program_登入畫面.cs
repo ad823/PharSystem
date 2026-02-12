@@ -18,7 +18,7 @@ using System.Text.Json.Serialization;
 using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
@@ -294,7 +294,7 @@ namespace 勤務傳送櫃
                 this.Text = $"{this.FormText}";
                 Function_功能隱藏();
             }));
-            this.PLC_Device_主頁面頁碼.Value = 0;
+            PLC_Device_主頁面頁碼.Value = 0;
         }
         private void Function_功能顯示()
         {
@@ -332,7 +332,7 @@ namespace 勤務傳送櫃
         #region Event
         private void TextBox_登入畫面_帳號_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Tab)
             {
                 textBox_登入畫面_密碼.Focus();
             }

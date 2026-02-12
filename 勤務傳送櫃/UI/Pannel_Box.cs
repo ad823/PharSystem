@@ -15,7 +15,7 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using H_Pannel_lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
 
     public partial class Pannel_Box : UserControl
@@ -24,9 +24,11 @@ namespace 勤務傳送櫃
         public static int AlarmTime = 5000;
         public static int AlarmBeepTime = 5000;
         public static int PharLightOnTime = 5000;
-        public static int InitDelay = 2000;
+        public static int InitDelay = 5000;
         public static bool flag_Run = false;
         public static bool LightCheck = true;
+      
+
         public static List<string> GetAllWardName()
         {
             List<string> list_temp = new List<string>();
@@ -117,8 +119,6 @@ namespace 勤務傳送櫃
         public event EPDSettingEventHandler EPDSettingEvent;
         public delegate void PharmacyLightEventHandler(string EPD_IP, string Name);
         public event PharmacyLightEventHandler PharmacyLightEvent;
-
-
 
 
         public delegate void InSideBoxOnEventHandler(Pannel_Box pannel_Box);
@@ -483,6 +483,7 @@ namespace 勤務傳送櫃
                             else if (value == enum_door_state.Close)
                             {
                                 this.label_病房名稱.BackColor = Color.Pink;
+                                cnt_alarm_led_blink_time = 0;
                             }
                             else if (value == enum_door_state.Alarm)
                             {
@@ -546,15 +547,19 @@ namespace 勤務傳送櫃
             this.storageUI_EPD_266 = _storageUI_EPD_266;
         }
         public static int input_time = 3000;
-        bool flag_alarm_is_active = true;
-        bool flag_Init = false;
-        bool flag_LED_State = false;
-        bool flag_sensor_State = false;
-        bool flag_lockinput_State = false;
-        bool flag_lock_input = false;
-        bool flag_lock_output = false;
-        MyTimerBasic MyTimerBasic_lock_input = new MyTimerBasic(200);
-        MyTimerBasic MyTimerBasic_input = new MyTimerBasic(input_time);
+        private bool flag_alarm_is_active = true;
+        private bool flag_Init = false;
+        private bool flag_LED_State = false;
+        private bool flag_sensor_State = false;
+        private bool flag_lockinput_State = false;
+        private bool flag_lock_input = false;
+        private bool flag_lock_output = false;
+        private bool flag_outSideDoorOpened = false;
+
+        private MyTimerBasic MyTimerBasic_lock_input = new MyTimerBasic(200);
+        private MyTimerBasic MyTimerBasic_outSideBoxPutinDelay = new MyTimerBasic(3000);
+        private MyTimerBasic MyTimerBasic_outSideBoxPutinInitDelay = new MyTimerBasic(3000);
+        private MyTimerBasic MyTimerBasic_input = new MyTimerBasic(input_time);
         public void Run()
         {
             if (!flag_Run) return;
@@ -585,12 +590,14 @@ namespace 勤務傳送櫃
                 this.myTimer_alarm_time.StartTickTime(AlarmTime);
                 this.myTimer_InitDelay.StartTickTime(InitDelay);
                 this.myTimer_InitinputDelay.StartTickTime(200000);
+                MyTimerBasic_outSideBoxPutinInitDelay.StartTickTime(200000);
                 if (this.myTimer_InitDelay.IsTimeOut())
                 {
                     PharmacyLightOff();
                     this.myTimer_InitinputDelay.TickStop();
                     this.myTimer_InitinputDelay.StartTickTime(2000);
-               
+                    MyTimerBasic_outSideBoxPutinInitDelay.TickStop();
+                    MyTimerBasic_outSideBoxPutinInitDelay.StartTickTime(3000);
                     flag_Init = true;
                 }
                 return;
@@ -608,6 +615,7 @@ namespace 勤務傳送櫃
             {
                 this.rFID_UI.Set_OutputPINTrigger(IP, Port, this.lock_output_num, true);
                 this.OpenEvent(this);
+           
                 flag_lock_output = false;
             }
 
@@ -619,10 +627,15 @@ namespace 勤務傳送櫃
             {
                 if(MyTimerBasic_input.IsTimeOut())
                 {
-                    if(flag_input != this.pLC_Device_sensor_input.Bool) if (InSideBoxOnEvent != null) InSideBoxOnEvent(this);
-                    this.pLC_Device_sensor_input.Bool = true;
-                    
+                    if (flag_input != this.pLC_Device_sensor_input.Bool)
+                    {
+                        if(MyTimerBasic_outSideBoxPutinDelay.IsTimeOut()) flag_outSideDoorOpened = false;
 
+                        if (InSideBoxOnEvent != null) InSideBoxOnEvent(this);
+                    }
+                    this.pLC_Device_sensor_input.Bool = true;
+
+                   
                 }
             }
             else
@@ -691,11 +704,9 @@ namespace 勤務傳送櫃
 
                     }
                 }
-            
+           
+              
             }
-
-  
-
 
             if (!flag_lock_input)
             {
@@ -713,6 +724,29 @@ namespace 勤務傳送櫃
                     {
                         if (this.myTimer_InitinputDelay.IsTimeOut())
                         {
+                            if (this.pLC_Device_sensor_input.Bool)
+                            {
+                                Task.Run(new Action(delegate
+                                {
+                                    using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{Main_Form.currentDirectory}\放回籃聲音.wav"))
+                                    {
+                                        sp.Stop();
+                                        sp.Play();
+                                        sp.PlaySync();
+                                    }
+
+                                }));
+                                Console.WriteLine($"[CloseEvent]  關門且有籃子開始撥放音樂 {DateTime.Now.ToDateTimeString_6()}");
+                                if (MyTimerBasic_outSideBoxPutinInitDelay.IsTimeOut())
+                                {
+                                    if (Main_Form.PLC_Device_勤務關門閃燈提醒.Bool)
+                                    {
+                                        MyTimerBasic_outSideBoxPutinDelay.TickStop();
+                                        MyTimerBasic_outSideBoxPutinDelay.StartTickTime(3000);
+                                        flag_outSideDoorOpened = true;
+                                    }
+                                }
+                            }
                             this.CloseEvent(this);
                             Console.WriteLine($"[CloseEvent]  WardName:{WardName},Number{Number} { DateTime.Now.ToDateTimeString_6()}");
                         }
@@ -758,39 +792,17 @@ namespace 勤務傳送櫃
 
                 this.myTimer_alarm_time.TickStop();
                 this.myTimer_alarm_time.StartTickTime(AlarmTime);
+                if(flag_outSideDoorOpened)
+                {
+                    program_alarmLight(1000);
+                }
                 flag_alarm_is_active = true;
             }
             else if (this.enum_Door_State == enum_door_state.Alarm)
             {
-           
-                if (cnt_alarm_led_blink_time == 0)
-                {
-                    this.rFID_UI.Set_OutputPIN(IP, Port, this.Led_output_num, true);
-                    this.myTimer_alarm_led_blink_time.TickStop();
-                    this.myTimer_alarm_led_blink_time.StartTickTime(500);
-                    cnt_alarm_led_blink_time++;
-                }
-                if (cnt_alarm_led_blink_time == 1)
-                {
-                    if (this.myTimer_alarm_led_blink_time.IsTimeOut())
-                    {
-                        this.rFID_UI.Set_OutputPIN(IP, Port, this.Led_output_num, false);
-                        this.myTimer_alarm_led_blink_time.TickStop();
-                        this.myTimer_alarm_led_blink_time.StartTickTime(500);
-                        cnt_alarm_led_blink_time++;
-                    }
-                }
-                if (cnt_alarm_led_blink_time == 2)
-                {
-                    if (this.myTimer_alarm_led_blink_time.IsTimeOut())
-                    {
-                        cnt_alarm_led_blink_time++;
-                    }
-                }
-                if (cnt_alarm_led_blink_time == 3)
-                {
-                    cnt_alarm_led_blink_time = 0;
-                }
+                program_alarmLight(500);
+
+
             }
             if (this.enum_Door_State == enum_door_state.Alarm && !this.myTimer_alarm_beep_time.IsTimeOut())
             {
@@ -802,6 +814,37 @@ namespace 勤務傳送櫃
             }
             flag_Init = true;
 
+        }
+        private void program_alarmLight(int time)
+        {
+            if (cnt_alarm_led_blink_time == 0)
+            {
+                this.rFID_UI.Set_OutputPIN(IP, Port, this.Led_output_num, true);
+                this.myTimer_alarm_led_blink_time.TickStop();
+                this.myTimer_alarm_led_blink_time.StartTickTime(time);
+                cnt_alarm_led_blink_time++;
+            }
+            if (cnt_alarm_led_blink_time == 1)
+            {
+                if (this.myTimer_alarm_led_blink_time.IsTimeOut())
+                {
+                    this.rFID_UI.Set_OutputPIN(IP, Port, this.Led_output_num, false);
+                    this.myTimer_alarm_led_blink_time.TickStop();
+                    this.myTimer_alarm_led_blink_time.StartTickTime(time);
+                    cnt_alarm_led_blink_time++;
+                }
+            }
+            if (cnt_alarm_led_blink_time == 2)
+            {
+                if (this.myTimer_alarm_led_blink_time.IsTimeOut())
+                {
+                    cnt_alarm_led_blink_time++;
+                }
+            }
+            if (cnt_alarm_led_blink_time == 3)
+            {
+                cnt_alarm_led_blink_time = 0;
+            }
         }
         public void Open()
         {

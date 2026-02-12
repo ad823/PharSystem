@@ -1,17 +1,23 @@
-﻿using System;
+﻿using Basic;
+using H_Pannel_lib;
+using MyUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyUI;
-using Basic;
-using System.Diagnostics;//記得取用 FileVersionInfo繼承
-using System.Reflection;//記得取用 Assembly繼承
+using SQLUI;
 using HIS_DB_Lib;
+using System.Diagnostics;
+using FpMatchLib;
+using FingerprintLib;
+using NPOI.SS.Formula.Functions;
+using DPUruNet;
+
 namespace 調劑台管理系統
 {
     public partial class Main_Form : Form
@@ -139,6 +145,15 @@ namespace 調劑台管理系統
             {
                 if(flag_後台登入_頁面更新_離開頁面 == false)
                 {
+                    if(fingerModle == FingerModleType.fingerPrint)
+                    {
+                        if (captureCts != null)
+                        {
+                            captureCts.Cancel();
+                            captureCts.Dispose();
+                            captureCts = null;
+                        }
+                    }
                     flag_後台登入_頁面更新_離開頁面 = true;
                 }
                 this.flag_後台登入_頁面更新 = false;
@@ -164,7 +179,9 @@ namespace 調劑台管理系統
 
             this.sub_Program_後台登入_RFID登入();
             this.sub_Program_後台登入_一維碼登入();
-            this.sub_Program_後台登入_指紋登入();
+            if(Main_Form.fingerModle == FingerModleType.fpMatchSoket) this.sub_Program_後台登入_指紋登入();
+            else sub_Program_後台登入_HID指紋登入();
+
 
 
         }
@@ -233,7 +250,10 @@ namespace 調劑台管理系統
         void cnt_Program_後台登入_RFID登入_外部設備資料(ref int cnt)
         {
             string RFID = "0";
-            List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID = this.rfiD_FX600_UI.Get_RFID();
+
+   
+            List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID = new List<RFID_FX600lib.RFID_FX600_UI.RFID_Device>();
+            if(myConfigClass.使用ISW_RFID == false) list_RFID = this.rfiD_FX600_UI.Get_RFID();
 
             for (int i = 0; i < List_RFID_本地資料.Count; i++)
             {
@@ -256,6 +276,29 @@ namespace 調劑台管理系統
                 {
                     RFID = list_RFID[0].UID;
                 }           
+            }
+            if (myConfigClass.使用ISW_RFID == true)
+            {
+                byte[] bytes = serialPort_ISW.ReadByteEx();
+              
+                if (bytes != null)
+                {
+                    if (bytes.Length != 18)
+                    {
+                        serialPort_ISW.ClearReadByte();
+                        cnt = 65500;
+                        return;
+                    }
+                    string hexs = bytes.ByteToStringHex();
+                    hexs = hexs.Replace("-", "");
+
+                    hexs = hexs.Substring(12, 20);
+                    serialPort_ISW.ClearReadByte();
+                    RFID = hexs;
+                    
+                    Console.WriteLine($"ISW : {hexs}");
+                }
+  
             }
             if (RFID.StringToInt32() == 0 || RFID.StringIsEmpty())
             {
@@ -548,6 +591,67 @@ namespace 調劑台管理系統
         void cnt_Program_後台登入_指紋登入_等待登入完成(ref int cnt)
         {
             cnt++;
+        }
+
+        async void sub_Program_後台登入_HID指紋登入()
+        {
+            if (fingerModle == FingerModleType.fingerPrint)
+            {
+                try
+                {
+                    if (this.PLC_Device_已登入.Bool) return;
+                    if (fingerprintReader.IsCapturing == true)
+                    {
+                        //Console.WriteLine("[後台登入]指紋已在擷取中");
+                        return;
+                    }
+                    //Function_指紋辨識初始化(false);
+                    captureCts = new CancellationTokenSource();
+                    Console.WriteLine("[後台登入]開始擷取指紋");
+                    var result = await fingerprintReader.CaptureAsync(captureCts.Token);
+                    Console.WriteLine("[後台登入]擷取指紋成功");
+
+                    List<personPageClass> personPageClasses = personPageClass.get_all(API_Server);
+                    Fmd fmd_result = result.Fmd;
+                    for (int i = 0; i < personPageClasses.Count; i++)
+                    {
+                        if (personPageClasses[i].指紋辨識.StringIsEmpty()) continue;
+                        Fmd fmd = personPageClasses[i].指紋辨識.FromBase64();
+                        if (fmd == null) continue;
+                        bool flag_match = fingerprintEngine.Compare(fmd_result, fmd);
+                        if (flag_match)
+                        {
+                            this.Invoke(new Action(delegate
+                            {
+                                this.textBox_後台登入_帳號.Text = personPageClasses[i].ID;
+                                this.textBox_後台登入_密碼.Text = personPageClasses[i].密碼;
+                            }));
+                            Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.指紋登入, personPageClasses[i].姓名, "後台登入(指紋)");
+                            Function_登入();
+                            if (captureCts != null)
+                            {
+                                captureCts.Cancel();
+                                captureCts.Dispose();
+                                captureCts = null;
+                            }
+                            return;
+                        }
+                    }
+                    MyMessageBox.ShowDialog(string.Format("查無此指紋帳號"));
+                    return;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("擷取 Finger #1 錯誤：" + ex.Message);
+
+                }
+                finally
+                {
+
+
+                }
+            }
         }
         #endregion
 

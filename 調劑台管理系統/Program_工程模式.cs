@@ -52,6 +52,7 @@ namespace 調劑台管理系統
             DrawerUI_EPD_583.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
             RowsLEDUI.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
             StorageUI_EPD_266.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
+            CommonSapceMethod.Lightness = plC_NumBox_亮燈亮度.Value / 100D;
 
             if (this.plC_ScreenPage_Main.PageText == "工程模式")
             {
@@ -151,7 +152,7 @@ namespace 調劑台管理系統
         #region Function
         private void Function_工程模式_鎖控按鈕更新()
         {
-            Function_從SQL取得儲位到本地資料();
+            List<object> devices = Function_從SQL取得儲位();
             List<object[]> list_locker_table_value = this.sqL_DataGridView_Locker_Index_Table.SQL_GetAllRows(false);
             List<object[]> list_locker_table_value_buf = new List<object[]>();
             string OutputAdress = "";
@@ -168,7 +169,7 @@ namespace 調劑台管理系統
                 }
                 IP = list_locker_table_value_buf[0][(int)enum_lockerIndex.IP].ObjectToString();
                 Num = list_locker_table_value_buf[0][(int)enum_lockerIndex.Num].ObjectToString().StringToInt32();
-                object device = Fucnction_從本地資料取得儲位(IP);
+                object device = devices.SortByIP(IP);
                 if (device == null)
                 {
                     List_Locker[i].Visible = false;
@@ -197,18 +198,6 @@ namespace 調劑台管理系統
                     List_Locker[i].Visible = true;
                     if (rowsLED.Name.StringIsEmpty()) continue;
                     List_Locker[i].Name = rowsLED.Name;
-                }
-                if(device is RFIDClass)
-                {
-                    if (Num == -1) return;
-                    RFIDClass rFIDClass = device as RFIDClass;
-                    RFIDClass.DeviceClass deviceClass = rFIDClass.DeviceClasses[Num];
-                    List_Locker[i].IP = IP;
-                    List_Locker[i].Num = Num;
-                    List_Locker[i].Visible = true;
-                    if (deviceClass.Name.StringIsEmpty()) continue;
-                    List_Locker[i].Name = deviceClass.Name;
-
                 }
                 else
                 {

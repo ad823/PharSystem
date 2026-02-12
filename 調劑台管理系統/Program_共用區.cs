@@ -22,6 +22,7 @@ namespace 調劑台管理系統
 {
     static public class CommonSapceMethod
     {
+        public static double Lightness = 1.0D;
         public static void WriteTakeMedicineStack(this List<CommonSapceClass> commonSapceClasses ,List<object[]> list_堆疊母資料_add)
         {
             Table table = new Table(new enum_取藥堆疊母資料());
@@ -46,6 +47,10 @@ namespace 調劑台管理系統
                 {
                     if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作].ObjectToString() == "系統領藥") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作] = "掃碼領藥";
                     if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == "已領用過") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態] = "儲位亮燈";
+                    //Color color = list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.顏色].ObjectToString().ToColor();
+                    //color = Color.FromArgb((int)(color.R * Lightness), (int)(color.G * Lightness), (int)(color.B * Lightness));
+                    //list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.顏色] = color.ToColorString();
+
                 }
                 sQLControl.AddRows(null, list_堆疊母資料_add);
                 Console.WriteLine($"新增共用台資料,共<{list_堆疊母資料_add.Count}>筆");
@@ -257,7 +262,7 @@ namespace 調劑台管理系統
                 Console.WriteLine($"API 連結失敗 : {dBConfigClass.Api_Server}/api/ServerSetting");
                 return new List<sys_serverSettingClass>();
             }
-            Console.WriteLine(json_result);
+            //Console.WriteLine(json_result);
             returnData returnData = json_result.JsonDeserializet<returnData>();
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses_buf = new List<sys_serverSettingClass>();

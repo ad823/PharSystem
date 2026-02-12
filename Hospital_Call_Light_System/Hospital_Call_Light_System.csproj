@@ -39,7 +39,14 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>dhiry-7bbsj-001.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AudioProcessingLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\0.DLL\AudioProcessingLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Basic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\Basic.dll</HintPath>
@@ -50,10 +57,6 @@
     </Reference>
     <Reference Include="cjwdev.windowsapi">
       <HintPath>..\0.DLL\cjwdev.windowsapi.dll</HintPath>
-    </Reference>
-    <Reference Include="CSkin, Version=10.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\0.DLL\CSkin.dll</HintPath>
     </Reference>
     <Reference Include="DeltaMotor485">
       <HintPath>..\0.DLL\DeltaMotor485.dll</HintPath>
@@ -273,6 +276,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalKeyboardScanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Program_主畫面.cs">
       <SubType>Form</SubType>
@@ -301,6 +305,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialog_小叫號台.resx">
       <DependentUpon>Dialog_小叫號台.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog_螢幕選擇.resx">
       <DependentUpon>Dialog_螢幕選擇.cs</DependentUpon>
@@ -332,6 +337,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dhiry-7bbsj-001.ico" />
+    <Content Include="j558d-wnbot-001.ico" />
+    <None Include="Resources\pharmacy-waiting-number-display-removebg-preview.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

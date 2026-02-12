@@ -165,7 +165,7 @@ namespace 調劑台管理系統
                 MyMessageBox.ShowDialog("API Server 連結失敗!");
                 return;
             }
-            Console.WriteLine(json_result);
+            //Console.WriteLine(json_result);
             returnData returnData = json_result.JsonDeserializet<returnData>();
             List<HIS_DB_Lib.sys_serverSettingClass> sys_serverSettingClasses = returnData.Data.ObjToListClass<sys_serverSettingClass>();
             HIS_DB_Lib.sys_serverSettingClass sys_serverSettingClass;

@@ -523,14 +523,12 @@ C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\bin\De
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\bin\Debug\System.ValueTuple.xml
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.AssemblyReference.cache
-C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe.config
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.Dialog_小叫號台.resources
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.Dialog_螢幕選擇.resources
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.Form1.resources
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.Properties.Resources.resources
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.GenerateResource.cache
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CoreCompileInputs.cache
-C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital.DBFEDD3D.Up2Date
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.pdb
 C:\Users\HS\source\repos\PharSystem\Hospital_Call_Light_System\bin\Debug\Hospital_Call_Light_System.exe.config
@@ -713,3 +711,4 @@ C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.pdb
+C:\Users\Administrator\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete

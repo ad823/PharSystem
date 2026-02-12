@@ -2,5 +2,8 @@
   "RFID_COMPort": "",
   "Scanner01_COMPort": "",
   "Scanner02_COMPort": "",
-  "Show_login": true
+  "Show_login": true,
+  "ResetIP": "192.168.32.240",
+  "配藥核對單處方模式": false,
+  "勤務取藥單處方模式": true
 }

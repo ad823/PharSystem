@@ -249,6 +249,26 @@
             備註
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medComboClass.GUID">
+            <summary>
+            唯一KEY。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.序列號">
+            <summary>
+            序列號。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.藥碼">
+            <summary>
+            藥碼。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medComboClass.藥名">
+            <summary>
+            藥名。
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.bedStatusClass.GUID">
             <summary>
             唯一KEY
@@ -4355,6 +4375,61 @@
         <member name="P:HIS_DB_Lib.OrderTClass.備註">
             <summary>
             備註
+            </summary>
+        </member>
+        <member name="T:HIS_DB_Lib.personTimePeriodClass">
+            <summary>
+            人員可用時段設定資料
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.GUID">
+            <summary>
+            唯一識別碼
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.ID">
+            <summary>
+            人員 ID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.start_date">
+            <summary>
+            可使用起始日期
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.end_date">
+            <summary>
+            可使用結束日期
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.period1">
+            <summary>
+            可使用時段 1（字串格式）
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.period2">
+            <summary>
+            可使用時段 2
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.period3">
+            <summary>
+            可使用時段 3
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.period4">
+            <summary>
+            可使用時段 4
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.personTimePeriodClass.period5">
+            <summary>
+            可使用時段 5
+            </summary>
+        </member>
+        <member name="M:HIS_DB_Lib.personTimePeriodClass.IsAllowedNow(HIS_DB_Lib.personTimePeriodClass,System.DateTime)">
+            <summary>
+            檢查現在是否在日期內 + 任一時段內
             </summary>
         </member>
         <member name="P:HIS_DB_Lib.personPageClass.GUID">

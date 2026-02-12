@@ -19,7 +19,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using MyOffice;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {

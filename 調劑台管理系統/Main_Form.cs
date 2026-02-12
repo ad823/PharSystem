@@ -21,8 +21,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.12081")]
-[assembly: AssemblyFileVersion("1.0.25.12081")]
+[assembly: AssemblyVersion("1.0.26.02041")]
+[assembly: AssemblyFileVersion("1.0.26.02041")]
 namespace 調劑台管理系統
 {
 
@@ -115,9 +115,12 @@ namespace 調劑台管理系統
         static public PLC_Device PLC_Device_手輸醫令要選擇收支原因 = new PLC_Device("S5055");
         static public PLC_Device PLC_Device_退藥要選擇收支原因 = new PLC_Device("S5056");
         static public PLC_Device PLC_Device_調劑登入提示語音開啟 = new PLC_Device("S5057");
-        static public PLC_Device PLC_Device_藥單重複刷取開檢查 = new PLC_Device("S5058");
+        static public PLC_Device PLC_Device_藥單重複刷取要檢查 = new PLC_Device("S5058");
         static public PLC_Device PLC_Device_刷取藥單不要都開啟抽屜 = new PLC_Device("S5059");
         static public PLC_Device PLC_Device_刷取藥單要檢查回車 = new PLC_Device("S5060");
+        static public PLC_Device PLC_Device_盤點異常排除不改動庫存 = new PLC_Device("S5061");
+        static public PLC_Device PLC_Device_盤點異常排除要修正原因 = new PLC_Device("S5062");
+        static public PLC_Device PLC_Device_亮燈要檢查料號 = new PLC_Device("S5063");
 
 
         static public PLC_Device PLC_Device_使用藥品群組排序盤點 = new PLC_Device("S5051");
@@ -229,6 +232,7 @@ namespace 調劑台管理系統
         #endregion
         #region MyConfigClass
         private static string MyConfigFileName = $@"{currentDirectory}\MyConfig.txt";
+        static public  MySerialPort serialPort_ISW = new MySerialPort();
         static public MyConfigClass myConfigClass = new MyConfigClass();
         public class MyConfigClass
         {
@@ -247,6 +251,8 @@ namespace 調劑台管理系統
             private bool rFID_Enable = true;
             private bool pannel35_Enable = true;
             private bool _舊版晶片 = false;
+            private bool _使用HID指紋機 = false;
+            private bool _使用ISW_RFID = false;
 
             private int ePD583_Port = 29005;
             private int ePD266_Port = 29000;
@@ -306,6 +312,8 @@ namespace 調劑台管理系統
             public string HFRFID_2_COMPort { get => hFRFID_2_COMPort; set => hFRFID_2_COMPort = value; }
             public string 批次領藥篩選 { get => _批次領藥篩選; set => _批次領藥篩選 = value; }
             public string QRCode_url { get => qRCode_url; set => qRCode_url = value; }
+            public bool 使用HID指紋機 { get => _使用HID指紋機; set => _使用HID指紋機 = value; }
+            public bool 使用ISW_RFID { get => _使用ISW_RFID; set => _使用ISW_RFID = value; }
         }
         private void LoadMyConfig()
         {
@@ -444,6 +452,7 @@ namespace 調劑台管理系統
 
                 LoadDBConfig();
                 LoadMyConfig();
+
 
                 if (myConfigClass.ControlMode) ControlMode = true;
 
@@ -645,6 +654,7 @@ namespace 調劑台管理系統
             this.sub_Program_盤點作業_單號查詢_Init();
             this.sub_Program_盤點作業_資料庫_Init();
             this.Program_異常通知_Init();
+            this.Program_storageMedBoxIOConfig_Init();
 
             if (!this.ControlMode) this.Program_輸出入檢查_Init();
             this.Program_收支作業_Init();
@@ -870,29 +880,40 @@ namespace 調劑台管理系統
                     _RFID_FX600_UI = this.rfiD_FX600_UI;
                     if (myConfigClass.RFID使用 == false) break;
 
+
+
                     if (MyTimer_rfiD_FX600_UI_Init.IsTimeOut() && !flag_rfiD_FX600_UI_Init)
                     {
                         if (myConfigClass.RFID使用)
                         {
-                            int num = 1;
-                            if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
+                            if(myConfigClass.使用ISW_RFID == false)
                             {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner02_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner03_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
-                            if (myConfigClass.Scanner04_COMPort.StringIsEmpty() == false)
-                            {
-                                num++;
-                            }
+                                int num = 1;
+                                if (myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner02_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner03_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
+                                if (myConfigClass.Scanner04_COMPort.StringIsEmpty() == false)
+                                {
+                                    num++;
+                                }
 
-                            this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+                                this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+                            }
+                            else
+                            {
+                                serialPort_ISW.Init(myConfigClass.RFID_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                                serialPort_ISW.SerialPortOpen();
+                            }
+                           
 
                         }
                         flag_rfiD_FX600_UI_Init = true;
@@ -1226,7 +1247,6 @@ namespace 調劑台管理系統
                 }
             }
         }
-
     }
 
 

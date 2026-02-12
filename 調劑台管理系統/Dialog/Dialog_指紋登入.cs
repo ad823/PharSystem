@@ -18,6 +18,7 @@ namespace 調劑台管理系統
     {
         private MyThread myThread = new MyThread();
         public FpMatchClass Value;
+        public personPageClass Value2;
         public int 台號 = -1;
         private bool about = false;
         public Dialog_指紋登入()
@@ -66,15 +67,19 @@ namespace 調劑台管理系統
             plC_RJ_Button_4號.Run();
             if(flag_init == false)
             {
-                if (Main_Form.Function_指紋辨識初始化(true,false) == false)
+                if(Main_Form.fingerModle == Main_Form.FingerModleType.fpMatchSoket)
                 {
-                    this.Invoke(new Action(delegate
+                    if (Main_Form.Function_指紋辨識初始化(true, false) == false)
                     {
-                        this.DialogResult = DialogResult.No;
-                        this.Close();
-                    }));
-                    return;
+                        this.Invoke(new Action(delegate
+                        {
+                            this.DialogResult = DialogResult.No;
+                            this.Close();
+                        }));
+                        return;
+                    }
                 }
+           
                 this.stepViewer1.Next();
                 if (Main_Form.myConfigClass.Scanner01_COMPort.StringIsEmpty() == false)
                 {
@@ -108,30 +113,48 @@ namespace 調劑台管理系統
             if (this.stepViewer1.CurrentStep == 3)
             {
                 flag_step_3 = true;
-                Value = Main_Form.fpMatchSoket.GetFeatureOnce();
-                if (Value == null) return;
-                if (Value.featureLen == 768)
+                if (Main_Form.fingerModle == Main_Form.FingerModleType.fpMatchSoket)
                 {
-
-                    List<object[]> list_人員資料 = Main_Form._sqL_DataGridView_人員資料.SQL_GetAllRows(false);
-                    object[] value = null;
-                    for (int i = 0; i < list_人員資料.Count; i++)
+                    Value = Main_Form.fpMatchSoket.GetFeatureOnce();
+                    if (Value == null) return;
+                    if (Value.featureLen == 768)
                     {
-                        string feature = list_人員資料[i][(int)enum_人員資料.指紋辨識].ObjectToString();
-                        if (Main_Form.fpMatchSoket.Match(Value.feature, feature))
-                        {
-                            value = list_人員資料[i];
 
+                        List<object[]> list_人員資料 = Main_Form._sqL_DataGridView_人員資料.SQL_GetAllRows(false);
+                        object[] value = null;
+                        for (int i = 0; i < list_人員資料.Count; i++)
+                        {
+                            string feature = list_人員資料[i][(int)enum_人員資料.指紋辨識].ObjectToString();
+                            if (Main_Form.fpMatchSoket.Match(Value.feature, feature))
+                            {
+                                value = list_人員資料[i];
+
+                            }
+                        }
+                        if (value != null) this.stepViewer1.Next();
+                        else
+                        {
+                            Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("找無符合指紋資訊", 2000);
+                            dialog_AlarmForm.ShowDialog();
+                            flag_step_3 = false;
                         }
                     }
-                    if (value != null) this.stepViewer1.Next();
-                    else
-                    {
-                        Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("找無符合指紋資訊", 2000);
-                        dialog_AlarmForm.ShowDialog();
-                        flag_step_3 = false;
-                    }
                 }
+                else
+                {
+                    Dialog_HID指紋登入 dialog_HID = new Dialog_HID指紋登入();
+                    if (dialog_HID.ShowDialog() != DialogResult.Yes)
+                    {
+                        this.Close();
+                        return;
+                    }
+                    Value2 = dialog_HID.Value;
+                    "指紋辨識成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+
+                    this.stepViewer1.Next();
+                }
+               
+            
             }
             if(this.stepViewer1.CurrentStep == 4 && flag_step_4 == false)
             {
@@ -149,9 +172,7 @@ namespace 調劑台管理系統
         }
         #region Event
         private void Dialog_指紋登入_LoadFinishedEvent(EventArgs e)
-        {
-          
-
+        {          
             myThread.AutoRun(true);
             myThread.SetSleepTime(50);
             myThread.Add_Method(sub_program);

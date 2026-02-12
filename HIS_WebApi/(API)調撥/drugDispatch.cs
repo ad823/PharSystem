@@ -55,7 +55,7 @@ namespace HIS_WebApi
         [Route("init")]
         [Swashbuckle.AspNetCore.Annotations.SwaggerResponse(1, "", typeof(drugDispatchClass))]
         [HttpPost]
-        public string GET_init([FromBody] returnData returnData)
+        public string init([FromBody] returnData returnData)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace HIS_WebApi
             returnData.Method = "add";
             try
             {
-                GET_init(returnData);
+                init(returnData);
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
                 if (sys_serverSettingClasses.Count == 0)
@@ -190,7 +190,7 @@ namespace HIS_WebApi
             returnData.Method = "datas_posting";
             try
             {
-                GET_init(returnData);
+                init(returnData);
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
                 List<sys_serverSettingClass> sys_serverSettingClasses_buf = new List<sys_serverSettingClass>();
                 sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");

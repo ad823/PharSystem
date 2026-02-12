@@ -35,10 +35,7 @@ namespace FADC
             this.FormClosed += Dialog_單品入庫作業_FormClosed;
             this.rJ_Button_取消.MouseDownEvent += RJ_Button_取消_MouseDownEvent;
         }
-
-     
-
-    
+   
         private void Dialog_入庫作業_LoadFinishedEvent(EventArgs e)
         {
             try
@@ -93,7 +90,6 @@ namespace FADC
            
         }
 
-
         private void Dialog_單品入庫作業_FormClosed(object sender, FormClosedEventArgs e)
         {
             gestureRecognitionCanvas.StopCaptureSoft();
@@ -104,16 +100,19 @@ namespace FADC
             double 異動 = rJ_Lable_數量.Text.StringToDouble();
             double 結存 = 庫存 + 異動;
             transactionsClass transactionsClass = new transactionsClass();
+            transactionsClass.GUID = Guid.NewGuid().ToString();
             transactionsClass.動作 = enum_交易記錄查詢動作.入庫作業.GetEnumName();
             transactionsClass.藥品碼 = _medClass.藥品碼;
             transactionsClass.藥品名稱 = _medClass.藥品名稱;
             transactionsClass.庫存量 = 庫存.ToString();
             transactionsClass.交易量 = 異動.ToString();
             transactionsClass.結存量 = 結存.ToString();
+            transactionsClass.收支原因 = $"({device.IP})";
             transactionsClass.備註 = $"[效期]:{rJ_Lable_效期.Text},[批號]:{rJ_Lable_批號.Text}";
     
             device.效期庫存異動(rJ_Lable_效期.Text, rJ_Lable_批號.Text, 異動.ToString());
             Main_Form._storageUI_EPD_266.SQL_ReplaceStorage((Storage)device);
+            Main_Form._storageUI_EPD_266.DrawToEpd_UDP((Storage)device);
             transactionsClass.add(Main_Form.API_Server, transactionsClass, Main_Form.ServerName, Main_Form.ServerType);
 
             this.Close();
@@ -187,33 +186,8 @@ namespace FADC
                 }
                 else if (tabControlEx.SelectedTab.Text == "確認結果")
                 {
-                
                 }
             }));
-        }
-        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<HandPoseInfo> result)
-        {
-            // 顯示 Log
-           
-            if (result != null && result.State && result.Data != null)
-            {
-                Console.WriteLine($"手勢: {result.Data.Pose}");
-                if (result.Data.Pose == "ok" || result.Data.Pose == "good")
-                {
-                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【確認手勢】", 1500, Color.Green);
-                    dialog_AlarmForm.ShowDialog();
-                    RJ_Button_確認_MouseDownEvent(null);
-                }
-                else if(result.Data.Pose == "bad")
-                {
-
-                }
-            }
-            else
-            {
-                //Console.WriteLine($"無法辨識");
-            }
-
         }
         private void SqL_DataGridView_藥品資料_RowDoubleClickEvent(object[] RowValue)
         {
@@ -270,6 +244,33 @@ namespace FADC
         
         }
 
+        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<HandPoseInfo> result)
+        {
+            // 顯示 Log
+
+            if (result != null && result.State && result.Data != null)
+            {
+                Console.WriteLine($"手勢: {result.Data.Pose}");
+                if (result.Data.Pose == "ok" || result.Data.Pose == "good")
+                {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【確認手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_確認_MouseDownEvent(null);
+                }
+                else if (result.Data.Pose == "bad")
+                {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【取消手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_取消_MouseDownEvent(null);
+
+                }
+            }
+            else
+            {
+                //Console.WriteLine($"無法辨識");
+            }
+
+        }
 
         private void SqL_DataGridView_儲位選擇_RowPostPaintingEvent(DataGridViewRowPostPaintEventArgs e)
         {

@@ -217,6 +217,12 @@
     <Compile Include="Dialog\Dialog_EPDPanel.Designer.cs">
       <DependentUpon>Dialog_EPDPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_OrderKeyin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_OrderKeyin.Designer.cs">
+      <DependentUpon>Dialog_OrderKeyin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_時段設定.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,12 @@
     </Compile>
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="temp_panel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="temp_panel.Designer.cs">
+      <DependentUpon>temp_panel.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\OpenDoorPermission_UI.cs">
       <SubType>UserControl</SubType>
@@ -294,12 +306,18 @@
     <EmbeddedResource Include="Dialog\Dialog_EPDPanel.resx">
       <DependentUpon>Dialog_EPDPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_OrderKeyin.resx">
+      <DependentUpon>Dialog_OrderKeyin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_時段設定.resx">
       <DependentUpon>Dialog_時段設定.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="temp_panel.resx">
+      <DependentUpon>temp_panel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\OpenDoorPermission_UI.resx">
       <DependentUpon>OpenDoorPermission_UI.cs</DependentUpon>

@@ -676,18 +676,30 @@ namespace 調劑台管理系統
         private void PlC_RJ_Button_指紋登入_MouseDownEvent(MouseEventArgs mevent)
         {
             Dialog_AlarmForm dialog_AlarmForm;
-            if (fpMatchSoket.IsOpen == false && flag_指紋辨識_Init == false)
+            if (fingerModle == FingerModleType.fpMatchSoket)
             {
-                dialog_AlarmForm = new Dialog_AlarmForm("指紋模組未初始化", 2000);
-                dialog_AlarmForm.ShowDialog();
-                return;
+                if (fpMatchSoket.IsOpen == false && flag_指紋辨識_Init == false)
+                {
+                    dialog_AlarmForm = new Dialog_AlarmForm("指紋模組未初始化", 2000);
+                    dialog_AlarmForm.ShowDialog();
+                    return;
+                }
+                Dialog_指紋登入 dialog_指紋登入 = new Dialog_指紋登入();
+                if (dialog_指紋登入.ShowDialog() != DialogResult.Yes) return;
+                if (dialog_指紋登入.台號 == 1) uC_調劑作業_TypeA_1.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
+                if (dialog_指紋登入.台號 == 2) uC_調劑作業_TypeA_2.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
+                if (dialog_指紋登入.台號 == 3) uC_調劑作業_TypeA_3.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
+                if (dialog_指紋登入.台號 == 4) uC_調劑作業_TypeA_4.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
             }
-            Dialog_指紋登入 dialog_指紋登入 = new Dialog_指紋登入();
-            if (dialog_指紋登入.ShowDialog() != DialogResult.Yes) return;
-            if (dialog_指紋登入.台號 == 1) uC_調劑作業_TypeA_1.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
-            if (dialog_指紋登入.台號 == 2) uC_調劑作業_TypeA_2.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
-            if (dialog_指紋登入.台號 == 3) uC_調劑作業_TypeA_3.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
-            if (dialog_指紋登入.台號 == 4) uC_調劑作業_TypeA_4.FpMatchClass_指紋資訊 = dialog_指紋登入.Value;
+            else
+            {
+                Dialog_指紋登入 dialog_指紋登入 = new Dialog_指紋登入();
+                if (dialog_指紋登入.ShowDialog() != DialogResult.Yes) return;
+                if (dialog_指紋登入.台號 == 1) uC_調劑作業_TypeA_1.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 2) uC_調劑作業_TypeA_2.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 3) uC_調劑作業_TypeA_3.personPageInput = dialog_指紋登入.Value2;
+                if (dialog_指紋登入.台號 == 4) uC_調劑作業_TypeA_4.personPageInput = dialog_指紋登入.Value2;
+            }
 
         }
         private void PlC_RJ_Button_醫令檢索_MouseDownEvent(MouseEventArgs mevent)

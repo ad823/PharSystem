@@ -74,9 +74,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\CallBackUI.dll</HintPath>
     </Reference>
+    <Reference Include="DPCtlUruNet">
+      <HintPath>..\0.DLL\DPCtlUruNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DPUruNet">
+      <HintPath>..\0.DLL\DPUruNet.dll</HintPath>
+    </Reference>
     <Reference Include="DrawingClass, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\DrawingClass.dll</HintPath>
+    </Reference>
+    <Reference Include="FingerprintLib">
+      <HintPath>..\0.DLL\FingerprintLib.dll</HintPath>
     </Reference>
     <Reference Include="FontAwesome.Sharp, Version=5.15.4.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -89,7 +98,8 @@
     <Reference Include="HF_ReaderLib">
       <HintPath>..\0.DLL\HF_ReaderLib.dll</HintPath>
     </Reference>
-    <Reference Include="HIS_DB_Lib">
+    <Reference Include="HIS_DB_Lib, Version=1.0.25.1101, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\0.DLL\HIS_DB_Lib.dll</HintPath>
     </Reference>
     <Reference Include="H_Pannel_lib">
@@ -268,6 +278,12 @@
     <Compile Include="Dialog\Dialog_等待RFID感應.Designer.cs">
       <DependentUpon>Dialog_等待RFID感應.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_自動出藥.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_自動出藥.Designer.cs">
+      <DependentUpon>Dialog_自動出藥.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_輸入效期.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -412,6 +428,24 @@
     <Compile Include="Dialog\Dialog_處方資訊填寫.Designer.cs">
       <DependentUpon>Dialog_處方資訊填寫.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋註冊.Designer.cs">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_HID指紋登入.Designer.cs">
+      <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\Dialog_下載藥檔範圍選擇.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -544,6 +578,12 @@
     <Compile Include="Dialog\Dialog_收支作業_RFID清點作業.Designer.cs">
       <DependentUpon>Dialog_收支作業_RFID清點作業.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_時段設定.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_時段設定.Designer.cs">
+      <DependentUpon>Dialog_時段設定.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -563,6 +603,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program_LCD114_索引表.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program_storageMedBoxIOConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program_交易紀錄查詢_結存量.cs">
@@ -766,6 +809,9 @@
     <EmbeddedResource Include="Dialog\Dialog_收支異常提示.resx">
       <DependentUpon>Dialog_收支異常提示.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_時段設定.resx">
+      <DependentUpon>Dialog_時段設定.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_條碼管理.resx">
       <DependentUpon>Dialog_條碼管理.cs</DependentUpon>
     </EmbeddedResource>
@@ -786,6 +832,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_申領.resx">
       <DependentUpon>Dialog_申領.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_自動出藥.resx">
+      <DependentUpon>Dialog_自動出藥.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\藥品群組\Dialog_藥品群組設定.resx">
       <DependentUpon>Dialog_藥品群組設定.cs</DependentUpon>
@@ -877,6 +926,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_長期醫令.resx">
       <DependentUpon>Dialog_長期醫令.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_HID指紋登入.resx">
+      <DependentUpon>Dialog_HID指紋登入.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_HID指紋註冊.resx">
+      <DependentUpon>Dialog_HID指紋註冊.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_領藥號輸入.resx">
       <DependentUpon>Dialog_領藥號輸入.cs</DependentUpon>

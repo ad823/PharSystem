@@ -13,6 +13,9 @@ using SQLUI;
 using H_Pannel_lib;
 using HIS_DB_Lib;
 using FpMatchLib;
+using SpeechRecognitionUserControl;
+using System.Text;
+using System.Threading.Tasks;
 
 
 [assembly: AssemblyVersion("1.0.0.0000")]
@@ -29,7 +32,7 @@ namespace FADC
         public static string ServerType = "";
         public static string Order_URL = "";
         public static string OrderByCodeApi_URL = "";
-
+        public static RFID_FX600lib.RFID_FX600_UI _RFID_FX600_UI = null;
         public bool ControlMode = false;
         public static MinasA6 minasA6 = null;
         public static string currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -45,11 +48,15 @@ namespace FADC
             private string servoZ_Com = "COM1";
             private string board_IP = "";
             private string scanner01_COMPort = "COM2";
+            private string rFID_COMPort = "COM3";
+            private string stepMotor_COMPort = "COM4";
 
             public bool ControlMode { get => controlMode; set => controlMode = value; }
             public string ServoZ_Com { get => servoZ_Com; set => servoZ_Com = value; }
             public string Board_IP { get => board_IP; set => board_IP = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
+            public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
+            public string StepMotor_COMPort { get => stepMotor_COMPort; set => stepMotor_COMPort = value; }
         }
         private void LoadMyConfig()
         {
@@ -187,13 +194,21 @@ namespace FADC
             }
         }
         #endregion
+
         public Main_Form()
         {
             InitializeComponent();
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.UpdateStyles();
             this.Load += MainFrom_Load;
+            this.Resize += Main_Form_Resize;
         }
+
+        private void Main_Form_Resize(object sender, EventArgs e)
+        {
+            //rJ_Pannel_登入卡片.Location = new System.Drawing.Point((tabPage_登入畫面.Width - rJ_Pannel_登入卡片.Width) / 2, (tabPage_登入畫面.Height - rJ_Pannel_登入卡片.Height) / 2);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             // 使用雙重緩衝
@@ -211,6 +226,9 @@ namespace FADC
             // 將緩衝區域的內容繪製到表單
             myBuffer.Render(e.Graphics);
             myBuffer.Dispose(); // 釋放緩衝區資源
+
+            rJ_Pannel_登入卡片.Location = new System.Drawing.Point((登入畫面.Width - rJ_Pannel_登入卡片.Width) / 2, (登入畫面.Height - rJ_Pannel_登入卡片.Height) / 2);
+
         }
         private void MainFrom_Load(object sender, EventArgs e)
         {
@@ -237,9 +255,13 @@ namespace FADC
             PLC_UI_Init.Set_PLC_ScreenPage(panel_Main, this.plC_ScreenPage_Main);
             PLC_UI_Init.Set_PLC_ScreenPage(panel_setting, this.plC_ScreenPage_setting);
 
+            speechRecognitionUserControl.Init();
+            speechRecognitionUserControl.OnRecognized += SpeechRecognitionUserControl_OnRecognized;
             LoadMyConfig();
             LoadDBConfig();
             ApiServerSetting();
+            
+            RFID_Iint();
 
             Program_faceReconition_Init();
             Program_storageMedBoxIOConfig_Init();
@@ -251,9 +273,76 @@ namespace FADC
             Program_儲位管理_Init();
             Program_調劑作業_Init();
             Program_PLC();
+
+         
         }
-    
-       private void LoadcommandLineArgs()
+
+        private void SpeechRecognitionUserControl_OnRecognized(SpeechRecognitionDll.Response<SpeechRecognitionDll.Detail> response)
+        {
+            StringBuilder log = new StringBuilder();
+
+            log.AppendLine($"Success: {response.State}");
+            log.AppendLine($"Message: {response.Message}");
+            log.AppendLine($"ErrorCode: {response.ErrorCode}");
+            log.AppendLine($"Command: {response.Command}");
+
+            var data = response.Data.JsonSerializationt(true);
+            log.AppendLine($"Data: {data}");
+
+            Console.WriteLine(log);
+            string SelectedTabText = "";
+            this.Invoke(new Action(delegate
+            {
+                SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
+            }));
+            if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if(response.Command.ToUpper() == "LOGIN" || response.Command.ToUpper() == "DISPENSE")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(null);
+                }
+
+            } 
+            if (SelectedTabText == "刷取藥單" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if (response.Command.ToUpper() == "LOGOUT")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    RJ_Button_調劑畫面_登出_MouseDownEvent(null);
+                }
+
+            }
+        }
+
+        private void RFID_Iint()
+        {
+            Task.Run(new Action(delegate
+            {
+                MyTimer MyTimer_rfiD_FX600_UI_Init = new MyTimer();
+                bool flag_rfiD_FX600_UI_Init = false;
+                MyTimer_rfiD_FX600_UI_Init.TickStop();
+                MyTimer_rfiD_FX600_UI_Init.StartTickTime(5000);
+                while (true)
+                {
+                    _RFID_FX600_UI = this.rfiD_FX600_UI;
+
+                    if (MyTimer_rfiD_FX600_UI_Init.IsTimeOut() && !flag_rfiD_FX600_UI_Init)
+                    {
+                        int num = 2;
+                        this.rfiD_FX600_UI.Init(RFID_FX600lib.RFID_FX600_UI.Baudrate._9600, num, myConfigClass.RFID_COMPort);
+
+                        flag_rfiD_FX600_UI_Init = true;
+                        break;
+
+                    }
+                    System.Threading.Thread.Sleep(100);
+                }
+            }));
+        }
+        private void LoadcommandLineArgs()
         {
             string jsonstr = MyFileStream.LoadFileAllText($"{DBConfigFileName}");
             string[] commandLineArgs = Environment.GetCommandLineArgs();

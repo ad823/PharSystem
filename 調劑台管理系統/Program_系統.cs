@@ -103,9 +103,10 @@ namespace 調劑台管理系統
             table = new Table(new enum_lockerIndex());
             _sqL_DataGridView_Locker_Index_Table = this.sqL_DataGridView_Locker_Index_Table;
             this.sqL_DataGridView_Locker_Index_Table.Init(table);
+            this.sqL_DataGridView_Locker_Index_Table.Set_ColumnVisible(false, enum_lockerIndex.GUID.GetEnumName(), enum_lockerIndex.Master_GUID.GetEnumName(), enum_lockerIndex.Slave_GUID.GetEnumName());
+            this.sqL_DataGridView_Locker_Index_Table.Set_ColumnWidth(200, enum_lockerIndex.IP);
 
 
-    
             if (!this.sqL_DataGridView_Locker_Index_Table.SQL_IsTableCreat()) this.sqL_DataGridView_Locker_Index_Table.SQL_CreateTable();
             else this.sqL_DataGridView_Locker_Index_Table.SQL_CheckAllColumnName(true);
 

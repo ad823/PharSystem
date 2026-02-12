@@ -6,11 +6,13 @@ using MyUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace FADC
 {
@@ -60,6 +62,10 @@ namespace FADC
         public static PLC_Device PLC_Device_出貨一次_Z軸層數 = new PLC_Device("D3000");
         public static string IP_出貨一次 = "";
 
+        public static PLC_Device PLC_Device_出貨到領藥平台 = new PLC_Device("S3001");
+   
+        public bool flag_輸送帶在後方 = false;
+
         public static PLC_Device PLC_Device_Z軸馬達激磁 = new PLC_Device("Y10");
         public static PLC_Device PLC_Device_Z軸馬達原點狀態 = new PLC_Device("Y11");
         public static PLC_Device PLC_Device_Z軸Alarm = new PLC_Device("Y12");
@@ -76,7 +82,7 @@ namespace FADC
         public byte deviceID = 1;
 
         private MyThread myThread_PLC;
-
+        private SerialPort serialPort = new SerialPort();
         public void Program_PLC()
         {
             if(flag_program_PLC_int == false)
@@ -194,7 +200,7 @@ namespace FADC
                 sub_Program_輸送帶前進();
                 sub_Program_輸送帶後退();
                 sub_Program_出貨一次();
-
+                sub_Program_出貨到領藥平台();
             }
         }
 
@@ -207,6 +213,7 @@ namespace FADC
         int cnt_Program_出貨一次 = 65534;
         void sub_Program_出貨一次()
         {
+            if (PLC_Device_出貨到領藥平台.Bool) PLC_Device_出貨一次.Bool = false;
             if (cnt_Program_出貨一次 == 65534)
             {
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
@@ -227,24 +234,25 @@ namespace FADC
             if (cnt_Program_出貨一次 == 10) cnt_Program_出貨一次_等待出料一次完成(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 11) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
             if (cnt_Program_出貨一次 == 12) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次_等待Z軸移動到頂層(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 14) cnt_Program_出貨一次_Z軸移動到頂層結束(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 15) cnt_Program_出貨一次_等待輸送帶前進(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 16) cnt_Program_出貨一次_輸送帶前進完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 17) cnt_Program_出貨一次_輸送帶正轉開始(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 18) cnt_Program_出貨一次_輸送帶正轉完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 19) cnt_Program_出貨一次_等待輸送帶後退(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 20) cnt_Program_出貨一次_輸送帶後退完成(ref cnt_Program_出貨一次);
-            if (cnt_Program_出貨一次 == 21) cnt_Program_出貨一次 = 65500;
+         
+            if (cnt_Program_出貨一次 == 13) cnt_Program_出貨一次 = 65500;
             if (cnt_Program_出貨一次 > 1) cnt_Program_出貨一次_檢查放開(ref cnt_Program_出貨一次);
 
             if (cnt_Program_出貨一次 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_出貨一次_結束延遲.TickStop();
                 this.MyTimer_出貨一次_結束延遲.StartTickTime(10000);
-                PLC_Device_Z軸移動到頂層.Bool = false;
                 PLC_Device_出貨一次.Bool = false;
+
+                PLC_Device_Z軸移動到頂層.Bool = false;
+                PLC_Device_輸送帶後退.Bool = false;
+                PLC_Device_輸送帶前進.Bool = false;
+                PLC_Device_移動到第一層位置.Bool = false;
+                PLC_Device_移動到第二層位置.Bool = false;
+                PLC_Device_移動到第三層位置.Bool = false;
+                PLC_Device_移動到第四層位置.Bool = false;
+                PLC_Device_移動到第五層位置.Bool = false;
                 cnt_Program_出貨一次 = 65535;
             }
         }
@@ -258,7 +266,8 @@ namespace FADC
         }
         void cnt_Program_出貨一次_初始化(ref int cnt)
         {
-            IP_出貨一次 = this.rJ_TextBox_出貨一次_IP.Text;
+            if(plC_ScreenPage_Main.PageText == "工程模式") IP_出貨一次 = this.rJ_TextBox_出貨一次_IP.Text;
+
             if (IP_出貨一次.Check_IP_Adress() == false)
             {
                 Console.WriteLine($"[出貨一次] - IP字元異常,{IP_出貨一次}");
@@ -310,6 +319,13 @@ namespace FADC
         }
         void cnt_Program_出貨一次_等待輸送帶後退(ref int cnt)
         {
+            if(flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+
+                cnt++;
+                return;
+            }
             if(PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨一次] - 等待輸送帶後退");
@@ -319,6 +335,13 @@ namespace FADC
         }
         void cnt_Program_出貨一次_輸送帶後退完成(ref int cnt)
         {
+            if (flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+
+                cnt++;
+                return;
+            }
             if (PLC_Device_輸送帶後退.Bool == false)
             {
                 Console.WriteLine($"[出貨一次] - 等待輸送帶完成");
@@ -438,8 +461,20 @@ namespace FADC
         void cnt_Program_出貨一次_出料一次開始(ref int cnt)
         {
             PLC_Device_輸送帶反轉.Bool = true;
+           
+            List<storageMedBoxIOConfigClass> storageMedBoxIOConfigClasses = storageMedBoxIOConfigClass.get_all(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType);
+            storageMedBoxIOConfigClass storageMedBoxIO = storageMedBoxIOConfigClasses.Where(x => x.IP == IP_出貨一次).FirstOrDefault();
             Console.WriteLine($"[出貨一次] - 出料一次開始");
-            this.storageUI_EPD_266.Set_ADCMotorTrigger(IP_出貨一次, 29000, 0);
+            int time = 0;
+            if (storageMedBoxIO!= null)
+            {
+                if (storageMedBoxIO.出料馬達輸入延遲時間.StringIsInt32())
+                {
+                    time = storageMedBoxIO.出料馬達輸入延遲時間.StringToInt32();
+                    if (time < 0) time = 0;
+                }
+            }
+            this.storageUI_EPD_266.Set_ADCMotorTrigger(IP_出貨一次, 29000, time);
             cnt++;
         }
         void cnt_Program_出貨一次_等待出料一次完成(ref int cnt)
@@ -459,42 +494,161 @@ namespace FADC
         }
 
 
-        void cnt_Program_出貨一次_等待Z軸移動到頂層(ref int cnt)
+
+        #endregion
+        #region PLC_出貨到領藥平台
+        MyTimerBasic MyTimerBasic_出貨到領藥平台_檢查延遲 = new MyTimerBasic();
+        Task Task_出貨到領藥平台;
+
+        MyTimer MyTimer_出貨到領藥平台_結束延遲 = new MyTimer();
+        int cnt_Program_出貨到領藥平台 = 65534;
+        void sub_Program_出貨到領藥平台()
         {
-            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            if (PLC_Device_出貨一次.Bool) PLC_Device_出貨到領藥平台.Bool = false;
+
+            if (cnt_Program_出貨到領藥平台 == 65534)
             {
-                Console.WriteLine($"[出貨一次] - 等待Z軸移動到頂層");
-                PLC_Device_Z軸移動到頂層.Bool = true;
+                this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨到領藥平台.SetComment("PLC_出貨到領藥平台");
+                PLC_Device_出貨到領藥平台.Bool = false;
+                cnt_Program_出貨到領藥平台 = 65535;
+            }
+            if (cnt_Program_出貨到領藥平台 == 65535) cnt_Program_出貨到領藥平台 = 1;
+            if (cnt_Program_出貨到領藥平台 == 1) cnt_Program_出貨到領藥平台_檢查按下(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 2) cnt_Program_出貨到領藥平台_初始化(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 3) cnt_Program_出貨到領藥平台_等待輸送帶後退(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 4) cnt_Program_出貨到領藥平台_輸送帶後退完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 5) cnt_Program_出貨到領藥平台_等待Z軸移動到頂層(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 6) cnt_Program_出貨到領藥平台_Z軸移動到頂層結束(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 7) cnt_Program_出貨到領藥平台_等待輸送帶前進(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 8) cnt_Program_出貨到領藥平台_輸送帶前進完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 9) cnt_Program_出貨到領藥平台_輸送帶正轉開始(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 10) cnt_Program_出貨到領藥平台_輸送帶正轉完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 11) cnt_Program_出貨到領藥平台_等待輸送帶後退(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 12) cnt_Program_出貨到領藥平台_輸送帶後退完成(ref cnt_Program_出貨到領藥平台);
+            if (cnt_Program_出貨到領藥平台 == 13) cnt_Program_出貨到領藥平台 = 65500;
+            if (cnt_Program_出貨到領藥平台 > 1) cnt_Program_出貨到領藥平台_檢查放開(ref cnt_Program_出貨到領藥平台);
+
+            if (cnt_Program_出貨到領藥平台 == 65500)
+            {
+                //minasA6.S_Stop(deviceID);
+                this.MyTimer_出貨到領藥平台_結束延遲.TickStop();
+                this.MyTimer_出貨到領藥平台_結束延遲.StartTickTime(10000);
+                PLC_Device_出貨到領藥平台.Bool = false;
+                PLC_Device_Z軸移動到頂層.Bool = false;
+                PLC_Device_輸送帶後退.Bool = false;
+                PLC_Device_輸送帶前進.Bool = false;
+                PLC_Device_移動到第一層位置.Bool = false;
+                PLC_Device_移動到第二層位置.Bool = false;
+                PLC_Device_移動到第三層位置.Bool = false;
+                PLC_Device_移動到第四層位置.Bool = false;
+                PLC_Device_移動到第五層位置.Bool = false;
+                cnt_Program_出貨到領藥平台 = 65535;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_檢查按下(ref int cnt)
+        {
+            if (PLC_Device_出貨到領藥平台.Bool) cnt++;
+        }
+        void cnt_Program_出貨到領藥平台_檢查放開(ref int cnt)
+        {
+            if (!PLC_Device_出貨到領藥平台.Bool) cnt = 65500;
+        }
+        void cnt_Program_出貨到領藥平台_初始化(ref int cnt)
+        {
+           
+          
+            if (PLC_Device_Z軸Ready.Bool)
+            {
                 cnt++;
             }
         }
-        void cnt_Program_出貨一次_Z軸移動到頂層結束(ref int cnt)
+        void cnt_Program_出貨到領藥平台_等待輸送帶後退(ref int cnt)
         {
-            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            if (flag_輸送帶在後方)
             {
-                Console.WriteLine($"[出貨一次] - Z軸移動到頂層完成");
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+                cnt++;
+                return;
+            }
+            else if (PLC_Device_輸送帶後退.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶後退");
+                PLC_Device_輸送帶後退.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_輸送帶後退完成(ref int cnt)
+        {
+            if (flag_輸送帶在後方)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶已經在後方");
+                cnt++;
+                return;
+            }
+            else if (PLC_Device_輸送帶後退.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶完成");
                 cnt++;
             }
         }
 
-        void cnt_Program_出貨一次_輸送帶正轉開始(ref int cnt)
+
+        void cnt_Program_出貨到領藥平台_等待Z軸移動到頂層(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待Z軸移動到頂層");
+                PLC_Device_Z軸移動到頂層.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_Z軸移動到頂層結束(ref int cnt)
+        {
+            if (PLC_Device_Z軸移動到頂層.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - Z軸移動到頂層完成");
+                cnt++;
+            }
+        }
+
+        void cnt_Program_出貨到領藥平台_等待輸送帶前進(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶前進");
+                PLC_Device_輸送帶前進.Bool = true;
+                cnt++;
+            }
+        }
+        void cnt_Program_出貨到領藥平台_輸送帶前進完成(ref int cnt)
+        {
+            if (PLC_Device_輸送帶前進.Bool == false)
+            {
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶前進完成");
+                cnt++;
+            }
+        }
+
+        void cnt_Program_出貨到領藥平台_輸送帶正轉開始(ref int cnt)
         {
             if (PLC_Device_輸送帶正轉.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - 輸送帶正轉開始");
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶正轉開始");
                 PLC_Device_輸送帶正轉.Bool = true;
                 cnt++;
             }
         }
-        void cnt_Program_出貨一次_輸送帶正轉完成(ref int cnt)
+        void cnt_Program_出貨到領藥平台_輸送帶正轉完成(ref int cnt)
         {
             if (PLC_Device_輸送帶正轉.Bool == false)
             {
-                Console.WriteLine($"[出貨一次] - 輸送帶正轉完成");
+                Console.WriteLine($"[出貨到領藥平台] - 輸送帶正轉完成");
                 cnt++;
             }
         }
         #endregion
+
 
         #region PLC_Z軸絕對位置移動
         PLC_Device PLC_Device_Z軸絕對位置移動 = new PLC_Device("S1000");
@@ -523,7 +677,7 @@ namespace FADC
 
             if (cnt_Program_Z軸絕對位置移動 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_Z軸絕對位置移動_結束延遲.TickStop();
                 this.MyTimer_Z軸絕對位置移動_結束延遲.StartTickTime(10000);
                 PLC_Device_Z軸絕對位置移動.Bool = false;
@@ -552,17 +706,23 @@ namespace FADC
             minasA6.MoveAbsolute(deviceID, PLC_Device_目標位置.Value, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
             MyTimerBasic_Z軸絕對位置移動_檢查延遲.TickStop();
             MyTimerBasic_Z軸絕對位置移動_檢查延遲.StartTickTime(100);
+
+            Console.WriteLine( $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] [Z軸移動] DeviceID={deviceID}, 目標位置={PLC_Device_目標位置.Value}, 速度={PLC_Device_Z軸馬達速度.Value}, 加速度={PLC_Device_Z軸馬達加速度.Value}, 減速度={PLC_Device_Z軸馬達減速度.Value}");
             cnt++;
         }
         void cnt_Program_Z軸絕對位置移動_等待移動完成(ref int cnt)
         {
-            if(MyTimerBasic_Z軸絕對位置移動_檢查延遲.IsTimeOut())
+            if(MyTimerBasic_Z軸絕對位置移動_檢查延遲.IsTimeOut() || true)
             {
-                if(PLC_Device_Z軸Ready.Bool)
+                //minasA6.MoveAbsolute(deviceID, PLC_Device_目標位置.Value, PLC_Device_Z軸馬達速度.Value, PLC_Device_Z軸馬達加速度.Value, PLC_Device_Z軸馬達減速度.Value);
+
+                int pos = minasA6.GetPosition(deviceID);
+
+                if (PLC_Device_目標位置.Value >= pos - 100 && PLC_Device_目標位置.Value <= pos + 100)
                 {
                     cnt++;
                 }
-              
+
             }         
         }
 
@@ -988,7 +1148,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶正轉 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶正轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶正轉_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
@@ -1059,7 +1219,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶反轉 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶反轉_結束延遲.TickStop();
                 this.MyTimer_輸送帶反轉_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶正轉, false);
@@ -1131,7 +1291,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶前進 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶前進_結束延遲.TickStop();
                 this.MyTimer_輸送帶前進_結束延遲.StartTickTime(10000);
                 this.rfiD_UI.Set_OutputPIN(myConfigClass.Board_IP, 29010, (int)enunm_InOutBoard.輸送帶前進, false);
@@ -1170,8 +1330,14 @@ namespace FADC
         }
         void cnt_Program_輸送帶前進_等待移動完成(ref int cnt)
         {
+            if (PLC_Device_輸送帶前進時間.Value == 0)
+            {
+                cnt++;
+                return;
+            }
             if (MyTimerBasic_輸送帶前進_檢查延遲.IsTimeOut())
             {
+                flag_輸送帶在後方 = false;
                 cnt++;
             }
         }
@@ -1207,7 +1373,7 @@ namespace FADC
 
             if (cnt_Program_輸送帶後退 == 65500)
             {
-                minasA6.S_Stop(deviceID);
+                //minasA6.S_Stop(deviceID);
                 this.MyTimer_輸送帶後退_結束延遲.TickStop();
                 this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
 
@@ -1245,6 +1411,7 @@ namespace FADC
         {
             if (MyTimerBasic_輸送帶後退_檢查延遲.IsTimeOut())
             {
+                flag_輸送帶在後方 = true;
                 cnt++;
             }
         }
@@ -1281,6 +1448,398 @@ namespace FADC
             flag_servoClearAlarm = true;
         }
 
+        public string open_rs232()
+        {
+            string result;
+            result = "";
+            try
+            {
+                if (serialPort.IsOpen == true) serialPort.Close();
+                //設定 Serial Port 參數
+                serialPort.PortName = myConfigClass.StepMotor_COMPort;
+                serialPort.BaudRate = 9600;
+                serialPort.DataBits = 8;
+                serialPort.Parity = System.IO.Ports.Parity.None;
+                serialPort.StopBits = System.IO.Ports.StopBits.One;
+                serialPort.Open();
+                result = "rs232 open ok";
+            }
+            catch (Exception ex)
+            {
 
+                result = ex.Message;
+                MyMessageBox.ShowDialog($"Exception : {result}");
+            }
+
+            return result;
+        }
+        public bool Home(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行歸零高速度設定 (0x3C, 150)");
+            if (modbus_write_funtion6(station, 0x3C, 150) == false)
+            {
+                Console.WriteLine($"[Station {station}] 執行歸零高速度設定失敗 (0x3C, 150)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 執行歸零指令 (0x3b, 0x15)");
+            if (modbus_write_funtion6(station, 0x3b, 0x15) == false)
+            {
+                Console.WriteLine($"[Station {station}] 歸零指令失敗 (0x3b, 0x15)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 開始移動歸零 (0x37, 0x08)");
+            if (modbus_write_funtion6(station, 0x37, 0x08) == false)
+            {
+                Console.WriteLine($"[Station {station}] 執行歸零動作失敗 (0x37, 0x08)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Acc(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定加速度 = {value} (0x31)");
+            if (modbus_write_funtion6(station, 0x31, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定加速度失敗 (0x31)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Dec(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定減速度 = {value} (0x32)");
+            if (modbus_write_funtion6(station, 0x32, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定減速度失敗 (0x32)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Speed(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定運轉速度 = {value} (0x33)");
+            if (modbus_write_funtion6(station, 0x33, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定運轉速度失敗 (0x33)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_Active_Position(int station, int value)
+        {
+            int data_H = Convert.ToInt32(value / 65536);
+            int data_L = Convert.ToInt32(value - value * 65536);
+            Console.WriteLine($"[Station {station}] 設定目標位置L = {data_L} (0x34)");
+            if (modbus_write_funtion6(station, 0x34, data_L) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定目標位置L失敗 (0x34)");
+                return false;
+            }
+
+            Console.WriteLine($"[Station {station}] 設定目標位置H = {data_H} (0x35)");
+            if (modbus_write_funtion6(station, 0x35, data_H) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定目標位置H失敗 (0x35)");
+                return false;
+            }
+            return true;
+        }
+        public bool AbsPosRun(int station)
+        {
+            Console.WriteLine($"[Station {station}] 開始絕對位置移動 = {0x04} (0x37)");
+            if (modbus_write_funtion6(station, 0x37, 0x04) == false)
+            {
+                Console.WriteLine($"[Station {station}] 開始絕對位置移動失敗 (0x37)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Speed(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG速度 = {value} (0x49)");
+            if (modbus_write_funtion6(station, 0x49, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG速度失敗 (0x49)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Acc(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG加速度 = {value} (0x47)");
+            if (modbus_write_funtion6(station, 0x47, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG加速度失敗 (0x47)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_JOG_Dec(int station, int value)
+        {
+            Console.WriteLine($"[Station {station}] 設定JOG減速度 = {value} (0x48)");
+            if (modbus_write_funtion6(station, 0x48, value) == false)
+            {
+                Console.WriteLine($"[Station {station}] 設定JOG減速度失敗 (0x48)");
+                return false;
+            }
+            return true;
+        }
+        public bool JOG_P(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行正向JOG (0x37, 0x40)");
+            if (modbus_write_funtion6(station, 0x37, 0x40) == false)
+            {
+                Console.WriteLine($"[Station {station}] 正向JOG失敗 (0x37, 0x40)");
+                return false;
+            }
+            return true;
+        }
+        public bool JOG_N(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行反向JOG (0x37, 0x80)");
+            if (modbus_write_funtion6(station, 0x37, 0x80) == false)
+            {
+                Console.WriteLine($"[Station {station}] 反向JOG失敗 (0x37, 0x80)");
+                return false;
+            }
+            return true;
+        }
+        public bool Set_IO_AbsMode(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行停止 (0x36, 0x01)");
+            if (modbus_write_funtion6(station, 0x36, 0x01) == false)
+            {
+                Console.WriteLine($"[Station {station}] 停止失敗 (0x36, 0x01)");
+                return false;
+            }
+            return true;
+        }
+        public bool Stop(int station)
+        {
+            Console.WriteLine($"[Station {station}] 執行停止 (0x38, 0x00)");
+            if (modbus_write_funtion6(station, 0x38, 0x00) == false)
+            {
+                Console.WriteLine($"[Station {station}] 停止失敗 (0x38, 0x00)");
+                return false;
+            }
+            return true;
+        }
+        public bool Motor_Enable(int station, bool enable)
+        {
+            Console.WriteLine($"[Station {station}] 執行激磁 (0x39, {(enable ? 0x03 : 0x00)})");
+            if (modbus_write_funtion6(station, 0x39, enable ? 0x03 : 0x00) == false)
+            {
+                Console.WriteLine($"[Station {station}] 激磁失敗 (0x39, {(enable ? 0x03 : 0x00)})");
+                return false;
+            }
+            return true;
+        }
+        public bool IsMotorMove(int station)
+        {
+            int result = modbus_read_funtion6(station, 0x04);
+            if (result.GetBit(1))
+            {
+                //Console.WriteLine($"[Station {station}] 馬達正在移動 (0x04) 回傳值: {result}");
+                return true;
+            }
+            else
+            {
+                //Console.WriteLine($"[Station {station}] 馬達未移動 (0x04) 回傳值: {result}");
+                return false;
+            }
+        }
+
+        public int modbus_read_funtion6(int station, int address)
+        {
+            byte[] tx = new byte[100];
+            byte[] rx = new byte[1000];
+            int crc;
+            int result = -1;
+            int 回傳的數量;
+            string st;
+            bool myresult;
+            if (serialPort.IsOpen == true)
+            {
+                tx[0] = (byte)(station);
+                tx[1] = 3;
+                tx[2] = (byte)((address & 0xFF00) >> 8);  //high byte
+                tx[3] = (byte)(address & 0x00FF);         //low byte
+                tx[4] = (byte)(0x00);  //high byte
+                tx[5] = (byte)(0x01);         //low byte
+                crc = CRC16(tx, 6);
+                tx[6] = (byte)(crc & 0x00FF);         //low byte
+                tx[7] = (byte)((crc & 0xFF00) >> 8);  //high byte
+                st = serialPort.ReadExisting();    //清除rs232的rx暫存器
+                serialPort.Write(tx, 0, 8);        //從rs232寫出
+                回傳的數量 = 7;
+                result = modbus_wait_datas(回傳的數量);
+                return result;
+            }
+
+            crc = 0;
+
+            return result;
+        }
+        public bool modbus_write_funtion6(int station, int address, int data)
+        {
+            byte[] tx = new byte[100];
+            byte[] rx = new byte[1000];
+            int crc;
+            bool result = false;
+            int 回傳的數量;
+            string st;
+            bool myresult;
+            if (serialPort.IsOpen == true)
+            {
+                tx[0] = (byte)(station);
+                tx[1] = 6;
+                tx[2] = (byte)((address & 0xFF00) >> 8);  //high byte
+                tx[3] = (byte)(address & 0x00FF);         //low byte
+                tx[4] = (byte)((data & 0xFF00) >> 8);  //high byte
+                tx[5] = (byte)(data & 0x00FF);         //low byte
+                crc = CRC16(tx, 6);
+                tx[6] = (byte)(crc & 0x00FF);         //low byte
+                tx[7] = (byte)((crc & 0xFF00) >> 8);  //high byte
+                st = serialPort.ReadExisting();    //清除rs232的rx暫存器
+                serialPort.Write(tx, 0, 8);        //從rs232寫出
+                回傳的數量 = 8;
+                myresult = modbus_回傳(回傳的數量);
+                if (myresult == true)
+                {
+                    result = true;
+                }
+            }
+
+            crc = 0;
+            if (result == false)
+            {
+                crc++;
+            }
+            return result;
+        }
+        private int modbus_wait_datas(int datas_num)
+        {
+            byte[] rx = new byte[1000];
+
+            long t1, t2;
+            bool myflag;
+            int i, j;
+            int result = -1;
+            t1 = DateTime.Now.Ticks / 10000;
+            myflag = false;
+            while (myflag == false)
+            {
+                t2 = DateTime.Now.Ticks / 10000;
+                if ((t2 - t1) > 100) myflag = true;
+
+                i = serialPort.BytesToRead;
+
+                if (i >= datas_num)
+                {
+                    for (j = 0; j < datas_num; j++) rx[j] = (byte)serialPort.ReadByte();
+                    myflag = true;
+
+                    result = rx[3] << 8 | rx[4]; // 解析返回数据的高低字节
+                    System.Threading.Thread.Sleep(1);
+                }
+                else
+                {
+
+                }
+
+            }
+
+            return result;
+        }
+        private bool modbus_回傳(int 回傳的數量)
+        {
+            byte[] rx = new byte[1000];
+
+            long t1, t2;
+            bool myflag, result;
+            int i, j;
+
+            t1 = DateTime.Now.Ticks / 10000;
+            result = false;
+            myflag = false;
+            while (myflag == false)
+            {
+                t2 = DateTime.Now.Ticks / 10000;
+                if ((t2 - t1) > 100) myflag = true;
+
+                i = serialPort.BytesToRead;
+
+                if (i >= 回傳的數量)
+                {
+                    for (j = 0; j < 回傳的數量; j++) rx[j] = (byte)serialPort.ReadByte();
+                    myflag = true;
+                    result = true;
+                    System.Threading.Thread.Sleep(1);
+
+                }
+
+            }
+
+            return result;
+        }
+
+        public static ushort CRC16(byte[] data, int len)
+        {
+            ushort crc = 0xFFFF;
+            for (int i = 0; i < len; i++)
+            {
+                crc = (ushort)(crc ^ (data[i]));
+                for (int j = 0; j < 8; j++)
+                {
+                    crc = (crc & 1) != 0 ? (ushort)((crc >> 1) ^ 0xA001) : (ushort)(crc >> 1);
+                }
+            }
+            return crc;
+        }
+
+        public bool UART_Command_RS485_SetOutputPIN(int station, int PIN, bool state)
+        {
+            try
+            {
+                Console.WriteLine($"[UART_Command] 設定輸出腳位 - Station: {station}, PIN: {PIN}, State: {(state ? "ON" : "OFF")}");
+
+                bool result = false;
+                List<byte> list_byte = new List<byte>();
+
+                // 建立指令
+                list_byte.Add((byte)(station));
+                list_byte.Add((byte)('G'));
+                list_byte.Add((byte)(PIN >> 0));
+                list_byte.Add((byte)(state ? 1 : 0));
+                list_byte.Add(3);  // 結尾標記
+
+                ushort CRC = Basic.MyConvert.Get_CRC16(list_byte.ToArray());
+                list_byte.Add((byte)(CRC >> 0));  // CRC低位元
+                list_byte.Add((byte)(CRC >> 8));  // CRC高位元
+
+                Console.WriteLine($"[UART_Command] 傳送指令: {BitConverter.ToString(list_byte.ToArray())}");
+
+                // 清除RS232接收緩衝區
+                serialPort.ReadExisting();
+
+                // 傳送指令
+                serialPort.Write(list_byte.ToArray(), 0, list_byte.Count);
+                Console.WriteLine($"[UART_Command] 指令已寫入 SerialPort");
+
+                // 等待回傳
+                bool myresult = modbus_回傳(7);
+                Console.WriteLine($"[UART_Command] 回傳接收結果: {(myresult ? "成功" : "失敗")}");
+
+                result = myresult;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UART_Command] 發生例外錯誤: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

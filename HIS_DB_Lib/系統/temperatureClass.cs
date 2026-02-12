@@ -14,13 +14,13 @@ namespace HIS_DB_Lib
     {
         [Description("GUID,VARCHAR,50,PRIMARY")]
         GUID,
-        [Description("IP,VARCHAR,20,NONE")]
+        [Description("IP,VARCHAR,50,INDEX")]
         IP,
         [Description("溫度,VARCHAR,20,NONE")]
         溫度,
         [Description("濕度,VARCHAR,20,NONE")]
         濕度,
-        [Description("新增時間,DATETIME,20,NONE")]
+        [Description("新增時間,DATETIME,20,INDEX")]
         新增時間,
     }
     [EnumDescription("temperature_set")]
@@ -28,7 +28,7 @@ namespace HIS_DB_Lib
     {
         [Description("GUID,VARCHAR,50,PRIMARY")]
         GUID,
-        [Description("IP,VARCHAR,20,NONE")]
+        [Description("IP,VARCHAR,50,INDEX")]
         IP,
         [Description("別名,VARCHAR,20,INDEX")]
         別名,

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using HIS_DB_Lib;
 using System.Text.Json.Serialization;
 using Basic;
+using System.Linq;
 
 /// <summary>
 /// 化療處方資料 (Chemotherapy Order)
@@ -165,4 +166,44 @@ public class chemotherapyOrderClass
         return returnData;
     }
 
+    static public returnData update_chemotherapyOrderDay_by_guid(string API_Server, List<chemotherapyOrderDayClass>  chemotherapyOrderDays)
+    {
+        string url = $"{API_Server}/api/chemotherapyOrder/update_chemotherapyOrderDay_by_guid";
+
+        returnData returnData = new returnData();
+        returnData.Data = chemotherapyOrderDays;
+
+        string json_in = returnData.JsonSerializationt();
+        string json_out = Net.WEBApiPostJson(url, json_in);
+        returnData = json_out.JsonDeserializet<returnData>();
+        return returnData;
+    }
+
+}
+
+
+static public class chemotherapyOrderClassMethod
+{
+    public static List<DateTime> GetOrderAllDates(this List<chemotherapyOrderClass> orders)
+    {
+        List<DateTime> result = new List<DateTime>();
+
+        foreach (var order in orders)
+        {
+            if (DateTime.TryParse(order.開始執行日期, out DateTime s) &&
+                DateTime.TryParse(order.結束執行日期, out DateTime e))
+            {
+                for (DateTime d = s.Date; d <= e.Date; d = d.AddDays(1))
+                {
+                    result.Add(d);
+                }
+            }
+        
+        }
+
+        return result
+            .Distinct()
+            .OrderBy(x => x)
+            .ToList();
+    }
 }

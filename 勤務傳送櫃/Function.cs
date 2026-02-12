@@ -16,7 +16,7 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using HIS_DB_Lib;
-namespace 勤務傳送櫃
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
@@ -111,6 +111,19 @@ namespace 勤務傳送櫃
             }
 
             return orderClasses;
+        }
+        private void Funtion_藥袋刷入API(List<OrderClass> orderClasses)
+        {
+            string url = dBConfigClass.OrderCheckinApiURL;
+   
+            if (url.StringIsEmpty() == true) return;
+            returnData returnData = new returnData();
+            returnData.Data = orderClasses;
+            string jsonin = returnData.JsonSerializationt();
+            string json_result = Net.WEBApiPostJson(url, jsonin);
+            Console.WriteLine($"\n");
+            Console.WriteLine($"----------------------[藥袋刷入]----------------------");
+            Console.WriteLine($"{json_result}");
         }
         private void Funtion_藥袋刷入API(OrderClass orderClass , string 操作人 ,string ID)
         {

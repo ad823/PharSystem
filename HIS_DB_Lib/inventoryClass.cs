@@ -511,6 +511,26 @@ namespace HIS_DB_Lib
             }
         }
 
+        static public void creat_add(string API_Server, creat _creat)
+        {
+            string url = $"{API_Server}/api/inventory/creat_add";
+            returnData returnData = new returnData();
+            returnData.Data = _creat;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Basic.Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            if (returnData == null) return;
+            if (returnData.Code != 200)
+            {
+                Console.WriteLine($"-----------------------------------------------");
+                Console.WriteLine($"url : {url}");
+                Console.WriteLine($"Result : {returnData.Result}");
+                Console.WriteLine($"-----------------------------------------------");
+                return;
+            }
+        }
+        
+
     }
 
   

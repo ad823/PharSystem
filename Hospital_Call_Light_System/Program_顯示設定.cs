@@ -154,8 +154,9 @@ namespace Hospital_Call_Light_System
         {
             myConfigClass.一號台名稱 = this.comboBox_一號台名稱.Text;
             myConfigClass.二號台名稱 = this.comboBox_二號台名稱.Text;
-  
+
             myConfigClass.全局音效 = checkBox_全局音效.Checked;
+            myConfigClass.推撥語音至資料庫 = checkBox_推撥語音至資料庫.Checked;
             myConfigClass.本地音效 = checkBox_本地音效.Checked;
             myConfigClass.公告名稱 = comboBox_公告名稱.Text;
 

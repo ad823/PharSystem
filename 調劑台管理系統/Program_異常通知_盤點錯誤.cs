@@ -66,29 +66,64 @@ namespace 調劑台管理系統
                     MyMessageBox.ShowDialog("未選取資料");
                     return;
                 }
-                string 藥碼 = list_value[0][(int)enum_medRecheckLog.藥碼].ObjectToString();
-                string 藥名 = list_value[0][(int)enum_medRecheckLog.藥名].ObjectToString();
-                string 庫存 = Function_從SQL取得庫存(藥碼).ToString();
-                double 差異值 = medRecheckLogClass.get_unresolved_qty_by_code(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType, 藥碼);
-                Dialog_NumPannel dialog_NumPannel = new Dialog_NumPannel("請輸入現在庫存值", 藥名);
-                if (dialog_NumPannel.ShowDialog() != DialogResult.Yes) return;
-                double 現在庫存值 = dialog_NumPannel.Value;
-                差異值 = 現在庫存值 - 庫存.StringToDouble();
+                if (PLC_Device_盤點異常排除不改動庫存.Bool == false)
+                {
+                    string 藥碼 = list_value[0][(int)enum_medRecheckLog.藥碼].ObjectToString();
+                    string 藥名 = list_value[0][(int)enum_medRecheckLog.藥名].ObjectToString();
+                    string 庫存 = Function_從SQL取得庫存(藥碼).ToString();
+                    double 差異值 = medRecheckLogClass.get_unresolved_qty_by_code(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType, 藥碼);
+                    Dialog_NumPannel dialog_NumPannel = new Dialog_NumPannel("請輸入現在庫存值", 藥名);
+                    if (dialog_NumPannel.ShowDialog() != DialogResult.Yes) return;
+                    double 現在庫存值 = dialog_NumPannel.Value;
+                    差異值 = 現在庫存值 - 庫存.StringToDouble();
 
-                msg = $"藥碼:{藥碼}\n" +
-                    $"藥名:{藥名}\n" +
-                    $"庫存:{庫存} , 差異值:{差異值}\n" +
-                    $"是否排除盤點異常?";
-                if (MyMessageBox.ShowDialog($"{msg}", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) return;
-                medRecheckLogClass.set_unresolved_data_by_code(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType, 藥碼, Main_Form._登入者名稱);
-                Function_異常通知_盤點錯誤_庫存異動(藥碼, 藥名, 差異值 ,Main_Form._登入者名稱);
-                this.sqL_DataGridView_異常通知_盤點錯誤.ClearGrid();
-                uC_調劑作業_TypeA_1.Logout();
-                uC_調劑作業_TypeA_2.Logout();
-                uC_調劑作業_TypeA_3.Logout();
-                uC_調劑作業_TypeA_4.Logout();
+                    msg = $"藥碼:{藥碼}\n" +
+                        $"藥名:{藥名}\n" +
+                        $"庫存:{庫存} , 差異值:{差異值}\n" +
+                        $"是否排除盤點異常?";
+                    if (MyMessageBox.ShowDialog($"{msg}", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) return;
+                    medRecheckLogClass.set_unresolved_data_by_code(Main_Form.API_Server, Main_Form.ServerName, Main_Form.ServerType, 藥碼, Main_Form._登入者名稱);
+                    Function_異常通知_盤點錯誤_庫存異動(藥碼, 藥名, 差異值, Main_Form._登入者名稱);
+                    this.sqL_DataGridView_異常通知_盤點錯誤.ClearGrid();
+                    uC_調劑作業_TypeA_1.Logout();
+                    uC_調劑作業_TypeA_2.Logout();
+                    uC_調劑作業_TypeA_3.Logout();
+                    uC_調劑作業_TypeA_4.Logout();
 
-                MyMessageBox.ShowDialog("完成");
+                    MyMessageBox.ShowDialog("完成");
+                    return;
+
+                }
+                if(PLC_Device_盤點異常排除要修正原因.Bool = true)
+                {
+                    medRecheckLogClass medRecheckLog = list_value[0].SQLToClass<medRecheckLogClass, enum_medRecheckLog>();
+                    if (medRecheckLog.交易紀錄_GUID.StringIsEmpty() == false)
+                    {
+                        transactionsClass transactions = transactionsClass.get_by_guid(API_Server, medRecheckLog.交易紀錄_GUID, ServerName, ServerType);
+                        Dialog_收支原因選擇 dialog_收支原因選擇 = new Dialog_收支原因選擇();
+                        if (dialog_收支原因選擇.ShowDialog() != DialogResult.Yes) return;
+
+                        if (dialog_收支原因選擇.Value.StringIsEmpty()) dialog_收支原因選擇.Value = "無";
+                        transactions.收支原因 = $"{transactions.收支原因}({dialog_收支原因選擇.Value})";
+                        transactionsClass.update_by_guid(API_Server, transactions, ServerName, ServerType);
+
+                        medRecheckLog.排除藥師 = Main_Form._登入者名稱;
+                        medRecheckLog.排除時間 = DateTime.Now.ToDateTimeString();
+                        medRecheckLog.異常原因 = transactions.收支原因;
+                        medRecheckLog.狀態 = "已排除";
+                        medRecheckLogClass.set_unresolved_data_by_guid(API_Server, Main_Form.ServerName, Main_Form.ServerType, medRecheckLog.GUID, Main_Form._登入者名稱);
+                        this.sqL_DataGridView_異常通知_盤點錯誤.ClearGrid();
+                        uC_調劑作業_TypeA_1.Logout();
+                        uC_調劑作業_TypeA_2.Logout();
+                        uC_調劑作業_TypeA_3.Logout();
+                        uC_調劑作業_TypeA_4.Logout();
+
+                        MyMessageBox.ShowDialog("完成");
+                    }
+
+
+                }
+    
             }
             catch
             {
@@ -143,7 +178,7 @@ namespace 調劑台管理系統
         }
         #region Function
 
-        static public void Function_異常通知_盤點錯誤_庫存異動(string 藥碼, string 藥名 , double 差異值 , string _登入者名稱 = "")
+        static public void Function_異常通知_盤點錯誤_庫存異動(string 藥碼, string 藥名 , double 差異值 , string _登入者名稱 = "" , medRecheckLogClass medRecheckLog = null)
         {
             List<string> list_效期 = new List<string>();
             List<string> list_批號 = new List<string>();
@@ -181,10 +216,17 @@ namespace 調劑台管理系統
                 transactionsClass.藥品名稱 = 藥名;
                 transactionsClass.庫存量 = 庫存量.ToString();
                 transactionsClass.交易量 = 異動量.ToString();
-                transactionsClass.結存量 = 結存量.ToString();
+                transactionsClass.結存量 = 結存量.ToString();             
                 transactionsClass.操作人 = _登入者名稱;
                 transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
+                transactionsClass.開方時間 = DateTime.Now.ToDateTimeString_6();
                 transactionsClass.備註 = 備註;
+                if (medRecheckLog != null)
+                {
+                    medRecheckLog.交易紀錄_GUID = transactionsClass.GUID;
+                    transactionsClass.收支原因 = medRecheckLog.異常原因;
+                }
+
                 object[] trading_value = transactionsClass.ClassToSQL<transactionsClass, enum_交易記錄查詢資料>();
                 list_交易紀錄_Add.Add(trading_value);
 
@@ -215,7 +257,15 @@ namespace 調劑台管理系統
                 transactionsClass.結存量 = 結存量.ToString();
                 transactionsClass.操作人 = _登入者名稱;
                 transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
+                transactionsClass.開方時間 = DateTime.Now.ToDateTimeString_6();
                 transactionsClass.備註 = 備註;
+
+                if (medRecheckLog != null)
+                {
+                    medRecheckLog.交易紀錄_GUID = transactionsClass.GUID;
+                    transactionsClass.收支原因 = medRecheckLog.異常原因;
+                }
+
                 object[] trading_value = transactionsClass.ClassToSQL<transactionsClass, enum_交易記錄查詢資料>();
 
                 list_交易紀錄_Add.Add(trading_value);

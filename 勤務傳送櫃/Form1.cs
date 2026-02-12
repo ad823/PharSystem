@@ -22,9 +22,9 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.0.51")]
-[assembly: AssemblyFileVersion("1.0.0.51")]
-namespace 勤務傳送櫃
+[assembly: AssemblyVersion("1.0.25.12158")]
+[assembly: AssemblyFileVersion("1.0.25.12158")]
+namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
@@ -130,12 +130,18 @@ namespace 勤務傳送櫃
             private string rFID_COMPort = "";
             private string scanner01_COMPort = "COM2";
             private string scanner02_COMPort = "COM3";
+            private string resetIP = "192.168.32.240";
             private bool show_login = true;
+            private bool _配藥核對單處方模式 = true;
+            private bool _勤務取藥單處方模式 = true;
 
             public string RFID_COMPort { get => rFID_COMPort; set => rFID_COMPort = value; }
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public string Scanner02_COMPort { get => scanner02_COMPort; set => scanner02_COMPort = value; }
             public bool Show_login { get => show_login; set => show_login = value; }
+            public string ResetIP { get => resetIP; set => resetIP = value; }
+            public bool 配藥核對單處方模式 { get => _配藥核對單處方模式; set => _配藥核對單處方模式 = value; }
+            public bool 勤務取藥單處方模式 { get => _勤務取藥單處方模式; set => _勤務取藥單處方模式 = value; }
         }
         private void LoadMyConfig()
         {
@@ -170,9 +176,10 @@ namespace 勤務傳送櫃
         }
         #endregion
 
-        PLC_Device PLC_Device_主頁面頁碼 = new PLC_Device("D0");
-        PLC_Device PLC_Device_開門異常時間 = new PLC_Device("D3000");
-        PLC_Device PLC_Device_單層格數 = new PLC_Device("D3001");
+        static public PLC_Device PLC_Device_主頁面頁碼 = new PLC_Device("D0");
+        static public PLC_Device PLC_Device_開門異常時間 = new PLC_Device("D3000");
+        static public PLC_Device PLC_Device_單層格數 = new PLC_Device("D3001");
+        static public PLC_Device PLC_Device_勤務關門閃燈提醒 = new PLC_Device("S4510");
 
         public Main_Form()
         {
@@ -214,7 +221,13 @@ namespace 勤務傳送櫃
                 this.textBox_登入畫面_密碼.PassWordChar = true;
                 this.plC_UI_Init.UI_Finished_Event += PlC_UI_Init_UI_Finished_Event;
                 StorageUI_EPD_266.Get_Storage_bmpChangeEvent += StorageUI_EPD_266_Get_Storage_bmpChangeEvent;
-              
+
+                if (myConfigClass.勤務取藥單處方模式) tabControlEx_勤務取藥.SelectTab("勤務取藥_單處方");
+                else tabControlEx_勤務取藥.SelectTab("勤務取藥_全處方");
+
+                if (myConfigClass.配藥核對單處方模式) tabControlEx_配藥核對.SelectTab("配藥核對_單處方");
+                else tabControlEx_配藥核對.SelectTab("配藥核對_全處方");
+
             }
         }
         private Bitmap StorageUI_EPD_266_Get_Storage_bmpChangeEvent(Storage storage)
@@ -486,6 +499,8 @@ namespace 勤務傳送櫃
         private void Pannel_Box_Init()
         {
             int Num = PLC_Device_單層格數.Value;
+            int panel_max = Num * 8;
+            panel_max = panel_max + 1;
             if (Num <= 0) Num = 1;
             this.SuspendLayout();
 
@@ -495,18 +510,20 @@ namespace 勤務傳送櫃
             flowLayoutPanels.Add(flowLayoutPanel_PannelBox03);
             flowLayoutPanels.Add(flowLayoutPanel_PannelBox04);
 
-            for (int i = 0; i < 160; i++)
+
+            for (int i = 0; i < panel_max * 4; i++)
             {
-                
+
+
                 Pannel_Box pannel_Box = new Pannel_Box();
-                pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266) ;
+                pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266);
                 pannel_Box.TabIndex = i + 5;
                 pannel_Box.Width = 195;
                 pannel_Box.Height = flowLayoutPanels[0].Height / Num - 10;
                 pannel_Box.Visible = false;
 
-                flowLayoutPanels[i / 40].Controls.Add(pannel_Box);
-              
+                flowLayoutPanels[i / panel_max].Controls.Add(pannel_Box);
+
                 Pannel_Box.Panels.Add(pannel_Box);
                 pannel_Box.AlarmEvent += Pannel_Box_AlarmEvent;
                 pannel_Box.CloseEvent += Pannel_Box_CloseEvent;
@@ -518,7 +535,7 @@ namespace 勤務傳送櫃
             }
             this.ResumeLayout(false);
 
-         
+
 
         }
 

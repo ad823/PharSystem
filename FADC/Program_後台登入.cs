@@ -471,6 +471,7 @@ namespace FADC
                         if (personPageClasses[i].指紋辨識.StringIsEmpty()) continue;
                         Fmd fmd = personPageClasses[i].指紋辨識.FromBase64();
                         if (fmd == null) continue;
+                        await "指紋辨識成功".PlayGooleVoiceAsync(Main_Form.API_Server);
                         bool flag_match = fingerprintEngine.Compare(fmd_result, fmd);
                         if(flag_match)
                         {

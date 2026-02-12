@@ -104,7 +104,9 @@ namespace 調劑台管理系統
                         Storage storage = value_device as Storage;
                         if (storage.DeviceType == DeviceType.EPD266 || storage.DeviceType == DeviceType.EPD266_lock
                             || storage.DeviceType == DeviceType.EPD290 || storage.DeviceType == DeviceType.EPD290_lock
-                            || storage.DeviceType == DeviceType.EPD420 || storage.DeviceType == DeviceType.EPD420_lock)
+                            || storage.DeviceType == DeviceType.EPD420 || storage.DeviceType == DeviceType.EPD420_lock
+                            || storage.DeviceType == DeviceType.EPD360E || storage.DeviceType == DeviceType.EPD360E_lock
+                            || storage.DeviceType == DeviceType.EPD420G || storage.DeviceType == DeviceType.EPD420G_lock)
                         {
 
                             Console.WriteLine($"{IP},{Num},<抽屜關閉> {storage.DeviceType.GetEnumName()} {DateTime.Now.ToDateTimeString()}");
@@ -157,6 +159,7 @@ namespace 調劑台管理系統
                                 Task.Run(new Action(delegate { storageUI_LCD_114.ClearCanvas(index_IP, 29008); }));
 
                             }
+                            this.Function_取藥堆疊子資料_設定配藥完成ByIP("None", IP, Num);
                             //if (plC_CheckBox_同藥品全部亮燈.Bool) return;
 
                             //List_EPD583_雲端資料.Add_NewDrawer(drawer);
@@ -212,11 +215,6 @@ namespace 調劑台管理系統
             string IP = list_locker_table_value[0][(int)enum_lockerIndex.IP].ObjectToString();
             string Num = list_locker_table_value[0][(int)enum_lockerIndex.Num].ObjectToString();
             Console.WriteLine($"{IP},{Num},<抽屜開啟> {DateTime.Now.ToDateTimeString()}");
-            //if (plC_ScreenPage_Main.PageText == "管制抽屜")
-            //{
-            //    Pannel_Locker pannel_Locker = (Pannel_Locker)sender;
-            //    Funnction_交易記錄查詢_動作紀錄新增(enum_交易記錄查詢動作.管制抽屜開啟, this.登入者名稱, $"[{pannel_Locker.StorageName}]");
-            //}
         }
         private bool Loker_LockAlarmEvent(object sender, PLC_Device PLC_Device_Input, PLC_Device PLC_Device_Output, string GUID)
         {
@@ -283,7 +281,7 @@ namespace 調劑台管理系統
                             Storage storage = List_EPD266_雲端資料.SortByIP(IP);
                             if (storage != null)
                             {
-                                this.storageUI_EPD_266.Set_LockOpen(storage);
+                                if (storage.IsFADC == false) this.storageUI_EPD_266.Set_LockOpen(storage);
                             }
                         }));
                         taskList.Add(Task.Run(() =>
@@ -437,12 +435,12 @@ namespace 調劑台管理系統
                 Storage storage = List_EPD266_雲端資料.SortByIP(IP);
                 if (storage != null)
                 {
-                    if(storage.DeviceType == DeviceType.EPD266_lock || storage.DeviceType == DeviceType.EPD290_lock || storage.DeviceType == DeviceType.EPD420_lock)
+                    if(storage.DeviceType == DeviceType.EPD266_lock || storage.DeviceType == DeviceType.EPD290_lock || storage.DeviceType == DeviceType.EPD420_lock
+                        || storage.DeviceType == DeviceType.EPD420G_lock || storage.DeviceType == DeviceType.EPD360E_lock)
                     {
                         flag_state = this.storageUI_EPD_266.GetInput(storage.IP);
                         this.PLC.properties.device_system.Set_Device(Input, flag_state);
                         AlarmEnable = storage.AlarmEnable;
-                        if (storage.DeviceType != DeviceType.EPD266_lock && storage.DeviceType != DeviceType.EPD290_lock && storage.DeviceType != DeviceType.EPD420_lock) AlarmEnable = false;
                     }
                
                 }

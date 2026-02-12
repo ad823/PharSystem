@@ -2437,7 +2437,7 @@ namespace HIS_WebApi
             //Console.WriteLine($"取得creats {myTimer.ToString()}");
             for (int i = 0; i < creat.Contents.Count; i++)
             {
-                if (creat.Contents[i].盤點量.StringToInt32() <= 0)
+                if (creat.Contents[i].盤點量.StringToDouble() <= 0)
                 {
                     continue;
                 }
@@ -2474,6 +2474,7 @@ namespace HIS_WebApi
             }
 
             dataTable = list_value.ToDataTable(new enum_盤點定盤_Excel());
+            dataTable.Columns.Remove("GUID");
             Enum[] enums = new Enum[] {  enum_盤點定盤_Excel.庫存量, enum_盤點定盤_Excel .盤點量 ,enum_盤點定盤_Excel .單價 ,enum_盤點定盤_Excel .庫存金額 ,enum_盤點定盤_Excel .消耗量 ,
                 enum_盤點定盤_Excel.結存金額, enum_盤點定盤_Excel .誤差量 ,enum_盤點定盤_Excel.誤差金額,enum_盤點定盤_Excel.覆盤量 };
 
@@ -2485,12 +2486,12 @@ namespace HIS_WebApi
                 dataTable = sheetTemps[i].list_value.ToDataTable(new enum_盤點定盤_Excel());
                 sheetClass = dataTable.NPOI_GetSheetClass(enums);
                 sheetClass.Name = sheetTemps[i].Name;
+                
                 sheetClasses.Add(sheetClass);
             }
 
-            //Console.WriteLine($"NewCell_Webapi_Buffer_Caculate {myTimer.ToString()}");
 
-            string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string xls_command = "application/vnd.ms-excel";
 
             byte[] excelData = sheetClasses.NPOI_GetBytes(Excel_Type.xlsx);

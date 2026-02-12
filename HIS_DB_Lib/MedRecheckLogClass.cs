@@ -367,14 +367,15 @@ namespace HIS_DB_Lib
 
         }
 
-        static public (int code, string result) set_unresolved_data_by_guid(string API_Server, string guid, string pharmacist)
+        static public (int code, string result) set_unresolved_data_by_guid(string API_Server, string ServerName, string ServerType, string guid, string pharmacist)
         {
             string url = $"{API_Server}/api/medRecheckLog/set_unresolved_data_by_guid";
 
             returnData returnData = new returnData();
             returnData.ValueAry.Add(guid);
             returnData.ValueAry.Add(pharmacist);
-
+            returnData.ServerType = ServerType;
+            returnData.ServerName = ServerName;
             string json_in = returnData.JsonSerializationt();
             string json_out = Net.WEBApiPostJson(url, json_in);
 

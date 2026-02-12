@@ -133,6 +133,7 @@ namespace 調劑台管理系統
 
             this.plC_CheckBox_儲位管理_EPD266_儲位內容_顯示空白儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_顯示空白儲位_CheckStateChanged;
             this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
+            this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
             this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged += PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
 
 
@@ -144,6 +145,8 @@ namespace 調劑台管理系統
             this.comboBox_儲位管理_EPD266_儲位內容_儲位搜尋.SelectedIndex = 0;
             this.plC_UI_Init.Add_Method(this.Program_儲位管理_EPD266);
         }
+
+     
 
         private void StoragePanel_SizeChanged(object sender, EventArgs e)
         {
@@ -238,6 +241,7 @@ namespace 調劑台管理系統
                 List<object[]> list_藥品設定表_buf = new List<object[]>();
 
                 string 藥品碼 = "";
+                string 料號 = "";
                 string 藥品名稱 = "";
                 string 中文名稱 = "";
                 string 藥品學名 = "";
@@ -250,6 +254,7 @@ namespace 調劑台管理系統
                 string 管制級別 = "";
 
                 string 藥品碼_buf = "";
+                string 料號_buf = "";
                 string 藥品名稱_buf = "";
                 string 中文名稱_buf = "";
                 string 藥品學名_buf = "";
@@ -275,6 +280,8 @@ namespace 調劑台管理系統
                 else
                 {
                     藥品碼_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品碼].ObjectToString();
+                    料號_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.料號].ObjectToString();
+
                     藥品名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品名稱].ObjectToString();
                     中文名稱_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.中文名稱].ObjectToString();
                     藥品學名_buf = list_藥品資料_藥檔資料_buf[0][(int)enum_藥品資料_藥檔資料.藥品學名].ObjectToString();
@@ -298,6 +305,7 @@ namespace 調劑台管理系統
                     }
 
                     藥品碼 = storage.GetValue(Device.ValueName.藥品碼, Device.ValueType.Value).ObjectToString();
+                    料號 = storage.SKDIACODE;
                     藥品名稱 = storage.GetValue(Device.ValueName.藥品名稱, Device.ValueType.Value).ObjectToString();
                     中文名稱 = storage.GetValue(Device.ValueName.藥品中文名稱, Device.ValueType.Value).ObjectToString();
                     藥品學名 = storage.GetValue(Device.ValueName.藥品學名, Device.ValueType.Value).ObjectToString();
@@ -310,6 +318,7 @@ namespace 調劑台管理系統
                     發音相似 = storage.IsSoundSimilar ? "TRUE" : "FALSE";
 
                     if (藥品碼 != 藥品碼_buf) Is_Replace = true;
+                    if (料號 != 料號_buf) Is_Replace = true;
                     if (藥品名稱 != 藥品名稱_buf) Is_Replace = true;
                     if (中文名稱 != 中文名稱_buf) Is_Replace = true;
                     if (藥品學名 != 藥品學名_buf) Is_Replace = true;
@@ -326,6 +335,7 @@ namespace 調劑台管理系統
                     storage.SetValue(Device.ValueName.藥品學名, Device.ValueType.Value, 藥品學名_buf);
                     storage.SetValue(Device.ValueName.BarCode, Device.ValueType.Value, BarCode_buf);
                     storage.SetValue(Device.ValueName.包裝單位, Device.ValueType.Value, 包裝單位_buf);
+                    storage.SKDIACODE = 料號_buf;
                     storage.DRUGKIND = 管制級別_buf;
                     storage.IsWarning = (警訊藥品_buf == "TRUE");
                     storage.IsAnesthetic = (麻醉藥品_buf == "TRUE");
@@ -334,7 +344,9 @@ namespace 調劑台管理系統
 
                     if (myConfigClass.QRCode_url.StringIsEmpty() == false)
                     {
-                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                        storage.QRCode = $"{myConfigClass.QRCode_url}";
+                        storage.QRCode = storage.QRCode.Replace("{code}", storage.Code);
+                        storage.QRCode = storage.QRCode.Replace("{serverName}", ServerName);
                     }
 
                 }
@@ -431,6 +443,7 @@ namespace 調劑台管理系統
                     }
                 }
                 this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged -= PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
+                this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged -= PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
                 this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged -= PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
 
                 rJ_TextBox_儲位管理_EPD266_儲位內容_語音.Texts = storage.Speaker;
@@ -439,9 +452,12 @@ namespace 調劑台管理系統
 
                 this.Invoke(new Action(delegate { plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.Checked = storage.TOFON; }));
                 plC_CheckBox_儲位管理_EPD266_警報.Checked = storage.AlarmEnable;
+                plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.Checked = storage.IsInventoryLocation;
 
                 this.plC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_手勢感測_CheckStateChanged;
                 this.plC_CheckBox_儲位管理_EPD266_警報.CheckStateChanged += PlC_RJ_Button_儲位管理_EPD266_警報_CheckStateChanged;
+                this.plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.CheckStateChanged += PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged;
+
                 this.storagePanel.DrawToPictureBox(storage);
             }
 
@@ -522,6 +538,19 @@ namespace 調劑台管理系統
                 MyMessageBox.ShowDialog("[語音內容]更新成功");
 
             }
+        }
+        private void PlC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位_CheckStateChanged(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(delegate
+            {
+                Storage storage = this.storagePanel.CurrentStorage;
+                if (storage == null) return;
+                storage.IsInventoryLocation = plC_CheckBox_儲位管理_EPD266_儲位內容_庫存儲位.Checked;
+             
+                List_EPD266_本地資料.Add_NewStorage(storage);
+                this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
+                this.Function_設定雲端資料更新();
+            }));
         }
         private void PlC_RJ_Button_儲位管理_EPD266_藥品搜尋_藥品名稱_搜尋_MouseDownEvent(MouseEventArgs mevent)
         {
@@ -782,11 +811,14 @@ namespace 調劑台管理系統
                 double 原有庫存 = storage.取得庫存();
                 string 藥品碼 = storage.Code;
                 藥品碼 = Function_藥品碼檢查(藥品碼);
-                string 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 庫存量 = "";
+                if (storage.IsInventoryLocation == false) 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 庫存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 storage.效期庫存覆蓋(效期, 數量);
+
                 double 修正庫存 = storage.取得庫存();
                 this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
-                List_EPD266_本地資料.Add_NewStorage(storage);
+                if (storage.IsInventoryLocation == false) List_EPD266_本地資料.Add_NewStorage(storage);
 
 
                 string GUID = Guid.NewGuid().ToString();
@@ -794,7 +826,11 @@ namespace 調劑台管理系統
                 string 藥品名稱 = storage.Name;
                 string 藥袋序號 = "";
                 string 交易量 = (修正庫存 - 原有庫存).ToString();
-                string 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+
+                string 結存量 = "";
+                if (storage.IsInventoryLocation == false) 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 結存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
+
                 string 操作人 = this.登入者名稱;
                 string 病人姓名 = "";
                 string 病歷號 = "";
@@ -816,7 +852,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"庫存異動{(storage.IsInventoryLocation ? "(庫儲)" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -885,7 +921,9 @@ namespace 調劑台管理系統
                 double 原有庫存 = storage.取得庫存();
                 string 藥品碼 = storage.Code;
                 藥品碼 = Function_藥品碼檢查(藥品碼);
-                string 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 庫存量 = "";
+                if (storage.IsInventoryLocation == false) 庫存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 庫存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 storage.效期庫存覆蓋(效期, 批號, 數量);
                 double 修正庫存 = storage.取得庫存();
                 this.storageUI_EPD_266.SQL_ReplaceStorage(storage);
@@ -895,7 +933,9 @@ namespace 調劑台管理系統
                 string 藥品名稱 = storage.Name;
                 string 藥袋序號 = "";
                 string 交易量 = (修正庫存 - 原有庫存).ToString();
-                string 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                string 結存量 = "";
+                if (storage.IsInventoryLocation == false) 結存量 = Function_從SQL取得庫存(藥品碼).ToString();
+                else 結存量 = Function_從SQL取得庫儲區庫存(藥品碼).ToString();
                 string 操作人 = this.登入者名稱;
                 string 病人姓名 = "";
                 string 病歷號 = "";
@@ -918,7 +958,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"庫存異動{(storage.IsInventoryLocation ? "(庫儲)" : "")}{(storage.IsFADC ? $"({storage.IP})" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -1006,7 +1046,7 @@ namespace 調劑台管理系統
                 value_trading[(int)enum_交易記錄查詢資料.操作時間] = 操作時間;
                 value_trading[(int)enum_交易記錄查詢資料.開方時間] = 開方時間;
                 value_trading[(int)enum_交易記錄查詢資料.備註] = 備註;
-                value_trading[(int)enum_交易記錄查詢資料.收支原因] = "庫存異動";
+                value_trading[(int)enum_交易記錄查詢資料.收支原因] = $"修正批號{(storage.IsInventoryLocation ? "(庫儲)" : "")}";
                 value_trading[(int)enum_交易記錄查詢資料.藥師證字號] = this.登入者藥師證字號;
                 this.sqL_DataGridView_交易記錄查詢.SQL_AddRow(value_trading, false);
 
@@ -1130,9 +1170,11 @@ namespace 調劑台管理系統
                 {
                     string IP = list_value[i][(int)enum_儲位管理_EPD266_儲位資料.IP].ObjectToString();
                     Storage storage = this.storageUI_EPD_266.SQL_GetStorage(IP);
-                    if(myConfigClass.QRCode_url.StringIsEmpty() == false)
+                    if (myConfigClass.QRCode_url.StringIsEmpty() == false)
                     {
-                        storage.QRCode = $"{myConfigClass.QRCode_url}?code={storage.Code}&serverName={ServerName}";
+                        storage.QRCode = $"{myConfigClass.QRCode_url}";
+                        storage.QRCode = storage.QRCode.Replace("{code}", storage.Code);
+                        storage.QRCode = storage.QRCode.Replace("{serverName}", ServerName);
                     }
                     if (Storage.ContainsBitmap(storage.Code) == false)
                     {
