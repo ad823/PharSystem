@@ -494,10 +494,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_stock = new SQLControl(Server, DB, "stockLight", UserName, Password, Port, SSLMode);
                 foreach (var item in stockLightClasses)
                 {
-                    item.GUID = Guid.NewGuid().ToString();
-
-
-                   
+                    item.GUID = Guid.NewGuid().ToString();                  
                 }
                 List<object[]> add = stockLightClasses.ClassToSQL<stockLightClass>();
                 await sQLControl_stock.AddRowsAsync(null, add);

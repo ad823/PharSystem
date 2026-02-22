@@ -1153,9 +1153,14 @@
             唯一識別碼 (GUID)
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.stockLightClass.IP">
+        <member name="P:HIS_DB_Lib.stockLightClass.code">
             <summary>
-            IP
+            藥碼
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.stockLightClass.ip">
+            <summary>
+            ip
             </summary>
         </member>
         <member name="P:HIS_DB_Lib.stockLightClass.start_num">

@@ -196,6 +196,9 @@
     <None Update="處方疑義紀錄表.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="溫度記錄表.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="excel_emg_tradding.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
