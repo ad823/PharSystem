@@ -171,26 +171,30 @@ namespace FADC
             }));
             if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
             {
-                string UID_01 = _RFID_FX600_UI.Get_RFID_UID(1);
-                if (!UID_01.StringIsEmpty() && UID_01.StringToInt32() != 0 && this.IsHandleCreated)
+                if (myConfigClass.RFID_COMPort.StringIsEmpty() == false)
                 {
-                    this.Invoke(new Action(delegate
+
+                    string UID_01 = _RFID_FX600_UI.Get_RFID_UID(1);
+                    if (!UID_01.StringIsEmpty() && UID_01.StringToInt32() != 0 && this.IsHandleCreated)
                     {
-                        Console.WriteLine($"接收到[RFID01] {UID_01}");
-                        List<personPageClass> personPageClasses = personPageClass.get_all(Main_Form.API_Server);
-                        personPageClass personPage = personPageClasses.Where(x => x.卡號 == UID_01).FirstOrDefault();
-                        if (personPage == null)
-                        {
-                            Console.WriteLine($"找無人員資訊");
-                            return;
-                        }
                         this.Invoke(new Action(delegate
                         {
-                            personpageClass_調劑畫面 = personPage;
-                            rJ_Lable_調劑畫面_登入資訊.Text = $"{personPage.姓名}({personPage.ID})";
-                            tabControlEx_調劑畫面.SelectTab("刷取藥單");
+                            Console.WriteLine($"接收到[RFID01] {UID_01}");
+                            List<personPageClass> personPageClasses = personPageClass.get_all(Main_Form.API_Server);
+                            personPageClass personPage = personPageClasses.Where(x => x.卡號 == UID_01).FirstOrDefault();
+                            if (personPage == null)
+                            {
+                                Console.WriteLine($"找無人員資訊");
+                                return;
+                            }
+                            this.Invoke(new Action(delegate
+                            {
+                                personpageClass_調劑畫面 = personPage;
+                                rJ_Lable_調劑畫面_登入資訊.Text = $"{personPage.姓名}({personPage.ID})";
+                                tabControlEx_調劑畫面.SelectTab("刷取藥單");
+                            }));
                         }));
-                    }));
+                    }
                 }
             }
              

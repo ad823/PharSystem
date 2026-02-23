@@ -325,6 +325,7 @@ namespace FADC
                 bool flag_rfiD_FX600_UI_Init = false;
                 MyTimer_rfiD_FX600_UI_Init.TickStop();
                 MyTimer_rfiD_FX600_UI_Init.StartTickTime(5000);
+                if (myConfigClass.RFID_COMPort.StringIsEmpty()) return;
                 while (true)
                 {
                     _RFID_FX600_UI = this.rfiD_FX600_UI;

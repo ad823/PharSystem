@@ -408,6 +408,11 @@
             this.contextMenuStrip_Main = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_顯示主控台 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_隱藏主控台 = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.plC_RJ_Button11 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_出料步進復歸 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_出料步進_到前進位置 = new MyUI.PLC_RJ_Button();
+            this.plC_RJ_Button_出料步進_到後退位置 = new MyUI.PLC_RJ_Button();
             this.panel_Main.ContentsPanel.SuspendLayout();
             this.panel_Main.SuspendLayout();
             this.panel128.SuspendLayout();
@@ -489,6 +494,7 @@
             this.panel_setting.SuspendLayout();
             this.系統.SuspendLayout();
             this.contextMenuStrip_Main.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_Main
@@ -7754,6 +7760,7 @@
             // 設定01
             // 
             this.設定01.BackColor = System.Drawing.Color.White;
+            this.設定01.Controls.Add(this.groupBox3);
             this.設定01.Controls.Add(this.groupBox2);
             this.設定01.Controls.Add(this.groupBox1);
             this.設定01.Controls.Add(this.plC_AlarmFlow1);
@@ -10220,6 +10227,238 @@
             this.ToolStripMenuItem_隱藏主控台.Size = new System.Drawing.Size(168, 24);
             this.ToolStripMenuItem_隱藏主控台.Text = "(隱藏)主控台";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.plC_RJ_Button_出料步進_到後退位置);
+            this.groupBox3.Controls.Add(this.plC_RJ_Button_出料步進_到前進位置);
+            this.groupBox3.Controls.Add(this.plC_RJ_Button11);
+            this.groupBox3.Controls.Add(this.plC_RJ_Button_出料步進復歸);
+            this.groupBox3.Location = new System.Drawing.Point(6, 604);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(817, 301);
+            this.groupBox3.TabIndex = 44;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "出料前推步進";
+            // 
+            // plC_RJ_Button11
+            // 
+            this.plC_RJ_Button11.AutoResetState = false;
+            this.plC_RJ_Button11.BackgroundColor = System.Drawing.Color.DarkSeaGreen;
+            this.plC_RJ_Button11.Bool = false;
+            this.plC_RJ_Button11.BorderColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button11.BorderRadius = 10;
+            this.plC_RJ_Button11.BorderSize = 0;
+            this.plC_RJ_Button11.but_press = false;
+            this.plC_RJ_Button11.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.plC_RJ_Button11.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button11.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button11.Font = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button11.GUID = "";
+            this.plC_RJ_Button11.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button11.Image_padding = new System.Windows.Forms.Padding(0);
+            this.plC_RJ_Button11.Location = new System.Drawing.Point(26, 41);
+            this.plC_RJ_Button11.Name = "plC_RJ_Button11";
+            this.plC_RJ_Button11.OFF_文字內容 = "原點";
+            this.plC_RJ_Button11.OFF_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button11.OFF_文字顏色 = System.Drawing.Color.Gray;
+            this.plC_RJ_Button11.OFF_背景顏色 = System.Drawing.Color.DarkSeaGreen;
+            this.plC_RJ_Button11.ON_BorderSize = 1;
+            this.plC_RJ_Button11.ON_文字內容 = "原點";
+            this.plC_RJ_Button11.ON_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button11.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button11.ON_背景顏色 = System.Drawing.Color.LawnGreen;
+            this.plC_RJ_Button11.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button11.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button11.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button11.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button11.ShadowSize = 0;
+            this.plC_RJ_Button11.ShowLoadingForm = false;
+            this.plC_RJ_Button11.Size = new System.Drawing.Size(58, 50);
+            this.plC_RJ_Button11.State = false;
+            this.plC_RJ_Button11.TabIndex = 80;
+            this.plC_RJ_Button11.Text = "原點";
+            this.plC_RJ_Button11.TextColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button11.TextHeight = 0;
+            this.plC_RJ_Button11.Texts = "原點";
+            this.plC_RJ_Button11.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button11.字型鎖住 = false;
+            this.plC_RJ_Button11.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button11.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button11.文字鎖住 = false;
+            this.plC_RJ_Button11.背景圖片 = null;
+            this.plC_RJ_Button11.讀取位元反向 = false;
+            this.plC_RJ_Button11.讀取元件位置 = "Y40";
+            this.plC_RJ_Button11.讀寫鎖住 = false;
+            this.plC_RJ_Button11.音效 = true;
+            this.plC_RJ_Button11.顯示 = false;
+            this.plC_RJ_Button11.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_出料步進復歸
+            // 
+            this.plC_RJ_Button_出料步進復歸.AutoResetState = false;
+            this.plC_RJ_Button_出料步進復歸.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進復歸.Bool = false;
+            this.plC_RJ_Button_出料步進復歸.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_出料步進復歸.BorderRadius = 10;
+            this.plC_RJ_Button_出料步進復歸.BorderSize = 0;
+            this.plC_RJ_Button_出料步進復歸.but_press = false;
+            this.plC_RJ_Button_出料步進復歸.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.plC_RJ_Button_出料步進復歸.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_出料步進復歸.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_出料步進復歸.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_出料步進復歸.Font = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進復歸.GUID = "";
+            this.plC_RJ_Button_出料步進復歸.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_出料步進復歸.Image_padding = new System.Windows.Forms.Padding(0);
+            this.plC_RJ_Button_出料步進復歸.Location = new System.Drawing.Point(90, 34);
+            this.plC_RJ_Button_出料步進復歸.Name = "plC_RJ_Button_出料步進復歸";
+            this.plC_RJ_Button_出料步進復歸.OFF_文字內容 = "Home";
+            this.plC_RJ_Button_出料步進復歸.OFF_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進復歸.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進復歸.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進復歸.ON_BorderSize = 5;
+            this.plC_RJ_Button_出料步進復歸.ON_文字內容 = "Home";
+            this.plC_RJ_Button_出料步進復歸.ON_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進復歸.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進復歸.ON_背景顏色 = System.Drawing.Color.Yellow;
+            this.plC_RJ_Button_出料步進復歸.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_出料步進復歸.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_出料步進復歸.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_出料步進復歸.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_出料步進復歸.ShadowSize = 0;
+            this.plC_RJ_Button_出料步進復歸.ShowLoadingForm = false;
+            this.plC_RJ_Button_出料步進復歸.Size = new System.Drawing.Size(131, 62);
+            this.plC_RJ_Button_出料步進復歸.State = false;
+            this.plC_RJ_Button_出料步進復歸.TabIndex = 79;
+            this.plC_RJ_Button_出料步進復歸.Text = "Home";
+            this.plC_RJ_Button_出料步進復歸.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進復歸.TextHeight = 0;
+            this.plC_RJ_Button_出料步進復歸.Texts = "Home";
+            this.plC_RJ_Button_出料步進復歸.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_出料步進復歸.字型鎖住 = false;
+            this.plC_RJ_Button_出料步進復歸.寫入元件位置 = "S400";
+            this.plC_RJ_Button_出料步進復歸.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.保持型;
+            this.plC_RJ_Button_出料步進復歸.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_出料步進復歸.文字鎖住 = false;
+            this.plC_RJ_Button_出料步進復歸.背景圖片 = null;
+            this.plC_RJ_Button_出料步進復歸.讀取位元反向 = false;
+            this.plC_RJ_Button_出料步進復歸.讀取元件位置 = "S400";
+            this.plC_RJ_Button_出料步進復歸.讀寫鎖住 = false;
+            this.plC_RJ_Button_出料步進復歸.音效 = true;
+            this.plC_RJ_Button_出料步進復歸.顯示 = false;
+            this.plC_RJ_Button_出料步進復歸.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_出料步進_到前進位置
+            // 
+            this.plC_RJ_Button_出料步進_到前進位置.AutoResetState = false;
+            this.plC_RJ_Button_出料步進_到前進位置.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進_到前進位置.Bool = false;
+            this.plC_RJ_Button_出料步進_到前進位置.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_出料步進_到前進位置.BorderRadius = 10;
+            this.plC_RJ_Button_出料步進_到前進位置.BorderSize = 0;
+            this.plC_RJ_Button_出料步進_到前進位置.but_press = false;
+            this.plC_RJ_Button_出料步進_到前進位置.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.plC_RJ_Button_出料步進_到前進位置.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_出料步進_到前進位置.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_出料步進_到前進位置.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_出料步進_到前進位置.Font = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到前進位置.GUID = "";
+            this.plC_RJ_Button_出料步進_到前進位置.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_出料步進_到前進位置.Image_padding = new System.Windows.Forms.Padding(0);
+            this.plC_RJ_Button_出料步進_到前進位置.Location = new System.Drawing.Point(236, 34);
+            this.plC_RJ_Button_出料步進_到前進位置.Name = "plC_RJ_Button_出料步進_到前進位置";
+            this.plC_RJ_Button_出料步進_到前進位置.OFF_文字內容 = "到前進位置";
+            this.plC_RJ_Button_出料步進_到前進位置.OFF_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到前進位置.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到前進位置.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進_到前進位置.ON_BorderSize = 5;
+            this.plC_RJ_Button_出料步進_到前進位置.ON_文字內容 = "到前進位置";
+            this.plC_RJ_Button_出料步進_到前進位置.ON_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到前進位置.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到前進位置.ON_背景顏色 = System.Drawing.Color.Yellow;
+            this.plC_RJ_Button_出料步進_到前進位置.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_出料步進_到前進位置.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_出料步進_到前進位置.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_出料步進_到前進位置.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_出料步進_到前進位置.ShadowSize = 0;
+            this.plC_RJ_Button_出料步進_到前進位置.ShowLoadingForm = false;
+            this.plC_RJ_Button_出料步進_到前進位置.Size = new System.Drawing.Size(131, 62);
+            this.plC_RJ_Button_出料步進_到前進位置.State = false;
+            this.plC_RJ_Button_出料步進_到前進位置.TabIndex = 81;
+            this.plC_RJ_Button_出料步進_到前進位置.Text = "到前進位置";
+            this.plC_RJ_Button_出料步進_到前進位置.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到前進位置.TextHeight = 0;
+            this.plC_RJ_Button_出料步進_到前進位置.Texts = "到前進位置";
+            this.plC_RJ_Button_出料步進_到前進位置.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_出料步進_到前進位置.字型鎖住 = false;
+            this.plC_RJ_Button_出料步進_到前進位置.寫入元件位置 = "S410";
+            this.plC_RJ_Button_出料步進_到前進位置.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
+            this.plC_RJ_Button_出料步進_到前進位置.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_出料步進_到前進位置.文字鎖住 = false;
+            this.plC_RJ_Button_出料步進_到前進位置.背景圖片 = null;
+            this.plC_RJ_Button_出料步進_到前進位置.讀取位元反向 = false;
+            this.plC_RJ_Button_出料步進_到前進位置.讀取元件位置 = "S410";
+            this.plC_RJ_Button_出料步進_到前進位置.讀寫鎖住 = false;
+            this.plC_RJ_Button_出料步進_到前進位置.音效 = true;
+            this.plC_RJ_Button_出料步進_到前進位置.顯示 = false;
+            this.plC_RJ_Button_出料步進_到前進位置.顯示狀態 = false;
+            // 
+            // plC_RJ_Button_出料步進_到後退位置
+            // 
+            this.plC_RJ_Button_出料步進_到後退位置.AutoResetState = false;
+            this.plC_RJ_Button_出料步進_到後退位置.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進_到後退位置.Bool = false;
+            this.plC_RJ_Button_出料步進_到後退位置.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.plC_RJ_Button_出料步進_到後退位置.BorderRadius = 10;
+            this.plC_RJ_Button_出料步進_到後退位置.BorderSize = 0;
+            this.plC_RJ_Button_出料步進_到後退位置.but_press = false;
+            this.plC_RJ_Button_出料步進_到後退位置.buttonType = MyUI.RJ_Button.ButtonType.Push;
+            this.plC_RJ_Button_出料步進_到後退位置.DisenableColor = System.Drawing.Color.Gray;
+            this.plC_RJ_Button_出料步進_到後退位置.FlatAppearance.BorderSize = 0;
+            this.plC_RJ_Button_出料步進_到後退位置.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plC_RJ_Button_出料步進_到後退位置.Font = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到後退位置.GUID = "";
+            this.plC_RJ_Button_出料步進_到後退位置.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
+            this.plC_RJ_Button_出料步進_到後退位置.Image_padding = new System.Windows.Forms.Padding(0);
+            this.plC_RJ_Button_出料步進_到後退位置.Location = new System.Drawing.Point(375, 34);
+            this.plC_RJ_Button_出料步進_到後退位置.Name = "plC_RJ_Button_出料步進_到後退位置";
+            this.plC_RJ_Button_出料步進_到後退位置.OFF_文字內容 = "到後退位置";
+            this.plC_RJ_Button_出料步進_到後退位置.OFF_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到後退位置.OFF_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到後退位置.OFF_背景顏色 = System.Drawing.SystemColors.Control;
+            this.plC_RJ_Button_出料步進_到後退位置.ON_BorderSize = 5;
+            this.plC_RJ_Button_出料步進_到後退位置.ON_文字內容 = "到後退位置";
+            this.plC_RJ_Button_出料步進_到後退位置.ON_文字字體 = new System.Drawing.Font("新細明體", 14F);
+            this.plC_RJ_Button_出料步進_到後退位置.ON_文字顏色 = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到後退位置.ON_背景顏色 = System.Drawing.Color.Yellow;
+            this.plC_RJ_Button_出料步進_到後退位置.ProhibitionBorderLineWidth = 1;
+            this.plC_RJ_Button_出料步進_到後退位置.ProhibitionLineWidth = 4;
+            this.plC_RJ_Button_出料步進_到後退位置.ProhibitionSymbolSize = 30;
+            this.plC_RJ_Button_出料步進_到後退位置.ShadowColor = System.Drawing.Color.DimGray;
+            this.plC_RJ_Button_出料步進_到後退位置.ShadowSize = 0;
+            this.plC_RJ_Button_出料步進_到後退位置.ShowLoadingForm = false;
+            this.plC_RJ_Button_出料步進_到後退位置.Size = new System.Drawing.Size(131, 62);
+            this.plC_RJ_Button_出料步進_到後退位置.State = false;
+            this.plC_RJ_Button_出料步進_到後退位置.TabIndex = 82;
+            this.plC_RJ_Button_出料步進_到後退位置.Text = "到後退位置";
+            this.plC_RJ_Button_出料步進_到後退位置.TextColor = System.Drawing.Color.Black;
+            this.plC_RJ_Button_出料步進_到後退位置.TextHeight = 0;
+            this.plC_RJ_Button_出料步進_到後退位置.Texts = "到後退位置";
+            this.plC_RJ_Button_出料步進_到後退位置.UseVisualStyleBackColor = false;
+            this.plC_RJ_Button_出料步進_到後退位置.字型鎖住 = false;
+            this.plC_RJ_Button_出料步進_到後退位置.寫入元件位置 = "S411";
+            this.plC_RJ_Button_出料步進_到後退位置.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
+            this.plC_RJ_Button_出料步進_到後退位置.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            this.plC_RJ_Button_出料步進_到後退位置.文字鎖住 = false;
+            this.plC_RJ_Button_出料步進_到後退位置.背景圖片 = null;
+            this.plC_RJ_Button_出料步進_到後退位置.讀取位元反向 = false;
+            this.plC_RJ_Button_出料步進_到後退位置.讀取元件位置 = "S411";
+            this.plC_RJ_Button_出料步進_到後退位置.讀寫鎖住 = false;
+            this.plC_RJ_Button_出料步進_到後退位置.音效 = true;
+            this.plC_RJ_Button_出料步進_到後退位置.顯示 = false;
+            this.plC_RJ_Button_出料步進_到後退位置.顯示狀態 = false;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -10324,6 +10563,7 @@
             this.panel_setting.ResumeLayout(false);
             this.系統.ResumeLayout(false);
             this.contextMenuStrip_Main.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -10708,6 +10948,11 @@
         private MyUI.PLC_RJ_Button plC_RJ_Button9;
         private SpeechRecognitionUserControl.SpeechRecognitionUserControl speechRecognitionUserControl;
         private MyUI.PLC_RJ_Button plC_RJ_Button_調劑作業_藥品組合;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private MyUI.PLC_RJ_Button plC_RJ_Button11;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_出料步進復歸;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_出料步進_到後退位置;
+        private MyUI.PLC_RJ_Button plC_RJ_Button_出料步進_到前進位置;
     }
 }
 

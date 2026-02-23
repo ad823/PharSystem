@@ -768,9 +768,9 @@ namespace HIS_WebApi._API_系統
         /// </remarks>
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns>[returnData.Data]為交易紀錄結構</returns>
-        [Route("download_cdmis_datas_excel")]
+        [Route("download_datas_excel")]
         [HttpPost]
-        public async Task<ActionResult> download_cdmis_datas_excel([FromBody] returnData returnData)
+        public async Task<ActionResult> download_datas_excel([FromBody] returnData returnData)
         {
             try
             {

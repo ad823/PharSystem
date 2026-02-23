@@ -3,16 +3,17 @@ using H_Pannel_lib;
 using HIS_DB_Lib;
 using MinasA6DLL;
 using MyUI;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO.Ports;
 
 namespace FADC
 {
@@ -71,6 +72,8 @@ namespace FADC
         public static PLC_Device PLC_Device_Z軸Alarm = new PLC_Device("Y12");
         public static PLC_Device PLC_Device_Z軸Ready = new PLC_Device("Y13");
 
+        public static PLC_Device PLC_Device_出料步進Ready = new PLC_Device("Y40");
+
         public bool flag_program_PLC_int = false;
         public bool flag_minasA6_isOpen = false;
         public bool flag_servoOn = false;
@@ -80,6 +83,15 @@ namespace FADC
         public bool flag_servoJogPos = false;
         public bool flag_servoJogNeg = false;
         public byte deviceID = 1;
+
+        MyTimerBasic MyTimerBasic_stepMotor_cmd_delay = new MyTimerBasic();
+        public bool flag_stepMotor_isOpen = false;
+        public bool flag_stepMotorHome = false;
+        public bool flag_stepMotorInOrg = false;
+        public int cnt_stepMotorHome = 0;
+        public int cnt_出料步進_到前進位置 = 0;
+        public int cnt_出料步進_到後退位置 = 0;
+
 
         private MyThread myThread_PLC;
         private SerialPort serialPort = new SerialPort();
@@ -92,6 +104,7 @@ namespace FADC
                 {
                     minasA6.Open();
                     flag_minasA6_isOpen = true;
+                    flag_stepMotor_isOpen = open_rs232();
                 }
                 catch (Exception ex)
                 {
@@ -108,12 +121,17 @@ namespace FADC
             plC_RJ_Button_Z軸上升.MouseDownEvent += PlC_RJ_Button_Z軸上升_MouseDownEvent;
             plC_RJ_Button_Z軸下降.MouseDownEvent += PlC_RJ_Button_Z軸下降_MouseDownEvent;
 
+            plC_RJ_Button_出料步進復歸.MouseDownEvent += PlC_RJ_Button_出料步進復歸_MouseDownEvent;
+
             myThread_PLC = new MyThread();
             myThread_PLC.Add_Method(sub_Program_PLC);
             myThread_PLC.SetSleepTime(1);
             myThread_PLC.AutoRun(true);
             myThread_PLC.Trigger();
         }
+
+      
+
         public void sub_Program_PLC()
         {
             if (flag_minasA6_isOpen == true)
@@ -202,6 +220,116 @@ namespace FADC
                 sub_Program_出貨一次();
                 sub_Program_出貨到領藥平台();
             }
+            if(flag_stepMotor_isOpen)
+            {
+                PLC_Device_出料步進Ready.Bool = !IsMotorMove(1);
+                bool ready = PLC_Device_出料步進Ready.Bool;
+                if (flag_stepMotorHome)
+                {
+                    if (cnt_stepMotorHome == 0)
+                    {                   
+                        Stop(1);
+                        Home(1);
+                        PLC_Device_出料步進Ready.Bool = false;
+                        cnt_stepMotorHome++;
+                    }
+                    if (cnt_stepMotorHome == 1)
+                    {
+                        if (PLC_Device_出料步進Ready.Bool)
+                        {
+                            MyTimerBasic_stepMotor_cmd_delay.TickStop();
+                            MyTimerBasic_stepMotor_cmd_delay.StartTickTime(10);
+                            cnt_stepMotorHome++;
+                        }
+                    }
+                    if (cnt_stepMotorHome == 2)
+                    {
+                        if(MyTimerBasic_stepMotor_cmd_delay.IsTimeOut())
+                        {
+                            Stop(1);
+                            int paulse = (180 * 10000) / 12;
+                            Set_Active_Acc(1, 100);
+                            Set_Active_Dec(1, 100);
+                            Set_Active_Speed(1, 500);
+                            Set_Active_Position(1, paulse);
+                            AbsPosRun(1);
+                            PLC_Device_出料步進Ready.Bool =false;
+                            cnt_stepMotorHome++;
+                        }
+                       
+                    }
+                    if (cnt_stepMotorHome == 3)
+                    {
+                        if (PLC_Device_出料步進Ready.Bool)
+                        {
+                            cnt_stepMotorHome++;
+                        }
+                    }
+                    if (cnt_stepMotorHome == 4)
+                    {
+                        flag_stepMotorInOrg = true;
+                        flag_stepMotorHome = false;
+                    }
+         
+                }
+                if (plC_RJ_Button_出料步進_到前進位置.Bool)
+                {
+                    if (cnt_出料步進_到前進位置 == 0)
+                    {
+                        Stop(1);
+                        int paulse = (0 * 10000) / 12;
+                        Set_Active_Acc(1, 100);
+                        Set_Active_Dec(1, 100);
+                        Set_Active_Speed(1, 500);
+                        Set_Active_Position(1, paulse);
+                        AbsPosRun(1);
+                        PLC_Device_出料步進Ready.Bool = false;
+                        cnt_出料步進_到前進位置++;
+                    }
+                    if (cnt_出料步進_到前進位置 == 1)
+                    {
+                        if (PLC_Device_出料步進Ready.Bool)
+                        {
+                            cnt_出料步進_到前進位置++;
+                        }
+                    }
+                    if (cnt_出料步進_到前進位置 == 2)
+                    {
+                        flag_stepMotorInOrg = false;
+                        cnt_出料步進_到前進位置 = 0;
+                        plC_RJ_Button_出料步進_到前進位置.Bool = false;
+                    }
+                }
+                if (plC_RJ_Button_出料步進_到後退位置.Bool)
+                {
+                    if (cnt_出料步進_到後退位置 == 0)
+                    {
+                        Stop(1);
+                        int paulse = (180 * 10000) / 12;
+                        Set_Active_Acc(1, 100);
+                        Set_Active_Dec(1, 100);
+                        Set_Active_Speed(1, 500);
+                        Set_Active_Position(1, paulse);
+                        AbsPosRun(1);
+                        PLC_Device_出料步進Ready.Bool = false;
+                        cnt_出料步進_到後退位置++;
+                    }
+                    if (cnt_出料步進_到後退位置 == 1)
+                    {
+                        if (PLC_Device_出料步進Ready.Bool)
+                        {
+                            cnt_出料步進_到後退位置++;
+                        }
+                    }
+                    if (cnt_出料步進_到後退位置 == 2)
+                    {
+                        flag_stepMotorInOrg = true;
+                        cnt_出料步進_到後退位置 = 0;
+                        plC_RJ_Button_出料步進_到後退位置.Bool = false;
+                    }
+                }
+            }
+
         }
 
         #region PLC_出貨一次
@@ -443,10 +571,11 @@ namespace FADC
         }
         void cnt_Program_出貨一次_等待輸送帶前進(ref int cnt)
         {
-            if (PLC_Device_輸送帶前進.Bool == false)
+            if (PLC_Device_輸送帶前進.Bool == false && plC_RJ_Button_出料步進_到後退位置.Bool == false)
             {
                 Console.WriteLine($"[出貨一次] - 等待輸送帶前進");
                 PLC_Device_輸送帶前進.Bool = true;
+                plC_RJ_Button_出料步進_到後退位置.Bool = true;
                 cnt++;
             }
         }
@@ -614,10 +743,11 @@ namespace FADC
 
         void cnt_Program_出貨到領藥平台_等待輸送帶前進(ref int cnt)
         {
-            if (PLC_Device_輸送帶前進.Bool == false)
+            if (PLC_Device_輸送帶前進.Bool == false && plC_RJ_Button_出料步進_到後退位置.Bool == false)
             {
                 Console.WriteLine($"[出貨到領藥平台] - 等待輸送帶前進");
                 PLC_Device_輸送帶前進.Bool = true;
+                plC_RJ_Button_出料步進_到後退位置.Bool = true;
                 cnt++;
             }
         }
@@ -641,10 +771,11 @@ namespace FADC
         }
         void cnt_Program_出貨到領藥平台_輸送帶正轉完成(ref int cnt)
         {
-            if (PLC_Device_輸送帶正轉.Bool == false)
+            if (PLC_Device_輸送帶正轉.Bool == false && plC_RJ_Button_出料步進_到前進位置.Bool == false)
             {
                 Console.WriteLine($"[出貨到領藥平台] - 輸送帶正轉完成");
-                cnt++;
+                plC_RJ_Button_出料步進_到前進位置.Bool = true;
+               cnt++;
             }
         }
         #endregion
@@ -1448,7 +1579,15 @@ namespace FADC
             flag_servoClearAlarm = true;
         }
 
-        public string open_rs232()
+
+        private void PlC_RJ_Button_出料步進復歸_MouseDownEvent(MouseEventArgs mevent)
+        {
+            flag_stepMotorHome = true;
+            flag_stepMotorInOrg = false;
+            cnt_stepMotorHome = 0;
+        }
+
+        public bool open_rs232()
         {
             string result;
             result = "";
@@ -1462,7 +1601,7 @@ namespace FADC
                 serialPort.Parity = System.IO.Ports.Parity.None;
                 serialPort.StopBits = System.IO.Ports.StopBits.One;
                 serialPort.Open();
-                result = "rs232 open ok";
+                return true;
             }
             catch (Exception ex)
             {
@@ -1471,7 +1610,7 @@ namespace FADC
                 MyMessageBox.ShowDialog($"Exception : {result}");
             }
 
-            return result;
+            return false;
         }
         public bool Home(int station)
         {
