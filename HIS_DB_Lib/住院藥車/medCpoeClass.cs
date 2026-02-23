@@ -93,6 +93,8 @@ namespace HIS_DB_Lib
         簽收狀態,
         [Description("備註,VARCHAR,200,NONE")]
         備註,
+        [Description("批號效期,VARCHAR,100,NONE")]
+        批號效期,
     }
     public enum enum_med_cpoe_export
     {
@@ -302,6 +304,11 @@ namespace HIS_DB_Lib
         [JsonPropertyName("note")]
         public string 備註 { get; set; }
         /// <summary>
+        /// 批號效期
+        /// </summary>
+        [JsonPropertyName("lot_exp")]
+        public string 批號效期 { get; set; }
+        /// <summary>
         /// 調劑台
         /// </summary>
         [JsonPropertyName("dispens_name")]
@@ -331,6 +338,8 @@ namespace HIS_DB_Lib
         public List<string> 藥品群組   { get; set; }
         [JsonPropertyName("nearmiss")]
         public nearMissClass nearmiss { get; set; }
+        [JsonPropertyName("stock")]
+        public stockClass stock { get; set; }
 
 
         public class ICP_By_Rank : IComparer<medCpoeClass>

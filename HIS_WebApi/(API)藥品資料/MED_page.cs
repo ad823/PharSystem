@@ -936,151 +936,7 @@ namespace HIS_WebApi
         /// </code>
         /// </remarks>
         /// <returns></returns>
-        [Route("add_med_clouds")]
-        [HttpPost]
-        public string add_med_clouds(returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            myTimerBasic.StartTickTime(50000);
-            returnData.Method = "add_med_clouds";
-            returnData.RequestUrl = Method.GetRequestPath(HttpContext, includeQuery: false);
-            try
-            {
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料");
-                if (sys_serverSettingClasses_buf.Count == 0)
-                {
-                    if (sys_serverSettingClasses.Count == 0)
-                    {
-                        returnData.Code = -200;
-                        returnData.Result = $"找無Server資料!";
-                        return returnData.JsonSerializationt();
-                    }
-                }
-                List<medClass> medClasses_src = returnData.Data.ObjToClass<List<medClass>>();
-                if (medClasses_src == null)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"傳入資料錯誤";
-                    return returnData.JsonSerializationt();
-                }
-                List<string> codes = (from temp in medClasses_src
-                                      select temp.藥品碼).Distinct().ToList();
-
-                Dictionary<string, List<medClass>> keyValuePairs = medClasses_src.CoverToDictionaryByCode();
-                List<medClass> medClasses_src_buf = new List<medClass>();
-                List<medClass> medClasses_temp = new List<medClass>();
-
-                for (int i = 0; i < codes.Count; i++)
-                {
-                    medClasses_temp = keyValuePairs.SortDictionaryByCode(codes[i]);
-                    if (medClasses_temp.Count > 0)
-                    {
-                        medClasses_src_buf.Add(medClasses_temp[0]);
-                    }
-                }
-
-
-                List<object[]> list_value_add_buf = new List<object[]>();
-                List<object[]> list_value_update_buf = new List<object[]>();
-
-
-                List<medClass> medClasses_cloud = medClass.get_med_cloud("http://127.0.0.1:4433");
-                Dictionary<string, List<medClass>> keyValuePairs_med_cloud = medClasses_cloud.CoverToDictionaryByCode();
-                List<medClass> medClasses_cloud_buf = new List<medClass>();
-                List<medClass> medClasses_add = new List<medClass>();
-                List<medClass> medClasses_replace = new List<medClass>();
-
-
-                for (int i = 0; i < medClasses_src_buf.Count; i++)
-                {
-                    string 藥碼 = medClasses_src_buf[i].藥品碼;
-                    medClasses_cloud_buf = keyValuePairs_med_cloud.SortDictionaryByCode(藥碼);
-                    if (medClasses_cloud_buf.Count == 0)
-                    {
-                        medClasses_src_buf[i].GUID = Guid.NewGuid().ToString();
-                        medClasses_add.Add(medClasses_src_buf[i]);
-                    }
-                    else
-                    {
-                        medClass medClass_update = medClasses_cloud_buf[0];
-                        if (medClasses_src_buf[i].料號.StringIsEmpty() == false) medClass_update.料號 = medClasses_src_buf[i].料號;
-                        if (medClasses_src_buf[i].ATC.StringIsEmpty() == false) medClass_update.ATC = medClasses_src_buf[i].ATC;
-                        if (medClasses_src_buf[i].中文名稱.StringIsEmpty() == false) medClass_update.中文名稱 = medClasses_src_buf[i].中文名稱;
-                        if (medClasses_src_buf[i].藥品名稱.StringIsEmpty() == false) medClass_update.藥品名稱 = medClasses_src_buf[i].藥品名稱;
-                        if (medClasses_src_buf[i].藥品學名.StringIsEmpty() == false) medClass_update.藥品學名 = medClasses_src_buf[i].藥品學名;
-                        if (medClasses_src_buf[i].藥品群組.StringIsEmpty() == false) medClass_update.藥品群組 = medClasses_src_buf[i].藥品群組;
-                        if (medClasses_src_buf[i].健保碼.StringIsEmpty() == false) medClass_update.健保碼 = medClasses_src_buf[i].健保碼;
-                        if (medClasses_src_buf[i].包裝單位.StringIsEmpty() == false) medClass_update.包裝單位 = medClasses_src_buf[i].包裝單位;
-                        if (medClasses_src_buf[i].包裝數量.StringIsEmpty() == false) medClass_update.包裝數量 = medClasses_src_buf[i].包裝數量;
-                        if (medClasses_src_buf[i].最小包裝單位.StringIsEmpty() == false) medClass_update.最小包裝單位 = medClasses_src_buf[i].最小包裝單位;
-                        if (medClasses_src_buf[i].建議劑量.StringIsEmpty() == false) medClass_update.建議劑量 = medClasses_src_buf[i].建議劑量;
-                        if (medClasses_src_buf[i].建議頻次.StringIsEmpty() == false) medClass_update.建議頻次 = medClasses_src_buf[i].建議頻次;
-                        if (medClasses_src_buf[i].治療分類代碼.StringIsEmpty() == false) medClass_update.治療分類代碼 = medClasses_src_buf[i].治療分類代碼;
-                        if (medClasses_src_buf[i].治療分類名.StringIsEmpty() == false) medClass_update.治療分類名 = medClasses_src_buf[i].治療分類名;
-                        if (medClasses_src_buf[i].藥理分類序號.StringIsEmpty() == false) medClass_update.藥理分類序號 = medClasses_src_buf[i].藥理分類序號;
-                        if (medClasses_src_buf[i].藥理分類代碼.StringIsEmpty() == false) medClass_update.藥理分類代碼 = medClasses_src_buf[i].藥理分類代碼;
-                        if (medClasses_src_buf[i].藥理分類名.StringIsEmpty() == false) medClass_update.藥理分類名 = medClasses_src_buf[i].藥理分類名;
-                        if (medClasses_src_buf[i].適應症.StringIsEmpty() == false) medClass_update.適應症 = medClasses_src_buf[i].適應症;
-                        if (medClasses_src_buf[i].健保規範.StringIsEmpty() == false) medClass_update.健保規範 = medClasses_src_buf[i].健保規範;
-                        if (medClasses_src_buf[i].使用說明.StringIsEmpty() == false) medClass_update.使用說明 = medClasses_src_buf[i].使用說明;
-                        if (medClasses_src_buf[i].警訊藥品.StringIsEmpty() == false) medClass_update.警訊藥品 = medClasses_src_buf[i].警訊藥品;
-                        if (medClasses_src_buf[i].高價藥品.StringIsEmpty() == false) medClass_update.高價藥品 = medClasses_src_buf[i].高價藥品;
-                        if (medClasses_src_buf[i].自費藥品.StringIsEmpty() == false) medClass_update.自費藥品 = medClasses_src_buf[i].自費藥品;
-                        if (medClasses_src_buf[i].冷藏藥品.StringIsEmpty() == false) medClass_update.冷藏藥品 = medClasses_src_buf[i].冷藏藥品;
-                        if (medClasses_src_buf[i].生物製劑.StringIsEmpty() == false) medClass_update.生物製劑 = medClasses_src_buf[i].生物製劑;
-                        if (medClasses_src_buf[i].管制級別.StringIsEmpty() == false) medClass_update.管制級別 = medClasses_src_buf[i].管制級別;
-                        if (medClasses_src_buf[i].懷孕用藥級別.StringIsEmpty() == false) medClass_update.懷孕用藥級別 = medClasses_src_buf[i].懷孕用藥級別;
-                        if (medClasses_src_buf[i].圖片網址.StringIsEmpty() == false) medClass_update.圖片網址 = medClasses_src_buf[i].圖片網址;
-                        if (medClasses_src_buf[i].仿單網址.StringIsEmpty() == false) medClass_update.仿單網址 = medClasses_src_buf[i].仿單網址;
-                        if (medClasses_src_buf[i].說明書網址.StringIsEmpty() == false) medClass_update.說明書網址 = medClasses_src_buf[i].說明書網址;
-                        if (medClasses_src_buf[i].類別.StringIsEmpty() == false) medClass_update.類別 = medClasses_src_buf[i].類別;
-                        if (medClasses_src_buf[i].中西藥.StringIsEmpty() == false) medClass_update.中西藥 = medClasses_src_buf[i].中西藥;
-                        if (medClasses_src_buf[i].廠牌.StringIsEmpty() == false) medClass_update.廠牌 = medClasses_src_buf[i].廠牌;
-                        if (medClasses_src_buf[i].藥品許可證號.StringIsEmpty() == false) medClass_update.藥品許可證號 = medClasses_src_buf[i].藥品許可證號;
-                        if (medClasses_src_buf[i].供貨廠商.StringIsEmpty() == false) medClass_update.供貨廠商 = medClasses_src_buf[i].供貨廠商;
-                        if (medClasses_src_buf[i].供貨商證字號.StringIsEmpty() == false) medClass_update.供貨商證字號 = medClasses_src_buf[i].供貨商證字號;
-                        if (medClasses_src_buf[i].開檔狀態.StringIsEmpty() == false) medClass_update.開檔狀態 = medClasses_src_buf[i].開檔狀態;
-                        if (medClasses_src_buf[i].儲位描述.StringIsEmpty() == false) medClass_update.儲位描述 = medClasses_src_buf[i].儲位描述;
-                        if (medClasses_src_buf[i].備註.StringIsEmpty() == false) medClass_update.備註 = medClasses_src_buf[i].備註;
-                        if (medClasses_src_buf[i].藥品條碼2.StringIsEmpty() == false) medClass_update.藥品條碼2 = medClasses_src_buf[i].藥品條碼2;
-
-
-                        medClasses_replace.Add(medClass_update);
-                    }
-                }
-                string Server = sys_serverSettingClasses_buf[0].Server;
-                string DB = sys_serverSettingClasses_buf[0].DBName;
-                string UserName = sys_serverSettingClasses_buf[0].User;
-                string Password = sys_serverSettingClasses_buf[0].Password;
-                uint Port = (uint)sys_serverSettingClasses_buf[0].Port.StringToDouble();
-
-                SQLControl sQLControl = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
-
-                list_value_add_buf = medClasses_add.ClassToSQL<medClass, enum_雲端藥檔>();
-                list_value_update_buf = medClasses_replace.ClassToSQL<medClass, enum_雲端藥檔>();
-                List<medClass> result = new List<medClass>();
-                result.AddRange(medClasses_add);
-                result.AddRange(medClasses_replace);
-                sQLControl.AddRows(null, list_value_add_buf);
-                sQLControl.UpdateByDefulteExtra(null, list_value_update_buf);
-
-                returnData.Code = 200;
-                returnData.Data = result;
-                returnData.Result = $"更新雲端藥檔成功,共新增<{list_value_add_buf.Count}>筆資料,共修改<{list_value_update_buf.Count}>筆資料";
-                returnData.TimeTaken = myTimerBasic.ToString();
-
-                return returnData.JsonSerializationt(false);
-            }
-            catch (Exception e)
-            {
-                returnData.Code = -200;
-                returnData.Data = null;
-                returnData.Result = $"{e.Message}";
-                Logger.Log($"MED_page", $"[異常] {returnData.Result}");
-                return returnData.JsonSerializationt(true);
-            }
-        }
+        
         /// <summary>
         /// 新增及修改雲端藥檔含藥品條碼資料
         /// </summary>
@@ -1101,129 +957,112 @@ namespace HIS_WebApi
         /// </code>
         /// </remarks>
         /// <returns></returns>
-        [Route("add_med_clouds_barcode")]
-        [HttpPost]
-        public string add_med_clouds_barcode(returnData returnData)
+        [HttpPost("add_med_clouds")]
+        public async Task<string> add_med_clouds(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
             returnData.Method = "add_med_clouds_barcode";
-            returnData.RequestUrl = Method.GetRequestPath(HttpContext, includeQuery: false);
             try
             {
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料");
-                if (sys_serverSettingClasses_buf.Count == 0)
+
+
+                List<medClass> medClasses = returnData.Data.ObjToClass<List<medClass>>();
+                if (medClasses == null || medClasses.Count == 0)
                 {
-                    if (sys_serverSettingClasses.Count == 0)
+                    medClass medClass = returnData.Data.ObjToClass<medClass>();
+                    if (medClass == null)
                     {
                         returnData.Code = -200;
-                        returnData.Result = $"找無Server資料!";
-                        return returnData.JsonSerializationt();
+                        returnData.Result = $"Data不得為空";
+                        return returnData.JsonSerializationt(true);
                     }
+                    medClasses = new List<medClass>() { medClass };
                 }
-                List<medClass> medClasses_src = returnData.Data.ObjToClass<List<medClass>>();
-                if (medClasses_src == null)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"傳入資料錯誤";
-                    return returnData.JsonSerializationt();
-                }
-                List<string> codes = (from temp in medClasses_src
-                                      select temp.藥品碼).Distinct().ToList();
-
-                Dictionary<string, List<medClass>> keyValuePairs = medClasses_src.CoverToDictionaryByCode();
-                List<medClass> medClasses_src_buf = new List<medClass>();
-                List<medClass> medClasses_temp = new List<medClass>();
-
-                for (int i = 0; i < codes.Count; i++)
-                {
-                    medClasses_temp = keyValuePairs.SortDictionaryByCode(codes[i]);
-                    if (medClasses_temp.Count > 0)
-                    {
-                        medClasses_src_buf.Add(medClasses_temp[0]);
-                    }
-                }
+                string[] codes = medClasses.Select(x => x.藥品碼).Distinct().ToArray();
 
 
-                List<object[]> list_value_add_buf = new List<object[]>();
-                List<object[]> list_value_update_buf = new List<object[]>();
-
-
-                List<medClass> medClasses_cloud = medClass.get_med_cloud("http://127.0.0.1:4433");
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "藥檔資料");
+                SQLControl sQLControl = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
+                List<object[]> list_medCloud = await sQLControl.GetRowsByDefultAsync(null, (int)enum_雲端藥檔.藥品碼, codes);
+                List<medClass> medClasses_cloud = list_medCloud.SQLToClass<medClass, enum_雲端藥檔>();
+                //if (medClasses_cloud == null || medClasses_cloud.Count == 0)
+                //{
+                //    returnData.Code = -200;
+                //    returnData.Result = $"取得藥檔失敗";
+                //    return returnData.JsonSerializationt(true);
+                //}
                 Dictionary<string, List<medClass>> keyValuePairs_med_cloud = medClasses_cloud.CoverToDictionaryByCode();
-                List<medClass> medClasses_cloud_buf = new List<medClass>();
                 List<medClass> medClasses_add = new List<medClass>();
                 List<medClass> medClasses_replace = new List<medClass>();
 
 
-                for (int i = 0; i < medClasses_src_buf.Count; i++)
+                for (int i = 0; i < medClasses.Count; i++)
                 {
-                    string 藥碼 = medClasses_src_buf[i].藥品碼;
-                    medClasses_cloud_buf = keyValuePairs_med_cloud.SortDictionaryByCode(藥碼);
-                    if (medClasses_cloud_buf.Count == 0)
+                    medClass medClass_buf = keyValuePairs_med_cloud.SortDictionaryByCode(medClasses[i].藥品碼).FirstOrDefault();
+                    if (medClass_buf == null)
                     {
-                        medClasses_src_buf[i].GUID = Guid.NewGuid().ToString();
-                        medClasses_add.Add(medClasses_src_buf[i]);
+                        medClasses[i].GUID = Guid.NewGuid().ToString();
+                        medClasses_add.Add(medClasses[i]);
                     }
                     else
                     {
-                        medClass medClass_update = medClasses_cloud_buf[0];
-                        medClass_update.藥品碼 = medClasses_src_buf[i].藥品碼;
-                        medClass_update.料號 = medClasses_src_buf[i].料號;
-                        medClass_update.藥品名稱 = medClasses_src_buf[i].藥品名稱;
-                        medClass_update.藥品學名 = medClasses_src_buf[i].藥品學名;
-                        medClass_update.管制級別 = medClasses_src_buf[i].管制級別;
-                        medClass_update.包裝單位 = medClasses_src_buf[i].包裝單位;
-                        medClass_update.建議劑量 = medClasses_src_buf[i].建議劑量;
-                        medClass_update.建議頻次 = medClasses_src_buf[i].建議頻次;
-                        medClass_update.適應症 = medClasses_src_buf[i].適應症;
-                        medClass_update.使用說明 = medClasses_src_buf[i].使用說明;
-                        medClass_update.警訊藥品 = medClasses_src_buf[i].警訊藥品;
-                        medClass_update.懷孕用藥級別 = medClasses_src_buf[i].懷孕用藥級別;
-                        medClass_update.高價藥品 = medClasses_src_buf[i].高價藥品;
-                        medClass_update.冷藏藥品 = medClasses_src_buf[i].冷藏藥品;
-                        medClass_update.自費藥品 = medClasses_src_buf[i].自費藥品;
-                        medClass_update.生物製劑 = medClasses_src_buf[i].生物製劑;
-                        medClass_update.健保碼 = medClasses_src_buf[i].健保碼;
-                        medClass_update.健保規範 = medClasses_src_buf[i].健保規範;
-                        medClass_update.廠牌 = medClasses_src_buf[i].廠牌;
-                        medClass_update.治療分類名 = medClasses_src_buf[i].治療分類名;
-                        medClass_update.治療分類代碼 = medClasses_src_buf[i].治療分類代碼;
-                        medClass_update.開檔狀態 = medClasses_src_buf[i].開檔狀態;
-                        medClass_update.ATC = medClasses_src_buf[i].ATC;
-                        medClass_update.中文名稱 = medClasses_src_buf[i].中文名稱;
-                        medClass_update.儲位描述 = medClasses_src_buf[i].儲位描述;
-                        medClass_update.圖片網址 = medClasses_src_buf[i].圖片網址;
-                        medClass_update.仿單網址 = medClasses_src_buf[i].仿單網址;
-                        medClass_update.說明書網址 = medClasses_src_buf[i].說明書網址;
-                        medClass_update.類別 = medClasses_src_buf[i].類別;
-                        medClass_update.中西藥 = medClasses_src_buf[i].中西藥;
-                        medClass_update.最小包裝單位 = medClasses_src_buf[i].最小包裝單位;
-                        medClass_update.備註 = medClasses_src_buf[i].備註;
-                        medClass_update.藥品條碼2 = medClasses_src_buf[i].藥品條碼2;
+                        if (medClasses[i].料號.StringIsEmpty() == false) medClass_buf.料號 = medClasses[i].料號;
+                        if (medClasses[i].ATC.StringIsEmpty() == false) medClass_buf.ATC = medClasses[i].ATC;
+                        if (medClasses[i].中文名稱.StringIsEmpty() == false) medClass_buf.中文名稱 = medClasses[i].中文名稱;
+                        if (medClasses[i].藥品名稱.StringIsEmpty() == false) medClass_buf.藥品名稱 = medClasses[i].藥品名稱;
+                        if (medClasses[i].藥品學名.StringIsEmpty() == false) medClass_buf.藥品學名 = medClasses[i].藥品學名;
+                        if (medClasses[i].藥品群組.StringIsEmpty() == false) medClass_buf.藥品群組 = medClasses[i].藥品群組;
+                        if (medClasses[i].健保碼.StringIsEmpty() == false) medClass_buf.健保碼 = medClasses[i].健保碼;
+                        if (medClasses[i].包裝單位.StringIsEmpty() == false) medClass_buf.包裝單位 = medClasses[i].包裝單位;
+                        if (medClasses[i].包裝數量.StringIsEmpty() == false) medClass_buf.包裝數量 = medClasses[i].包裝數量;
+                        if (medClasses[i].最小包裝單位.StringIsEmpty() == false) medClass_buf.最小包裝單位 = medClasses[i].最小包裝單位;
+                        if (medClasses[i].建議劑量.StringIsEmpty() == false) medClass_buf.建議劑量 = medClasses[i].建議劑量;
+                        if (medClasses[i].建議頻次.StringIsEmpty() == false) medClass_buf.建議頻次 = medClasses[i].建議頻次;
+                        if (medClasses[i].治療分類代碼.StringIsEmpty() == false) medClass_buf.治療分類代碼 = medClasses[i].治療分類代碼;
+                        if (medClasses[i].治療分類名.StringIsEmpty() == false) medClass_buf.治療分類名 = medClasses[i].治療分類名;
+                        if (medClasses[i].藥理分類序號.StringIsEmpty() == false) medClass_buf.藥理分類序號 = medClasses[i].藥理分類序號;
+                        if (medClasses[i].藥理分類代碼.StringIsEmpty() == false) medClass_buf.藥理分類代碼 = medClasses[i].藥理分類代碼;
+                        if (medClasses[i].藥理分類名.StringIsEmpty() == false) medClass_buf.藥理分類名 = medClasses[i].藥理分類名;
+                        if (medClasses[i].適應症.StringIsEmpty() == false) medClass_buf.適應症 = medClasses[i].適應症;
+                        if (medClasses[i].健保規範.StringIsEmpty() == false) medClass_buf.健保規範 = medClasses[i].健保規範;
+                        if (medClasses[i].使用說明.StringIsEmpty() == false) medClass_buf.使用說明 = medClasses[i].使用說明;
+                        if (medClasses[i].警訊藥品.StringIsEmpty() == false) medClass_buf.警訊藥品 = medClasses[i].警訊藥品;
+                        if (medClasses[i].高價藥品.StringIsEmpty() == false) medClass_buf.高價藥品 = medClasses[i].高價藥品;
+                        if (medClasses[i].自費藥品.StringIsEmpty() == false) medClass_buf.自費藥品 = medClasses[i].自費藥品;
+                        if (medClasses[i].冷藏藥品.StringIsEmpty() == false) medClass_buf.冷藏藥品 = medClasses[i].冷藏藥品;
+                        if (medClasses[i].生物製劑.StringIsEmpty() == false) medClass_buf.生物製劑 = medClasses[i].生物製劑;
+                        if (medClasses[i].管制級別.StringIsEmpty() == false) medClass_buf.管制級別 = medClasses[i].管制級別;
+                        if (medClasses[i].懷孕用藥級別.StringIsEmpty() == false) medClass_buf.懷孕用藥級別 = medClasses[i].懷孕用藥級別;
+                        if (medClasses[i].圖片網址.StringIsEmpty() == false) medClass_buf.圖片網址 = medClasses[i].圖片網址;
+                        if (medClasses[i].仿單網址.StringIsEmpty() == false) medClass_buf.仿單網址 = medClasses[i].仿單網址;
+                        if (medClasses[i].說明書網址.StringIsEmpty() == false) medClass_buf.說明書網址 = medClasses[i].說明書網址;
+                        if (medClasses[i].類別.StringIsEmpty() == false) medClass_buf.類別 = medClasses[i].類別;
+                        if (medClasses[i].中西藥.StringIsEmpty() == false) medClass_buf.中西藥 = medClasses[i].中西藥;
+                        if (medClasses[i].廠牌.StringIsEmpty() == false) medClass_buf.廠牌 = medClasses[i].廠牌;
+                        if (medClasses[i].藥品許可證號.StringIsEmpty() == false) medClass_buf.藥品許可證號 = medClasses[i].藥品許可證號;
+                        if (medClasses[i].供貨廠商.StringIsEmpty() == false) medClass_buf.供貨廠商 = medClasses[i].供貨廠商;
+                        if (medClasses[i].供貨商證字號.StringIsEmpty() == false) medClass_buf.供貨商證字號 = medClasses[i].供貨商證字號;
+                        if (medClasses[i].開檔狀態.StringIsEmpty() == false) medClass_buf.開檔狀態 = medClasses[i].開檔狀態;
+                        if (medClasses[i].儲位描述.StringIsEmpty() == false) medClass_buf.儲位描述 = medClasses[i].儲位描述;
+                        if (medClasses[i].備註.StringIsEmpty() == false) medClass_buf.備註 = medClasses[i].備註;
+                        if (medClasses[i].藥品條碼2.StringIsEmpty() == false && medClasses[i].藥品條碼2.Length > 2) 
+                            medClass_buf.藥品條碼2 = medClasses[i].藥品條碼2;
 
-                        medClasses_replace.Add(medClass_update);
+                        medClasses_replace.Add(medClass_buf);
                     }
                 }
-                string Server = sys_serverSettingClasses_buf[0].Server;
-                string DB = sys_serverSettingClasses_buf[0].DBName;
-                string UserName = sys_serverSettingClasses_buf[0].User;
-                string Password = sys_serverSettingClasses_buf[0].Password;
-                uint Port = (uint)sys_serverSettingClasses_buf[0].Port.StringToDouble();
 
-                SQLControl sQLControl = new SQLControl(Server, DB, "medicine_page_cloud", UserName, Password, Port, SSLMode);
 
-                list_value_add_buf = medClasses_add.ClassToSQL<medClass, enum_雲端藥檔>();
-                list_value_update_buf = medClasses_replace.ClassToSQL<medClass, enum_雲端藥檔>();
-                List<medClass> result = new List<medClass>();
-                result.AddRange(medClasses_add);
-                result.AddRange(medClasses_replace);
-                sQLControl.AddRows(null, list_value_add_buf);
-                sQLControl.UpdateByDefulteExtra(null, list_value_update_buf);
 
+                List<object[]> list_value_add_buf = medClasses_add.ClassToSQL<medClass, enum_雲端藥檔>();
+                List<object[]>  list_value_update_buf = medClasses_replace.ClassToSQL<medClass, enum_雲端藥檔>();
+                
+                if(list_value_add_buf.Count > 0) await sQLControl.AddRowsAsync(null, list_value_add_buf);
+                if (list_value_update_buf.Count > 0)  await sQLControl.UpdateRowsAsync(null, list_value_update_buf);
+                medClasses_add.AddRange(medClasses_replace);
                 returnData.Code = 200;
-                returnData.Data = result;
+                returnData.Data = medClasses_add;
                 returnData.Result = $"更新雲端藥檔成功,共新增<{list_value_add_buf.Count}>筆資料,共修改<{list_value_update_buf.Count}>筆資料";
                 returnData.TimeTaken = myTimerBasic.ToString();
 
@@ -4245,6 +4084,112 @@ namespace HIS_WebApi
             }
 
         }
+        [HttpPost("download_med_barcode")]
+        public async Task<ActionResult> download_med_barcode([FromBody] returnData returnData)
+        {
+            try
+            {
+
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+
+                List<medClass> medClasses = returnData.Data.ObjToClass<List<medClass>>();
+                if (medClasses == null)
+                {
+                    //medClasses = new List<medClass>();
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 無傳入資料";
+                    return Content($"下載失敗：{returnData.Result}");
+                }
+                List<object[]> objects = medClasses.ClassToSQL<medClass, enum_雲端藥檔>();
+                System.Data.DataTable dataTable = objects.ToDataTable(new enum_雲端藥檔());
+                if (dataTable.Columns.Count > 0)
+                {
+                    dataTable.Columns.RemoveAt(0);
+                }
+                dataTable = dataTable.ReorderTable(new enum_藥品條碼());
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xls_command = "application/vnd.ms-excel";
+                byte[] excelData = MyOffice.ExcelClass.NPOI_GetBytes(dataTable, Excel_Type.xlsx);
+                Stream stream = new MemoryStream(excelData);
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_藥品條碼.xlsx"));
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        [HttpPost("upload_med_barcode")]
+        public async Task<string> upload_med_barcode([FromForm] IFormFile file)
+        {
+            returnData returnData = new returnData();
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            try
+            {
+                
+
+                var formFile = Request.Form.Files.FirstOrDefault();
+
+                if (formFile == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "文件不得為空";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                string extension = Path.GetExtension(formFile.FileName); // 获取文件的扩展名
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                string error = "";
+                List<medClass> medClasses = new List<medClass>();
+                string str = "";
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await formFile.CopyToAsync(memoryStream);
+                    System.Data.DataTable dt = ExcelClass.NPOI_LoadFile(memoryStream.ToArray(), extension);
+                    dt = dt.ReorderTable(new enum_藥品條碼());
+                    if (dt == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = "上傳文件表頭無效!";
+                        return returnData.JsonSerializationt(true);
+                    }
+                    List<object[]> list_value = dt.DataTableToRowList();
+                    if (list_value.Count == 0)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"文件內容不得為空";
+                        return returnData.JsonSerializationt(true);
+                    }
+                    for(int i = 0; i < list_value.Count; i++) 
+                    { 
+                        medClass medClass = new medClass
+                        {
+                            藥品碼 = list_value[i][(int)enum_藥品條碼.藥品碼].ObjectToString(),
+                            藥品條碼2 = list_value[i][(int)enum_藥品條碼.藥品條碼2].ObjectToString()
+                        };
+                        medClasses.Add(medClass);
+                    }
+                    
+                }
+                returnData returnData_Add = await add_med_clouds(medClasses);
+                return returnData_Add.JsonSerializationt(true);
+               
+            }
+
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
+
         static public Dictionary<string, List<H_Pannel_lib.DeviceSimple>> ConvertToDictionary(List<H_Pannel_lib.DeviceSimple> deviceSimples)
         {
             Dictionary<string, List<H_Pannel_lib.DeviceSimple>> dictionary = new Dictionary<string, List<H_Pannel_lib.DeviceSimple>>();
@@ -4538,6 +4483,13 @@ namespace HIS_WebApi
             returnData returnData = new returnData();
             returnData.Value = barcode;
             string result = await serch_by_BarCode(returnData);
+            return await result.JsonDeserializetAsync<returnData>();
+        }
+        private async Task<returnData> add_med_clouds(List<medClass> medClasses)
+        {
+            returnData returnData = new returnData();
+            returnData.Data = medClasses;
+            string result = await add_med_clouds(returnData);
             return await result.JsonDeserializetAsync<returnData>();
         }
     }

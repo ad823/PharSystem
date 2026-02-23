@@ -168,6 +168,54 @@ namespace HIS_DB_Lib
             return returnData;
         }
     }
+    /// <summary>
+    /// 貨品表資料結構  
+    /// 用於紀錄藥品在各層架或裝置上的位置、批號、效期與數量。
+    /// </summary>
+    [Description("stockLight")]
+    public class stockLightClass
+    {
+        /// <summary>
+        /// 唯一識別碼 (GUID)
+        /// </summary>
+        [Description("VARCHAR,50,PRIMARY")]
+        public string GUID { get; set; }
+        /// <summary>
+        /// 藥碼
+        /// </summary>
+        [Description("VARCHAR,20,NONE")]
+        public string code { get; set; }
+        /// <summary>
+        /// ip
+        /// </summary>
+        [Description("VARCHAR,20,NONE")]
+        public string ip { get; set; }
+        /// <summary>
+        /// 開始位置
+        /// </summary>
+        [Description("VARCHAR,20,NONE")]
+        public string start_num { get; set; }
+        /// <summary>
+        /// 結束位置
+        /// </summary>
+        [Description("VARCHAR,20,NONE")]
+        public string end_num { get; set; }
+        /// <summary>
+        /// 裝置類型
+        /// </summary>
+        [Description("VARCHAR,50,NONE")]
+        public string device_type { get; set; }
+        /// <summary>
+        /// 開始時間
+        /// </summary>
+        [Description("DATETIME,20,NONE")]
+        public string start_time { get; set; }
+        /// <summary>
+        /// 結束時間
+        /// </summary>
+        [Description("DATETIME,20,NONE")]
+        public string end_time { get; set; }
+    }
     public static class stockClassMethod
     {
         static public Dictionary<string, List<stockClass>> ToDictByShelfGUID(this List<stockClass> stockClasses)

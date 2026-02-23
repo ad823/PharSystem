@@ -3033,7 +3033,8 @@ namespace HIS_WebApi._API_藥品資料
                 {
                     stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
                     if (medMap_stock_buff == null) continue;
-                    if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false) item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
+                    //if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false)
+                    item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
                     if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
                     if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
                     if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
@@ -3703,7 +3704,6 @@ namespace HIS_WebApi._API_藥品資料
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap()));
             tables.Add(MethodClass.CheckCreatTable<medMap_sectionClass>(sys_serverSettingClasses[0]));
-            //tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_sub_section()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_shelf()));
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClasses[0], new enum_medMap_drawer()));

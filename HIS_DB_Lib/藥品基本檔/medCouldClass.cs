@@ -135,6 +135,12 @@ namespace HIS_DB_Lib
         藥品許可證號,
         中西藥
     }
+    public enum enum_藥品條碼
+    {
+        藥品碼,
+        藥品名稱,
+        藥品條碼2
+    }
 
 
 }

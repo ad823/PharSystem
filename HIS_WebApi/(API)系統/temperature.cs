@@ -1,16 +1,20 @@
 ﻿using Basic;
 using HIS_DB_Lib;
 using Microsoft.AspNetCore.Mvc;
+using MyOffice;
 using MySql.Data.MySqlClient;
 using MyUI;
+using NPOI.SS.Formula.Functions;
 using SQLUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -145,7 +149,7 @@ namespace HIS_WebApi._API_系統
         /// <param name="returnData">共用傳遞資料結構</param>
         /// <returns></returns>
         [HttpPost("get_temp_by_time")]
-        public string get_temp_by_time([FromBody] returnData returnData)
+        public async Task<string> get_temp_by_time([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -213,7 +217,7 @@ namespace HIS_WebApi._API_系統
                 returnData.Code = 200;
                 returnData.Data = temperature_SetClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "get_temp_by_name";
+                returnData.Method = "get_temp_by_time";
                 returnData.Result = $"取得{開始時間}~{結束時間}溫度資料成功，共{temperatureClasses.Count()}!";
                 return returnData.JsonSerializationt(true);
             }
@@ -611,6 +615,190 @@ namespace HIS_WebApi._API_系統
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("get_datas_sheet")]
+        public async Task<string> get_datas_sheet([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "get_datas_sheet";
+            try
+            {
+
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry資料錯誤，須為 [\"開始時間,\"結束時間\"]";
+                    return returnData.JsonSerializationt();
+                }
+
+                string 開始時間 = returnData.ValueAry[0];
+                string 結束時間 = returnData.ValueAry[1];
+
+
+                returnData returnData_get_temp = await get_temp_by_time(開始時間, 結束時間);
+                if (returnData_get_temp == null || returnData_get_temp.Code != 200)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"取得溫度資料失敗";
+                    return returnData.JsonSerializationt();
+                }
+                List<temperature_setClass> temperature_SetClasses = returnData_get_temp.Data.ObjToClass<List<temperature_setClass>>();
+
+                List<SheetClass> sheetClasses = new List<SheetClass>();
+                //List<List<transactionsClass>> list_transactionsClasses = new List<List<transactionsClass>>();
+
+                for (int k = 0; k < temperature_SetClasses.Count; k++)
+                {
+                    temperature_setClass  temperature_SetClass = temperature_SetClasses[k];
+                    List<temperatureClass> temperatureClasses = temperature_SetClass.temperatureClasses;
+                    List<temperatureClass> temperatures_buff = temperatureClasses
+                        .GroupBy(x => x.新增時間.StringToDateTime().Date)
+                        .SelectMany(g =>
+                        {
+                            var temperatureClass_9 = g
+                                .Where(x => x.新增時間.StringToDateTime().Hour == 9)
+                                .OrderBy(x => x.新增時間.StringToDateTime())
+                                .FirstOrDefault();
+
+                            var temperatureClass_17 = g
+                                .Where(x => x.新增時間.StringToDateTime().Hour == 17)
+                                .OrderBy(x => x.新增時間.StringToDateTime())
+                                .FirstOrDefault();
+
+                            return new[] { temperatureClass_9, temperatureClass_17 }
+                                   .Where(x => x != null);
+                        }).ToList();
+
+                    temperatures_buff = temperatures_buff.OrderBy(x => x.新增時間.StringToDateTime()).ToList();
+
+                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "溫度記錄表.xlsx");
+                    string loadText = MyOffice.ExcelClass.NPOI_LoadSheetsToJson_PreserveStyle(path);
+                    List<SheetClass> sheetClasslist = loadText.JsonDeserializet<List<SheetClass>>();
+                    SheetClass sheetClass = sheetClasslist[0];
+
+                    //Logger.Log("excel_emg_tradding", $"{sheetClass.JsonSerializationt(true)}");
+
+                    
+                    
+
+                    sheetClass.Name = $"{temperature_SetClass.別名}";
+                    string year = temperatures_buff[0].新增時間.StringToDateTime().Year.ToString();
+                    string month = temperatures_buff[0].新增時間.StringToDateTime().Month.ToString();
+                    sheetClass.Rows[2].Cell[57].Text = $"{year}年{month}月";
+                    sheetClass.Rows[0].Cell[57].Text = $"{temperature_SetClass.別名}";
+
+                    for (int i = 0; i < temperatures_buff.Count; i++)
+                    {
+                        double 溫度 = temperatures_buff[i].溫度.StringToDouble();
+                        溫度 = Math.Round(溫度 * 2, MidpointRounding.AwayFromZero) / 2.0;
+                        int rows = (int)Math.Round(65 - 2 * 溫度); //根據EXCEL算出來的位置
+                        int day = temperatures_buff[i].新增時間.StringToDateTime().Day;
+                        int hour = temperatures_buff[i].新增時間.StringToDateTime().Hour;
+                        int cell = 0;
+                        if (hour < 12) 
+                        {
+                            cell = 2 * day - 1;
+                        }
+                        else
+                        {
+                            cell = 2 * day;
+                        }
+                        if ( rows > 0 && rows <= 53 && cell > 0 && cell <= 63) sheetClass.Rows[rows].Cell[cell].Text = "*";
+                    }
+                    //sheetClass.Rows[1].Cell[1].Text = $"{medClasses_buf[0].藥品碼}";
+                    //sheetClass.Rows[1].Cell[4].Text = $"{medClasses_buf[0].包裝單位}";
+                    //sheetClass.Rows[1].Cell[8].Text = $"{medClasses_buf[0].管制級別}";
+                    //sheetClass.Rows[1].Cell[11].Text = $"{起始時間}";
+                    //sheetClass.Rows[2].Cell[1].Text = $"{medClasses_buf[0].藥品名稱}";
+                    //sheetClass.Rows[2].Cell[8].Text = $"{medClasses_buf[0].廠牌}";
+
+                    //sheetClass.Rows[2].Cell[11].Text = $"{結束時間}";
+
+                    //sheetClass.Rows[3].Cell[1].Text = $"{medClasses_buf[0].藥品學名}";
+                    //sheetClass.Rows[3].Cell[8].Text = $"{medClasses_buf[0].藥品許可證號}";
+
+                    //sheetClass.Rows[4].Cell[2].Text = $"{medClasses_buf[0].供貨廠商}";
+                    //sheetClass.Rows[4].Cell[8].Text = $"{medClasses_buf[0].供貨商證字號}";
+
+                    sheetClasses.Add(sheetClass);
+                                     
+
+                }
+
+                returnData.Code = 200;
+                returnData.Result = "Sheet取得成功!";
+                returnData.Data = sheetClasses;
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+        }
+        /// <summary>
+        /// 取得收支結存報表(Excel)(多台合併)
+        /// </summary>
+        /// <remarks>
+        ///  --------------------------------------------<br/> 
+        /// 以下為範例JSON範例
+        /// <code>
+        ///   {
+        ///     "Data": 
+        ///     {
+        ///        
+        ///     },
+        ///     "ValueAry" : 
+        ///     [
+        ///       "藥碼1,藥碼2,藥碼",
+        ///       "起始時間",
+        ///       "結束時間",
+        ///       "口服1,口服2",
+        ///       "調劑台,調劑台"
+        ///     ]
+        ///   }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]為交易紀錄結構</returns>
+        [Route("download_cdmis_datas_excel")]
+        [HttpPost]
+        public async Task<ActionResult> download_cdmis_datas_excel([FromBody] returnData returnData)
+        {
+            try
+            {
+                MyTimerBasic myTimerBasic = new MyTimerBasic();
+                myTimerBasic.StartTickTime(50000);
+                string result = await get_datas_sheet(returnData);
+                returnData = result.JsonDeserializet<returnData>();
+                if (returnData.Code != 200)
+                {
+                    return null;
+                }
+                string jsondata = returnData.Data.JsonSerializationt();
+
+                List<SheetClass> sheetClasses = jsondata.JsonDeserializet<List<SheetClass>>();
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xls_command = "application/vnd.ms-excel";
+
+                byte[] excelData = sheetClasses.NPOI_GetBytes(Excel_Type.xlsx);
+                Stream stream = new MemoryStream(excelData);
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_收支結存簿冊.xlsx"));
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        
 
 
         private string CheckCreatTable()
@@ -650,6 +838,15 @@ namespace HIS_WebApi._API_系統
             List<temperature_setClass> temperature_SetClasses = returnData_get_set.Data.ObjToClass<List<temperature_setClass>>();
             return (returnData_get_set,temperature_SetClasses);
         }
+        public async Task<returnData> get_temp_by_time(string start_time, string end_time)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add(start_time);
+            returnData.ValueAry.Add(end_time);
+            string result = await get_temp_by_time(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
+
     }
 }
     

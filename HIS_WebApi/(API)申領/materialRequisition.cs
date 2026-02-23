@@ -114,13 +114,14 @@ namespace HIS_WebApi
                 
                 if (materialRequisitionClass == null || materialRequisitionClass.藥碼.StringIsEmpty())
                 {
-                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode);
-                    if (returnData_ != null && returnData_.Data != null)
+                    returnData returnData_ = await new MED_pageController().serch_by_BarCode(barcode.Split(";")[0]);
+                    if (returnData_ != null && returnData_.Data != null && returnData_.Code == 200)
                     {
                         medClass mED_PageClasses = returnData_.Data.ObjToClass<List<medClass>>().FirstOrDefault();
                         if (mED_PageClasses != null)
                         {
                             materialRequisitionClass.藥碼 = mED_PageClasses.藥品碼;
+                            materialRequisitionClass.申領量 = barcode.Split(";").Length >= 2 && barcode.Split(";")[1].StringIsDouble() ? barcode.Split(";")[1] : "";
                         }
                     }
                 }
@@ -207,7 +208,7 @@ namespace HIS_WebApi
                     materialRequisitionClasses[i].核撥時間 = DateTime.MinValue.ToDateTimeString_6();
                     materialRequisitionClasses[i].簽收時間 = DateTime.MinValue.ToDateTimeString_6();
 
-                    materialRequisitionClasses[i].申領庫庫存 = "";
+                    //materialRequisitionClasses[i].申領庫庫存 = "";
                     materialRequisitionClasses[i].申領庫結存 = "";
                     //materialRequisitionClasses[i].實撥庫庫存 = "";
                     materialRequisitionClasses[i].實撥庫結存 = "";

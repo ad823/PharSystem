@@ -1191,10 +1191,13 @@ namespace HIS_WebApi._API_AI
                 string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 string xls_command = "application/vnd.ms-excel";
                 sheetClasslist[0] = sheetClass;
-                byte[] excelData = sheetClasslist.NPOI_GenerateExcelWithPreservedStyle(Excel_Type.xlsx);
-
+                byte[] excelData = sheetClasslist.NPOI_GetBytes(Excel_Type.xlsx);
                 Stream stream = new MemoryStream(excelData);
-                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_醫師處方疑義紀錄表(個別).xlsx"));
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}醫師處方疑義紀錄表(個別).xlsx"));
+                //byte[] excelData = sheetClasslist.NPOI_GenerateExcelWithPreservedStyle(Excel_Type.xlsx);
+
+                //Stream stream = new MemoryStream(excelData);
+                //return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_醫師處方疑義紀錄表(個別).xlsx"));
             }
             catch
             {
