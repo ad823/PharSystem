@@ -165,6 +165,7 @@ namespace HIS_WebApi
                 string color = GetVal("color") ?? "";
                 string lightness = GetVal("lightness") ?? "";
                 string device_type = GetVal("device_type") ?? "";
+                string time = GetVal("time") ?? "";
                 double _lightness = 0.9;
                 if (lightness.StringIsDouble()) _lightness = lightness.StringToDouble();
                 if (ip.Check_IP_Adress() == false)
@@ -239,6 +240,10 @@ namespace HIS_WebApi
                     }
                     else
                     {
+                        if (color != "0,0,0")
+                        {
+                            returnData returnData_stocklight = await new stock().add_stockLight(returnData.ValueAry);
+                        }
                         returnData.Code = 200;
                         returnData.TimeTaken = myTimerBasic.ToString();
                         returnData.Result = $"裝置觸發成功";

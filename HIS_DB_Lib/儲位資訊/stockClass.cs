@@ -181,11 +181,6 @@ namespace HIS_DB_Lib
         [Description("VARCHAR,50,PRIMARY")]
         public string GUID { get; set; }
         /// <summary>
-        /// 藥碼
-        /// </summary>
-        [Description("VARCHAR,20,NONE")]
-        public string code { get; set; }
-        /// <summary>
         /// ip
         /// </summary>
         [Description("VARCHAR,20,NONE")]
@@ -215,6 +210,30 @@ namespace HIS_DB_Lib
         /// </summary>
         [Description("DATETIME,20,NONE")]
         public string end_time { get; set; }
+        static public returnData get_stockLight_all(string API_Server)
+        {
+            string url = $"{API_Server}/api/stock/get_stockLight_all";
+
+            returnData returnData = new returnData();
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+
+            List<stockLightClass> stockLightClasses = returnData.Data.ObjToClass<List<stockLightClass>>();
+            Console.WriteLine($"{returnData}");
+            return returnData;
+        }
+    }
+    public enum enum_stockLight
+    {
+        GUID,
+        ip,
+        start_num,
+        end_num,
+        device_type,
+        start_time,
+        end_time
+
     }
     public static class stockClassMethod
     {
@@ -276,4 +295,5 @@ namespace HIS_DB_Lib
 
 
     }
+
 }

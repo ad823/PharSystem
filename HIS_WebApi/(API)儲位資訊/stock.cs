@@ -471,39 +471,86 @@ namespace HIS_WebApi
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
             {
+                string GetVal(string key) =>
+                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                    ?.Split('=')[1];
+                string ip = GetVal("ip") ?? "";
+                string start_num = GetVal("start_num") ?? "";
+                string end_num = GetVal("end_num") ?? "";
+                string color = GetVal("color") ?? "";
+                string lightness = GetVal("lightness") ?? "";
+                string device_type = GetVal("device_type") ?? "";
+                string time = GetVal("time") ?? "";
+                double _lightness = 0.9;
+
                 if (returnData.Data == null)
                 {
                     returnData.Code = -200;
                     returnData.Result = $"returnData.Data不得為空";
                     return returnData.JsonSerializationt();
                 }
-                List<stockLightClass> stockLightClasses = returnData.Data.ObjToClass<List<stockLightClass>>();
-                if (stockLightClasses == null)
+                DateTime now = DateTime.Now;
+                if (time.StringIsEmpty()) time = "180";
+                stockLightClass stockLightClass = new stockLightClass()
                 {
-                    stockLightClass stockLightClass = returnData.Data.ObjToClass<stockLightClass>();
-                    if (stockLightClass == null)
-                    {
-                        returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為stockLightClass";
-                        return returnData.JsonSerializationt();
-                    }
-                    stockLightClasses = new List<stockLightClass>() { stockLightClass };
+                    GUID = Guid.NewGuid().ToString(),
+                    ip = ip,
+                    start_num = start_num,
+                    end_num = end_num,
+                    device_type = device_type,
+                    start_time = now.ToDateTimeString(),
+                    end_time = now.AddSeconds(time.StringToInt32()).ToDateTimeString()
+                };
+
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl_stock = new SQLControl(Server, DB, "stockLight", UserName, Password, Port, SSLMode);
+
+                List<object[]> objects = await sQLControl_stock.GetRowsByDefultAsync(null, (int)enum_stockLight.ip, stockLightClass.ip);
+                if(objects.Count != 0)
+                {
+                    objects[0][(int)enum_stockLight.end_time] = stockLightClass.end_time;
+                    await sQLControl_stock.UpdateRowsAsync(null, objects);
                 }
+                else
+                {
+                    object[] add = stockLightClass.ClassToSQL<stockLightClass>();
+                    await sQLControl_stock.AddRowAsync(null, add);
+                }
+                   
+
+                returnData.Code = 200;
+                returnData.Data = stockLightClass;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "add_stockLight";
+                returnData.Result = $"亮燈資訊寫入成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        [HttpPost("get_stockLight_all")]
+        public async Task<string> get_stockLight_all([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
                 
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl_stock = new SQLControl(Server, DB, "stockLight", UserName, Password, Port, SSLMode);
-                foreach (var item in stockLightClasses)
-                {
-                    item.GUID = Guid.NewGuid().ToString();                  
-                }
-                List<object[]> add = stockLightClasses.ClassToSQL<stockLightClass>();
-                await sQLControl_stock.AddRowsAsync(null, add);
+
+                List<object[]> objects = await sQLControl_stock.GetAllRowsAsync(null);      
+                List<stockLightClass> stockLightClasses = objects.SQLToClass<stockLightClass>();
 
                 returnData.Code = 200;
                 returnData.Data = stockLightClasses;
                 returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "add_stockLight";
-                returnData.Result = $"儲位寫入成功!";
+                returnData.Method = "get_stockLight_all";
+                returnData.Result = $"亮燈資訊讀取成功，共<{stockLightClasses.Count}>筆!";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
@@ -547,6 +594,15 @@ namespace HIS_WebApi
             returnData.ServerName = serverName;
             returnData.ServerType = serverType;
             string result = await get_stock_by_code(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> add_stockLight(List<string> strings)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry = strings;
+
+            string result = await add_stockLight(returnData);
             return result.JsonDeserializet<returnData>();
         }
     }

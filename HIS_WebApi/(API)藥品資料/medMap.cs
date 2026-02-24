@@ -3588,6 +3588,7 @@ namespace HIS_WebApi._API_藥品資料
                 string code = GetVal("code") ?? "";
                 string color = GetVal("color") ?? "";
                 string lightness = GetVal("lightness") ?? "";
+                string time = GetVal("time") ?? "";
 
                 if (ServerName.StringIsEmpty() || ServerType.StringIsEmpty() || code.StringIsEmpty() || color.StringIsEmpty()
                     || lightness.StringIsEmpty())
@@ -3663,8 +3664,8 @@ namespace HIS_WebApi._API_藥品資料
                             stock_device_type = med.device_type;
                             start = med.燈條亮燈位置.Split(",")[0];
                             end = med.燈條亮燈位置.Split(",").Last();
-                            string command = $"ip={shelf_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={shelf_device_type}";
-                            string command_1 = $"ip={stock_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={stock_device_type}";
+                            string command = $"ip={shelf_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={shelf_device_type};time={time}";
+                            string command_1 = $"ip={stock_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={stock_device_type};time={time}";
                             list_light.Add(command);
                             list_light.Add(command_1);
                         }

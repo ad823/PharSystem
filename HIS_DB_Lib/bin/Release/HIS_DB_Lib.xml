@@ -1153,11 +1153,6 @@
             唯一識別碼 (GUID)
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.stockLightClass.code">
-            <summary>
-            藥碼
-            </summary>
-        </member>
         <member name="P:HIS_DB_Lib.stockLightClass.ip">
             <summary>
             ip
@@ -3642,6 +3637,16 @@
         <member name="P:HIS_DB_Lib.medMap_shelfClass.serverType">
             <summary>
             serverType
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medMap_shelfClass.start_num">
+            <summary>
+            燈泡開始位置
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medMap_shelfClass.end_num">
+            <summary>
+            燈泡結束位置
             </summary>
         </member>
         <member name="T:HIS_DB_Lib.medMap_drawerClass">
