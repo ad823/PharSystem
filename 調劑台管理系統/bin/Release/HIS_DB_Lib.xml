@@ -3639,6 +3639,16 @@
             serverType
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medMap_shelfClass.start_num">
+            <summary>
+            燈泡開始位置
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medMap_shelfClass.end_num">
+            <summary>
+            燈泡結束位置
+            </summary>
+        </member>
         <member name="T:HIS_DB_Lib.medMap_drawerClass">
             <summary>
             藥品地圖_抽屜

@@ -1639,6 +1639,9 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_shelfClass_buff.高度.StringIsEmpty() == false) item.高度 = medMap_shelfClass_buff.高度;
                     if (medMap_shelfClass_buff.燈條IP.StringIsEmpty() == false) item.燈條IP = medMap_shelfClass_buff.燈條IP;
                     if (medMap_shelfClass_buff.名稱.StringIsEmpty() == false) item.名稱 = medMap_shelfClass_buff.名稱;
+                    if (medMap_shelfClass_buff.start_num.StringIsEmpty() == false) item.start_num = medMap_shelfClass_buff.start_num;
+                    if (medMap_shelfClass_buff.end_num.StringIsEmpty() == false) item.end_num = medMap_shelfClass_buff.end_num;
+
                     if (medMap_shelfClass_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_shelfClass_buff.device_type;
 
 
@@ -2062,6 +2065,7 @@ namespace HIS_WebApi._API_藥品資料
                     item.shelf = shelf;
                 }
                 medMap_Sub_SectionClasses = medMap_Sub_SectionClasses
+                .Where(x => x.section_position.StringIsEmpty() == false && x.位置.StringIsEmpty() == false)
                 .OrderBy(x => int.Parse(x.section_position.Split(',')[0]))  // 取前半部分 (例如 0)
                 .ThenBy(x => int.Parse(x.section_position.Split(',')[1]))   // 取後半部分 (例如 1)
                 .ThenBy(x => int.Parse(x.位置.Split(',')[0]))               // 同理處理 位置
