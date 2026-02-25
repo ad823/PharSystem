@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System;
-using System.Threading.Tasks;
-using Basic;
+﻿using Basic;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using HIS_WebApi._API_系統;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
 using MyUI;
 using NPOI.SS.Formula.Functions;
 using OfficeOpenXml;
 using SQLUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Security;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -333,9 +335,28 @@ namespace HIS_WebApi
                 string ServerName = returnData.ServerName;
                 string ServerType = returnData.ServerType;
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
+                (string Server_, string DB_, string UserName_, string Password_, uint Port_) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                //取SHELF
+                SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
+                List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
+                List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                //取stock
                 SQLControl sQLControl_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
-                List<object[]> objects = await sQLControl_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
+                string sql = $@"
+                    SELECT *
+                    FROM dbvm.stock
+                    WHERE (GUID IN @guid OR Shelf_GUID IN @Shelf_GUID)";
+
+
+                var param = new
+                {      
+                    guid = medMap_StockClasses.Select(x => x.GUID).ToList(),
+                    Shelf_GUID = medMap_StockClasses.Select(x => x.Shelf_GUID).ToList()
+                };
+
+                List<object[]> objects = await sQLControl_stock.WriteCommandAsync(sql, param);
                 List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
+
                 foreach (var item in db_medMap_StockClasses)
                 {
                     stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
@@ -380,6 +401,23 @@ namespace HIS_WebApi
                     }
                     item.Value = deviceBasic.JsonSerializationt();
                 }
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
+                if (settingPages == null)
+                {
+                    returnData.Code = 200;
+                    returnData.Result = "設定資料取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (settingPages != null && settingPages.設定值 == true.ToString()) 
+                {
+                    db_medMap_StockClasses = horizontal(db_medMap_StockClasses, medMap_ShelfClasses);
+                }
+                else
+                {
+                    db_medMap_StockClasses = vertical(db_medMap_StockClasses, medMap_ShelfClasses);
+                }
+
+
                 List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.UpdateRowsAsync(null, update);
 
@@ -447,6 +485,27 @@ namespace HIS_WebApi
                         deviceBasic.新增效期(item.效期[i], item.批號[i], item.數量[i]);
                         item.Value = deviceBasic.JsonSerializationt();
                     }
+                }
+                //取SHELF
+                (string Server_, string DB_, string UserName_, string Password_, uint Port_) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
+                List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
+                List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+
+                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
+                if (settingPages == null)
+                {
+                    returnData.Code = 200;
+                    returnData.Result = "設定資料取得失敗";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (settingPages != null && settingPages.設定值 == true.ToString())
+                {
+                    medMap_StockClasses = horizontal(medMap_StockClasses, medMap_ShelfClasses);
+                }
+                else
+                {
+                    medMap_StockClasses = vertical(medMap_StockClasses, medMap_ShelfClasses);
                 }
                 List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.AddRowsAsync(null, add);
@@ -560,7 +619,60 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        
+        private List<stockClass> horizontal(List<stockClass> db_medMap_StockClasses, List<medMap_shelfClass> medMap_ShelfClasses)
+        {
+            List<List<stockClass>> stockClasses = db_medMap_StockClasses
+                        .GroupBy(x => x.Shelf_GUID)
+                        .Select(g => g.ToList())
+                        .ToList();
+            foreach (var list in stockClasses)
+            {
+                List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
+                    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
+                string shlef_guid = list[0].Shelf_GUID;
+                medMap_shelfClass shelfClass = medMap_ShelfClasses.FirstOrDefault(x => x.GUID == shlef_guid);
+                if (shelfClass == null) continue;
+                string start_num = shelfClass.start_num;
+                string end_num = shelfClass.end_num;
+                if (start_num.StringIsEmpty() || end_num.StringIsEmpty()) continue;
+                
+                int light_num = end_num.StringToInt32() - start_num.StringToInt32() + 1;
+                int stock_num = stocks.Count;
+                int each_num = (int)Math.Round((double)light_num / stock_num);
+                for (int i = 0; i < stocks.Count; i++)
+                {
+                    int end_num_int = start_num.StringToInt32() + each_num - 1;
+                    stocks[i].燈條亮燈位置 = $"{start_num},{end_num_int.ToString()}";
+                    start_num = (end_num_int + 1).ToString();
+                } 
+            }
+            return db_medMap_StockClasses;
+        }
+        private List<stockClass> vertical(List<stockClass> db_medMap_StockClasses, List<medMap_shelfClass> medMap_ShelfClasses)
+        {
+            List<List<stockClass>> stockClasses = db_medMap_StockClasses
+            .GroupBy(x => x.Shelf_GUID)
+            .Select(g => g.ToList())
+            .ToList();
+            foreach (var list in stockClasses)
+            {
+                List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
+                    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
+                string shlef_guid = list[0].Shelf_GUID;
+                medMap_shelfClass shelfClass = medMap_ShelfClasses.FirstOrDefault(x => x.GUID == shlef_guid);
+                if (shelfClass == null) continue;
+                string start_num = shelfClass.start_num;
+                string end_num = shelfClass.end_num;
+                if (start_num.StringIsEmpty() || end_num.StringIsEmpty()) continue;
 
+                for (int i = 0; i < stocks.Count; i++)
+                {
+                    stocks[i].燈條亮燈位置 = $"{start_num},{end_num}";
+                }
+            }
+            return db_medMap_StockClasses;
+        }
         private async Task<string> CheckCreatTable(returnData returnData)
         {
             sys_serverSettingClass sys_ServerSettingClass = new sys_serverSettingClass();

@@ -3624,21 +3624,6 @@
             燈條IP
             </summary>
         </member>
-        <member name="P:HIS_DB_Lib.medMap_shelfClass.device_type">
-            <summary>
-            裝置類型
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.medMap_shelfClass.serverName">
-            <summary>
-            serverName
-            </summary>
-        </member>
-        <member name="P:HIS_DB_Lib.medMap_shelfClass.serverType">
-            <summary>
-            serverType
-            </summary>
-        </member>
         <member name="T:HIS_DB_Lib.medMap_drawerClass">
             <summary>
             藥品地圖_抽屜

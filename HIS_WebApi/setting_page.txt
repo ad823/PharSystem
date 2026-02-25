@@ -312,6 +312,14 @@
             "value_type": "text",
             "option_str": "",
             "value_db": "180"
+        },
+        {
+            "page_name": "medmap",
+            "cht": "水平向燈條",
+            "name": "horizontal_light",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "True"
         }
 
         
