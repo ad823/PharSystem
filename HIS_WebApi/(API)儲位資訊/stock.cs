@@ -628,8 +628,8 @@ namespace HIS_WebApi
                         .ToList();
             foreach (var list in stockClasses)
             {
-                List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
-                    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
+                List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0])).ToList();
+                    //.ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
                 string shlef_guid = list[0].Shelf_GUID;
                 medMap_shelfClass shelfClass = medMap_ShelfClasses.FirstOrDefault(x => x.GUID == shlef_guid);
                 if (shelfClass == null) continue;
@@ -638,13 +638,24 @@ namespace HIS_WebApi
                 if (start_num.StringIsEmpty() || end_num.StringIsEmpty()) continue;
                 
                 int light_num = end_num.StringToInt32() - start_num.StringToInt32() + 1;
-                int stock_num = stocks.Count;
+                List<string> stock_num_ = stocks.Select(x => x.位置.Split(',')[0]).Distinct().ToList();
+                int stock_num = stock_num_.Count;
                 int each_num = (int)Math.Round((double)light_num / stock_num);
+                string 位置x = string.Empty;
                 for (int i = 0; i < stocks.Count; i++)
                 {
                     int end_num_int = start_num.StringToInt32() + each_num - 1;
-                    stocks[i].燈條亮燈位置 = $"{start_num},{end_num_int.ToString()}";
-                    start_num = (end_num_int + 1).ToString();
+                    if (位置x == stocks[i].位置.Split(',')[0]) 
+                    {
+                        stocks[i].燈條亮燈位置 = stocks[i - 1].燈條亮燈位置;
+                    }
+                    else
+                    {
+                        stocks[i].燈條亮燈位置 = $"{start_num},{end_num_int.ToString()}";
+                        start_num = (end_num_int + 1).ToString();
+                    }
+                    
+                    位置x = stocks[i].位置.Split(',')[0];
                 } 
             }
             return db_medMap_StockClasses;

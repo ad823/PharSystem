@@ -211,6 +211,10 @@ namespace HIS_WebApi
                     }
                     else
                     {
+                        //if (color != "0,0,0")
+                        //{
+                        //    returnData returnData_stocklight = await new stock().add_stockLight(returnData.ValueAry);
+                        //}
                         returnData.Code = 200;
                         returnData.TimeTaken = myTimerBasic.ToString();
                         returnData.Result = $"裝置觸發成功";
@@ -240,10 +244,10 @@ namespace HIS_WebApi
                     }
                     else
                     {
-                        if (color != "0,0,0")
-                        {
-                            returnData returnData_stocklight = await new stock().add_stockLight(returnData.ValueAry);
-                        }
+                        //if (color != "0,0,0")
+                        //{
+                        //    returnData returnData_stocklight = await new stock().add_stockLight(returnData.ValueAry);
+                        //}
                         returnData.Code = 200;
                         returnData.TimeTaken = myTimerBasic.ToString();
                         returnData.Result = $"裝置觸發成功";
