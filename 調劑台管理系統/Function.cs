@@ -1347,6 +1347,12 @@ namespace 調劑台管理系統
                     string IP = 儲位清單[i][(int)enum_儲位資訊.IP].ObjectToString();
                     string 效期 = 儲位清單[i][(int)enum_儲位資訊.效期].ObjectToString();
 
+                    if (使用數量 > 0)
+                    {
+                        儲位清單[i][(int)enum_儲位資訊.異動量] = 使用數量;
+                        儲位資訊_buf.Add(儲位清單[i]);
+                        break;
+                    }
                     if (包裝量 <= 0) 包裝量 = 1;
 
                     double 可用包數 = (double)(庫存數量 / 包裝量);
