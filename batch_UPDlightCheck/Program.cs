@@ -29,12 +29,13 @@ namespace batch_UPDlightCheck
                 foreach (var stockLightClass in stockLightClasses)
                 {
                     Console.WriteLine($"IP: {stockLightClass.ip} 已過期，開始時間: {stockLightClass.start_time} 結束時間: {stockLightClass.end_time}");
-                    string url = $"{API_Server}/api/stock/update_stockLight";
                     string command = $"ip={stockLightClass.ip};start_num={stockLightClass.start_num};end_num={stockLightClass.end_num};color=0,0,0;lightness=0.9;device_type={stockLightClass.device_type};time={10}";
                     List<string> command_arry = command.Split(';').ToList();
                     returnData returnData_light = await deviceApiClass.light_action(API_Server, command_arry);
                     Console.WriteLine($"更新結果: {returnData}");
                 }
+                returnData returnData_delete = stockLightClass.delete_stockLight(API_Server, stockLightClasses);
+
                 Thread.Sleep(6000);
             }
         }

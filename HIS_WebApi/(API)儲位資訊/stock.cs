@@ -619,7 +619,61 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
-        
+        [HttpPost("delete_stockLight")]
+        public async Task<string> delete_stockLight([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                List<stockLightClass> stockLightClasses = returnData.Data.ObjToClass<List<stockLightClass>>();
+                if (stockLightClasses == null)
+                {
+                    stockLightClass stockLight = returnData.Data.ObjToClass<stockLightClass>();
+                    if (stockLight == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤，須為stockLightClass";
+                        return returnData.JsonSerializationt();
+                    }
+                    stockLightClasses = new List<stockLightClass>() { stockLight };
+                }
+
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl_stock = new SQLControl(Server, DB, "stockLight", UserName, Password, Port, SSLMode);
+
+                List<object[]> delete = stockLightClasses.ClassToSQL<stockLightClass>();
+
+                if (delete.Count > 0) await sQLControl_stock.DeleteRowsAsync(null, delete);
+
+                returnData.Code = 200;
+                returnData.Data = stockLightClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "delete_stockLight";
+                returnData.Result = $"亮燈資訊刪除成功!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+
         private List<stockClass> horizontal(List<stockClass> db_medMap_StockClasses, List<medMap_shelfClass> medMap_ShelfClasses)
         {
             List<List<stockClass>> stockClasses = db_medMap_StockClasses
@@ -668,8 +722,9 @@ namespace HIS_WebApi
             .ToList();
             foreach (var list in stockClasses)
             {
-                List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
-                    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
+
+                //List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
+                //    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
                 string shlef_guid = list[0].Shelf_GUID;
                 medMap_shelfClass shelfClass = medMap_ShelfClasses.FirstOrDefault(x => x.GUID == shlef_guid);
                 if (shelfClass == null) continue;
@@ -677,9 +732,9 @@ namespace HIS_WebApi
                 string end_num = shelfClass.end_num;
                 if (start_num.StringIsEmpty() || end_num.StringIsEmpty()) continue;
 
-                for (int i = 0; i < stocks.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    stocks[i].燈條亮燈位置 = $"{start_num},{end_num}";
+                    list[i].燈條亮燈位置 = $"{start_num},{end_num}";
                 }
             }
             return db_medMap_StockClasses;

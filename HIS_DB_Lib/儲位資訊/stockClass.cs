@@ -223,6 +223,19 @@ namespace HIS_DB_Lib
             Console.WriteLine($"{returnData}");
             return returnData;
         }
+        static public returnData delete_stockLight(string API_Server , List<stockLightClass> stockLightClasses)
+        {
+            string url = $"{API_Server}/api/stock/delete_stockLight";
+
+            returnData returnData = new returnData();
+            returnData.Data = stockLightClasses;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+
+            Console.WriteLine($"{returnData}");
+            return returnData;
+        }
     }
     public enum enum_stockLight
     {
