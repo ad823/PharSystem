@@ -94,17 +94,16 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleCenter, enum_儲位管理_EPD266_儲位資料.包裝單位);
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnWidth(120, DataGridViewContentAlignment.MiddleCenter, enum_儲位管理_EPD266_儲位資料.庫存);
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnWidth(200, DataGridViewContentAlignment.MiddleCenter, enum_儲位管理_EPD266_儲位資料.區域);
+            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.IP);
+            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.儲位名稱);
+            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.藥品碼);
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnText("藥碼", enum_儲位管理_EPD266_儲位資料.藥品碼);
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnText("藥名", enum_儲位管理_EPD266_儲位資料.藥品名稱);
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnText("單位", enum_儲位管理_EPD266_儲位資料.包裝單位);
 
-            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.IP);
-            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.儲位名稱);
-            this.sqL_DataGridView_儲位管理_EPD266_儲位資料.Set_ColumnSortMode(DataGridViewColumnSortMode.Automatic, enum_儲位管理_EPD266_儲位資料.藥品碼);
-
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.RowEnterEvent += SqL_DataGridView_儲位管理_EPD266_儲位資料_RowEnterEvent;
             this.sqL_DataGridView_儲位管理_EPD266_儲位資料.ComboBoxSelectedIndexChangedEvent += SqL_DataGridView_儲位管理_EPD266_儲位資料_ComboBoxSelectedIndexChangedEvent;
-
+            
             Table table = new SQLUI.Table(new enum_儲位管理_EPD266_效期及庫存());
             this.sqL_DataGridView_儲位管理_EPD266_儲位內容_效期及庫存.Init(table);
             this.sqL_DataGridView_儲位管理_EPD266_儲位內容_效期及庫存.Set_ColumnVisible(false, new enum_儲位管理_EPD266_效期及庫存().GetEnumNames());
