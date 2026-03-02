@@ -439,7 +439,6 @@ C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospi
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.Properties.Resources.resources
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.GenerateResource.cache
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CoreCompileInputs.cache
-C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital.DBFEDD3D.Up2Date
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.pdb
 C:\Users\Administrator\source\repos\PharSystem\Hospital_Call_Light_System\bin\Debug\Hospital_Call_Light_System.exe.config
@@ -712,3 +711,4 @@ C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.pdb
 C:\Users\Administrator\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete
+C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete

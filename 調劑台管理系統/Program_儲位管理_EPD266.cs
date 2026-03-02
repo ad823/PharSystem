@@ -1498,15 +1498,37 @@ namespace 調劑台管理系統
             }));
         }
         private void PlC_RJ_Button_儲位管理_EPD266_自動填入儲位名稱_MouseDownEvent(MouseEventArgs mevent)
+
         {
             if (MyMessageBox.ShowDialog("確認自動填入儲位名稱?", MyMessageBox.enum_BoxType.Warning, MyMessageBox.enum_Button.Confirm_Cancel) != DialogResult.Yes) return;
             List<object[]> list_儲位列表 = this.sqL_DataGridView_儲位管理_EPD266_儲位資料.GetAllRows();
+            List<medClass> medClasses = medClass.get_med_cloud(API_Server);
+            List<medClass> medClasses_buf = new List<medClass>();
+            Dictionary<string, List<medClass>> keyValuePairs_medcloud = medClasses.CoverToDictionaryByCode();
+
+
             for (int i = 0; i < list_儲位列表.Count; i++)
             {
                 string IP = list_儲位列表[i][(int)enum_儲位管理_EPD266_儲位資料.IP].ObjectToString();
                 Storage storage = List_EPD266_本地資料.SortByIP(IP);
                 if (storage == null) continue;
-                storage.StorageName = $"{i + 1}";
+                string 藥碼 = storage.Code;
+
+                medClass medClass = keyValuePairs_medcloud.SortDictionaryByCode(藥碼).FirstOrDefault();
+                if (medClass == null)
+                {
+                    storage.StorageName = $"{i + 1}";
+                }
+                else
+                {
+                    List<string> storage_info = new List<string>();
+                    foreach (var storage_ in medClass.storageInfo)
+                    {
+                        storage_info.Add(storage_.儲位描述);
+                    }
+                    string 儲位描述 = string.Join(",", storage_info);
+                    storage.StorageName = 儲位描述.StringIsEmpty() ? $"{i + 1}" : 儲位描述;
+                }
                 List_EPD266_本地資料.Add_NewStorage(storage);
             }
             this.storageUI_EPD_266.SQL_ReplaceStorage(List_EPD266_本地資料);

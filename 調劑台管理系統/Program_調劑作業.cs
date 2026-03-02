@@ -935,6 +935,12 @@ namespace 調劑台管理系統
                     string 藥師證字號 = uC_調劑作業_TypeA_1.藥師證字號;
                     string 顏色 = uC_調劑作業_TypeA_1.顏色;
                     string 收支原因 = $"手動{(enum_狀態 == Dialog_手輸醫令.enum_狀態.領藥? "領":"退")}藥";
+                    List<string> storage_info = new List<string>();
+                    foreach (var storage in medClasses_buf[0].storageInfo)
+                    {
+                        storage_info.Add(storage.儲位描述);
+                    }
+                    string 儲位描述 = string.Join(",", storage_info);
                     if (dialog_手輸醫令.transactionsClass.收支原因.StringIsEmpty() == false)
                     {
                         收支原因 = $"{收支原因}[{dialog_手輸醫令.transactionsClass.收支原因}]";
@@ -974,6 +980,8 @@ namespace 調劑台管理系統
                     takeMedicineStackClass.收支原因 = 收支原因;
                     takeMedicineStackClass.效期 = 效期;
                     takeMedicineStackClass.ID = ID;
+                    takeMedicineStackClass.儲位描述 = 儲位描述.StringIsEmpty() == false ? 儲位描述 : 調劑台名稱;
+
 
                     PermissionsClass permissionsClass = _sessionClass.GetPermission("調劑台", "禁止調劑1-3級管制藥品");
                     if (permissionsClass != null)
