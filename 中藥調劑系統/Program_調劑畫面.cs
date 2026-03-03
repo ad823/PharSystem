@@ -793,6 +793,7 @@ namespace 中藥調劑系統
                 {
                     rJ_Lable_處方警示.Text = "此為罐裝調劑";
                     Voice.MediaPlayAsync($@"{currentDirectory}\此為罐裝調劑.wav");
+                    MyMessageBox.ShowDialog("此為罐裝調劑");
                 }));
             }
             else if (flag_水劑處方待製)

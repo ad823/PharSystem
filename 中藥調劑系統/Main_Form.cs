@@ -14,8 +14,8 @@ using System.Text.Json.Serialization;
 using System.Reflection;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.25.12231")]
-[assembly: AssemblyFileVersion("1.0.25.12231")]
+[assembly: AssemblyVersion("1.0.25.03031")]
+[assembly: AssemblyFileVersion("1.0.25.03031")]
 namespace 中藥調劑系統
 {
     public partial class Main_Form : Form
