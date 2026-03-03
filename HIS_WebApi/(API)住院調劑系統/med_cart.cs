@@ -2763,6 +2763,8 @@ namespace HIS_WebApi
                 foreach (var item in sql_patinfo)
                 {
                     List<medCpoeClass> targetCpoe = medCpoeClass.GetByMasterGUID(medCpoeDict, item.GUID);
+                    targetCpoe.Sort(new medCpoeClass.ICP_By_Rank());
+
                     if (targetCpoe == null && targetCpoe.Count == 0) continue;
                     foreach (var order in targetCpoe)
                     {
