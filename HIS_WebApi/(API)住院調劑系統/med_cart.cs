@@ -1697,7 +1697,7 @@ namespace HIS_WebApi
                     Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
                     Dictionary<string, List<medPriceClass>> medPriceDict = medPriceClass.CoverToDicByCode(med_price);
                     Dictionary<string, List<medInventoryLogClass>> medInvenDict = medInventoryLogClass.CoverToDictionaryMasterGUID(med_InvenLog);
-                    Dictionary<string, List<stockClass>> stockDict = stockClasses.ToDictByCode();
+                    Dictionary<string, List<stockClass>> stockDict = stockClasses == null ? new Dictionary<string, List<stockClass>>() : stockClasses.ToDictByCode();
                     foreach (var cpoe in sql_medCpoe)
                     {
                         cpoe.雲端藥檔 = medClass.SortDictionaryByCode(medCloudDict, cpoe.藥碼);
