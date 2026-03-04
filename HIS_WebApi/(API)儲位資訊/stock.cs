@@ -247,6 +247,15 @@ namespace HIS_WebApi
 
                 List<object[]> rows = await sQLControl.GetRowsByDefultAsync(null, (int)enum_medMap_stock.藥碼, code);
                 List<stockClass> stockClasses = rows.SQLToClass<stockClass>();
+                if (stockClasses.Count == 0)
+                {
+                    returnData.Code = 200;
+                    returnData.Data = stockClasses;
+                    returnData.TimeTaken = myTimerBasic.ToString();
+                    returnData.Method = "get_stock";
+                    returnData.Result = $"取得ServerName{ServerName} ServerType{ServerType}儲位資料，共{stockClasses.Count}筆!";
+                    return returnData.JsonSerializationt(true);
+                }
                 returnData returnData_med_cloud = await new MED_pageController().get_med_clouds_by_codes(code);
                 if (returnData_med_cloud == null || returnData_med_cloud.Code != 200)
                 {
@@ -376,48 +385,49 @@ namespace HIS_WebApi
                     if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
                     DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
                     List<string> 效期 = deviceBasic.List_Validity_period; //原來的
+                    List<string> 批號 = deviceBasic.List_Lot_number; //原來的
 
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
-                        if (效期.Contains(medMap_stock_buff.效期[i]) == false)
+                        for(int j = 0; j < 效期.Count; j++)
                         {
-                            deviceBasic.新增效期(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
-                            效期.Add(medMap_stock_buff.效期[i]);
-                        }
-                        else
-                        {
-                            deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
-                        }
-                                                                              
+                            if (效期[j] == medMap_stock_buff.效期[i] && 批號[j] == medMap_stock_buff.批號[i])
+                            {
+                                deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                            }
+                            else
+                            {
+                                deviceBasic.新增效期(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                                效期.Add(medMap_stock_buff.效期[i]);
+                            }
+                        }                                                                                                
                     }
                     for (int i = 0; i < 效期.Count; i++)
                     {
                         string 效期_ = 效期[i].StringToDateTime().ToDateTimeString();
-                        if (medMap_stock_buff.效期.Contains(效期_) == false) 
-                        
+                        if (medMap_stock_buff.效期.Contains(效期_) == false)                         
                         {
                             deviceBasic.清除效期(效期[i]);
                         } 
                     }
                     item.Value = deviceBasic.JsonSerializationt();
                 }
-                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
-                if (settingPages == null)
+                if (medMap_ShelfClasses.Count > 0)
                 {
-                    returnData.Code = 200;
-                    returnData.Result = "設定資料取得失敗";
-                    return returnData.JsonSerializationt(true);
+                    settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
+                    if (settingPages != null)
+                    {
+                        if (settingPages != null && settingPages.設定值 == true.ToString())
+                        {
+                            db_medMap_StockClasses = horizontal(db_medMap_StockClasses, medMap_ShelfClasses);
+                        }
+                        else
+                        {
+                            db_medMap_StockClasses = vertical(db_medMap_StockClasses, medMap_ShelfClasses);
+                        }
+                    }
                 }
-                if (settingPages != null && settingPages.設定值 == true.ToString()) 
-                {
-                    db_medMap_StockClasses = horizontal(db_medMap_StockClasses, medMap_ShelfClasses);
-                }
-                else
-                {
-                    db_medMap_StockClasses = vertical(db_medMap_StockClasses, medMap_ShelfClasses);
-                }
-
-
+                
                 List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.UpdateRowsAsync(null, update);
 

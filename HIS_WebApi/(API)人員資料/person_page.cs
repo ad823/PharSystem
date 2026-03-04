@@ -405,7 +405,6 @@ namespace HIS_WebApi
                 }
                 string[] GUIDs = returnData.ValueAry[0].Split(";");
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "藥檔資料");
-                string API = HIS_WebApi.Method.GetServerAPI("Main", "網頁", "API01");
                 SQLControl sQLControl_personPage = new SQLControl(Server, DB, "person_page", UserName, Password, Port, SSLMode);
 
                 List<object[]> list_value = sQLControl_personPage.GetAllRows(null);
