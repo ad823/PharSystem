@@ -351,12 +351,20 @@ namespace HIS_WebApi
                 List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
                 //取stock
                 SQLControl sQLControl_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
+                List<string> shelf_GUID = medMap_StockClasses.Where(x => x.Shelf_GUID.StringIsEmpty() == false).Select(x => x.Shelf_GUID).Distinct().ToList();
+                
                 string sql = $@"
                     SELECT *
                     FROM dbvm.stock
                     WHERE (GUID IN @guid OR Shelf_GUID IN @Shelf_GUID)";
 
-
+                if (shelf_GUID.Count == 0)
+                {
+                    sql = $@"
+                    SELECT *
+                    FROM dbvm.stock
+                    WHERE (GUID IN @guid)";
+                }
                 var param = new
                 {      
                     guid = medMap_StockClasses.Select(x => x.GUID).ToList(),
