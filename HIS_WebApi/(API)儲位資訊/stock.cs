@@ -509,22 +509,21 @@ namespace HIS_WebApi
                 SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
                 List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
                 List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
-
-                settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
-                if (settingPages == null)
+                if (medMap_ShelfClasses.Count > 0)
                 {
-                    returnData.Code = 200;
-                    returnData.Result = "設定資料取得失敗";
-                    return returnData.JsonSerializationt(true);
-                }
-                if (settingPages != null && settingPages.設定值 == true.ToString())
-                {
-                    medMap_StockClasses = horizontal(medMap_StockClasses, medMap_ShelfClasses);
-                }
-                else
-                {
-                    medMap_StockClasses = vertical(medMap_StockClasses, medMap_ShelfClasses);
-                }
+                    settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
+                    if (settingPages != null)
+                    {
+                        if (settingPages != null && settingPages.設定值 == true.ToString())
+                        {
+                            medMap_StockClasses = horizontal(medMap_StockClasses, medMap_ShelfClasses);
+                        }
+                        else
+                        {
+                            medMap_StockClasses = vertical(medMap_StockClasses, medMap_ShelfClasses);
+                        }
+                    }
+                }            
                 List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.AddRowsAsync(null, add);
 
