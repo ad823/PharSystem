@@ -42,7 +42,7 @@ namespace HIS_WebApi
             try
             {
                 this.CheckCreatTable();
-                loadData();
+                //loadData();
                 SQLControl sQLControl = new SQLControl(Server, DB, "ServerSetting", UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl.GetAllRows(null);
 

@@ -345,11 +345,8 @@ namespace HIS_WebApi
                 string ServerType = returnData.ServerType;
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
                 (string Server_, string DB_, string UserName_, string Password_, uint Port_) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                //取SHELF
-                SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
-                List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
-                List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
-                //取stock
+                
+                ////取stock
                 SQLControl sQLControl_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
                 List<string> shelf_GUID = medMap_StockClasses.Where(x => x.Shelf_GUID.StringIsEmpty() == false).Select(x => x.Shelf_GUID).Distinct().ToList();
                 
@@ -382,7 +379,7 @@ namespace HIS_WebApi
                     if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
                     if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
                     if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
-                    if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
+                    //if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
                     if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
 
                     if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
@@ -397,22 +394,36 @@ namespace HIS_WebApi
 
                     for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
                     {
-                        for(int j = 0; j < 效期.Count; j++)
+                        if (效期.Contains(medMap_stock_buff.效期[i]))
                         {
-                            if (效期[j] == medMap_stock_buff.效期[i] && 批號[j] == medMap_stock_buff.批號[i])
+                            bool flag = false;
+                            for (int j = 0; j < 效期.Count; j++)
                             {
-                                deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                                if (效期[j] == medMap_stock_buff.效期[i] && 批號[j] == medMap_stock_buff.批號[i])
+                                {
+                                    deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                                    flag = true;
+                                }
                             }
-                            else
+                            if (flag == false)
                             {
                                 deviceBasic.新增效期(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
                                 效期.Add(medMap_stock_buff.效期[i]);
+                                批號.Add(medMap_stock_buff.批號[i]);
+
                             }
-                        }                                                                                                
+                        }
+                        else
+                        {
+                            deviceBasic.新增效期(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
+                            效期.Add(medMap_stock_buff.效期[i]);
+                            批號.Add(medMap_stock_buff.批號[i]);
+
+                        }
                     }
                     for (int i = 0; i < 效期.Count; i++)
                     {
-                        string 效期_ = 效期[i].StringToDateTime().ToDateTimeString();
+                        string 效期_ = 效期[i].StringToDateTime().ToString("yyyy-MM-dd");
                         if (medMap_stock_buff.效期.Contains(效期_) == false)                         
                         {
                             deviceBasic.清除效期(效期[i]);
@@ -420,8 +431,12 @@ namespace HIS_WebApi
                     }
                     item.Value = deviceBasic.JsonSerializationt();
                 }
-                if (medMap_ShelfClasses.Count > 0)
+                if (shelf_GUID.Count > 0)
                 {
+                    ////取SHELF
+                    SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
+                    List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
+                    List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
                     settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
                     if (settingPages != null)
                     {
@@ -505,25 +520,30 @@ namespace HIS_WebApi
                     }
                 }
                 //取SHELF
-                (string Server_, string DB_, string UserName_, string Password_, uint Port_) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
-                List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, medMap_StockClasses.Select(x => x.Shelf_GUID).ToArray());
-                List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
-                if (medMap_ShelfClasses.Count > 0)
+                string[] shelf_array = medMap_StockClasses.Where(x => x.Shelf_GUID.StringIsEmpty() == false).Select(x => x.Shelf_GUID).Distinct().ToArray();
+                if (shelf_array.Length > 0)
                 {
-                    settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
-                    if (settingPages != null)
+                    (string Server_, string DB_, string UserName_, string Password_, uint Port_) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
+                    SQLControl sQLControl_shelf = new SQLControl(Server_, DB_, "medMap_shelf", UserName_, Password_, Port_, SSLMode);
+                    List<object[]> objects_ = await sQLControl_shelf.GetRowsByDefultAsync(null, (int)enum_medMap_shelf.GUID, shelf_array);
+                    List<medMap_shelfClass> medMap_ShelfClasses = objects_.SQLToClass<medMap_shelfClass, enum_medMap_shelf>();
+                    if (medMap_ShelfClasses.Count > 0)
                     {
-                        if (settingPages != null && settingPages.設定值 == true.ToString())
+                        settingPageClass settingPages = await new settingPage().get_by_page_name_cht("medmap", "水平向燈條");
+                        if (settingPages != null)
                         {
-                            medMap_StockClasses = horizontal(medMap_StockClasses, medMap_ShelfClasses);
-                        }
-                        else
-                        {
-                            medMap_StockClasses = vertical(medMap_StockClasses, medMap_ShelfClasses);
+                            if (settingPages != null && settingPages.設定值 == true.ToString())
+                            {
+                                medMap_StockClasses = horizontal(medMap_StockClasses, medMap_ShelfClasses);
+                            }
+                            else
+                            {
+                                medMap_StockClasses = vertical(medMap_StockClasses, medMap_ShelfClasses);
+                            }
                         }
                     }
-                }            
+                }
+
                 List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
                 await sQLControl_stock.AddRowsAsync(null, add);
 

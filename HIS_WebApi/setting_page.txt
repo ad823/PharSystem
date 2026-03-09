@@ -193,6 +193,14 @@
             "option_str": "",
             "value_db": "True"
         },
+        {
+            "page_name": "medicine_cart",
+            "cht": "批號回寫功能",
+            "name": "exp_lot",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "True"
+        },
         { 
             "page_name": "medicine_cart", 
             "cht": "大瓶藥下拉選單功能開啟", 
