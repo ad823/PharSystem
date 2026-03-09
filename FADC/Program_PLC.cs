@@ -105,6 +105,11 @@ namespace FADC
                     minasA6.Open();
                     flag_minasA6_isOpen = true;
                     flag_stepMotor_isOpen = open_rs232();
+                    if (flag_stepMotor_isOpen)
+                    {
+                        Motor_Enable(1, true);
+                        flag_stepMotorHome = true;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -247,7 +252,7 @@ namespace FADC
                         if(MyTimerBasic_stepMotor_cmd_delay.IsTimeOut())
                         {
                             Stop(1);
-                            int paulse = (180 * 10000) / 12;
+                            int paulse = (180 * 9500) / 12;
                             Set_Active_Acc(1, 100);
                             Set_Active_Dec(1, 100);
                             Set_Active_Speed(1, 500);
@@ -305,7 +310,7 @@ namespace FADC
                     if (cnt_出料步進_到後退位置 == 0)
                     {
                         Stop(1);
-                        int paulse = (180 * 10000) / 12;
+                        int paulse = (180 * 9500) / 12;
                         Set_Active_Acc(1, 100);
                         Set_Active_Dec(1, 100);
                         Set_Active_Speed(1, 500);
@@ -1491,7 +1496,7 @@ namespace FADC
             {
                 this.MyTimer_輸送帶後退_結束延遲.StartTickTime(10000);
                 PLC_Device_輸送帶後退.SetComment("PLC_輸送帶後退");
-                PLC_Device_輸送帶後退.Bool = false;
+                PLC_Device_輸送帶後退.Bool = true;
                 cnt_Program_輸送帶後退 = 65535;
             }
             if (cnt_Program_輸送帶後退 == 65535) cnt_Program_輸送帶後退 = 1;
