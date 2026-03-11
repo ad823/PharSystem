@@ -372,6 +372,11 @@ namespace 勤務傳送系統
         {
             set
             {
+                if(value.StringIsEmpty())
+                {
+                    list_serchName = new List<string>();
+                    return;
+                }
                 List<string> temp = value.JsonDeserializet<List<string>>();
                 if (temp == null) temp = new List<string>();
                 list_serchName = temp;

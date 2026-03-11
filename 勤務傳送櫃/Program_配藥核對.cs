@@ -415,6 +415,8 @@ namespace 勤務傳送系統
 
                             rJ_Lable_配藥核對_全處方_病人姓名.Text = "-------";
                             rJ_Lable_配藥核對_全處方_病歷號.Text = "-------";
+                            rJ_Lable_配藥核對_全處方_病房.Text = "";
+
                             sqL_DataGridView_配藥核對_全處方.ClearGrid();
                         }));
 
@@ -546,16 +548,15 @@ namespace 勤務傳送系統
                 this.Invoke(new Action(delegate
                 {
                     //Application.DoEvents();
-                    MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
-                    MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(5000);
-                    using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
-                    {
-                        sp.Stop();
-                        sp.Play();
-                        sp.PlaySync();
-                    }
+                   
                 }));
-
+                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
+                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(5000);
+                using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
+                {
+                    sp.Stop();
+                    sp.PlaySync();
+                }
                 List<transactionsClass> transactionses = new List<transactionsClass>();
                 foreach(OrderClass order in orderClasses)
                 {
@@ -569,7 +570,7 @@ namespace 勤務傳送系統
                     order.核對時間 = DateTime.Now.ToDateTimeString();
                     order.核對姓名 = this.登入者名稱;
                     order.核對ID = this.登入者ID;
-
+                    sqL_DataGridView_配藥核對_全處方.AddRow(new object[] { order.JsonSerializationt() }, false);
                     transactionsClass transactions = new transactionsClass();
                     transactions.Order_GUID = order.GUID;
                     transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
@@ -588,6 +589,20 @@ namespace 勤務傳送系統
                     transactions.操作人 = this.登入者名稱;
                     transactionses.Add(transactions);
                 }
+                if(orderClasses.Count > 0)
+                {
+                    this.Invoke(new Action(delegate 
+                    {
+                        rJ_Lable_配藥核對_全處方_病人姓名.Text = orderClasses[0].病人姓名;
+                        rJ_Lable_配藥核對_全處方_病歷號.Text = orderClasses[0].病歷號;
+                        rJ_Lable_配藥核對_全處方_病房.Text = orderClasses[0].病房;
+
+                    }));
+                }
+                配藥核對_Keyin_barcode = "";
+                sqL_DataGridView_配藥核對_全處方.RefreshGrid();
+                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
+                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(5000);
                 transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
                 OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
                 Funtion_藥袋刷入API(orderClasses);
