@@ -352,14 +352,14 @@ namespace HIS_WebApi
                 
                 string sql = $@"
                     SELECT *
-                    FROM dbvm.stock
+                    FROM {DB}.stock
                     WHERE (GUID IN @guid OR Shelf_GUID IN @Shelf_GUID)";
 
                 if (shelf_GUID.Count == 0)
                 {
                     sql = $@"
                     SELECT *
-                    FROM dbvm.stock
+                    FROM {DB}.stock
                     WHERE (GUID IN @guid)";
                 }
                 var param = new
@@ -370,7 +370,6 @@ namespace HIS_WebApi
 
                 List<object[]> objects = await sQLControl_stock.WriteCommandAsync(sql, param);
                 List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
-
                 foreach (var item in db_medMap_StockClasses)
                 {
                     stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
@@ -381,7 +380,6 @@ namespace HIS_WebApi
                     if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
                     //if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
                     if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
-
                     if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
                     if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
                     if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
@@ -423,7 +421,7 @@ namespace HIS_WebApi
                     }
                     for (int i = 0; i < 效期.Count; i++)
                     {
-                        string 效期_ = 效期[i].StringToDateTime().ToDateTimeString();
+                        string 效期_ = 效期[i].StringToDateTime().ToString("yyyy/MM/dd");
                         if (medMap_stock_buff.效期.Contains(效期_) == false)                         
                         {
                             deviceBasic.清除效期(效期[i]);
@@ -719,6 +717,7 @@ namespace HIS_WebApi
                         .ToList();
             foreach (var list in stockClasses)
             {
+                if (list[0].Shelf_GUID.StringIsEmpty()) continue;
                 List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0])).ToList();
                     //.ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
                 string shlef_guid = list[0].Shelf_GUID;
@@ -759,7 +758,7 @@ namespace HIS_WebApi
             .ToList();
             foreach (var list in stockClasses)
             {
-
+                if (list[0].Shelf_GUID.StringIsEmpty()) continue;
                 //List<stockClass> stocks = list.OrderBy(x => int.Parse(x.位置.Split(',')[0]))
                 //    .ThenBy(x => int.Parse(x.位置.Split(',')[1])).ToList();
                 string shlef_guid = list[0].Shelf_GUID;
