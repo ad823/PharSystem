@@ -5656,6 +5656,31 @@
             排序順序（數字越小越前面）
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.orderConfigClass.GUID">
+            <summary>
+            唯一KEY
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.orderConfigClass.Order_GUID">
+            <summary>
+            Order_GUID
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.orderConfigClass.功能備註">
+            <summary>
+            功能備註
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.orderConfigClass.狀態">
+            <summary>
+            狀態
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.orderConfigClass.更新時間">
+            <summary>
+            更新時間
+            </summary>
+        </member>
         <member name="T:chemotherapyOrderClass">
             <summary>
             化療處方資料 (Chemotherapy Order)
