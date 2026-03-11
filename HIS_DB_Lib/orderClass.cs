@@ -336,6 +336,7 @@ namespace HIS_DB_Lib
         [JsonPropertyName("NOTE")]
         public string 備註 { get; set; }
         public List<diseaseClass> diseaseClasses { get; set; }
+        public List<orderConfigClass> orderConfig { get; set; }
 
         static public SQLUI.Table init(string API_Server)
         {

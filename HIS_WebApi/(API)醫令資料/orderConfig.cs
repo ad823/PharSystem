@@ -73,6 +73,7 @@ namespace HIS_WebApi._API_醫令資料
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
                 SQLControl sQLControl = new SQLControl(Server, DB, "orderConfig", UserName, Password, Port, SSLMode);
                 string now = DateTime.Now.ToDateTimeString();
+                orderConfigClasses = orderConfigClasses.Where(x => x.Order_GUID.StringIsEmpty() == false).ToList();
                 foreach (var item in orderConfigClasses)
                 {
                     item.GUID = Guid.NewGuid().ToString(); 
@@ -150,6 +151,46 @@ namespace HIS_WebApi._API_醫令資料
             catch (Exception ex)
             {
                 returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
+        [HttpPost("get_by_orderGUID")]
+        public async Task<string> get_by_orderGUID([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry不得為空";
+                    return returnData.JsonSerializationt();
+                }
+                if (returnData.ValueAry.Count != 1)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry資料錯誤，須為 [\"GUID\"]";
+                    return returnData.JsonSerializationt();
+                }
+                string[] orderGUID = returnData.ValueAry[0].Split(";");
+                
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl = new SQLControl(Server, DB, "orderConfig", UserName, Password, Port, SSLMode);
+                List<object[]> objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.Order_GUID, orderGUID);
+                List<orderConfigClass> db_orderConfig = objects_.SQLToClass<orderConfigClass>();
+               
+                returnData.Code = 200;
+                returnData.Data = db_orderConfig;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_by_orderGUID";
+                returnData.Result = $"取得成功，共<{db_orderConfig.Count}>筆!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                if (ex.Message.Contains("Index was outside the bounds of the array.")) init(returnData);
                 returnData.Result = ex.Message;
                 return returnData.JsonSerializationt(true);
             }
