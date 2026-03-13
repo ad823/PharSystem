@@ -2882,7 +2882,21 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
-
+                string GUID = string.Join(";", sql_medCpoe.Select(temp => temp.GUID).ToList());
+                returnData returnData_log = new returnData();
+                returnData_log.ValueAry.Add(GUID);
+                string result = new med_inventory().get_logtime_by_master_GUID(returnData_log);
+                returnData_log = result.JsonDeserializet<returnData>();
+                List<medInventoryLogClass> medInventoryLogClasses = returnData_log.Data.ObjToClass<List<medInventoryLogClass>>();
+                if (medInventoryLogClasses != null)
+                {
+                    Dictionary<string, List<medInventoryLogClass>> medInvenDict = medInventoryLogClass.CoverToDictionaryMasterGUID(medInventoryLogClasses);
+                    foreach (var cpoe in sql_medCpoe)
+                    {
+                        cpoe.調劑紀錄 = medInventoryLogClass.SortDictByMasterGUID(medInvenDict, cpoe.GUID);
+                    }
+                } 
+                
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
                 returnData.Data = sql_medCpoe;
