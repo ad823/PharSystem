@@ -1154,6 +1154,141 @@ namespace HIS_WebApi
 
         }
         /// <summary>
+        /// 創建每日盤點單(自動填入盤點單號)
+        /// </summary>
+        /// <remarks>
+        /// [必要輸入參數說明]<br/> 
+        ///  1.[returnData.Value] : 驗收單名稱 <br/> 
+        ///  --------------------------------------------<br/> 
+        /// 以下為範例JSON範例
+        /// <code>
+        /// {
+        ///   "ValueAry": [
+        ///     "medGroup=大瓶藥;冷藏藥",
+        ///     "control=1;3", // N,1,2,3,4
+        ///     "medType=口服;針劑"
+        ///   ]
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]為驗收單結構</returns>
+
+        [HttpPost("creat_evd_auto_add")]
+        public async Task<string> creat_evd_auto_add([FromBody] returnData returnData)
+        {
+            try
+            {
+                string GetVal(string key) =>
+                   returnData.ValueAry.FirstOrDefault(x => x.StartsWith($"{key}=", StringComparison.OrdinalIgnoreCase))
+                    ?.Split('=')[1];
+                string medGroup = GetVal("medGroup") ?? "";
+                string control = GetVal("control") ?? "";
+                string medType = GetVal("medType") ?? "";
+                GET_init(returnData);
+
+
+                (string Server, string DB, string UserName, string Password, uint Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
+                List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
+                List<object[]> list_inventory_creat_buf = new List<object[]>();
+
+                list_inventory_creat_buf = list_inventory_creat.GetRowsInDate((int)enum_盤點單號.建表時間, DateTime.Now);
+                string 盤點單號 = "";
+                int index = 0;
+                while (true)
+                {
+                    盤點單號 = $"EVD{DateTime.Now.ToDateTinyString()}-{index}";
+                    index++;
+                    list_inventory_creat_buf = list_inventory_creat.GetRows((int)enum_盤點單號.盤點單號, 盤點單號);
+                    if (list_inventory_creat_buf.Count == 0) break;
+                }
+
+                string str_IC_SN = 盤點單號;
+
+                List<medClass> medClasses = new List<medClass>();
+                if (medGroup.StringIsEmpty() == false)
+                {
+                    returnData returnData_group = await new medGroup().get_groups_by_name(medGroup);
+                    if (returnData_group == null || returnData_group.Code != 200)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥品群組取得失敗";
+                        return returnData.JsonSerializationt();
+                    }
+                    List<medGroupClass> medGroupClasses = returnData_group.Data.ObjToClass<List<medGroupClass>>();
+                    foreach (var medGroupClasses_buf in medGroupClasses)
+                    {
+                        if (medGroupClasses_buf.MedClasses != null && medGroupClasses_buf.MedClasses.Count > 0)
+                        {
+                            medClasses.AddRange(medGroupClasses_buf.MedClasses);
+                        }
+                    }
+                    medClasses = medClasses.Where(temp => temp.開檔狀態 != "關檔中").GroupBy(x => x.GUID).Select(g => g.First()).ToList();
+
+                }
+                if (control.StringIsEmpty() == false)
+                {
+                    List<string> control_ = control.Split(';').ToList();
+                    if (medClasses == null || medClasses.Count == 0)
+                    {
+                        returnData returnData_med = await new MED_pageController().get_med_cloud();
+                        medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    }
+                    medClasses = medClasses.Where(item => control_.Contains(item.管制級別) && item.開檔狀態 != "關檔中").ToList();
+                }
+                if (medType.StringIsEmpty() == false)
+                {
+                    List<string> medType_ = medType.Split(';').ToList();
+                    if (medClasses == null || medClasses.Count == 0)
+                    {
+                        returnData returnData_med = await new MED_pageController().get_med_cloud();
+                        medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    }
+                    medClasses = medClasses.Where(item => medType_.Contains(item.類別) && item.開檔狀態 != "關檔中").ToList();
+                }
+                if (medGroup.StringIsEmpty() && control.StringIsEmpty() && medType.StringIsEmpty())
+                {
+                    returnData returnData_med = await new MED_pageController().get_med_cloud();
+                    medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                }
+                inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
+                creat.盤點單號 = str_IC_SN;
+                for (int i = 0; i < medClasses.Count; i++)
+                {
+
+                    inventoryClass.content content = new inventoryClass.content();
+                    content.藥品碼 = medClasses[i].藥品碼;
+                    content.藥品名稱 = medClasses[i].藥品名稱;
+                    content.中文名稱 = medClasses[i].中文名稱;
+                    content.料號 = medClasses[i].料號;
+                    content.藥品條碼1 = medClasses[i].藥品條碼1;
+                    content.藥品條碼2 = medClasses[i].藥品條碼2;
+                    content.包裝單位 = medClasses[i].包裝單位;
+                    content.理論值 = "0";
+
+                    creat.Contents.Add(content);
+                }
+                if (creat.Contents.Count == 0)
+                {
+                    returnData.Code = -6;
+                    returnData.Value = "無盤點資料可新增!";
+                    return returnData.JsonSerializationt();
+                }
+                returnData.Data = creat;
+                returnData.Method = "creat_auto_add";
+
+                return creat_add(returnData);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+        }
+        /// <summary>
         /// 以盤點單號鎖定盤點單
         /// </summary>
         /// <remarks>

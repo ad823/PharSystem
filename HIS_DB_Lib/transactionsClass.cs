@@ -127,6 +127,7 @@ namespace HIS_DB_Lib
     public enum enum_交易記錄查詢資料_匯出
     {
         動作,
+        庫別,
         藥品碼,
         藥品名稱,
         藥袋序號,
