@@ -529,7 +529,18 @@ namespace HIS_DB_Lib
                 return;
             }
         }
-        
+        static public returnData creat_evd_auto_add(string API_Server, creat _creat, string valueAry)
+        {
+            string url = $"{API_Server}/api/inventory/creat_evd_auto_add";
+
+            returnData returnData = new returnData();
+            returnData.Data = _creat;
+            returnData.ValueAry = valueAry.Split(';').ToList();
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
 
     }
 

@@ -202,6 +202,7 @@
     <Compile Include="化療排程\udphnoph.cs" />
     <Compile Include="sys_updateVersionClass.cs" />
     <Compile Include="藥品基本檔\medUnitClass.cs" />
+    <Compile Include="醫令資料\orderConfigClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -99,4 +99,34 @@ namespace HIS_DB_Lib
         public patientInfoClass patientInfo{ get; set; }
         public medCpoeClass medCpoe { get; set; }
     }
+    public enum enum_nearmiss_report
+    {
+        藥局 = 0,
+        護理站,
+        調劑人ID,
+        調劑人姓名,
+        通報人ID,
+        通報人姓名,
+        建立時間,
+        原因,
+        備註,
+        姓名,
+        床號,
+        住院號,
+        病歷號,
+        序號,
+        開始時間,
+        結束時間,
+        藥碼,
+        頻次,
+        藥品名,
+        中文名,
+        途徑,
+        數量,
+        劑量,
+        單位,
+        自購,
+        處方醫師,
+        處方醫師姓名
+    }
 }

@@ -347,7 +347,7 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("get_by_creat_time_st_end")]
         [HttpPost]
-        public string POST_get_by_creat_time_st_end([FromBody] returnData returnData)
+        public async Task<string> POST_get_by_creat_time_st_end([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "get_by_creat_time_st_end";
@@ -406,6 +406,17 @@ namespace HIS_WebApi
                 List<object[]> list_value_buf = sQLControl_醫令資料.GetRowsByBetween(null, (int)enum_醫囑資料.產出時間, date_st.ToDateTimeString(), date_end.ToDateTimeString());
                 List<OrderClass> OrderClasses = list_value_buf.SQLToClass<OrderClass, enum_醫囑資料>();
                 OrderClasses.sort(OrderClassMethod.SortType.產出時間);
+
+                string[] orderGUID = OrderClasses.Select(x => x.GUID).ToArray();
+                SQLControl sQLControl = new SQLControl(Server, DB, "orderConfig", UserName, Password, Port, SSLMode);
+                List<object[]> objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.Order_GUID, orderGUID);
+                List<orderConfigClass> db_orderConfig = objects_.SQLToClass<orderConfigClass>();
+
+                foreach (var item in OrderClasses)
+                {
+                    List<orderConfigClass> orderConfigs = db_orderConfig.Where(x => x.Order_GUID == item.GUID).ToList();
+                    item.orderConfig = orderConfigs;
+                }
                 returnData.Code = 200;
                 returnData.Result = $"取得西藥醫令!共<{OrderClasses.Count}>筆資料";
                 returnData.TimeTaken = myTimerBasic.ToString();

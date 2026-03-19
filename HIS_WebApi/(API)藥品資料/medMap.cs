@@ -1639,6 +1639,9 @@ namespace HIS_WebApi._API_藥品資料
                     if (medMap_shelfClass_buff.高度.StringIsEmpty() == false) item.高度 = medMap_shelfClass_buff.高度;
                     if (medMap_shelfClass_buff.燈條IP.StringIsEmpty() == false) item.燈條IP = medMap_shelfClass_buff.燈條IP;
                     if (medMap_shelfClass_buff.名稱.StringIsEmpty() == false) item.名稱 = medMap_shelfClass_buff.名稱;
+                    if (medMap_shelfClass_buff.start_num.StringIsEmpty() == false) item.start_num = medMap_shelfClass_buff.start_num;
+                    if (medMap_shelfClass_buff.end_num.StringIsEmpty() == false) item.end_num = medMap_shelfClass_buff.end_num;
+
                     if (medMap_shelfClass_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_shelfClass_buff.device_type;
 
 
@@ -2062,6 +2065,7 @@ namespace HIS_WebApi._API_藥品資料
                     item.shelf = shelf;
                 }
                 medMap_Sub_SectionClasses = medMap_Sub_SectionClasses
+                .Where(x => x.section_position.StringIsEmpty() == false && x.位置.StringIsEmpty() == false)
                 .OrderBy(x => int.Parse(x.section_position.Split(',')[0]))  // 取前半部分 (例如 0)
                 .ThenBy(x => int.Parse(x.section_position.Split(',')[1]))   // 取後半部分 (例如 1)
                 .ThenBy(x => int.Parse(x.位置.Split(',')[0]))               // 同理處理 位置
@@ -2812,265 +2816,6 @@ namespace HIS_WebApi._API_藥品資料
                 return returnData.JsonSerializationt(true);
             }
         }
-        /// <summary>
-        /// 新增 medMap_stock 儲位資料（支援單筆或多筆）
-        /// </summary>
-        /// <remarks>
-        /// 本 API 會：
-        /// 1. 驗證 <c>returnData.Data</c> 是否存在，並嘗試轉為 <c>List&lt;stockClass&gt;</c>；若失敗則再嘗試單筆 <c>stockClass</c>。  
-        /// 2. 為每一筆資料自動產生 <c>GUID</c>。  
-        /// 3. 以批次方式寫入資料表 <c>medMap_stock</c>。  
-        ///
-        /// 【必要欄位】(每筆)
-        /// - <c>Shelf_GUID</c>：對應層架 GUID。  
-        /// - <c>位置</c>：儲位座標，建議格式 <c>"row,col"</c>（兩段）。  
-        /// - <c>code / 藥碼</c>：藥碼（實際欄位名稱依你的 class/enum）。  
-        ///
-        /// 【常見驗證錯誤】
-        /// - <c>returnData.Data</c> 為空。  
-        /// - <c>returnData.Data</c> 轉型失敗（非 <c>stockClass</c> / <c>List&lt;stockClass&gt;</c>）。  
-        /// - 必填欄位為空（例如 <c>Shelf_GUID</c>、<c>位置</c>、<c>藥碼</c>）。  
-        ///
-        /// 【單筆請求範例】
-        /// <code>
-        /// {
-        ///   "Data": {
-        ///     "GUID": "",
-        ///     "shelf_guid": "SHELF-001",
-        ///     "device_type": "LED_BAR",
-        ///     "location": "0,1",
-        ///     "ip": "192.168.1.20",
-        ///     "led_index": "12",
-        ///     "code": "OPER7"
-        ///   },
-        ///   "Value": "",
-        ///   "ValueAry": [],
-        ///   "TableName": "stock",
-        ///   "ServerName": "Main",
-        ///   "ServerType": "網頁",
-        ///   "TimeTaken": ""
-        /// }
-        /// </code>
-        ///
-        /// 【多筆請求範例】
-        /// <code>
-        /// {
-        ///   "Data": [
-        ///     {
-        ///       "GUID": "",
-        ///       "shelf_guid": "SHELF-001",
-        ///       "device_type": "LED_BAR",
-        ///       "location": "0,1",
-        ///       "ip": "192.168.1.20",
-        ///       "led_index": "12",
-        ///       "code": "OPER7"
-        ///     },
-        ///     {
-        ///       "GUID": "",
-        ///       "shelf_guid": "SHELF-001",
-        ///       "device_type": "LED_BAR",
-        ///       "location": "0,2",
-        ///       "ip": "192.168.1.21",
-        ///       "led_index": "13",
-        ///       "code": "EPAR"
-        ///     }
-        ///   ],
-        ///   "Value": "",
-        ///   "ValueAry": [],
-        ///   "TableName": "stock",
-        ///   "ServerName": "Main",
-        ///   "ServerType": "網頁",
-        ///   "TimeTaken": ""
-        /// }
-        /// </code>
-        ///
-        /// 【成功回應範例】
-        /// <code>
-        /// {
-        ///   "Code": 200,
-        ///   "Result": "儲位寫入成功!",
-        ///   "Data": [
-        ///     {
-        ///       "GUID": "f3c5a0b2-5d7a-46a8-9a2a-5f6b1d0e1c22",
-        ///       "shelf_guid": "SHELF-001",
-        ///       "device_type": "LED_BAR",
-        ///       "location": "0,1",
-        ///       "ip": "192.168.1.20",
-        ///       "led_index": "12",
-        ///       "code": "OPER7"
-        ///     },
-        ///     {
-        ///       "GUID": "4b65f0fb-8f2a-4f0a-8a77-3d0f2a1b9b33",
-        ///       "shelf_guid": "SHELF-001",
-        ///       "device_type": "LED_BAR",
-        ///       "location": "0,2",
-        ///       "ip": "192.168.1.21",
-        ///       "led_index": "13",
-        ///       "code": "EPAR"
-        ///     }
-        ///   ],
-        ///   "TimeTaken": "85.123ms",
-        ///   "Method": "add_medMap_stock"
-        /// }
-        /// </code>
-        ///
-        /// 【失敗回應範例】（資料為空）
-        /// <code>
-        /// {
-        ///   "Code": -200,
-        ///   "Result": "returnData.Data不得為空",
-        ///   "Data": null,
-        ///   "Method": "add_medMap_stock",
-        ///   "TimeTaken": "3.221ms"
-        /// }
-        /// </code>
-        ///
-        /// 備註：本 API 僅新增資料，不負責檢查 <c>位置</c> 重複或唯一性；若需要「同一 <c>Shelf_GUID</c> + <c>位置</c> 不可重複」之約束，請在資料庫層加上複合唯一鍵或在呼叫前先自檢。
-        /// </remarks>
-        /// <param name="returnData">
-        /// 請求包裝物件；其中 <c>Data</c> 可為 <c>stockClass</c>（單筆）或 <c>List&lt;stockClass&gt;</c>（多筆）。
-        /// </param>
-        /// <returns>
-        /// <para>JSON 字串；欄位說明：</para>
-        /// <list type="bullet">
-        /// <item><description><c>Code</c>：200 表示成功，-200 表示失敗。</description></item>
-        /// <item><description><c>Result</c>：結果描述。</description></item>
-        /// <item><description><c>Data</c>：成功時回傳實際寫入（並補上 GUID）的單筆或多筆資料。</description></item>
-        /// <item><description><c>TimeTaken</c>：耗時字串。</description></item>
-        /// <item><description><c>Method</c>：方法名稱 <c>"add_medMap_stock"</c>。</description></item>
-        /// </list>
-        /// </returns>
-        [HttpPost("add_stock")]
-        public async Task<string> add_medMap_stock([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            try
-            {
-                if (returnData.Data == null)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"returnData.Data不得為空";
-                    return returnData.JsonSerializationt();
-                }
-                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
-                if (medMap_StockClasses == null)
-                {
-                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
-                    if (medMap_stock == null)
-                    {
-                        returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
-                        return returnData.JsonSerializationt();
-                    }
-                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
-                }
-                DateTime dateTime = DateTime.Now;
-                foreach (var item in medMap_StockClasses)
-                {
-                    item.GUID = Guid.NewGuid().ToString();
-                    string value = item.Value;
-                    for (int i = 0; i < item.效期.Count; i++)
-                    {
-                        if (item.效期.Count != item.批號.Count && item.效期.Count != item.數量.Count) continue;
-                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
-                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-
-                        deviceBasic.新增效期(item.效期[i], item.批號[i], item.數量[i]);
-                        item.Value = deviceBasic.JsonSerializationt();
-                    }
-                }
-                // DB 連線與資料表
-                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
-
-                List<object[]> add = medMap_StockClasses.ClassToSQL<stockClass>();
-                await sQLControl_medMap_stock.AddRowsAsync(null, add);
-                // 回傳
-                returnData.Code = 200;
-                returnData.Data = medMap_StockClasses;
-                returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "add_medMap_stock";
-                returnData.Result = $"儲位寫入成功!";
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception ex)
-            {
-                returnData.Code = -200;
-                returnData.Result = ex.Message;
-                return returnData.JsonSerializationt(true);
-            }
-        }
-        [HttpPost("update_stock")]
-        public async Task<string> update_stock([FromBody] returnData returnData)
-        {
-            MyTimerBasic myTimerBasic = new MyTimerBasic();
-            try
-            {
-                if (returnData.Data == null)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"returnData.Data不得為空";
-                    return returnData.JsonSerializationt();
-                }
-                List<stockClass> medMap_StockClasses = returnData.Data.ObjToClass<List<stockClass>>();
-                if (medMap_StockClasses == null)
-                {
-                    stockClass medMap_stock = returnData.Data.ObjToClass<stockClass>();
-                    if (medMap_stock == null)
-                    {
-                        returnData.Code = -200;
-                        returnData.Result = $"returnData.Data資料錯誤，須為stockClass";
-                        return returnData.JsonSerializationt();
-                    }
-                    medMap_StockClasses = new List<stockClass>() { medMap_stock };
-                }
-                // DB 連線與資料表
-                (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "VM端");
-                SQLControl sQLControl_medMap_stock = new SQLControl(Server, DB, "stock", UserName, Password, Port, SSLMode);
-                List<object[]> objects = await sQLControl_medMap_stock.GetRowsByDefultAsync(null, (int)enum_medMap_stock.GUID, medMap_StockClasses.Select(x => x.GUID).ToArray());
-                List<stockClass> db_medMap_StockClasses = objects.SQLToClass<stockClass>();
-                foreach (var item in db_medMap_StockClasses)
-                {
-                    stockClass medMap_stock_buff = medMap_StockClasses.Where(x => x.GUID == item.GUID).FirstOrDefault();
-                    if (medMap_stock_buff == null) continue;
-                    //if (medMap_stock_buff.Shelf_GUID.StringIsEmpty() == false)
-                    item.Shelf_GUID = medMap_stock_buff.Shelf_GUID;
-                    if (medMap_stock_buff.位置.StringIsEmpty() == false) item.位置 = medMap_stock_buff.位置;
-                    if (medMap_stock_buff.IP.StringIsEmpty() == false) item.IP = medMap_stock_buff.IP;
-                    if (medMap_stock_buff.device_type.StringIsEmpty() == false) item.device_type = medMap_stock_buff.device_type;
-                    if (medMap_stock_buff.燈條亮燈位置.StringIsEmpty() == false) item.燈條亮燈位置 = medMap_stock_buff.燈條亮燈位置;
-                    if (medMap_stock_buff.Classify_GUID.StringIsEmpty() == false) item.Classify_GUID = medMap_stock_buff.Classify_GUID;
-
-                    if (medMap_stock_buff.藥碼.StringIsEmpty() == false) item.藥碼 = medMap_stock_buff.藥碼;
-                    if (medMap_stock_buff.藥名.StringIsEmpty() == false) item.藥名 = medMap_stock_buff.藥名;
-                    if (medMap_stock_buff.料號.StringIsEmpty() == false) item.料號 = medMap_stock_buff.料號;
-                    if (medMap_stock_buff.效期 == null || (medMap_stock_buff.效期.Count != medMap_stock_buff.批號.Count && medMap_stock_buff.效期.Count != medMap_stock_buff.數量.Count)) continue;
-                    for (int i = 0; i < medMap_stock_buff.效期.Count; i++)
-                    {
-                        string value = item.Value;
-                        if (value.StringIsEmpty()) value = new DeviceBasic().JsonSerializationt();
-                        DeviceBasic deviceBasic = value.JsonDeserializet<DeviceBasic>();
-                        deviceBasic.效期庫存覆蓋(medMap_stock_buff.效期[i], medMap_stock_buff.批號[i], medMap_stock_buff.數量[i]);
-                        item.Value = deviceBasic.JsonSerializationt();
-                    }
-                }
-                List<object[]> update = db_medMap_StockClasses.ClassToSQL<stockClass>();
-                await sQLControl_medMap_stock.UpdateRowsAsync(null, update);
-
-                returnData.Code = 200;
-                returnData.Data = db_medMap_StockClasses;
-                returnData.TimeTaken = myTimerBasic.ToString();
-                returnData.Method = "update_medMap_stock";
-                returnData.Result = $"儲位寫入成功!";
-                return returnData.JsonSerializationt(true);
-            }
-            catch (Exception ex)
-            {
-                returnData.Code = -200;
-                returnData.Result = ex.Message;
-                return returnData.JsonSerializationt(true);
-            }
-        }
 
         /// <summary>
         /// 依指定 <c>GUID</c>，從該藥品庫存的 <c>Value</c>（<c>DeviceBasic</c> 序列化資料）中
@@ -3588,6 +3333,7 @@ namespace HIS_WebApi._API_藥品資料
                 string code = GetVal("code") ?? "";
                 string color = GetVal("color") ?? "";
                 string lightness = GetVal("lightness") ?? "";
+                string time = GetVal("time") ?? "";
 
                 if (ServerName.StringIsEmpty() || ServerType.StringIsEmpty() || code.StringIsEmpty() || color.StringIsEmpty()
                     || lightness.StringIsEmpty())
@@ -3663,8 +3409,8 @@ namespace HIS_WebApi._API_藥品資料
                             stock_device_type = med.device_type;
                             start = med.燈條亮燈位置.Split(",")[0];
                             end = med.燈條亮燈位置.Split(",").Last();
-                            string command = $"ip={shelf_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={shelf_device_type}";
-                            string command_1 = $"ip={stock_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={stock_device_type}";
+                            string command = $"ip={shelf_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={shelf_device_type};time={time}";
+                            string command_1 = $"ip={stock_ip};start_num={start};end_num={end};color={color};lightness={lightness};device_type={stock_device_type};time={time}";
                             list_light.Add(command);
                             list_light.Add(command_1);
                         }

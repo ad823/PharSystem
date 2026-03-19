@@ -691,12 +691,17 @@ namespace HIS_WebApi._API_系統
                     string month = temperatures_buff[0].新增時間.StringToDateTime().Month.ToString();
                     sheetClass.Rows[2].Cell[57].Text = $"{year}年{month}月";
                     sheetClass.Rows[0].Cell[57].Text = $"{temperature_SetClass.別名}";
-
+                    Logger.Log(temperatures_buff.JsonSerializationt(true));
                     for (int i = 0; i < temperatures_buff.Count; i++)
                     {
                         double 溫度 = temperatures_buff[i].溫度.StringToDouble();
                         溫度 = Math.Round(溫度 * 2, MidpointRounding.AwayFromZero) / 2.0;
-                        int rows = (int)Math.Round(65 - 2 * 溫度); //根據EXCEL算出來的位置
+                        int rows_溫度 = (int)Math.Round(57 - 2 * 溫度); //根據EXCEL算出來的位置
+
+                        double 濕度 = temperatures_buff[i].濕度.StringToDouble();
+                        濕度 = Math.Round(濕度 * 2, MidpointRounding.AwayFromZero) / 2.0;
+                        int rows_濕度 = (int)Math.Round(125 - 2 * 濕度); //根據EXCEL算出來的位置
+
                         int day = temperatures_buff[i].新增時間.StringToDateTime().Day;
                         int hour = temperatures_buff[i].新增時間.StringToDateTime().Hour;
                         int cell = 0;
@@ -708,7 +713,20 @@ namespace HIS_WebApi._API_系統
                         {
                             cell = 2 * day;
                         }
-                        if ( rows > 0 && rows <= 53 && cell > 0 && cell <= 63) sheetClass.Rows[rows].Cell[cell].Text = "*";
+                        if (rows_溫度 > 0 && rows_溫度 <= 53 && cell > 0 && cell <= 63) sheetClass.Rows[rows_溫度].Cell[cell].Text = "★";
+                        if (rows_濕度 > 0 && rows_濕度 <= 53 && cell > 0 && cell <= 63) 
+                        {
+                            if (sheetClass.Rows[rows_濕度].Cell[cell].Text.StringIsEmpty()==false)
+                            {
+                                sheetClass.Rows[rows_濕度].Cell[cell].Text = "○";
+                            }
+                            else
+                            {
+                                sheetClass.Rows[rows_濕度].Cell[cell].Text = "●";
+                            }
+                        }
+                        
+
                     }
                     //sheetClass.Rows[1].Cell[1].Text = $"{medClasses_buf[0].藥品碼}";
                     //sheetClass.Rows[1].Cell[4].Text = $"{medClasses_buf[0].包裝單位}";

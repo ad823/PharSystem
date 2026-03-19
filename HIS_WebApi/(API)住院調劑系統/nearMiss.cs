@@ -1,14 +1,16 @@
 ﻿using Basic;
 using HIS_DB_Lib;
+using HIS_WebApi._API_系統;
 using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using SQLUI;
 using System;
 using System.Collections.Generic;
-using SQLUI;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
+using System.IO;
 using System.Linq;
-using HIS_WebApi._API_系統;
 using System.Threading;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -388,6 +390,93 @@ namespace HIS_WebApi._API_住院調劑系統
                 returnData.Result = ex.Message;
                 return returnData.JsonSerializationt(true);
             }
+        }
+        [HttpPost("download_report")]
+        public async Task<ActionResult> download_report([FromBody] returnData returnData)
+        {
+            try
+            {
+
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry資料錯誤!";
+                    return Content(returnData.JsonSerializationt(), "application/json");
+                }
+                if (returnData.ValueAry.Count != 2)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "returnData.ValueAry資料錯誤，['2025-08-24 00:00:00','2025-08-24 23:59:59']!";
+                    return Content(returnData.JsonSerializationt(), "application/json");
+                }
+                string startTime = returnData.ValueAry[0];
+                string endTime = returnData.ValueAry[1];
+                if (startTime.Check_Date_String() == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "returnData.ValueAry[0]資料錯誤，須為 '2025-08-24 00:00:00' 格式!";
+                    return Content(returnData.JsonSerializationt(), "application/json");
+                }
+                if (endTime.Check_Date_String() == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "returnData.ValueAry[0]資料錯誤，須為 '2025-08-24 00:00:00' 格式!";
+                    return Content(returnData.JsonSerializationt(), "application/json");
+                }
+                string command = $@"
+                    SELECT 
+                        n.藥局,
+                        n.護理站,
+                        n.調劑人ID,
+                        n.調劑人姓名,
+                        n.通報人ID,
+                        n.通報人姓名,
+                        n.建立時間,
+                        n.原因,
+                        n.備註,
+                        m.姓名,
+                        m.床號,
+                        m.住院號,
+                        m.病歷號,
+                        m.序號,
+                        m.開始時間,
+                        m.結束時間,
+                        m.藥碼,
+                        m.頻次,
+                        m.藥品名,
+                        m.中文名,
+                        m.途徑,
+                        m.數量,
+                        m.劑量,
+                        m.單位,
+                        m.自購,
+                        m.處方醫師,
+                        m.處方醫師姓名
+                    FROM dbvm.nearmiss n
+                    LEFT JOIN dbvm.med_cpoe m
+                        ON n.cpoe_GUID = m.GUID
+                    WHERE n.建立時間 >= '{startTime}'
+                      AND n.建立時間 <  '{endTime}'
+                    ORDER BY n.建立時間 DESC
+                    ";
+                string tableName = "nearMiss";
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl = new SQLControl(Server, DB, tableName, UserName, Password, Port, SSLMode);
+                List<object[]> objects = await sQLControl.WriteCommandAsync(command);
+
+                System.Data.DataTable dataTable = objects.ToDataTable(new enum_nearmiss_report());
+
+                string xlsx_command = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                string xls_command = "application/vnd.ms-excel";
+                byte[] excelData = MyOffice.ExcelClass.NPOI_GetBytes(dataTable, Excel_Type.xlsx);
+                Stream stream = new MemoryStream(excelData);
+                return await Task.FromResult(File(stream, xlsx_command, $"{DateTime.Now.ToDateString("-")}_調劑錯誤報表.xlsx"));
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
 

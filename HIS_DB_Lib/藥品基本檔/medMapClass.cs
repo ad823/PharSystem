@@ -76,6 +76,10 @@ namespace HIS_DB_Lib
         serverName,
         [Description("serverType,VARCHAR,20,NONE")]
         serverType,
+        [Description("start_num,VARCHAR,20,NONE")]
+        start_num,
+        [Description("end_num,VARCHAR,20,NONE")]
+        end_num,
     }
     public enum  enum_shelfType
     {
@@ -374,21 +378,12 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("ip_light")]
         public string 燈條IP { get; set; }
-        /// <summary>
-        /// 裝置類型
-        /// </summary>
-        [JsonPropertyName("device_type")]
         public string device_type { get; set; }
-        /// <summary>
-        /// serverName
-        /// </summary>
-        [JsonPropertyName("serverName")]
         public string serverName { get; set; }
-        /// <summary>
-        /// serverType
-        /// </summary>
-        [JsonPropertyName("serverType")]
         public string serverType { get; set; }
+        public string start_num { get; set; }     
+        public string end_num { get; set; }
+
         public List<medMap_boxClass> medMapBox { get; set; }
         public List<stockClass> medMapStock { get; set; }
         public RowsLED rowsLED { get; set; }
