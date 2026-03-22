@@ -250,96 +250,91 @@ namespace HIS_WebApi
                 SQLControl sQLControl_sub = new SQLControl(Server, DB, "chemotherapy_order_days", UserName, Password, Port, SSLMode);
 
                 string command = string.Empty;
-
-                string[] array_priKey = input_orderClass[0].PRI_KEY.Split("-");
-                if (array_priKey.Length < 2)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"PRI_KEY格式錯誤，應為 '開方時間(yyyyMMddHHmmss)-病歷號'";
-                    return returnData.JsonSerializationt();
-                }
-                input_orderClass = input_orderClass.OrderByDescending(x => x.處方日期).ToList();
-
-                int count_ = input_orderClass.Count;
-                string PRI_KEY = $"{array_priKey[0]}-{array_priKey[1]}";
-                string start = input_orderClass[count_ - 1].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
-                string end = input_orderClass[0].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
-                string 病歷號 = input_orderClass[0].病歷號;
-
-                command = $"SELECT * FROM {DB}.chemotherapy_orders " +
-                    $"WHERE 病歷號 = '{病歷號}' " +
-                    $" AND 處方日期 >= '{start} 00:00:00'" +
-                    $" AND 處方日期 <= '{end} 23:59:59';";
-
-
-                List<object[]> order_object = await sQLControl.WriteCommandAsync(command);
-                List<chemotherapyOrderClass> orderClasses = order_object.SQLToClass<chemotherapyOrderClass>();
-                string[] GUID = orderClasses.Select(x => x.GUID).ToArray();
-                string GUID_string = GUID.Length > 0 ?string.Join(",", GUID.Select(x => $"'{x}'")):"''";
-                command = $"SELECT * FROM {DB}.chemotherapy_order_days " +
-                    $"WHERE 主表GUID IN ({GUID_string});";
-                List<object[]> sub_order_object = await sQLControl_sub.WriteCommandAsync(command); //主表GUID
-
-                //List<object[]> sub_order_object = await sQLControl_sub.GetRowsByDefultAsync(null, 2, GUID); //主表GUID
-                List<chemotherapyOrderDayClass> sub_orderClasses = sub_order_object.SQLToClass<chemotherapyOrderDayClass>();
-
-                List<chemotherapyOrderClass> add_order_list = new List<chemotherapyOrderClass>();
-                List<chemotherapyOrderDayClass> add_sub_order_list = new List<chemotherapyOrderDayClass>();
-
+                List<List<chemotherapyOrderClass>> chemotherapyOrderClasses = input_orderClass
+                    .GroupBy(g => g.病歷號)
+                    .Select(g => g.ToList())
+                    .ToList();
                 List<chemotherapyOrderClass> result = new List<chemotherapyOrderClass>();
-                string now = DateTime.Now.ToDateTimeString();
-                string min_time = DateTime.MinValue.ToDateTimeString();
-                foreach (var item in input_orderClass)
+
+                foreach (var orders in chemotherapyOrderClasses)
                 {
-                    chemotherapyOrderClass orderClass = orderClasses.Where(order => order.PRI_KEY == item.PRI_KEY).FirstOrDefault();
-                    if (orderClass == null)
+                    
+                    List<chemotherapyOrderClass> chemotherapyOrders = orders.OrderByDescending(x => x.處方日期).ToList();
+                    int count_ = orders.Count;
+                    string start = orders[count_ - 1].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                    string end = orders[0].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                    string 病歷號 = orders[0].病歷號;
+
+                    command = $"SELECT * FROM {DB}.chemotherapy_orders " +
+                        $"WHERE 病歷號 = '{病歷號}' " +
+                        $" AND 處方日期 >= '{start} 00:00:00'" +
+                        $" AND 處方日期 <= '{end} 23:59:59';";
+                    List<object[]> order_object = await sQLControl.WriteCommandAsync(command);
+                    List<chemotherapyOrderClass> orderClasses = order_object.SQLToClass<chemotherapyOrderClass>();
+                    string[] GUID = orderClasses.Select(x => x.GUID).ToArray();
+                    string GUID_string = GUID.Length > 0 ? string.Join(",", GUID.Select(x => $"'{x}'")) : "''";
+                    command = $"SELECT * FROM {DB}.chemotherapy_order_days " +
+                        $"WHERE 主表GUID IN ({GUID_string});";
+                    List<object[]> sub_order_object = await sQLControl_sub.WriteCommandAsync(command); //主表GUID
+
+                    List<chemotherapyOrderDayClass> sub_orderClasses = sub_order_object.SQLToClass<chemotherapyOrderDayClass>();
+
+                    List<chemotherapyOrderClass> add_order_list = new List<chemotherapyOrderClass>();
+                    List<chemotherapyOrderDayClass> add_sub_order_list = new List<chemotherapyOrderDayClass>();
+
+                    string now = DateTime.Now.ToDateTimeString();
+                    string min_time = DateTime.MinValue.ToDateTimeString();
+                    foreach (var item in orders)
                     {
-                        item.GUID = Guid.NewGuid().ToString();
-                        item.建立時間 = now;
-                        item.更新時間 = now;                                             
-                        foreach(var sub_order in item.每日紀錄)
+                        chemotherapyOrderClass orderClass = orderClasses.Where(order => order.PRI_KEY == item.PRI_KEY).FirstOrDefault();
+                        if (orderClass == null)
                         {
-                            sub_order.GUID = Guid.NewGuid().ToString();
-                            sub_order.主表GUID = item.GUID;
-                            sub_order.審核時間 = min_time;
-                            sub_order.調劑時間 = min_time;
-                            sub_order.核對時間 = min_time;
-                            sub_order.建立時間 = now;
-                            sub_order.更新時間 = now;
-                            add_sub_order_list.Add(sub_order);
+                            item.GUID = Guid.NewGuid().ToString();
+                            item.建立時間 = now;
+                            item.更新時間 = now;
+                            foreach (var sub_order in item.每日紀錄)
+                            {
+                                sub_order.GUID = Guid.NewGuid().ToString();
+                                sub_order.主表GUID = item.GUID;
+                                sub_order.審核時間 = min_time;
+                                sub_order.調劑時間 = min_time;
+                                sub_order.核對時間 = min_time;
+                                sub_order.建立時間 = now;
+                                sub_order.更新時間 = now;
+                                add_sub_order_list.Add(sub_order);
+                            }
+                            item.每日紀錄 = add_sub_order_list;
+                            add_order_list.Add(item);
+
                         }
-                        item.每日紀錄 = add_sub_order_list;
-                        add_order_list.Add(item);
-
+                        else
+                        {
+                            List<chemotherapyOrderDayClass> chemotherapyOrderDayClass = sub_orderClasses.Where(order => order.主表GUID == orderClass.GUID).ToList();
+                            orderClass.每日紀錄 = chemotherapyOrderDayClass;
+                            result.Add(orderClass);
+                        }
                     }
-                    else
+                    List<object[]> list_add_order_list = add_order_list.ClassToSQL<chemotherapyOrderClass>();
+                    List<object[]> list_add_sub_order_list = add_sub_order_list.ClassToSQL<chemotherapyOrderDayClass>();
+                    if (list_add_order_list.Count > 0)
                     {
-                        List<chemotherapyOrderDayClass> chemotherapyOrderDayClass = sub_orderClasses.Where(order => order.主表GUID == orderClass.GUID).ToList();
-                        orderClass.每日紀錄 = chemotherapyOrderDayClass;
-                        result.Add(orderClass);
+                        Logger.Log("FADC", $"{add_order_list.JsonSerializationt(true)}");
+                        sQLControl.AddRows(null, list_add_order_list);
                     }
-                }
-                List<object[]> list_add_order_list = add_order_list.ClassToSQL<chemotherapyOrderClass>();
-                List<object[]> list_add_sub_order_list = add_sub_order_list.ClassToSQL<chemotherapyOrderDayClass>();
 
-                if (list_add_order_list.Count > 0) 
-                {
-                    Logger.Log("FADC", $"{add_order_list.JsonSerializationt(true)}");
-                    sQLControl.AddRows(null, list_add_order_list);
-                }
+                    if (list_add_sub_order_list.Count > 0)
+                    {
+                        Logger.Log("FADC", $"{add_sub_order_list.JsonSerializationt(true)}");
+                        sQLControl_sub.AddRows(null, list_add_sub_order_list);
+                    }
+                    result.AddRange(add_order_list);
 
-                if (list_add_sub_order_list.Count > 0)
-                {
-                    Logger.Log("FADC", $"{add_sub_order_list.JsonSerializationt(true)}");
-                    sQLControl_sub.AddRows(null, list_add_sub_order_list);
                 }
-
-                result.AddRange(add_order_list);
 
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
                 returnData.Data = result;
-                returnData.Result = $"取得醫令成功,共<{result.Count}>筆,新增<{list_add_order_list.Count}>筆";
+                returnData.Result = $"取得醫令成功,共<{result.Count}>筆";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)

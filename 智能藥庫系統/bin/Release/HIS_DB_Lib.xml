@@ -5701,6 +5701,9 @@
         <member name="P:chemotherapyOrderClass.病歷號">
             <summary>病歷號碼</summary>
         </member>
+        <member name="P:chemotherapyOrderClass.病人姓名">
+            <summary>病人姓名</summary>
+        </member>
         <member name="P:chemotherapyOrderClass.處方日期">
             <summary>處方日期</summary>
         </member>

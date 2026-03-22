@@ -42,6 +42,11 @@ public class chemotherapyOrderClass
     [Description("VARCHAR,10,INDEX")]
     public string 病歷號 { get; set; }
 
+    /// <summary>病人姓名</summary>
+    [JsonPropertyName("CHE_PATNAME")]
+    [Description("VARCHAR,10,NONE")]
+    public string 病人姓名 { get; set; }
+
     /// <summary>處方日期</summary>
     [JsonPropertyName("CHE_VISITDT")]
     [Description("DATETIME,20,INDEX")]
