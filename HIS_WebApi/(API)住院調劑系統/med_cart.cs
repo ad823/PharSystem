@@ -5061,7 +5061,7 @@ namespace HIS_WebApi
                     returnData.Result = $"returnData.Data 無傳入資料";
                     return returnData.JsonSerializationt(true);
                 }
-
+                medCpoeClass = medCpoeClass.Where(x => x.數量.Contains("-") == false).ToList();
 
                 List<medCpoeClass> medCpoeClasses = medCpoeClass
                     .GroupBy(temp => temp.藥碼)
