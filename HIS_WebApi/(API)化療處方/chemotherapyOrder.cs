@@ -260,10 +260,10 @@ namespace HIS_WebApi
                 {
                     
                     List<chemotherapyOrderClass> chemotherapyOrders = orders.OrderByDescending(x => x.處方日期).ToList();
-                    int count_ = orders.Count;
-                    string start = orders[count_ - 1].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
-                    string end = orders[0].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
-                    string 病歷號 = orders[0].病歷號;
+                    int count_ = chemotherapyOrders.Count;
+                    string start = chemotherapyOrders[count_ - 1].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                    string end = chemotherapyOrders[0].處方日期.StringToDateTime().ToString("yyyy-MM-dd");
+                    string 病歷號 = chemotherapyOrders[0].病歷號;
 
                     command = $"SELECT * FROM {DB}.chemotherapy_orders " +
                         $"WHERE 病歷號 = '{病歷號}' " +
