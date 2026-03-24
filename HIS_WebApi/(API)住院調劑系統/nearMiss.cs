@@ -107,8 +107,8 @@ namespace HIS_WebApi._API_住院調劑系統
                 string tableName = "nearMiss";
                 (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
                 SQLControl sQLControl = new SQLControl(Server, DB, tableName, UserName, Password, Port, SSLMode);
-                List<string> cpoe_guids = nearMissClasses.Select(x => x.cpoe_GUID).Distinct().ToList();
-                string command = getCommand(DB, tableName, cpoe_guids);
+                List<string> pat_guids = nearMissClasses.Select(x => x.pat_GUID).Distinct().ToList();
+                string command = getCommand(DB, tableName, pat_guids);
                 List<object[]> objects = await sQLControl.WriteCommandAsync(command);
                 List<nearMissClass> nearMisses = objects.SQLToClass<nearMissClass, enum_nearMiss>();
                 List<nearMissClass> add_nearMisses = new List<nearMissClass>();
@@ -117,7 +117,7 @@ namespace HIS_WebApi._API_住院調劑系統
 
                 foreach (var item in nearMissClasses)
                 {
-                    nearMissClass nearMiss_buff = nearMisses.Where(m => m.cpoe_GUID == item.cpoe_GUID).FirstOrDefault();
+                    nearMissClass nearMiss_buff = nearMisses.Where(m => m.cpoe_GUID == item.cpoe_GUID && m.pat_GUID == item.pat_GUID).FirstOrDefault();
                     if (nearMiss_buff == null)
                     {
                         item.GUID = Guid.NewGuid().ToString();
@@ -309,11 +309,17 @@ namespace HIS_WebApi._API_住院調劑系統
                     return await returnData.JsonSerializationtAsync(true);
                 }
                 List<medCpoeClass> medCpoeClasses = task_cpoe.Data.ObjToClass<List<medCpoeClass>>();
+                string[] pat_GUIDs = nearMisses.Select(x => x.pat_GUID).Distinct().ToArray();
+                SQLControl sQLControl_patient_info = new SQLControl(Server, DB, "patient_info", UserName, Password, Port, SSLMode);
+                List<object[]> patient_info_objects = await sQLControl_patient_info.GetRowsByDefultAsync(null, (int)enum_patient_info.GUID, pat_GUIDs);
+                List<patientInfoClass> patientInfoClasses = patient_info_objects.SQLToClass<patientInfoClass, enum_patient_info>();
                 foreach (var item in nearMisses)
                 {
                     medCpoeClass medCpoe_buff = medCpoeClasses.Where(x => x.GUID == item.cpoe_GUID).FirstOrDefault();
-                    if (medCpoe_buff == null) continue;
-                    item.medCpoe = medCpoe_buff;
+                    patientInfoClass patientInfo_buff = patientInfoClasses.Where(x => x.GUID == item.pat_GUID).FirstOrDefault();
+                    
+                    if (medCpoe_buff != null) item.medCpoe = medCpoe_buff;
+                    if (patientInfo_buff != null) item.patientInfo = patientInfo_buff;
                 }
                 returnData.Code = 200;
                 returnData.Data = nearMisses;
@@ -497,10 +503,10 @@ namespace HIS_WebApi._API_住院調劑系統
 
             return tables.JsonSerializationt(true);
         }
-        private string getCommand (string db, string tableName, List<string> strings)
+        private string getCommand(string db, string tableName, List<string> strings)
         {
             string inClause = string.Join(",", strings.Select(g => $"'{g}'"));  // 加上單引號包起來
-            string command = $"SELECT * FROM {db}.{tableName} WHERE cpoe_GUID IN ({inClause});";
+            string command = $"SELECT * FROM {db}.{tableName} WHERE pat_GUID IN ({inClause});";
             return command;
         }
         private string getCommand(string db, string tableName,string startTime, string endTime)
