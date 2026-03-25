@@ -575,6 +575,7 @@ namespace HIS_WebApi
                 string TableName = "trading";
                 SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value = sQLControl_trading.GetRowsByDefult(null, (int)enum_交易記錄查詢資料.GUID, $"{returnData.Value}");
+
                 list_value.Sort(new ICP_交易記錄查詢());
                 List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
                 if(transactionsClasses.Count == 0)
@@ -598,6 +599,158 @@ namespace HIS_WebApi
 
             }
         }
+        /// <summary>
+        /// 以多筆 GUID 搜尋交易紀錄
+        /// </summary>
+        /// <remarks>
+        /// --------------------------------------------<br/>
+        /// 以下為範例JSON範例
+        /// <code>
+        /// {
+        ///   "ServerName": "口服2",
+        ///   "ServerType": "調劑台",
+        ///   "Data": {},
+        ///   "ValueAry": [
+        ///     "GUID001",
+        ///     "GUID002",
+        ///     "GUID003"
+        ///   ]
+        /// }
+        /// </code>
+        /// <br/>
+        /// 亦支援單筆：
+        /// <code>
+        /// {
+        ///   "ServerName": "口服2",
+        ///   "ServerType": "調劑台",
+        ///   "Data": {},
+        ///   "Value": "GUID001"
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns>[returnData.Data]為交易紀錄結構 List&lt;transactionsClass&gt;</returns>
+        [Route("get_by_guids")]
+        [HttpPost]
+        public string get_by_guids([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "get_by_guids";
+
+            try
+            {
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "交易紀錄資料");
+
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "找無Server資料!";
+                    return returnData.JsonSerializationt();
+                }
+
+                string Server = sys_serverSettingClasses[0].Server;
+                string DB = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+
+                // 整理 GUID 清單：優先使用 ValueAry，若無則回退使用 Value
+                List<string> guidList = new List<string>();
+
+                if (returnData.ValueAry != null && returnData.ValueAry.Count > 0)
+                {
+                    foreach (string guid in returnData.ValueAry)
+                    {
+                        if (guid.StringIsEmpty() == false)
+                        {
+                            guidList.Add(guid.Trim());
+                        }
+                    }
+                }
+                else if (returnData.Value.StringIsEmpty() == false)
+                {
+                    guidList.Add(returnData.Value.Trim());
+                }
+
+                // 去除空白、重複
+                guidList = guidList
+                    .Where(x => x.StringIsEmpty() == false)
+                    .Select(x => x.Trim())
+                    .Distinct()
+                    .ToList();
+
+                if (guidList.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "輸入參數異常!";
+                    return returnData.JsonSerializationt();
+                }
+
+                // 過濾 GUID 內容，避免 SQL Injection
+                // 僅允許 英數、底線、連字號
+                guidList = guidList
+                    .Where(x => System.Text.RegularExpressions.Regex.IsMatch(x, @"^[A-Za-z0-9_\-]+$"))
+                    .ToList();
+
+                if (guidList.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "GUID 格式異常!";
+                    return returnData.JsonSerializationt();
+                }
+
+                string TableName = "trading";
+                SQLControl sQLControl_trading = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+
+                // 組 SQL IN 查詢
+                string guidInSql = string.Join(",", guidList.Select(g => $"'{g}'"));
+
+                string commandText = $@"
+                    SELECT *
+                    FROM {TableName}
+                    WHERE GUID IN ({guidInSql})
+                    ";
+
+               System.Data.DataTable dataTable = sQLControl_trading.WtrteCommandAndExecuteReader(commandText);
+
+                if (dataTable == null || dataTable.Rows.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "找無交易資料";
+                    return returnData.JsonSerializationt();
+                }
+
+                List<object[]> list_value = dataTable.DataTableToRowList();
+
+                // 若需要排序
+                list_value.Sort(new ICP_交易記錄查詢());
+
+                List<transactionsClass> transactionsClasses = list_value.SQLToClass<transactionsClass, enum_交易記錄查詢資料>();
+
+                if (transactionsClasses == null || transactionsClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "找無交易資料";
+                    return returnData.JsonSerializationt();
+                }
+
+                returnData.Code = 200;
+                returnData.Result = $"取得交易紀錄成功!共<{transactionsClasses.Count}>筆資料";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Data = transactionsClasses;
+
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
+
+
         /// <summary>
         /// 指定操作時間範圍取得交易紀錄
         /// </summary>

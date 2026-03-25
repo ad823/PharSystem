@@ -70,7 +70,7 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_醫令資料.DataGridRowsChangeRefEvent += SqL_DataGridView_醫令資料_DataGridRowsChangeRefEvent;
             this.sqL_DataGridView_醫令資料.DataGridRefreshEvent += SqL_DataGridView_醫令資料_DataGridRefreshEvent;
             this.sqL_DataGridView_醫令資料.DataGridRowsChangeEvent += SqL_DataGridView_醫令資料_DataGridRowsChangeEvent;
-
+            this.sqL_DataGridView_醫令資料.dataGridView.Sorted += DataGridView_Sorted;
 
             this.plC_RJ_Button_醫令資料_自動過帳.MouseDownEvent += PlC_RJ_Button_醫令資料_自動過帳_MouseDownEvent;
             this.plC_RJ_Button_醫令資料_設定產出時間.MouseDownEvent += PlC_RJ_Button_醫令資料_設定產出時間_MouseDownEvent;
@@ -92,7 +92,7 @@ namespace 調劑台管理系統
             this.plC_UI_Init.Add_Method(Program_醫令資料);
         }
 
-   
+      
 
         private void Program_醫令資料()
         {
@@ -448,6 +448,10 @@ namespace 調劑台管理系統
         }
         #endregion
         #region Event
+        private void DataGridView_Sorted(object sender, EventArgs e)
+        {
+            SqL_DataGridView_醫令資料_DataGridRefreshEvent();
+        }
         private void SqL_DataGridView_醫令資料_DataGridRefreshEvent()
         {
             String 狀態 = "";

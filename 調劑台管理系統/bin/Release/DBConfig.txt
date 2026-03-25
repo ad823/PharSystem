@@ -1,4 +1,4 @@
 {
-  "Name": "ADC_24йт",
+  "Name": "ADC(ER)",
   "Api_Server": "http://127.0.0.1:4433"
 }

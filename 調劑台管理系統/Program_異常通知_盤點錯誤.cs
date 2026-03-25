@@ -43,6 +43,8 @@ namespace 調劑台管理系統
             this.sqL_DataGridView_異常通知_盤點錯誤.Set_ColumnWidth(100, DataGridViewContentAlignment.MiddleCenter, enum_medRecheckLog.發生時間);
             this.sqL_DataGridView_異常通知_盤點錯誤.Set_ColumnWidth(200, DataGridViewContentAlignment.MiddleLeft, enum_medRecheckLog.異常原因);
             this.sqL_DataGridView_異常通知_盤點錯誤.Set_ColumnWidth(80, DataGridViewContentAlignment.MiddleCenter, enum_medRecheckLog.狀態);
+            this.sqL_DataGridView_異常通知_盤點錯誤.DataGridRefreshEvent += SqL_DataGridView_異常通知_盤點錯誤_DataGridRefreshEvent;
+            this.sqL_DataGridView_異常通知_盤點錯誤.DataGridRowsChangeEvent += SqL_DataGridView_異常通知_盤點錯誤_DataGridRowsChangeEvent;
 
             this.plC_RJ_Button_異常通知_盤點錯誤_未排除顯示.MouseDownEvent += PlC_RJ_Button_異常通知_盤點錯誤_未排除顯示_MouseDownEvent;
             this.plC_RJ_Button_異常通知_盤點錯誤_選取藥品異常排除.MouseDownEvent += PlC_RJ_Button_異常通知_盤點錯誤_選取藥品異常排除_MouseDownEvent;
@@ -51,6 +53,25 @@ namespace 調劑台管理系統
 
             rJ_DatePicker_異常通知_盤點錯誤_排除時段_起始.Value = rJ_DatePicker_異常通知_盤點錯誤_排除時段_起始.Value.AddMonths(-1);
             rJ_DatePicker_異常通知_盤點錯誤_發生時段_起始.Value = rJ_DatePicker_異常通知_盤點錯誤_發生時段_起始.Value.AddMonths(-1);
+        }
+
+        private void SqL_DataGridView_異常通知_盤點錯誤_DataGridRowsChangeEvent(List<object[]> RowsList)
+        {
+            List<string> guids = (from temp in RowsList
+                                  select temp[(int)enum_medRecheckLog.交易紀錄_GUID].ObjectToString()).ToList();
+            List<transactionsClass> transactionsClasses = transactionsClass.get_by_guids(API_Server, guids, ServerName, ServerType);
+
+            foreach(object[] obj in RowsList)
+            {
+                string guid = obj[(int)enum_medRecheckLog.交易紀錄_GUID].ObjectToString();
+                transactionsClass transactions = transactionsClasses.Where(x => x.GUID == guid).FirstOrDefault();
+                if (transactions != null) obj[(int)enum_medRecheckLog.差異值] = transactions.交易量;
+                else obj[(int)enum_medRecheckLog.差異值] = "-";
+            }
+        }
+        private void SqL_DataGridView_異常通知_盤點錯誤_DataGridRefreshEvent()
+        {
+           
         }
 
         private void PlC_RJ_Button_異常通知_盤點錯誤_選取藥品異常排除_MouseDownEvent(MouseEventArgs mevent)

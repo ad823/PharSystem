@@ -849,6 +849,31 @@ namespace HIS_DB_Lib
             transactionsClass transactions = returnData_out.Data.ObjToClass<transactionsClass>();
             return transactions;
         }
+        static public List<transactionsClass> get_by_guids(string API_Server, List<string> guids, string serverName, string serverType)
+        {
+            string url = $"{API_Server}/api/transactions/get_by_guids";
+            string str_serverNames = "";
+            string str_serverTypes = "";
+
+            returnData returnData = new returnData();
+            returnData.ServerName = serverName;
+            returnData.ServerType = serverType;
+            returnData.ValueAry = guids;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            if (returnData_out == null)
+            {
+                return null;
+            }
+            if (returnData_out.Data == null)
+            {
+                return null;
+            }
+            Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
+            List<transactionsClass> transactions = returnData_out.Data.ObjToClass<List<transactionsClass>>();
+            return transactions;
+        }
 
 
 
