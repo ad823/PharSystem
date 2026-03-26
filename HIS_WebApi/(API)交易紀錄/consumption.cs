@@ -994,7 +994,9 @@ namespace HIS_WebApi
                     .Select(g => new consumptionClass
                     {
                         藥碼 = g.Key,
-                        平均消耗量 = g.Average(x => x.消耗量.StringToDouble()).ToString()
+                        平均消耗量 = g.Average(x => x.消耗量.StringToDouble()).ToString(), 
+                        serverName = returnData.ServerName,
+                        serverType = returnData.ServerType
                     }).ToList();
 
                 returnData.Code = 200;
@@ -1013,7 +1015,63 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("get_consume_all_server_today")]
+        public async Task<string> get_consume_all_server_today([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                returnData returnData_server = await new ServerSettingController().get_name();
+                if (returnData_server == null || returnData_server.Code != 200)
+                {
+                    returnData_server.Result += "伺服器取得失敗";
+                    return returnData_server.JsonSerializationt(true);
+                }
+                List<sys_serverSettingClass> serverSettingClasses = returnData_server.Data.ObjToClass<List<sys_serverSettingClass>>();
+                List<Task<string>> tasks = new List<Task<string>>();
+                DateTime now  = DateTime.Now;
+                string today_start = now.GetStartDate().ToDateTimeString();
+                string today_end = now.GetEndDate().ToDateTimeString();
 
+                foreach (var item in serverSettingClasses)
+                {
+                    returnData returnData_ = new returnData();
+
+                    returnData_.ServerName = item.設備名稱;
+                    returnData_.ServerType = item.類別;
+                    returnData.ValueAry.Add(today_start);
+                    returnData.ValueAry.Add(today_end);
+                    Task<string> stock = get_by_start_end(returnData_);
+                    tasks.Add(stock);
+
+                }
+                string[] result = await Task.WhenAll(tasks);
+                List<consumptionClass> consumptionClasses = new List<consumptionClass>();
+                for (int i = 0; i < result.Length; i++)
+                {
+                    returnData returnData_result = result[i].JsonDeserializet<returnData>();
+                    if (returnData_result.Code == 200)
+                    {
+                        List<consumptionClass> temp_consume = returnData_result.Data.ObjToClass<List<consumptionClass>>();
+                        consumptionClasses.AddRange(temp_consume);
+                    }
+                }
+
+                returnData.Code = 200;
+                returnData.Data = consumptionClasses;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "get_consume_all_server_today";
+                returnData.Result = $"取得共{consumptionClasses.Count}筆!";
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception ex)
+            {
+                //if (ex.Message == "Table 'dbvm.medmap_stock' doesn't exist") init(returnData);
+                returnData.Code = -200;
+                returnData.Result = ex.Message;
+                return returnData.JsonSerializationt(true);
+            }
+        }
         private async Task<string> CheckCreatTable(returnData returnData)
         {
             sys_serverSettingClass sys_ServerSettingClass = await HIS_WebApi.Method.GetServerAsync(returnData.ServerName, returnData.ServerType, "儲位資料");
@@ -1047,6 +1105,13 @@ namespace HIS_WebApi
                 return compare;
 
             }
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_consume_all_server_today()
+        {
+            returnData returnData = new returnData();
+            string result = await get_consume_all_server_today(returnData);
+            return result.JsonDeserializet<returnData>();
         }
     }
 }

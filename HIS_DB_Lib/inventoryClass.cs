@@ -119,6 +119,10 @@ namespace HIS_DB_Lib
         儲位名稱,
         [Description("理論值,VARCHAR,10,NONE")]
         理論值,
+        [Description("單價,VARCHAR,10,NONE")]
+        單價,
+        [Description("消耗量,VARCHAR,10,NONE")]
+        消耗量,
         [Description("新增時間,DATETIME,50,NONE")]
         新增時間,
         [Description("備註,VARCHAR,200,NONE")]
@@ -266,6 +270,10 @@ namespace HIS_DB_Lib
             public string 藥品條碼2 { get; set; }
             [JsonPropertyName("START_QTY")]
             public string 理論值 { get; set; }
+            [JsonPropertyName("PRICE")]
+            public string 單價 { get; set; }
+            [JsonPropertyName("CONSUME")]
+            public string 消耗量 { get; set; }
             [JsonPropertyName("END_QTY")]
             public string 盤點量 { get; set; }
             [JsonPropertyName("ADD_TIME")]

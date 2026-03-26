@@ -124,6 +124,8 @@ namespace HIS_DB_Lib
         public List<inspectionClass.content> content { get; set; }
         public string serverName { get; set; }
         public string serverType { get; set; }
+        public string total_qty { get; set; }
+
 
         static public returnData get_stock(string API_Server, string serverName, string serverType)
         {

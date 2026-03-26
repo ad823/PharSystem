@@ -1,26 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using SQLUI;
-using Basic;
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Configuration;
-using MyOffice;
-using NPOI;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
-using MyUI;
+﻿using Basic;
 using H_Pannel_lib;
 using HIS_DB_Lib;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MyOffice;
+using MySql.Data.MySqlClient;
+using MyUI;
+using NPOI;
+using NPOI.SS.Formula.Functions;
+using SQLUI;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 namespace HIS_WebApi
 {
     [Route("api/[controller]")]
@@ -30,7 +32,16 @@ namespace HIS_WebApi
         static public string API_Server = "http://127.0.0.1:4433/api/serversetting";
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
 
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+          serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+          {
+              var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
 
+              if (string.IsNullOrWhiteSpace(Password))
+                  throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+              return (Server, DB, UserName, Password, Port);
+          });
         /// <summary>
         /// 初始化資料庫
         /// </summary>
@@ -249,14 +260,10 @@ namespace HIS_WebApi
                 returnData.Result = $"Exception : {e.Message}";
                 return returnData.JsonSerializationt(true);
             }
-
-
-
-
         }
         [Route("get_by_codes")]
         [HttpPost]
-        public string get_by_codes([FromBody] returnData returnData)
+        public async Task<string> get_by_codes([FromBody] returnData returnData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -270,39 +277,19 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt(true);
                 }
                 string[] Codes = returnData.ValueAry[0].Split(",");
+                if (Codes.Length == 1)
+                {
+                    Codes = returnData.ValueAry[0].Split(";");
+                }
                 GET_init(returnData);
                 returnData.Method = "get_by_codes";
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
-                if (sys_serverSettingClasses.Count == 0)
-                {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料!";
-                    return returnData.JsonSerializationt();
-                }
-
-                string Server = sys_serverSettingClasses[0].Server;
-                string DB = sys_serverSettingClasses[0].DBName;
-                string UserName = sys_serverSettingClasses[0].User;
-                string Password = sys_serverSettingClasses[0].Password;
-                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
 
                 Table table = new Table(new enum_medPrice());
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
                 SQLControl sQLControl_medPrice = new SQLControl(Server, DB, table.TableName, UserName, Password, Port, SSLMode);
-                List<object[]> list_medPrice = new List<object[]>();
 
-                List<Task> tasks = new List<Task>();
-                for (int i = 0; i < Codes.Length; i++)
-                {
-                    string code = Codes[i];
-                    tasks.Add(Task.Run(new Action(delegate
-                    {
-                        List<object[]> list_value_buf = sQLControl_medPrice.GetRowsByDefult(null, (int)enum_medPrice.藥品碼, code);
-                        list_medPrice.LockAdd(list_value_buf);
-                    })));
-                }
-                Task.WhenAll(tasks).Wait();
-                List<medPriceClass> medPirce_sql = list_medPrice.SQLToClass<medPriceClass, enum_medPrice>();
+                List<object[]> list_value_buf = await sQLControl_medPrice.GetRowsByDefultAsync(null, (int)enum_medPrice.藥品碼, Codes);           
+                List<medPriceClass> medPirce_sql = list_value_buf.SQLToClass<medPriceClass, enum_medPrice>();
 
                 returnData.TimeTaken = myTimer.ToString();
                 returnData.Data = medPirce_sql;
@@ -318,10 +305,6 @@ namespace HIS_WebApi
                 returnData.Result = $"Exception : {e.Message}";
                 return returnData.JsonSerializationt(true);
             }
-
-
-
-
         }
 
         private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
@@ -330,6 +313,14 @@ namespace HIS_WebApi
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClass, new enum_medPrice()));
             return tables.JsonSerializationt(true);
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_by_codes(List<string> strings)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry = string.Join(";",strings);
+            string result = await get_by_codes(returnData);
+            return result.JsonDeserializet<returnData>();
         }
     }
 }

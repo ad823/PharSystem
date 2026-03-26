@@ -66,6 +66,8 @@ namespace HIS_DB_Lib
         public string 建立時間 { get; set; }
         [JsonPropertyName("ANG_QTY")]
         public string 平均消耗量 { get; set; }
+        public string serverName { get; set; }
+        public string serverType { get; set; }
         static public returnData get_avg_by_start_end(string API_Server, string serverName, string serverType, string start, string end)
         {
             string url = $"{API_Server}/api/consumption/get_avg_by_start_end";
