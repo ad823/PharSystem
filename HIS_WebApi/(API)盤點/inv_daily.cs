@@ -72,9 +72,14 @@ namespace HIS_WebApi._API_盤點
                 string[] EvdInv = returnData.Value.Split(';').ToArray();
 
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_inventory_content = new SQLControl(Server, DB, "inventory_content", UserName, Password, Port, SSLMode);
+
                 List<object[]> list_inventory_content = await sQLControl_inventory_content.GetRowsByDefultAsync(null, (int)enum_盤點內容.盤點單號, EvdInv);
                 List<inventoryClass.content> contents = list_inventory_content.SQLToClass<inventoryClass.content, enum_盤點內容>();
+                string[] Master_GUID = contents.Select(x => x.Master_GUID).Distinct().ToArray();
+                List<object[]> list_inventory_creat = await sQLControl_inventory_creat.GetRowsByDefultAsync(null, (int)enum_盤點單號.GUID, Master_GUID);
+                List<inventoryClass.creat> creat = list_inventory_creat.SQLToClass<inventoryClass.creat, enum_盤點單號>();
 
                 returnData returnData_stock = await new stock().get_stock_all_server();
                 List<stockClass> stockClasses = returnData_stock.Data.ObjToClass<List<stockClass>>();
@@ -105,15 +110,15 @@ namespace HIS_WebApi._API_盤點
                 List<List<inventoryClass.content>> contents_group = contents.GroupBy(x => x.Master_GUID).Select(g => g.ToList()).ToList();
                 foreach (var content in contents_group)
                 {
-                    string 盤點單號 = content[0].盤點單號;
+                    string 盤點名稱 = creat.Where(x => x.GUID == content[0].Master_GUID).Select(x => x.盤點名稱).FirstOrDefault();
                     for (int i = 0; i < content.Count; i++)
                     {
-                        stockClass stockClass = stockClasses.Where(x => x.藥碼 == content[i].藥品碼 && 盤點單號.Contains(x.serverName) && x.total_qty.StringToDouble() > 0).FirstOrDefault();
-                        consumptionClass consumptionClass = consumptionClasses.Where(x => x.藥碼 == content[i].藥品碼 && 盤點單號.Contains(x.serverName)).FirstOrDefault();
+                        stockClass stockClass = stockClasses.Where(x => x.藥碼 == content[i].藥品碼 && 盤點名稱.Contains(x.serverName) && x.total_qty.StringToDouble() > 0).FirstOrDefault();
+                        consumptionClass consumptionClass = consumptionClasses.Where(x => x.藥碼 == content[i].藥品碼 && 盤點名稱.Contains(x.serverName)).FirstOrDefault();
                         medPriceClass medPriceClass = medPriceClasses.Where(x => x.藥品碼 == content[i].藥品碼).FirstOrDefault();
 
                         content[i].理論值 = stockClass != null ? stockClass.total_qty : "0";
-                        content[i].消耗量 = consumptionClass != null ? consumptionClass.消耗量 : "0";
+                        content[i].消耗量 = consumptionClass != null ? consumptionClass.平均消耗量 : "0";
                         content[i].單價 = medPriceClass != null ? medPriceClass.售價 : "0";
 
                     }
@@ -200,7 +205,7 @@ namespace HIS_WebApi._API_盤點
                 returnData.Result = $"資料初始化失敗!";
                 return returnData.JsonSerializationt(true);
             }
-            List<List<inventoryClass.creat>> creats_group = creats.GroupBy(x => x.盤點單號).Select(g => g.ToList()).ToList();
+            List<List<inventoryClass.creat>> creats_group = creats.GroupBy(x => x.盤點單號.Split("-")[0]).Select(g => g.ToList()).ToList();
             List<System.Data.DataTable> dataTables = new List<DataTable>();
 
             foreach (var creat in creats_group)
@@ -211,10 +216,10 @@ namespace HIS_WebApi._API_盤點
                 dataTables.Add(dataTable);
             }
             System.Data.DataTable total_dataTable = new DataTable();
-            total_dataTable.Columns.Add("藥碼", typeof(decimal));
-            total_dataTable.Columns.Add("料號", typeof(decimal));
-            total_dataTable.Columns.Add("藥名", typeof(decimal));
-
+            total_dataTable.Columns.Add("藥碼", typeof(string));
+            total_dataTable.Columns.Add("料號", typeof(string));
+            total_dataTable.Columns.Add("藥名", typeof(string));
+            total_dataTable.TableName = "盤點總表";
             foreach (var dt in dataTables)
             {
                 string colName = dt.TableName + "誤差量";           

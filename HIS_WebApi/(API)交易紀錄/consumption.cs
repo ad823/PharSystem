@@ -957,7 +957,7 @@ namespace HIS_WebApi
             }
         }
         [HttpPost("get_avg_by_start_end")]
-        public async Task<string> get_by_start_end([FromBody] returnData returnData)
+        public async Task<string> get_avg_by_start_end([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             try
@@ -1039,9 +1039,9 @@ namespace HIS_WebApi
 
                     returnData_.ServerName = item.設備名稱;
                     returnData_.ServerType = item.類別;
-                    returnData.ValueAry.Add(today_start);
-                    returnData.ValueAry.Add(today_end);
-                    Task<string> stock = get_by_start_end(returnData_);
+                    returnData_.ValueAry.Add(today_start);
+                    returnData_.ValueAry.Add(today_end);
+                    Task<string> stock = get_avg_by_start_end(returnData_);
                     tasks.Add(stock);
 
                 }

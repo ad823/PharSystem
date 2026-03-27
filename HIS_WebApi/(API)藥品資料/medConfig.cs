@@ -238,9 +238,14 @@ namespace HIS_WebApi
                 List<medConfigClass> medConfigClasses = returnData.Data.ObjToClass<List<medConfigClass>>();
                 if (medConfigClasses == null)
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"傳入Data資料異常";
-                    return returnData.JsonSerializationt();
+                    medConfigClasses = new List<medConfigClass>() { returnData.Data.ObjToClass<medConfigClass>() };
+                    if (medConfigClasses == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"傳入Data資料異常";
+                        return returnData.JsonSerializationt();
+                    }
+                    
                 }
                 string Server = _sys_serverSettingClasses[0].Server;
                 string DB = _sys_serverSettingClasses[0].DBName;
