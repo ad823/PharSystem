@@ -140,7 +140,16 @@ namespace HIS_WebApi
                 List<medPriceClass> medPirce_sql_replace = new List<medPriceClass>();
 
                 List<medPriceClass> medPirce_input = returnData.Data.ObjToClass<List<medPriceClass>>();
-
+                if (medPirce_input == null)
+                {
+                    medPirce_input = new List<medPriceClass>() { returnData.Data.ObjToClass<medPriceClass>()};
+                    if (medPirce_input == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"returnData.Data資料錯誤";
+                        return returnData.JsonSerializationt();
+                    } 
+                }
                 List<object[]> list_medPreice_add = new List<object[]>();
                 List<object[]> list_medPreice_replace = new List<object[]>();
 
@@ -318,7 +327,7 @@ namespace HIS_WebApi
         public async Task<returnData> get_by_codes(List<string> strings)
         {
             returnData returnData = new returnData();
-            returnData.ValueAry = string.Join(";",strings);
+            returnData.ValueAry.Add(string.Join(";",strings));
             string result = await get_by_codes(returnData);
             return result.JsonDeserializet<returnData>();
         }

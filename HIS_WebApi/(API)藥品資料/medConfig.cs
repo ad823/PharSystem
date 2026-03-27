@@ -113,6 +113,7 @@ namespace HIS_WebApi
             }
             catch (Exception e)
             {
+                GET_init(returnData);
                 returnData.Code = -200;
                 returnData.Result = e.Message;
                 return returnData.JsonSerializationt();
