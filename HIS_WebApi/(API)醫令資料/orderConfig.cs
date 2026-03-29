@@ -141,6 +141,7 @@ namespace HIS_WebApi._API_醫令資料
                     }
                     else
                     {
+                        item.GUID = orderConfig.GUID;
                         item.更新時間 = now;
                         db_orderConfig_update.Add(item);
                     }
@@ -148,8 +149,11 @@ namespace HIS_WebApi._API_醫令資料
 
                 List<object[]> update = db_orderConfig_update.ClassToSQL<orderConfigClass>();
                 List<object[]> add = db_orderConfig_add.ClassToSQL<orderConfigClass>();
-                await sQLControl.UpdateRowsAsync(null, update);
+                sQLControl.UpdateByDefulteExtra(null, update);
                 await sQLControl.AddRowsAsync(null, add);
+
+                objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.Order_GUID, orderConfigClasses.Select(x => x.Order_GUID).ToArray());
+                db_orderConfig = objects_.SQLToClass<orderConfigClass>();
 
                 returnData.Code = 200;
                 returnData.Data = db_orderConfig;
