@@ -28,114 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.plC_RJ_Button_不發藥 = new MyUI.PLC_RJ_Button();
-            this.plC_RJ_Button_大型點滴 = new MyUI.PLC_RJ_Button();
             this.plC_RJ_Button_確認 = new MyUI.PLC_RJ_Button();
+            this.panel_不發藥 = new System.Windows.Forms.Panel();
+            this.panel_大瓶藥 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
-            // 
-            // plC_RJ_Button_不發藥
-            // 
-            this.plC_RJ_Button_不發藥.AutoResetState = true;
-            this.plC_RJ_Button_不發藥.BackgroundColor = System.Drawing.Color.White;
-            this.plC_RJ_Button_不發藥.Bool = false;
-            this.plC_RJ_Button_不發藥.BorderColor = System.Drawing.Color.Black;
-            this.plC_RJ_Button_不發藥.BorderRadius = 15;
-            this.plC_RJ_Button_不發藥.BorderSize = 0;
-            this.plC_RJ_Button_不發藥.but_press = false;
-            this.plC_RJ_Button_不發藥.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
-            this.plC_RJ_Button_不發藥.DisenableColor = System.Drawing.Color.Gray;
-            this.plC_RJ_Button_不發藥.FlatAppearance.BorderSize = 0;
-            this.plC_RJ_Button_不發藥.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.plC_RJ_Button_不發藥.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_不發藥.GUID = "";
-            this.plC_RJ_Button_不發藥.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
-            this.plC_RJ_Button_不發藥.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
-            this.plC_RJ_Button_不發藥.Location = new System.Drawing.Point(58, 44);
-            this.plC_RJ_Button_不發藥.Name = "plC_RJ_Button_不發藥";
-            this.plC_RJ_Button_不發藥.OFF_文字內容 = "不發藥";
-            this.plC_RJ_Button_不發藥.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_不發藥.OFF_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button_不發藥.OFF_背景顏色 = System.Drawing.Color.White;
-            this.plC_RJ_Button_不發藥.ON_BorderSize = 1;
-            this.plC_RJ_Button_不發藥.ON_文字內容 = "不發藥";
-            this.plC_RJ_Button_不發藥.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_不發藥.ON_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button_不發藥.ON_背景顏色 = System.Drawing.Color.Linen;
-            this.plC_RJ_Button_不發藥.ProhibitionBorderLineWidth = 1;
-            this.plC_RJ_Button_不發藥.ProhibitionLineWidth = 4;
-            this.plC_RJ_Button_不發藥.ProhibitionSymbolSize = 30;
-            this.plC_RJ_Button_不發藥.ShadowColor = System.Drawing.Color.DimGray;
-            this.plC_RJ_Button_不發藥.ShadowSize = 3;
-            this.plC_RJ_Button_不發藥.ShowLoadingForm = false;
-            this.plC_RJ_Button_不發藥.Size = new System.Drawing.Size(221, 220);
-            this.plC_RJ_Button_不發藥.State = false;
-            this.plC_RJ_Button_不發藥.TabIndex = 131;
-            this.plC_RJ_Button_不發藥.Text = "不發藥";
-            this.plC_RJ_Button_不發藥.TextColor = System.Drawing.Color.Black;
-            this.plC_RJ_Button_不發藥.TextHeight = 35;
-            this.plC_RJ_Button_不發藥.UseVisualStyleBackColor = false;
-            this.plC_RJ_Button_不發藥.字型鎖住 = false;
-            this.plC_RJ_Button_不發藥.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
-            this.plC_RJ_Button_不發藥.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
-            this.plC_RJ_Button_不發藥.文字鎖住 = false;
-            this.plC_RJ_Button_不發藥.背景圖片 = global::勤務傳送系統.Properties.Resources.發藥OFF;
-            this.plC_RJ_Button_不發藥.讀取位元反向 = false;
-            this.plC_RJ_Button_不發藥.讀寫鎖住 = false;
-            this.plC_RJ_Button_不發藥.音效 = false;
-            this.plC_RJ_Button_不發藥.顯示 = false;
-            this.plC_RJ_Button_不發藥.顯示狀態 = false;
-            // 
-            // plC_RJ_Button_大型點滴
-            // 
-            this.plC_RJ_Button_大型點滴.AutoResetState = true;
-            this.plC_RJ_Button_大型點滴.BackgroundColor = System.Drawing.Color.White;
-            this.plC_RJ_Button_大型點滴.Bool = false;
-            this.plC_RJ_Button_大型點滴.BorderColor = System.Drawing.Color.Black;
-            this.plC_RJ_Button_大型點滴.BorderRadius = 15;
-            this.plC_RJ_Button_大型點滴.BorderSize = 0;
-            this.plC_RJ_Button_大型點滴.but_press = false;
-            this.plC_RJ_Button_大型點滴.buttonType = MyUI.RJ_Button.ButtonType.Toggle;
-            this.plC_RJ_Button_大型點滴.DisenableColor = System.Drawing.Color.Gray;
-            this.plC_RJ_Button_大型點滴.FlatAppearance.BorderSize = 0;
-            this.plC_RJ_Button_大型點滴.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.plC_RJ_Button_大型點滴.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_大型點滴.GUID = "";
-            this.plC_RJ_Button_大型點滴.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
-            this.plC_RJ_Button_大型點滴.Image_padding = new System.Windows.Forms.Padding(18, 7, 23, 5);
-            this.plC_RJ_Button_大型點滴.Location = new System.Drawing.Point(310, 44);
-            this.plC_RJ_Button_大型點滴.Name = "plC_RJ_Button_大型點滴";
-            this.plC_RJ_Button_大型點滴.OFF_文字內容 = "大型點滴";
-            this.plC_RJ_Button_大型點滴.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_大型點滴.OFF_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button_大型點滴.OFF_背景顏色 = System.Drawing.Color.White;
-            this.plC_RJ_Button_大型點滴.ON_BorderSize = 1;
-            this.plC_RJ_Button_大型點滴.ON_文字內容 = "大型點滴";
-            this.plC_RJ_Button_大型點滴.ON_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.plC_RJ_Button_大型點滴.ON_文字顏色 = System.Drawing.Color.Black;
-            this.plC_RJ_Button_大型點滴.ON_背景顏色 = System.Drawing.Color.Linen;
-            this.plC_RJ_Button_大型點滴.ProhibitionBorderLineWidth = 1;
-            this.plC_RJ_Button_大型點滴.ProhibitionLineWidth = 4;
-            this.plC_RJ_Button_大型點滴.ProhibitionSymbolSize = 30;
-            this.plC_RJ_Button_大型點滴.ShadowColor = System.Drawing.Color.DimGray;
-            this.plC_RJ_Button_大型點滴.ShadowSize = 3;
-            this.plC_RJ_Button_大型點滴.ShowLoadingForm = false;
-            this.plC_RJ_Button_大型點滴.Size = new System.Drawing.Size(221, 220);
-            this.plC_RJ_Button_大型點滴.State = false;
-            this.plC_RJ_Button_大型點滴.TabIndex = 132;
-            this.plC_RJ_Button_大型點滴.Text = "大型點滴";
-            this.plC_RJ_Button_大型點滴.TextColor = System.Drawing.Color.Black;
-            this.plC_RJ_Button_大型點滴.TextHeight = 35;
-            this.plC_RJ_Button_大型點滴.UseVisualStyleBackColor = false;
-            this.plC_RJ_Button_大型點滴.字型鎖住 = false;
-            this.plC_RJ_Button_大型點滴.按鈕型態 = MyUI.PLC_RJ_Button.StatusEnum.交替型;
-            this.plC_RJ_Button_大型點滴.按鍵方式 = MyUI.PLC_RJ_Button.PressEnum.Mouse_左鍵;
-            this.plC_RJ_Button_大型點滴.文字鎖住 = false;
-            this.plC_RJ_Button_大型點滴.背景圖片 = global::勤務傳送系統.Properties.Resources.大型點滴OFF;
-            this.plC_RJ_Button_大型點滴.讀取位元反向 = false;
-            this.plC_RJ_Button_大型點滴.讀寫鎖住 = false;
-            this.plC_RJ_Button_大型點滴.音效 = false;
-            this.plC_RJ_Button_大型點滴.顯示 = false;
-            this.plC_RJ_Button_大型點滴.顯示狀態 = false;
             // 
             // plC_RJ_Button_確認
             // 
@@ -190,23 +86,41 @@
             this.plC_RJ_Button_確認.顯示 = false;
             this.plC_RJ_Button_確認.顯示狀態 = false;
             // 
+            // panel_不發藥
+            // 
+            this.panel_不發藥.BackgroundImage = global::勤務傳送系統.Properties.Resources.發藥OFF;
+            this.panel_不發藥.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_不發藥.Location = new System.Drawing.Point(42, 41);
+            this.panel_不發藥.Name = "panel_不發藥";
+            this.panel_不發藥.Size = new System.Drawing.Size(237, 231);
+            this.panel_不發藥.TabIndex = 134;
+            // 
+            // panel_大瓶藥
+            // 
+            this.panel_大瓶藥.BackgroundImage = global::勤務傳送系統.Properties.Resources.大型點滴OFF;
+            this.panel_大瓶藥.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_大瓶藥.Location = new System.Drawing.Point(315, 41);
+            this.panel_大瓶藥.Name = "panel_大瓶藥";
+            this.panel_大瓶藥.Size = new System.Drawing.Size(237, 231);
+            this.panel_大瓶藥.TabIndex = 135;
+            // 
             // Dialog_發藥狀態選擇
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(602, 386);
+            this.Controls.Add(this.panel_大瓶藥);
+            this.Controls.Add(this.panel_不發藥);
             this.Controls.Add(this.plC_RJ_Button_確認);
-            this.Controls.Add(this.plC_RJ_Button_大型點滴);
-            this.Controls.Add(this.plC_RJ_Button_不發藥);
             this.Name = "Dialog_發藥狀態選擇";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private MyUI.PLC_RJ_Button plC_RJ_Button_不發藥;
-        private MyUI.PLC_RJ_Button plC_RJ_Button_大型點滴;
         private MyUI.PLC_RJ_Button plC_RJ_Button_確認;
+        private System.Windows.Forms.Panel panel_不發藥;
+        private System.Windows.Forms.Panel panel_大瓶藥;
     }
 }

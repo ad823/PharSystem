@@ -31,7 +31,8 @@ namespace 勤務傳送系統
 
         private enum enum_配藥核對_處方
         {
-
+            [Description("GUID,VARCHAR,50,None")]
+            GUID,
             [Description("Value,VARCHAR,50,None")]
             Value,
     
@@ -60,10 +61,17 @@ namespace 勤務傳送系統
 
         private void SqL_DataGridView_配藥核對_全處方_RowEnterEvent(object[] RowValue)
         {
-            OrderClass order = RowValue[0].ObjectToString().JsonDeserializet<OrderClass>();
+            OrderClass order = RowValue[1].ObjectToString().JsonDeserializet<OrderClass>();
 
             Dialog_發藥狀態選擇 dialog_發藥狀態選擇 = new Dialog_發藥狀態選擇(order);
             dialog_發藥狀態選擇.ShowDialog();
+            List<orderConfigClass> orderConfigs = orderConfigClass.get_by_orderGUID(API_Server, order.GUID).orderConfigs;
+            order.orderConfig = orderConfigs;
+            RowValue[1]= order.JsonSerializationt();
+            sqL_DataGridView_配藥核對_全處方.Replace(RowValue, false);
+            sqL_DataGridView_配藥核對_全處方.ClearSelection();
+
+
         }
         private void SqL_DataGridView_配藥核對_全處方_RowHeaderPostPaintingEvent(object sender, Graphics g, Rectangle rect_hedder, Brush brush_background, Pen pen_border)
         {
@@ -117,7 +125,7 @@ namespace 勤務傳送系統
                 Size size = new Size();
                 PointF pointF = new PointF();
                 object[] value = this.sqL_DataGridView_配藥核對_全處方.GetRowsList()[e.RowIndex];
-                OrderClass order = value[0].ObjectToString().JsonDeserializet<OrderClass>();
+                OrderClass order = value[1].ObjectToString().JsonDeserializet<OrderClass>();
                 string 序號 = $"{e.RowIndex + 1}.";
                 double val = order.交易量.StringToDouble() * -1;
                 size = val.ToString("0.00").MeasureText(new Font("標楷體", 30, FontStyle.Bold));
@@ -129,17 +137,40 @@ namespace 勤務傳送系統
                 DrawingClass.Draw.文字左上繪製(order.藥品名稱, new PointF(400, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
                 string note = order.頻次;
 
-                foreach (var orderConfig in order.orderConfig)
+              
+                size = note.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
+                DrawingClass.Draw.文字左上繪製(note, new PointF(e.RowBounds.Width - size.Width - 120, y + 10), new Font("標楷體", 30, FontStyle.Regular), row_Forecolor, e.Graphics);
+                var configMap = new Dictionary<string, Image>()
                 {
-                    if (orderConfig.功能備註.StringIsEmpty() == false)
-                    {
-                        if(orderConfig.狀態.StringToBool()) note += $"/{orderConfig.功能備註}";
-                    }
+                    { "大瓶藥", global::勤務傳送系統.Properties.Resources.大型點滴ON },
+                    { "不發藥", global::勤務傳送系統.Properties.Resources.發藥ON }
+                };
+
+                                var sortOrder = new Dictionary<string, int>()
+                {
+                    { "大瓶藥", 1 },
+                    { "不發藥", 2 }
+                };
+
+                int img_num = 0;
+
+                var sortedConfigs = order.orderConfig
+                    .Where(z => z.狀態.StringToBool() && configMap.ContainsKey(z.功能備註))
+                    .OrderBy(z => sortOrder.ContainsKey(z.功能備註) ? sortOrder[z.功能備註] : 999);
+
+                foreach (var orderConfig in sortedConfigs)
+                {
+                    var img = configMap[orderConfig.功能備註];
+
+                    e.Graphics.DrawImage(img,
+                        e.RowBounds.Width - 50 - img_num * 50,
+                        y + 10,
+                        40,
+                        40);
+
+                    img_num++;
                 }
 
-                size = note.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
-                DrawingClass.Draw.文字左上繪製(note, new PointF(e.RowBounds.Width - size.Width - 10, y + 10), new Font("標楷體", 30, FontStyle.Regular), row_Forecolor, e.Graphics);
-             
             }
         }
 
@@ -589,7 +620,7 @@ namespace 勤務傳送系統
                     order.核對時間 = DateTime.Now.ToDateTimeString();
                     order.核對姓名 = this.登入者名稱;
                     order.核對ID = this.登入者ID;
-                    sqL_DataGridView_配藥核對_全處方.AddRow(new object[] { order.JsonSerializationt() }, false);
+                    sqL_DataGridView_配藥核對_全處方.AddRow(new object[] { order.GUID, order.JsonSerializationt() }, false);
                     transactionsClass transactions = new transactionsClass();
                     transactions.Order_GUID = order.GUID;
                     transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
