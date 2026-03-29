@@ -46,6 +46,7 @@ namespace 勤務傳送系統
             sqL_DataGridView_配藥核對_全處方.Set_ColumnVisible(false, new enum_配藥核對_處方().GetEnumNames());
             sqL_DataGridView_配藥核對_全處方.RowPostPaintingEventEx += SqL_DataGridView_配藥核對_全處方_RowPostPaintingEventEx;
             sqL_DataGridView_配藥核對_全處方.RowHeaderPostPaintingEvent += SqL_DataGridView_配藥核對_全處方_RowHeaderPostPaintingEvent;
+            sqL_DataGridView_配藥核對_全處方.RowEnterEvent += SqL_DataGridView_配藥核對_全處方_RowEnterEvent;
 
             button_配藥核對_全處方_輸入醫令條碼.Click += Button_配藥核對_全處方_輸入醫令條碼_Click;
 
@@ -57,8 +58,13 @@ namespace 勤務傳送系統
             myThread_配藥核對.Trigger();
         }
 
-     
+        private void SqL_DataGridView_配藥核對_全處方_RowEnterEvent(object[] RowValue)
+        {
+            OrderClass order = RowValue[0].ObjectToString().JsonDeserializet<OrderClass>();
 
+            Dialog_發藥狀態選擇 dialog_發藥狀態選擇 = new Dialog_發藥狀態選擇(order);
+            dialog_發藥狀態選擇.ShowDialog();
+        }
         private void SqL_DataGridView_配藥核對_全處方_RowHeaderPostPaintingEvent(object sender, Graphics g, Rectangle rect_hedder, Brush brush_background, Pen pen_border)
         {
             Brush brush = brush_background;
@@ -91,7 +97,11 @@ namespace 勤務傳送系統
         {
             Color row_Backcolor = Color.WhiteSmoke;
             Color row_Forecolor = Color.Black;
-
+            if (this.sqL_DataGridView_配藥核對_全處方.dataGridView.Rows[e.RowIndex].Selected)
+            {
+                row_Backcolor = Color.Blue;
+                row_Forecolor = Color.White;
+            }
 
 
             using (Brush brush = new SolidBrush(row_Backcolor))
@@ -117,9 +127,19 @@ namespace 勤務傳送系統
                 DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
 
                 DrawingClass.Draw.文字左上繪製(order.藥品名稱, new PointF(400, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
+                string note = order.頻次;
 
-                size = order.頻次.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
-                DrawingClass.Draw.文字左上繪製(order.頻次, new PointF(e.RowBounds.Width - size.Width - 10, y + 10), new Font("標楷體", 30, FontStyle.Regular), Color.Black, e.Graphics);
+                foreach (var orderConfig in order.orderConfig)
+                {
+                    if (orderConfig.功能備註.StringIsEmpty() == false)
+                    {
+                        if(orderConfig.狀態.StringToBool()) note += $"/{orderConfig.功能備註}";
+                    }
+                }
+
+                size = note.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
+                DrawingClass.Draw.文字左上繪製(note, new PointF(e.RowBounds.Width - size.Width - 10, y + 10), new Font("標楷體", 30, FontStyle.Regular), row_Forecolor, e.Graphics);
+             
             }
         }
 
@@ -330,7 +350,7 @@ namespace 勤務傳送系統
                     this.Invoke(new Action(delegate
                     {
                         rJ_Lable_配藥核對_單處方_狀態.BackgroundColor = Color.HotPink;
-                        rJ_Lable_配藥核對_單處方_狀態.Text = "未在櫃體內,找到病房名稱!";
+                        rJ_Lable_配藥核對_單處方_狀態.Text = "未在櫃體內,找到病房名稱";
                         //Application.DoEvents();
                         MyTimerBasic_配藥核對_單處方_刷藥單結束計時.TickStop();
                         MyTimerBasic_配藥核對_單處方_刷藥單結束計時.StartTickTime(3000);
@@ -403,26 +423,7 @@ namespace 勤務傳送系統
         {
             try
             {
-                if (MyTimerBasic_配藥核對_全處方_刷藥單結束計時.IsTimeOut())
-                {
-                    if (rJ_Lable_配藥核對_全處方_狀態.Text != "等待刷藥單...")
-                    {
-                        this.Invoke(new Action(delegate
-                        {
-                            rJ_Lable_配藥核對_全處方_狀態.BackgroundColor = Color.White;
-                            rJ_Lable_配藥核對_全處方_狀態.BorderSize = 0;
-                            rJ_Lable_配藥核對_全處方_狀態.Text = "等待刷藥單";
-
-                            rJ_Lable_配藥核對_全處方_病人姓名.Text = "-------";
-                            rJ_Lable_配藥核對_全處方_病歷號.Text = "-------";
-                            rJ_Lable_配藥核對_全處方_病房.Text = "";
-
-                            sqL_DataGridView_配藥核對_全處方.ClearGrid();
-                        }));
-
-
-                    }
-                }
+             
                 string text = null;
                 if(配藥核對_Keyin_barcode.StringIsEmpty())
                 {
@@ -475,6 +476,24 @@ namespace 勤務傳送系統
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
 
+                if (MyTimerBasic_配藥核對_全處方_刷藥單結束計時.IsTimeOut() || true)
+                {
+                    if (rJ_Lable_配藥核對_全處方_狀態.Text != "等待刷藥單...")
+                    {
+                        this.Invoke(new Action(delegate
+                        {
+                            rJ_Lable_配藥核對_全處方_狀態.BackgroundColor = Color.White;
+                            rJ_Lable_配藥核對_全處方_狀態.BorderSize = 0;
+                            rJ_Lable_配藥核對_全處方_狀態.Text = "等待刷藥單";
+
+                            rJ_Lable_配藥核對_全處方_病人姓名.Text = "-------";
+                            rJ_Lable_配藥核對_全處方_病歷號.Text = "-------";
+                            rJ_Lable_配藥核對_全處方_病房.Text = "";
+
+                            sqL_DataGridView_配藥核對_全處方.ClearGrid();
+                        }));
+                    }
+                }
 
                 if (orderClasses.Count == 0)
                 {
@@ -602,7 +621,7 @@ namespace 勤務傳送系統
                 配藥核對_Keyin_barcode = "";
                 sqL_DataGridView_配藥核對_全處方.RefreshGrid();
                 MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
-                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(5000);
+                MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(600000);
                 transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
                 OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
                 Funtion_藥袋刷入API(orderClasses);

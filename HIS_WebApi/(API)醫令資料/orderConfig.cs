@@ -125,27 +125,37 @@ namespace HIS_WebApi._API_醫令資料
 
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
                 SQLControl sQLControl = new SQLControl(Server, DB, "orderConfig", UserName, Password, Port, SSLMode);
-                List<object[]> objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.GUID, orderConfigClasses.Select(x => x.GUID).ToArray());
+                List<object[]> objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.Order_GUID, orderConfigClasses.Select(x => x.Order_GUID).ToArray());
                 List<orderConfigClass> db_orderConfig = objects_.SQLToClass<orderConfigClass>();
+                List<orderConfigClass> db_orderConfig_update = new List<orderConfigClass>();
+                List<orderConfigClass> db_orderConfig_add = new List<orderConfigClass>();
                 string now = DateTime.Now.ToDateTimeString();
-
-                foreach (var item in db_orderConfig)
+                foreach (var item in orderConfigClasses)
                 {
-                    orderConfigClass orderConfig = orderConfigClasses.FirstOrDefault(x => x.GUID == item.GUID);
-                    if (orderConfig == null) continue;
-                    item.功能備註 = orderConfig.功能備註;
-                    item.狀態 = orderConfig.狀態;
-                    item.更新時間 = now;
+                    orderConfigClass orderConfig = db_orderConfig.FirstOrDefault(x => x.功能備註 == item.功能備註);
+                    if (orderConfig == null)
+                    {
+                        item.GUID = Guid.NewGuid().ToString();
+                        item.更新時間 = now;
+                        db_orderConfig_add.Add(item);
+                    }
+                    else
+                    {
+                        item.更新時間 = now;
+                        db_orderConfig_update.Add(item);
+                    }
                 }
 
-                List<object[]> update = db_orderConfig.ClassToSQL<orderConfigClass>();
+                List<object[]> update = db_orderConfig_update.ClassToSQL<orderConfigClass>();
+                List<object[]> add = db_orderConfig_add.ClassToSQL<orderConfigClass>();
                 await sQLControl.UpdateRowsAsync(null, update);
+                await sQLControl.AddRowsAsync(null, add);
 
                 returnData.Code = 200;
                 returnData.Data = db_orderConfig;
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Method = "update";
-                returnData.Result = $"更新成功，共<{db_orderConfig.Count}>筆!";
+                returnData.Result = $"新增<{db_orderConfig_add.Count}>筆,更新<{db_orderConfig_update.Count}>筆";
                 return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)

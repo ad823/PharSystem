@@ -229,6 +229,12 @@
     <Compile Include="Dialog\Dialog_時段設定.Designer.cs">
       <DependentUpon>Dialog_時段設定.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_發藥狀態選擇.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_發藥狀態選擇.Designer.cs">
+      <DependentUpon>Dialog_發藥狀態選擇.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,7 +278,7 @@
       <DependentUpon>Pannel_Box.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Program_主畫面.cs">
+    <Compile Include="Program_櫃體狀態.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program_人員資料.cs">
@@ -311,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_時段設定.resx">
       <DependentUpon>Dialog_時段設定.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_發藥狀態選擇.resx">
+      <DependentUpon>Dialog_發藥狀態選擇.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -353,6 +362,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="awmce-q6d5v-001.ico" />
+    <None Include="Resources\發藥ON.png" />
+    <None Include="Resources\發藥OFF.png" />
+    <None Include="Resources\大型點滴ON.png" />
+    <None Include="Resources\大型點滴OFF.png" />
     <None Include="Resources\adjusted_checkmark-removebg-preview.png" />
     <None Include="Resources\Update.png" />
     <None Include="Resources\serach_document-512.png" />

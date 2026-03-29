@@ -366,5 +366,106 @@ namespace 勤務傳送系統
             H_Pannel_lib.Communication.Set_OutputPINTrigger(uDP_Class, myConfigClass.ResetIP, 1, true);
             uDP_Class.Dispose();
         }
+
+
+
+        private void Pannel_Box_Init()
+        {
+            int row_num = PLC_Device_單層格數.Value;
+            int col_num = PLC_Device_單行格數.Value;
+            int panel_max = row_num * col_num;
+            panel_max = panel_max + 1;
+            if (row_num <= 0) row_num = 1;
+            if (col_num <= 0) col_num = 8;
+            this.SuspendLayout();
+
+            List<FlowLayoutPanel> flowLayoutPanels = new List<FlowLayoutPanel>();
+            flowLayoutPanels.Add(flowLayoutPanel_PannelBox01);
+            flowLayoutPanels.Add(flowLayoutPanel_PannelBox02);
+            flowLayoutPanels.Add(flowLayoutPanel_PannelBox03);
+            flowLayoutPanels.Add(flowLayoutPanel_PannelBox04);
+
+
+            for (int i = 0; i < panel_max * 4; i++)
+            {
+
+
+                Pannel_Box pannel_Box = new Pannel_Box();
+                pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266);
+                pannel_Box.TabIndex = i + 5;
+                //pannel_Box.Width = 195;
+                pannel_Box.Width = flowLayoutPanels[0].Width / col_num - 10;
+                pannel_Box.Height = flowLayoutPanels[0].Height / row_num - 10;
+                pannel_Box.Visible = false;
+
+                flowLayoutPanels[i / panel_max].Controls.Add(pannel_Box);
+
+                Pannel_Box.Panels.Add(pannel_Box);
+                pannel_Box.AlarmEvent += Pannel_Box_AlarmEvent;
+                pannel_Box.CloseEvent += Pannel_Box_CloseEvent;
+                pannel_Box.OpenEvent += Pannel_Box_OpenEvent;
+                pannel_Box.InSideBoxOnEvent += Pannel_Box_InSideBoxOnEvent;
+                pannel_Box.EPDSettingEvent += Pannel_Box_EPDSettingEvent;
+                pannel_Box.PharmacyLightEvent += Pannel_Box_PharmacyLightEvent;
+                this.plC_UI_Init.Add_Method(pannel_Box.Run);
+            }
+            this.ResumeLayout(false);
+
+
+
+        }
+
+        private void Pannel_Box_InSideBoxOnEvent(Pannel_Box pannel_Box)
+        {
+            this.新增交易紀錄(enum_交易記錄查詢動作.藥品放入, this.登入者名稱, $"{pannel_Box.WardName}", "");
+        }
+        private void Pannel_Box_AlarmEvent(Pannel_Box pannel_Box)
+        {
+            this.新增交易紀錄(enum_交易記錄查詢動作.門片未關閉異常, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+        }
+        private void Pannel_Box_CloseEvent(Pannel_Box pannel_Box)
+        {
+            if (pannel_Box.CT_Name.StringIsEmpty()) return;
+            this.新增交易紀錄(enum_交易記錄查詢動作.關閉門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+            pannel_Box.Name = "";
+        }
+        private void Pannel_Box_OpenEvent(Pannel_Box pannel_Box)
+        {
+            if (pannel_Box.CT_Name.StringIsEmpty()) return;
+            this.新增交易紀錄(enum_交易記錄查詢動作.開啟門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+            string[] serch_colName = { enum_交易記錄查詢資料.領用時間.GetEnumName() };
+            string[] serch_Value = { "1999-01-01 00:00:00" };
+
+            MyTimer myTimer = new MyTimer(50000);
+            List<object[]> list_交易紀錄 = this.sqL_DataGridView_交易記錄查詢.SQL_GetRows(serch_colName, serch_Value, false);
+            List<object[]> list_交易紀錄_buf = new List<object[]>();
+            for (int i = 0; i < pannel_Box.List_serchName.Count; i++)
+            {
+                list_交易紀錄_buf.LockAdd(list_交易紀錄.GetRows((int)enum_交易記錄查詢資料.病房號, pannel_Box.List_serchName[i]));
+            }
+            for (int i = 0; i < list_交易紀錄_buf.Count; i++)
+            {
+                list_交易紀錄_buf[i][(int)enum_交易記錄查詢資料.領用人] = pannel_Box.CT_Name;
+                //list_交易紀錄[i][(int)enum_交易記錄查詢資料.領用時間] = DateTime.Now.ToDateTimeString_6();
+            }
+            this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_交易紀錄_buf, false);
+            Console.WriteLine($"領用人寫入共<{list_交易紀錄_buf.Count}>筆 ,耗時{myTimer.ToString()} {DateTime.Now.ToDateTimeString()}");
+        }
+        private void Pannel_Box_EPDSettingEvent(string EPD_IP, string Name)
+        {
+            Storage storage = this.storageUI_EPD_266.SQL_GetStorage(EPD_IP);
+            if (storage == null)
+            {
+                Console.WriteLine($"找無[{EPD_IP}]內容,無法進入設定!");
+                return;
+            }
+            storage.Name = Name;
+            Dialog_EPDPanel dialog_EPDPanel = new Dialog_EPDPanel(this.storageUI_EPD_266, storage);
+            dialog_EPDPanel.ShowDialog();
+        }
+        private void Pannel_Box_PharmacyLightEvent(string EPD_IP, string Name)
+        {
+
+        }
     }
 }
