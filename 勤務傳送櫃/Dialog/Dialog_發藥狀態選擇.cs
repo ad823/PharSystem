@@ -82,21 +82,31 @@ namespace 勤務傳送系統
                 myThread_program = null;
             }
             List<orderConfigClass> orderConfigs_update = new List<orderConfigClass>();
-            foreach (var orderConfig in orderClass.orderConfig)
-            {
-                if (orderConfig.功能備註 == "不發藥")
-                {
-                    orderConfig.狀態 = plC_RJ_Button_不發藥.Bool ? "True" : "False";
-                    orderConfigs_update.Add(orderConfig);
-                }
-                if (orderConfig.功能備註 == "大瓶藥" )
-                {
-                    orderConfig.狀態 = plC_RJ_Button_大型點滴.Bool ? "True" : "False";
-                    orderConfigs_update.Add(orderConfig);
-                    plC_RJ_Button_大型點滴.but_press = true;
+            orderConfigClass orderConfigClass_不發藥 = new orderConfigClass();
+            orderConfigClass_不發藥.Order_GUID = orderClass.GUID;
+            orderConfigClass_不發藥.狀態 = plC_RJ_Button_不發藥.Bool ? "True" : "False";
+            orderConfigClass_不發藥.功能備註 = "不發藥";
+            orderConfigs_update.Add(orderConfigClass_不發藥);
+            orderConfigClass orderConfigClass_大型點滴 = new orderConfigClass();
+            orderConfigClass_不發藥.Order_GUID = orderClass.GUID;
+            orderConfigClass_大型點滴.狀態 = plC_RJ_Button_大型點滴.Bool ? "True" : "False";
+            orderConfigClass_大型點滴.功能備註 = "大瓶藥";
+            orderConfigs_update.Add(orderConfigClass_大型點滴);
+            //foreach (var orderConfig in orderClass.orderConfig)
+            //{
+            //    if (orderConfig.功能備註 == "不發藥")
+            //    {
+            //        orderConfig.狀態 = plC_RJ_Button_不發藥.Bool ? "True" : "False";
+            //        orderConfigs_update.Add(orderConfig);
+            //    }
+            //    if (orderConfig.功能備註 == "大瓶藥" )
+            //    {
+            //        orderConfig.狀態 = plC_RJ_Button_大型點滴.Bool ? "True" : "False";
+            //        orderConfigs_update.Add(orderConfig);
+            //        plC_RJ_Button_大型點滴.but_press = true;
 
-                }
-            }
+            //    }
+            //}
             orderConfigClass.update(Main_Form.API_Server, orderConfigs_update);
         }
         private void PlC_RJ_Button_確認_MouseDownEvent(MouseEventArgs mevent)
