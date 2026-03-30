@@ -883,6 +883,8 @@ namespace HIS_WebApi
                     returnData.Result = $"傳入Data資料異常";
                     return returnData.JsonSerializationt();
                 }
+                input_medCpoe = input_medCpoe.GroupBy(x => new { x.Master_GUID, x.PRI_KEY }).Select(g => g.First()).ToList();
+
                 string 藥局 = input_medCpoe[0].藥局;
                 string 護理站 = input_medCpoe[0].護理站;
 

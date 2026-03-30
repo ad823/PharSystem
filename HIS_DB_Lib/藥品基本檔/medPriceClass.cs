@@ -90,6 +90,16 @@ namespace HIS_DB_Lib
             returnData = json_out.JsonDeserializet<returnData>();
             return returnData;
         }
+        static public returnData get_all(string API_Server)
+        {
+            string url = $"{API_Server}/api/medPirce/get_all";
+
+            returnData returnData = new returnData();
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
         static public List<medPriceClass> get_by_codes(string API_Server, List<string> code)
         {
             string url = $"{API_Server}/api/medPirce/get_by_codes";
