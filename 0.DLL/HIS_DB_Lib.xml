@@ -3106,6 +3106,11 @@
             發音相似
             </summary>
         </member>
+        <member name="P:HIS_DB_Lib.medConfigClass.LASA">
+            <summary>
+            LASA
+            </summary>
+        </member>
         <member name="P:HIS_DB_Lib.medConfigClass.自定義">
             <summary>
             自定義
@@ -3119,6 +3124,11 @@
         <member name="P:HIS_DB_Lib.medConfigClass.使用RFID">
             <summary>
             是否啟用 RFID 管控
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.medConfigClass.每日盤點">
+            <summary>
+            每日盤點
             </summary>
         </member>
         <member name="M:HIS_DB_Lib.medGroupClassMethod.SortByOrderNumber(HIS_DB_Lib.medGroupClass)">

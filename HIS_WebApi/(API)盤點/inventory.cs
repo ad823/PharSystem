@@ -231,7 +231,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_get_by_CT_TIME_ST_END")]
         [HttpPost]
-        public string creat_get_by_CT_TIME_ST_END([FromBody] returnData returnData)
+        public async Task<string> creat_get_by_CT_TIME_ST_END([FromBody] returnData returnData)
         {
             try
             {
@@ -278,7 +278,7 @@ namespace HIS_WebApi
                 sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
                 list_inventory_creat = list_inventory_creat.GetRowsInDateEx((int)enum_盤點單號.建表時間, date_st, date_end);
-                returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
+                returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
                 returnData.Code = 200;
                 returnData.TimeTaken = myTimer.ToString();
                 returnData.Method = "creat_get_by_CT_TIME_ST_END";
@@ -318,7 +318,7 @@ namespace HIS_WebApi
 
         [Route("creat_review_get_by_CT_TIME_ST_END")]
         [HttpPost]
-        public string creat_review_get_by_CT_TIME_ST_END([FromBody] returnData returnData)
+        public async Task<string> creat_review_get_by_CT_TIME_ST_END([FromBody] returnData returnData)
         {
             try
             {
@@ -365,7 +365,7 @@ namespace HIS_WebApi
                 sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
                 list_inventory_creat = list_inventory_creat.GetRowsInDateEx((int)enum_盤點單號.建表時間, date_st, date_end);
-                returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
+                returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
                 List<inventoryClass.creat> creats = returnData.Data.ObjToClass<List<inventoryClass.creat>>();
                 creats = creats.Where(c => c.類型.Contains("覆盤")).ToList();
                 returnData.Data = creats;
@@ -407,7 +407,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_get_by_CT_TIME")]
         [HttpPost]
-        public string creat_get_by_CT_TIME([FromBody] returnData returnData)
+        public async Task<string> creat_get_by_CT_TIME([FromBody] returnData returnData)
         {
             try
             {
@@ -444,11 +444,11 @@ namespace HIS_WebApi
                 list_inventory_creat = list_inventory_creat.GetRowsInDate((int)enum_盤點單號.建表時間, returnData.Value.StringToDateTime());
                 if (returnData.Value == "1")
                 {
-                    returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
+                    returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat, false);
                 }
                 else
                 {
-                    returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
+                    returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
                 }
                 returnData.Code = 200;
                 returnData.TimeTaken = myTimer.ToString();
@@ -488,7 +488,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_update_startime_by_IC_SN")]
         [HttpPost]
-        public string creat_update_startime_by_IC_SN([FromBody] returnData returnData)
+        public async Task<string> creat_update_startime_by_IC_SN([FromBody] returnData returnData)
         {
             try
             {
@@ -514,7 +514,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_inventory_content = new SQLControl(Server, DB, "inventory_content", UserName, Password, Port, SSLMode);
                 SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
                 inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
-                string json_out = creat_get_by_IC_SN(returnData);
+                string json_out = await creat_get_by_IC_SN(returnData);
                 returnData = json_out.JsonDeserializet<returnData>();
                 if (returnData.Code < 0)
                 {
@@ -581,7 +581,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_get_by_IC_SN")]
         [HttpPost]
-        public string creat_get_by_IC_SN([FromBody] returnData returnData)
+        public async Task<string> creat_get_by_IC_SN([FromBody] returnData returnData)
         {
             try
             {
@@ -614,21 +614,18 @@ namespace HIS_WebApi
                     returnData.Result = $"搜尋內容空白!";
                     return returnData.JsonSerializationt();
                 }
-                string command = $"SELECT * FROM {DB}.inventory_creat WHERE {enum_盤點單號.盤點單號.GetEnumName()} = '{returnData.Value}';";
-                DataTable dataTable = sQLControl_inventory_creat.WtrteCommandAndExecuteReader(command);
-
-                List<object[]> list_inventory_creat = dataTable.DataTableToRowList();
-                //List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
-                //list_inventory_creat = list_inventory_creat.GetRows((int)enum_盤點單號.盤點單號, returnData.Value);
+                string[] inv_num = returnData.Value.Split(";").Distinct().ToArray();
+                List<object[]> list_inventory_creat = await sQLControl_inventory_creat.GetRowsByDefultAsync(null, (int)enum_盤點單號.盤點單號, inv_num);
+                
+      
                 if (list_inventory_creat.Count == 0)
                 {
                     returnData.Code = -5;
                     returnData.Result = $"查無此單號資料[{returnData.Value}]!";
                     return returnData.JsonSerializationt();
                 }
-                MED_pageController mED_PageController = new MED_pageController();
 
-                returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
+                returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
                 returnData.Code = 200;
                 returnData.TimeTaken = myTimer.ToString();
                 returnData.Result = $"取得盤點資料成功!";
@@ -666,7 +663,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_get_by_INVC")]
         [HttpPost]
-        public string creat_get_by_INVC([FromBody] returnData returnData)
+        public async Task<string> creat_get_by_INVC([FromBody] returnData returnData)
         {
             try
             {
@@ -709,7 +706,7 @@ namespace HIS_WebApi
                     return returnData.JsonSerializationt();
                 }
 
-                returnData = Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
+                returnData = await Function_Get_inventory_creat(sys_serverSettingClasses[0], returnData.TableName, list_inventory_creat);
                 returnData.Code = 200;
                 returnData.TimeTaken = myTimer.ToString();
                 returnData.Result = $"取得盤點資料成功!";
@@ -2194,7 +2191,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_update_default_op_by_IC_SN")]
         [HttpPost]
-        public string creat_update_default_op_by_IC_SN([FromBody] returnData returnData)
+        public async Task<string> creat_update_default_op_by_IC_SN([FromBody] returnData returnData)
         {
             try
             {
@@ -2221,7 +2218,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
                 inventoryClass.creat creat_temp = returnData.Data.ObjToClass<inventoryClass.creat>();
                 inventoryClass.creat creat = new inventoryClass.creat();
-                string json_out = creat_get_by_IC_SN(returnData);
+                string json_out = await creat_get_by_IC_SN(returnData);
                 returnData = json_out.JsonDeserializet<returnData>();
                 if (returnData.Code < 0)
                 {
@@ -2284,7 +2281,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_get_default_op_by_IC_SN")]
         [HttpPost]
-        public string creat_get_default_op_by_IC_SN([FromBody] returnData returnData)
+        public async Task<string> creat_get_default_op_by_IC_SN([FromBody] returnData returnData)
         {
             try
             {
@@ -2311,7 +2308,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
                 inventoryClass.creat creat_temp = returnData.Data.ObjToClass<inventoryClass.creat>();
                 inventoryClass.creat creat = new inventoryClass.creat();
-                string json_out = creat_get_by_IC_SN(returnData);
+                string json_out = await creat_get_by_IC_SN(returnData);
                 returnData = json_out.JsonDeserializet<returnData>();
                 if (returnData.Code < 0)
                 {
@@ -2401,7 +2398,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("content_add_by_IC_SN")]
         [HttpPost]
-        public string content_add_by_IC_SN([FromBody] returnData returnData)
+        public async Task<string> content_add_by_IC_SN([FromBody] returnData returnData)
         {
             try
             {
@@ -2447,7 +2444,7 @@ namespace HIS_WebApi
                     returnData.Result = $"Data內無藥品可新增";
                     return returnData.JsonSerializationt();
                 }
-                string json_out = creat_get_by_IC_SN(returnData);
+                string json_out = await creat_get_by_IC_SN(returnData);
                 returnData = json_out.JsonDeserializet<returnData>();
                 if (returnData.Code < 0)
                 {
@@ -2554,7 +2551,7 @@ namespace HIS_WebApi
 
             string server = Server;
             string dbName = DB;
-            string json = creat_get_by_IC_SN(returnData);
+            string json = await creat_get_by_IC_SN(returnData);
             returnData = json.JsonDeserializet<returnData>();
 
             if (returnData.Code != 200)
@@ -2809,11 +2806,11 @@ namespace HIS_WebApi
             
         }
 
-        private returnData Function_Get_inventory_creat(sys_serverSettingClass sys_serverSettingClass, string MED_TableName, List<object[]> list_inventory_creat)
+        private async Task<returnData> Function_Get_inventory_creat(sys_serverSettingClass sys_serverSettingClass, string MED_TableName, List<object[]> list_inventory_creat)
         {
-            return Function_Get_inventory_creat(sys_serverSettingClass, MED_TableName, list_inventory_creat, true);
+            return await Function_Get_inventory_creat(sys_serverSettingClass, MED_TableName, list_inventory_creat, true);
         }
-        private returnData Function_Get_inventory_creat(sys_serverSettingClass sys_serverSettingClass, string MED_TableName, List<object[]> list_inventory_creat, bool allData)
+        private async Task<returnData> Function_Get_inventory_creat(sys_serverSettingClass sys_serverSettingClass, string MED_TableName, List<object[]> list_inventory_creat, bool allData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -2830,18 +2827,9 @@ namespace HIS_WebApi
             List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
             sys_serverSettingClass sys_serverSettingClasses_med = sys_serverSettingClasses.MyFind("Main", "網頁", "藥檔資料")[0];
 
-            MED_pageController mED_PageController = new MED_pageController();
-            returnData returnData_med = new returnData();
-            returnData_med.ServerName = "Main";
-            returnData_med.ServerType = "網頁";
-            returnData_med.Server = sys_serverSettingClasses_med.Server;
-            returnData_med.DbName = sys_serverSettingClasses_med.DBName;
-            returnData_med.TableName = "medicine_page_cloud";
-            returnData_med.UserName = sys_serverSettingClasses_med.User;
-            returnData_med.Password = sys_serverSettingClasses_med.Password;
-            returnData_med.Port = sys_serverSettingClasses_med.Port.StringToUInt32();
-            returnData_med = mED_PageController.get_by_apiserver(returnData_med).JsonDeserializet<returnData>();
-            List<medClass> medClasses = returnData_med.Data.ObjToListClass<medClass>();
+            returnData returnData_med = await new MED_pageController().get_med_cloud();
+          
+            List<medClass> medClasses = returnData_med.Data.ObjToClass<List<medClass>>();
             List<medClass> medClasses_buf = new List<medClass>();
 
             returnData returnData = new returnData();
@@ -2925,7 +2913,15 @@ namespace HIS_WebApi
             returnData.Result = $"成功! {myTimer.ToString()}";
             return returnData;
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> creat_get_by_IC_SN(string inv_num)
+        {
+            returnData returnData = new returnData();
+            returnData.Value = inv_num;
 
+            string result = await creat_get_by_IC_SN(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
         static private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
         {
 

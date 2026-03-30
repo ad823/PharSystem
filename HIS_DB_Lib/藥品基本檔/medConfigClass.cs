@@ -33,12 +33,16 @@ namespace HIS_DB_Lib
         形狀相似,
         [Description("發音相似,VARCHAR,15,NONE")]
         發音相似,
+        [Description("LASA,VARCHAR,15,NONE")]
+        LASA,
         [Description("自定義,VARCHAR,15,NONE")]
         自定義,
         [Description("調劑註記,VARCHAR,300,NONE")]
         調劑註記,
         [Description("使用RFID,VARCHAR,5,NONE")]
         使用RFID,
+        [Description("每日盤點,VARCHAR,20,NONE")]
+        每日盤點,
 
     }
     public class medConfigClass
@@ -94,6 +98,11 @@ namespace HIS_DB_Lib
         [JsonPropertyName("isSoundSimilar")]
         public string 發音相似 { get; set; }
         /// <summary>
+        /// LASA
+        /// </summary>
+        [JsonPropertyName("lasa")]
+        public string LASA { get; set; }
+        /// <summary>
         /// 自定義
         /// </summary>
         [JsonPropertyName("customVar")]
@@ -108,6 +117,11 @@ namespace HIS_DB_Lib
         /// </summary>
         [JsonPropertyName("useRFID")]
         public string 使用RFID { get; set; }
+        /// <summary>
+        /// 每日盤點
+        /// </summary>
+        [JsonPropertyName("inv_daily")]
+        public string 每日盤點 { get; set; }
 
         static public SQLUI.Table init(string API_Server)
         {

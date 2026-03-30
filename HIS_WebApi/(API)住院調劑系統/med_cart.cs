@@ -4317,6 +4317,15 @@ namespace HIS_WebApi
                 List<object[]> list_med_cpoe = await sQLControl_med_cpoe.WriteCommandAsync(command);
                 List<medCpoeClass> sql_medCpoe = list_med_cpoe.SQLToClass<medCpoeClass, enum_med_cpoe>();
 
+                string[] code = sql_medCpoe.Select(x => x.藥碼).Distinct().ToArray();
+                returnData returnData_med_cloud = await new MED_pageController().get_med_clouds_by_codes(code);
+                if (returnData_med_cloud == null || returnData_med_cloud.Code != 200)
+                {
+                    returnData_med_cloud.Result += "藥檔取得失敗";
+                    return returnData_med_cloud.JsonSerializationt(true);
+                }
+                List<medClass> med_cloud = returnData_med_cloud.Data.ObjToClass<List<medClass>>();
+                Dictionary<string, List<medClass>> medCloudDict = medClass.CoverToDictionaryByCode(med_cloud);
 
                 List<medClass> medClasses = new List<medClass>();
                 Dictionary<string, List<medClass>> medClassDict = new Dictionary<string, List<medClass>>();
@@ -4334,17 +4343,14 @@ namespace HIS_WebApi
                     medClassDict = medClass.CoverToDictionaryByCode(medClasses);
                 }
                 List<medGroupClass> medGroupClass_buff = await medGroup.get_UDgroup();
-                //foreach (var item in groupName)
-                //{
-                //    medGroupClass medGroup_buff = medGroupClasses.Where(m => m.名稱.Contains(item)).FirstOrDefault();
-                //    if (medGroup_buff != null) medGroupClass_buff.Add(medGroup_buff);
-                //}
+
 
                 MyTimerBasic myTimerBasic_藥品總量 = new MyTimerBasic();
                 List<medCpoeClass> medCpoeClasses = sql_medCpoe
                     .GroupBy(temp => temp.藥碼)
                     .Select(grouped =>
                     {
+                        medClass medCloud = medClass.SortDictionaryByCode(medCloudDict, grouped.Key).FirstOrDefault();
 
                         medCpoeClass medCpoe = grouped.First();
                         string 調劑台 = "";
@@ -4395,14 +4401,12 @@ namespace HIS_WebApi
                             中文名 = medCpoe.中文名,
                             藥碼 = grouped.Key,
                             單位 = medCpoe.單位,
-                            //針劑 = medCpoe.針劑,
-                            //口服 = medCpoe.口服,
-                            //冷儲 = medCpoe.冷儲,
                             儲位 = medCpoe.儲位,
                             調劑台 = 調劑台,
                             大瓶點滴 = 大瓶點滴,
                             病床清單 = bedLists,
-                            藥品群組 = 藥品群組
+                            藥品群組 = 藥品群組,
+                            雲端藥檔 = medCloud != null ? new List<medClass>() { medCloud } : new List<medClass>()
                         };
                     }).ToList();
                 returnData.Code = 200;
@@ -5920,6 +5924,14 @@ namespace HIS_WebApi
         }
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<returnData> get_medCpoe_by_GUID(string GUID)
+        {
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add(GUID);
+            string result = await get_medCpoe_by_GUID(returnData);
+            return result.JsonDeserializet<returnData>();
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_patient_by_GUID(string GUID)
         {
             returnData returnData = new returnData();
             returnData.ValueAry.Add(GUID);

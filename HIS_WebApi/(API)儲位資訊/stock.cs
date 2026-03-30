@@ -143,6 +143,7 @@ namespace HIS_WebApi
                         stock.content = contents_buff;
                         stock.serverName = ServerName;
                         stock.serverType = ServerType;
+                        stock.total_qty = stock.數量.Select(x => x.StringToDouble()).Sum().ToString();
                         stock_result.Add(stock);
                     }
                 }
@@ -291,6 +292,8 @@ namespace HIS_WebApi
                         stock.med_cloud = medClasses.Count > 0 ? medClasses[0] : null;
                         stock.藥名 = medClasses.Count > 0 ? medClasses[0].藥品名稱 : "";
                         stock.料號 = medClasses.Count > 0 ? medClasses[0].料號 : "";
+                        stock.total_qty = stock.數量.Select(x => x.StringToDouble()).Sum().ToString();
+
                     }
                 }
 
