@@ -400,24 +400,7 @@ namespace 勤務傳送系統
         {
             try
             {
-                if (MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.IsTimeOut())
-                {
-                    if (rJ_Lable_勤務取藥_全處方_狀態.Text != "等待刷藥單...")
-                    {
-                        this.Invoke(new Action(delegate
-                        {
-                            rJ_Lable_勤務取藥_全處方_狀態.BackgroundColor = Color.White;
-                            rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 0;
-                            rJ_Lable_勤務取藥_全處方_狀態.Text = "等待刷藥單";
-
-                            rJ_Lable_勤務取藥_全處方_病房.Text = "";
-
-                            sqL_DataGridView_勤務取藥_全處方.ClearGrid();
-                        }));
-
-
-                    }
-                }
+              
                 string text = null;
                 if (勤務取藥_Keyin_barcode.StringIsEmpty())
                 {
@@ -470,8 +453,27 @@ namespace 勤務傳送系統
                 }
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
+                List<transactionsClass> transactions = transactionsClass.get_by_order_guids(API_Server, orderClasses.Select(x => x.GUID).ToList(), ServerName, ServerType);
 
-                List<object[]> list_交易紀錄 = sqL_DataGridView_交易記錄查詢.SQL_GetRowsByIn((int)enum_交易記錄查詢資料.Order_GUID, orderClasses.Select(x => x.GUID).ToArray(), false);
+                if (MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.IsTimeOut() || true)
+                {
+                    if (rJ_Lable_勤務取藥_全處方_狀態.Text != "等待刷藥單...")
+                    {
+                        this.Invoke(new Action(delegate
+                        {
+                            rJ_Lable_勤務取藥_全處方_狀態.BackgroundColor = Color.White;
+                            rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 0;
+                            rJ_Lable_勤務取藥_全處方_狀態.Text = "等待刷藥單";
+
+                            rJ_Lable_勤務取藥_全處方_病房.Text = "";
+
+                            sqL_DataGridView_勤務取藥_全處方.ClearGrid();
+                        }));
+
+
+                    }
+                }
+
                 if (orderClasses.Count == 0)
                 {
                     this.Invoke(new Action(delegate
@@ -490,7 +492,7 @@ namespace 勤務傳送系統
                     }));
                     return;
                 }
-                if (list_交易紀錄.Count == 0)
+                if (transactions.Count == 0)
                 {
                     this.Invoke(new Action(delegate
                     {
@@ -530,16 +532,20 @@ namespace 勤務傳送系統
                 }
                 sqL_DataGridView_勤務取藥_全處方.RefreshGrid();
 
-                for(int i = 0; i < list_交易紀錄.Count; i++)
+                for(int i = 0; i < transactions.Count; i++)
                 {
-                    if (list_交易紀錄[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString().StringToDateTime() == "1999-01-01 00:00:00".StringToDateTime())list_交易紀錄[i][(int)enum_交易記錄查詢資料.領用時間] = DateTime.Now.ToDateTimeString_6();
+                    DateTime dt = transactions[i].領用時間.StringToDateTime();
+                    if (dt.ToDateString('-') == "1999-01-01")
+                    {
+                        transactions[i].領用時間 = DateTime.Now.ToDateTimeString_6();
+                    }
                 }
              
 
                 勤務取藥_Keyin_barcode = "";
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
-                MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(5000);
-                transactionsClass.add(API_Server, list_交易紀錄.SQLToClass<transactionsClass , enum_交易記錄查詢資料>(), ServerName, ServerType);
+                MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(120000);
+                transactionsClass.update_by_guid(API_Server, transactions, ServerName, ServerType);
                 //OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
                 //Funtion_藥袋刷入API(orderClasses);
 
@@ -599,7 +605,7 @@ namespace 勤務傳送系統
             OrderClass order = value[1].ObjectToString().JsonDeserializet<OrderClass>();
             bool has大瓶藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "大瓶藥");
             bool has不發藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "不發藥");
-            if (has不發藥) row_Forecolor = Color.Gray;
+            if (has不發藥) row_Forecolor = Color.LightGray;
             if (has大瓶藥) row_Backcolor = Color.Yellow;
             using (Brush brush = new SolidBrush(row_Backcolor))
             {
