@@ -63,13 +63,18 @@ namespace 勤務傳送系統
             this.sqL_DataGridView_醫令資料.DataGridRowsChangeEvent += SqL_DataGridView_醫令資料_DataGridRowsChangeEvent;
             this.sqL_DataGridView_醫令資料.RowDoubleClickEvent += SqL_DataGridView_醫令資料_RowDoubleClickEvent;
 
-            this.plC_RJ_Button_醫令資料_顯示全部.MouseDownEvent += PlC_RJ_Button_醫令資料_顯示全部_MouseDownEvent;
+            this.plC_RJ_Button_醫令資料_開方日期_搜尋.MouseDownEvent += PlC_RJ_Button_醫令資料_開方日期_搜尋_MouseDownEvent;
+            this.plC_RJ_Button_醫令資料_藥碼_搜尋.MouseDownEvent += PlC_RJ_Button_醫令資料_藥碼_搜尋_MouseDownEvent;
+            this.plC_RJ_Button_醫令資料_藥名_搜尋.MouseDownEvent += PlC_RJ_Button_醫令資料_藥名_搜尋_MouseDownEvent;
+            this.plC_RJ_Button_醫令資料_病歷號_搜尋.MouseDownEvent += PlC_RJ_Button_醫令資料_病歷號_搜尋_MouseDownEvent;
+            this.plC_RJ_Button_醫令資料_領藥號_搜尋.MouseDownEvent += PlC_RJ_Button_醫令資料_領藥號_搜尋_MouseDownEvent;
+
             this.plC_RJ_Button_醫令資料_設為未過帳.MouseDownEvent += PlC_RJ_Button_醫令資料_設為未過帳_MouseDownEvent;
 
             this.plC_UI_Init.Add_Method(Program_醫令資料);
         }
 
-    
+
 
         private void Program_醫令資料()
         {
@@ -118,20 +123,112 @@ namespace 勤務傳送系統
         {
             // RowsList.Sort(new ICP_醫令資料());
         }
-        private void PlC_RJ_Button_醫令資料_顯示全部_MouseDownEvent(MouseEventArgs mevent)
+        private void PlC_RJ_Button_醫令資料_開方日期_搜尋_MouseDownEvent(MouseEventArgs mevent)
         {
-            MyTimer myTimer = new MyTimer();
-            myTimer.TickStop();
-            myTimer.StartTickTime(50000);
-            List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRowsByBetween((int)enum_醫囑資料.開方日期, dateTimePicke_醫令資料_開方日期_起始, dateTimePicke_醫令資料_開方日期_結束, false);
+            try
+            {
+                LoadingForm.ShowLoadingForm();
+                MyTimer myTimer = new MyTimer();
+                myTimer.TickStop();
+                myTimer.StartTickTime(50000);
+                List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRowsByBetween((int)enum_醫囑資料.開方日期, dateTimePicke_醫令資料_開方日期_起始, dateTimePicke_醫令資料_開方日期_結束, false);
 
-            if (rJ_TextBox_醫令資料_搜尋條件_藥品碼.Texts.StringIsEmpty() == false) list_value = list_value.GetRowsByLike((int)enum_醫囑資料.藥品碼, rJ_TextBox_醫令資料_搜尋條件_藥品碼.Texts);
-            if (rJ_TextBox_醫令資料_搜尋條件_藥品名稱.Texts.StringIsEmpty() == false) list_value = list_value.GetRowsByLike((int)enum_醫囑資料.藥品名稱, rJ_TextBox_醫令資料_搜尋條件_藥品名稱.Texts);
-            if (rJ_TextBox_醫令資料_搜尋條件_病歷號.Texts.StringIsEmpty() == false) list_value = list_value.GetRows((int)enum_醫囑資料.病歷號, rJ_TextBox_醫令資料_搜尋條件_病歷號.Texts);
-            if (rJ_TextBox_醫令資料_搜尋條件_領藥號.Texts.StringIsEmpty() == false) list_value = list_value.GetRows((int)enum_醫囑資料.領藥號, rJ_TextBox_醫令資料_搜尋條件_領藥號.Texts);
+                Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
+                this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            catch
+            {
 
-            Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
-            this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            finally
+            {
+                LoadingForm.CloseLoadingForm();
+            }
+        }
+        private void PlC_RJ_Button_醫令資料_領藥號_搜尋_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                LoadingForm.ShowLoadingForm();
+                MyTimer myTimer = new MyTimer();
+                myTimer.TickStop();
+                myTimer.StartTickTime(50000);
+                List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRows((int)enum_醫囑資料.領藥號, rJ_TextBox_醫令資料_搜尋條件_領藥號.Text, false);
+                Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
+                this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                LoadingForm.CloseLoadingForm();
+            }
+        }
+        private void PlC_RJ_Button_醫令資料_病歷號_搜尋_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                LoadingForm.ShowLoadingForm();
+                MyTimer myTimer = new MyTimer();
+                myTimer.TickStop();
+                myTimer.StartTickTime(50000);
+                List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRows((int)enum_醫囑資料.病歷號, rJ_TextBox_醫令資料_搜尋條件_病歷號.Text, false);
+
+                Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
+                this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                LoadingForm.CloseLoadingForm();
+            }
+        }
+        private void PlC_RJ_Button_醫令資料_藥名_搜尋_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                LoadingForm.ShowLoadingForm();
+                MyTimer myTimer = new MyTimer();
+                myTimer.TickStop();
+                myTimer.StartTickTime(50000);
+                List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRows((int)enum_醫囑資料.藥品名稱, rJ_TextBox_醫令資料_搜尋條件_藥名.Text, false);
+                Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
+                this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                LoadingForm.CloseLoadingForm();
+            }
+        }
+        private void PlC_RJ_Button_醫令資料_藥碼_搜尋_MouseDownEvent(MouseEventArgs mevent)
+        {
+            try
+            {
+                LoadingForm.ShowLoadingForm();
+                MyTimer myTimer = new MyTimer();
+                myTimer.TickStop();
+                myTimer.StartTickTime(50000);
+                List<object[]> list_value = this.sqL_DataGridView_醫令資料.SQL_GetRows((int)enum_醫囑資料.藥品碼, rJ_TextBox_醫令資料_搜尋條件_藥碼.Text, false);
+                Console.Write($"取得醫令資料 , 耗時 : {myTimer.ToString()} ms\n");
+                this.sqL_DataGridView_醫令資料.RefreshGrid(list_value);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                LoadingForm.CloseLoadingForm();
+            }
         }
         private void PlC_RJ_Button_醫令資料_設為未過帳_MouseDownEvent(MouseEventArgs mevent)
         {

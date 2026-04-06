@@ -464,11 +464,12 @@ namespace 勤務傳送系統
                 else
                 {
                     text = 勤務取藥_Keyin_barcode;
+                    勤務取藥_Keyin_barcode = "";
                     Console.WriteLine($"接收Keyin內容:{text}");
                 }
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
-
+                List<object[]> list_交易紀錄 = this.sqL_DataGridView_交易記錄查詢.SQL_GetRows((int)enum_交易記錄查詢資料.GUID, orderClasses[0].GUID, false);
 
                 if (orderClasses.Count == 0)
                 {

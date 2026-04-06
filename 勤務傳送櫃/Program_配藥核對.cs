@@ -94,11 +94,6 @@ namespace 勤務傳送系統
                 g.DrawRectangle(new Pen(new SolidBrush(Color.White)), rectangle);
 
 
-                //rectangle = this.sqL_DataGridView_庫存查詢.GetColumnBounds(enum_庫存查詢.藥碼.GetEnumName());
-                //g.DrawRectangle(pen, rectangle);
-                //DrawingClass.Draw.DrawString(g, "藥碼", new Font("微軟正黑體", 15, FontStyle.Bold), rectangle, Color.Black, DataGridViewContentAlignment.MiddleCenter);
-
-
             }
         }
         private void SqL_DataGridView_配藥核對_全處方_RowPostPaintingEventEx(SQL_DataGridView sQL_DataGridView, DataGridViewRowPostPaintEventArgs e)
@@ -502,9 +497,10 @@ namespace 勤務傳送系統
                 else
                 {
                     text = 配藥核對_Keyin_barcode;
+                    配藥核對_Keyin_barcode = "";
                     Console.WriteLine($"接收Keyin內容:{text}");
                 }
-
+                bool flag_err = false;
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
 
                 if (MyTimerBasic_配藥核對_全處方_刷藥單結束計時.IsTimeOut() || true)
@@ -545,7 +541,7 @@ namespace 勤務傳送系統
                     }));
                     return;
                 }
-                if (orderClasses.All(x => x.核對時間.StringIsEmpty() == false))
+                if (orderClasses.All(x => x.狀態 == "已過帳"))
                 {
                     this.Invoke(new Action(delegate
                     {
@@ -555,14 +551,15 @@ namespace 勤務傳送系統
                         //Application.DoEvents();
                         MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
                         MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(3000);
-                        using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\fail_01.wav"))
-                        {
-                            sp.Stop();
-                            sp.Play();
-                            sp.PlaySync();
-                        }
+                    
                     }));
-                    return;
+                    using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\fail_01.wav"))
+                    {
+                        sp.Stop();
+                        sp.Play();
+                        sp.PlaySync();
+                    }
+                    flag_err = true;
                 }
                 else
                 {
@@ -602,42 +599,51 @@ namespace 勤務傳送系統
                 }));
                 MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
                 MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(5000);
-                using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
+                if (flag_err == false)
                 {
-                    sp.Stop();
-                    sp.PlaySync();
+                    using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
+                    {
+                        sp.Stop();
+                        sp.PlaySync();
+                    }
                 }
+              
                 List<transactionsClass> transactionses = new List<transactionsClass>();
                 foreach(OrderClass order in orderClasses)
                 {
-                    order.狀態 = "已過帳";
-                    order.結方日期 = (order.結方日期.Check_Date_String() ? order.結方日期 : DateTime.MinValue.ToDateTimeString());
-                    order.展藥時間 = (order.結方日期.Check_Date_String() ? order.展藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.就醫時間 = (order.結方日期.Check_Date_String() ? order.就醫時間 : DateTime.MinValue.ToDateTimeString());
-                    order.領藥時間 = (order.結方日期.Check_Date_String() ? order.領藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.過帳時間 = (order.結方日期.Check_Date_String() ? order.過帳時間 : DateTime.MinValue.ToDateTimeString());
-                    order.發藥時間 = (order.結方日期.Check_Date_String() ? order.發藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.核對時間 = DateTime.Now.ToDateTimeString();
-                    order.核對姓名 = this.登入者名稱;
-                    order.核對ID = this.登入者ID;
+                    if(flag_err == false)
+                    {
+                        order.狀態 = "已過帳";
+                        order.結方日期 = (order.結方日期.Check_Date_String() ? order.結方日期 : DateTime.MinValue.ToDateTimeString());
+                        order.展藥時間 = (order.展藥時間.Check_Date_String() ? order.展藥時間 : DateTime.MinValue.ToDateTimeString());
+                        order.就醫時間 = (order.就醫時間.Check_Date_String() ? order.就醫時間 : DateTime.MinValue.ToDateTimeString());
+                        order.領藥時間 = (order.領藥時間.Check_Date_String() ? order.領藥時間 : DateTime.MinValue.ToDateTimeString());
+                        order.過帳時間 = (order.過帳時間.Check_Date_String() ? order.過帳時間 : DateTime.MinValue.ToDateTimeString());
+                        order.發藥時間 = (order.發藥時間.Check_Date_String() ? order.發藥時間 : DateTime.MinValue.ToDateTimeString());
+                        order.核對時間 = DateTime.Now.ToDateTimeString();
+                        order.核對姓名 = this.登入者名稱;
+                        order.核對ID = this.登入者ID;
+
+                        transactionsClass transactions = new transactionsClass();
+                        transactions.Order_GUID = order.GUID;
+                        transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
+                        transactions.藥品碼 = order.藥品碼;
+                        transactions.領藥號 = order.領藥號;
+                        transactions.藥品名稱 = order.藥品名稱;
+                        transactions.頻次 = order.頻次;
+                        transactions.病房號 = order.病房;
+                        transactions.交易量 = order.交易量;
+                        transactions.病人姓名 = order.病人姓名;
+                        transactions.病歷號 = order.病歷號;
+                        transactions.開方時間 = order.開方日期;
+                        transactions.領用人 = "未領用";
+                        transactions.領用時間 = "1999-01-01 00:00:00";
+                        transactions.操作時間 = DateTime.Now.ToDateTimeString_6();
+                        transactions.操作人 = this.登入者名稱;
+                        transactionses.Add(transactions);
+                    }
+                                                 
                     sqL_DataGridView_配藥核對_全處方.AddRow(new object[] { order.GUID, order.JsonSerializationt() }, false);
-                    transactionsClass transactions = new transactionsClass();
-                    transactions.Order_GUID = order.GUID;
-                    transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
-                    transactions.藥品碼 = order.藥品碼;
-                    transactions.領藥號 = order.領藥號;
-                    transactions.藥品名稱 = order.藥品名稱;
-                    transactions.頻次 = order.頻次;
-                    transactions.病房號 = order.領藥號;
-                    transactions.交易量 = order.交易量;
-                    transactions.病人姓名 = order.病人姓名;
-                    transactions.病歷號 = order.病歷號;
-                    transactions.開方時間 = order.開方日期;
-                    transactions.領用人 = "未領用";
-                    transactions.領用時間 = "1999-01-01 00:00:00";
-                    transactions.操作時間 = DateTime.Now.ToDateTimeString_6();
-                    transactions.操作人 = this.登入者名稱;
-                    transactionses.Add(transactions);
                 }
                 if(orderClasses.Count > 0)
                 {
@@ -653,9 +659,13 @@ namespace 勤務傳送系統
                 sqL_DataGridView_配藥核對_全處方.RefreshGrid();
                 MyTimerBasic_配藥核對_全處方_刷藥單結束計時.TickStop();
                 MyTimerBasic_配藥核對_全處方_刷藥單結束計時.StartTickTime(600000);
-                transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
-                OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
-                Funtion_藥袋刷入API(orderClasses);
+                if(flag_err == false)
+                {
+                    transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
+                    OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
+                    Funtion_藥袋刷入API(orderClasses);
+                }
+               
 
             }
             catch (Exception ex)

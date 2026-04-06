@@ -223,7 +223,7 @@ namespace HIS_WebApi
 
         }
         /// <summary>
-        /// 新增多筆交易紀錄
+        /// 更新交易紀錄
         /// </summary>
         /// <remarks>
         ///  --------------------------------------------<br/> 
@@ -523,7 +523,7 @@ namespace HIS_WebApi
             }
         }
         /// <summary>
-        /// 以醫令搜尋交易紀錄
+        /// 以guid搜尋交易紀錄
         /// </summary>
         /// <remarks>
         ///  --------------------------------------------<br/> 
@@ -750,6 +750,7 @@ namespace HIS_WebApi
             }
         }
 
+   
 
         /// <summary>
         /// 指定操作時間範圍取得交易紀錄

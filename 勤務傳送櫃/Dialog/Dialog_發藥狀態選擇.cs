@@ -74,8 +74,35 @@ namespace 勤務傳送系統
             orderConfigClass_大型點滴.狀態 = flag_大瓶藥 ? "True" : "False";
             orderConfigClass_大型點滴.功能備註 = "大瓶藥";
             orderConfigs_update.Add(orderConfigClass_大型點滴);
-    
+            
             orderConfigClass.update(Main_Form.API_Server, orderConfigs_update);
+            List<transactionsClass> transactions = transactionsClass.get_by_order_guid(Main_Form.API_Server, orderClass.GUID, Main_Form.ServerName, Main_Form.ServerType);
+            if(transactions != null)
+            {
+                foreach (var transactionsClass in transactions)
+                {
+                    if (flag_不發藥)
+                    {
+                        if (transactionsClass.備註.Contains("[不發藥]") == false) transactionsClass.備註 += "[不發藥]";
+                    }
+                    else
+                    {
+                        transactionsClass.備註 = transactionsClass.備註.Replace("[不發藥]", "");
+                    }
+                    if (flag_大瓶藥)
+                    {
+                        if (transactionsClass.備註.Contains("[大瓶藥]") == false) transactionsClass.備註 += "[大瓶藥]";
+                    }
+                    else
+                    {
+                        transactionsClass.備註 = transactionsClass.備註.Replace("[大瓶藥]", "");
+                    }
+                }
+                
+            }
+            transactionsClass.update_by_guid(Main_Form.API_Server, transactions, Main_Form.ServerName, Main_Form.ServerType);
+
+
         }
         private void PlC_RJ_Button_確認_MouseDownEvent(MouseEventArgs mevent)
         {
