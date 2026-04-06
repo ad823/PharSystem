@@ -30,7 +30,8 @@ namespace 勤務傳送系統
 
         private enum enum_勤務取藥_處方
         {
-
+            [Description("GUID,VARCHAR,50,None")]
+            GUID,
             [Description("Value,VARCHAR,50,None")]
             Value,
 
@@ -469,18 +470,17 @@ namespace 勤務傳送系統
                 }
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
-                List<object[]> list_交易紀錄 = this.sqL_DataGridView_交易記錄查詢.SQL_GetRows((int)enum_交易記錄查詢資料.GUID, orderClasses[0].GUID, false);
 
+                List<object[]> list_交易紀錄 = sqL_DataGridView_交易記錄查詢.SQL_GetRowsByIn((int)enum_交易記錄查詢資料.Order_GUID, orderClasses.Select(x => x.GUID).ToArray(), false);
                 if (orderClasses.Count == 0)
                 {
                     this.Invoke(new Action(delegate
                     {
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderColor = Color.Red;
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 3;
-                        rJ_Lable_勤務取藥_全處方_狀態.Text = "找無藥單資料";
+                        rJ_Lable_勤務取藥_全處方_狀態.BackgroundColor = Color.HotPink;
+                        rJ_Lable_勤務取藥_全處方_狀態.Text = "找無藥單資料!";
                         //Application.DoEvents();
-                        MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
-                        MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(3000);
+                        MyTimerBasic_勤務取藥_單處方_刷藥單結束計時.TickStop();
+                        MyTimerBasic_勤務取藥_單處方_刷藥單結束計時.StartTickTime(3000);
                         using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\ttsmaker-請重刷.wav"))
                         {
                             sp.Stop();
@@ -490,99 +490,25 @@ namespace 勤務傳送系統
                     }));
                     return;
                 }
-                if (orderClasses.All(x => x.核對時間.StringIsEmpty() == false))
+                if (list_交易紀錄.Count == 0)
                 {
                     this.Invoke(new Action(delegate
                     {
                         rJ_Lable_勤務取藥_全處方_狀態.BorderColor = Color.Red;
                         rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 3;
-                        rJ_Lable_勤務取藥_全處方_狀態.Text = "此藥單已刷入過";
+                        rJ_Lable_勤務取藥_全處方_狀態.Text = "此藥單未配藥,請通知藥局刷入";
                         //Application.DoEvents();
                         MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
                         MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(3000);
-                        using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\fail_01.wav"))
+                        using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\ttsmaker-請藥師重刷.wav"))
                         {
                             sp.Stop();
                             sp.Play();
                             sp.PlaySync();
                         }
                     }));
+                    textBox_勤務取藥_單處方_條碼刷入區.Text = "";
                     return;
-                }
-                else
-                {
-                    this.Invoke(new Action(delegate
-                    {
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderColor = Color.DarkGreen;
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 3;
-                        rJ_Lable_勤務取藥_全處方_狀態.Text = $"刷取成功 共【{orderClasses.Count}】筆處方";
-                        //Application.DoEvents();
-                    }));
-
-                }
-
-                if (Pannel_Box.PharLightOn(orderClasses[0].病房) == false)
-                {
-                    this.Invoke(new Action(delegate
-                    {
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderColor = Color.Red;
-                        rJ_Lable_勤務取藥_全處方_狀態.BorderSize = 3;
-                        rJ_Lable_勤務取藥_全處方_狀態.Text = "未在櫃體內,找到病房名稱";
-                        //Application.DoEvents();
-                        MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
-                        MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(3000);
-                        using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\fail_01.wav"))
-                        {
-                            sp.Stop();
-                            sp.Play();
-                            sp.PlaySync();
-                        }
-                    }));
-                    return;
-                }
-                this.Invoke(new Action(delegate
-                {
-                    //Application.DoEvents();
-
-                }));
-                MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
-                MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(5000);
-                using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
-                {
-                    sp.Stop();
-                    sp.PlaySync();
-                }
-                List<transactionsClass> transactionses = new List<transactionsClass>();
-                foreach (OrderClass order in orderClasses)
-                {
-                    order.狀態 = "已過帳";
-                    order.結方日期 = (order.結方日期.Check_Date_String() ? order.結方日期 : DateTime.MinValue.ToDateTimeString());
-                    order.展藥時間 = (order.結方日期.Check_Date_String() ? order.展藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.就醫時間 = (order.結方日期.Check_Date_String() ? order.就醫時間 : DateTime.MinValue.ToDateTimeString());
-                    order.領藥時間 = (order.結方日期.Check_Date_String() ? order.領藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.過帳時間 = (order.結方日期.Check_Date_String() ? order.過帳時間 : DateTime.MinValue.ToDateTimeString());
-                    order.發藥時間 = (order.結方日期.Check_Date_String() ? order.發藥時間 : DateTime.MinValue.ToDateTimeString());
-                    order.核對時間 = DateTime.Now.ToDateTimeString();
-                    order.核對姓名 = this.登入者名稱;
-                    order.核對ID = this.登入者ID;
-                    sqL_DataGridView_勤務取藥_全處方.AddRow(new object[] { order.JsonSerializationt() }, false);
-                    transactionsClass transactions = new transactionsClass();
-                    transactions.Order_GUID = order.GUID;
-                    transactions.動作 = enum_交易記錄查詢動作.藥袋刷入.GetEnumName();
-                    transactions.藥品碼 = order.藥品碼;
-                    transactions.領藥號 = order.領藥號;
-                    transactions.藥品名稱 = order.藥品名稱;
-                    transactions.頻次 = order.頻次;
-                    transactions.病房號 = order.領藥號;
-                    transactions.交易量 = order.交易量;
-                    transactions.病人姓名 = order.病人姓名;
-                    transactions.病歷號 = order.病歷號;
-                    transactions.開方時間 = order.開方日期;
-                    transactions.領用人 = "未領用";
-                    transactions.領用時間 = "1999-01-01 00:00:00";
-                    transactions.操作時間 = DateTime.Now.ToDateTimeString_6();
-                    transactions.操作人 = this.登入者名稱;
-                    transactionses.Add(transactions);
                 }
                 if (orderClasses.Count > 0)
                 {
@@ -592,13 +518,30 @@ namespace 勤務傳送系統
 
                     }));
                 }
-                勤務取藥_Keyin_barcode = "";
+                using (System.Media.SoundPlayer sp = new System.Media.SoundPlayer($@"{currentDirectory}\sucess_01.wav"))
+                {
+                    sp.Stop();
+                    sp.PlaySync();
+                }
+
+                foreach (OrderClass order in orderClasses)
+                {
+                    sqL_DataGridView_勤務取藥_全處方.AddRow(new object[] { order.GUID, order.JsonSerializationt() }, false);
+                }
                 sqL_DataGridView_勤務取藥_全處方.RefreshGrid();
+
+                for(int i = 0; i < list_交易紀錄.Count; i++)
+                {
+                    if (list_交易紀錄[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString().StringToDateTime() == "1999-01-01 00:00:00".StringToDateTime())list_交易紀錄[i][(int)enum_交易記錄查詢資料.領用時間] = DateTime.Now.ToDateTimeString_6();
+                }
+             
+
+                勤務取藥_Keyin_barcode = "";
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(5000);
-                transactionsClass.add(API_Server, transactionses, ServerName, ServerType);
-                OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
-                Funtion_藥袋刷入API(orderClasses);
+                transactionsClass.add(API_Server, list_交易紀錄.SQLToClass<transactionsClass , enum_交易記錄查詢資料>(), ServerName, ServerType);
+                //OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
+                //Funtion_藥袋刷入API(orderClasses);
 
             }
             catch (Exception ex)
@@ -644,37 +587,79 @@ namespace 勤務傳送系統
         }
         private void SqL_DataGridView_勤務取藥_全處方_RowPostPaintingEventEx(SQL_DataGridView sQL_DataGridView, DataGridViewRowPostPaintEventArgs e)
         {
+
             Color row_Backcolor = Color.WhiteSmoke;
             Color row_Forecolor = Color.Black;
-
-
-
+            if (this.sqL_DataGridView_勤務取藥_全處方.dataGridView.Rows[e.RowIndex].Selected)
+            {
+                row_Backcolor = Color.Blue;
+                row_Forecolor = Color.White;
+            }
+            object[] value = this.sqL_DataGridView_勤務取藥_全處方.GetRowsList()[e.RowIndex];
+            OrderClass order = value[1].ObjectToString().JsonDeserializet<OrderClass>();
+            bool has大瓶藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "大瓶藥");
+            bool has不發藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "不發藥");
+            if (has不發藥) row_Forecolor = Color.Gray;
+            if (has大瓶藥) row_Backcolor = Color.Yellow;
             using (Brush brush = new SolidBrush(row_Backcolor))
             {
                 int x = e.RowBounds.Left;
                 int y = e.RowBounds.Top;
                 int width = e.RowBounds.Width;
                 int height = e.RowBounds.Height;
-                e.Graphics.FillRectangle(brush, e.RowBounds);
-                //DrawingClass.Draw.DrawRoundShadow(e.Graphics, new RectangleF(x - 1, y - 1, width, height), Color.Black, 1, 1);
 
+
+                e.Graphics.FillRectangle(brush, e.RowBounds);
                 e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)), new Rectangle(x - 0, y - 0, width + 1, height + 1));
                 Size size = new Size();
                 PointF pointF = new PointF();
-                object[] value = this.sqL_DataGridView_勤務取藥_全處方.GetRowsList()[e.RowIndex];
-                OrderClass order = value[0].ObjectToString().JsonDeserializet<OrderClass>();
+            
+
                 string 序號 = $"{e.RowIndex + 1}.";
                 double val = order.交易量.StringToDouble() * -1;
                 size = val.ToString("0.00").MeasureText(new Font("標楷體", 30, FontStyle.Bold));
-
+                
                 DrawingClass.Draw.文字左上繪製(序號, new PointF(10, y + 15), new Font("標楷體", 20), row_Forecolor, e.Graphics);
                 DrawingClass.Draw.文字左上繪製(order.藥品碼, new PointF(50, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
-                DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
-
+                if (has不發藥 == false) DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
+                if (has不發藥 == true) DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), row_Forecolor, e.Graphics);
                 DrawingClass.Draw.文字左上繪製(order.藥品名稱, new PointF(400, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
+                string note = order.頻次;
 
-                size = order.頻次.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
-                DrawingClass.Draw.文字左上繪製(order.頻次, new PointF(e.RowBounds.Width - size.Width - 10, y + 10), new Font("標楷體", 30, FontStyle.Regular), Color.Black, e.Graphics);
+
+                size = note.MeasureText(new Font("標楷體", 30, FontStyle.Regular));
+                DrawingClass.Draw.文字左上繪製(note, new PointF(e.RowBounds.Width - size.Width - 120, y + 10), new Font("標楷體", 30, FontStyle.Regular), row_Forecolor, e.Graphics);
+                var configMap = new Dictionary<string, Image>()
+                {
+                    { "大瓶藥", global::勤務傳送系統.Properties.Resources.大型點滴ON },
+                    { "不發藥", global::勤務傳送系統.Properties.Resources.發藥ON }
+                };
+
+                var sortOrder = new Dictionary<string, int>()
+                {
+                    { "大瓶藥", 1 },
+                    { "不發藥", 2 }
+                };
+
+                int img_num = 0;
+
+                var sortedConfigs = order.orderConfig
+                    .Where(z => z.狀態.StringToBool() && configMap.ContainsKey(z.功能備註))
+                    .OrderBy(z => sortOrder.ContainsKey(z.功能備註) ? sortOrder[z.功能備註] : 999);
+
+                foreach (var orderConfig in sortedConfigs)
+                {
+                    var img = configMap[orderConfig.功能備註];
+
+                    e.Graphics.DrawImage(img,
+                        e.RowBounds.Width - 50 - img_num * 50,
+                        y + 10,
+                        40,
+                        40);
+
+                    img_num++;
+                }
+
             }
         }
         private void TextBox_勤務取藥_單處方_條碼刷入區_KeyPress(object sender, KeyPressEventArgs e)
