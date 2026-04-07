@@ -237,7 +237,7 @@ namespace HIS_WebApi
                     foreach (var item in input_patInfo_filter)
                     {
                         item.占床狀態 = enum_bed_status_string.已出院.GetEnumName();
-                        medCart_sql_update.Add(item);
+                        patInfo_sql_update_out.Add(item);
                     }
                 }
                 List<object[]> list_medCart_add = patInfo_sql_add.ClassToSQL<patientInfoClass, enum_patient_info>();
@@ -883,6 +883,8 @@ namespace HIS_WebApi
                     returnData.Result = $"傳入Data資料異常";
                     return returnData.JsonSerializationt();
                 }
+                input_medCpoe = input_medCpoe.GroupBy(x => new { x.Master_GUID, x.PRI_KEY }).Select(g => g.First()).ToList();
+
                 string 藥局 = input_medCpoe[0].藥局;
                 string 護理站 = input_medCpoe[0].護理站;
 

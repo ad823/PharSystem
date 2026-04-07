@@ -2950,7 +2950,7 @@ namespace HIS_WebApi
             public int Compare(inventoryClass.content x, inventoryClass.content y)
             {
                 int 序號1 = x.序號.StringToInt32();
-                int 序號2 = x.序號.StringToInt32();
+                int 序號2 = y.序號.StringToInt32();
                 if (序號1 > 0 && 序號2 > 0)
                 {
                     return 序號1.CompareTo(序號2);

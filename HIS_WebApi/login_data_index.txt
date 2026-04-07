@@ -1142,59 +1142,52 @@
       "description": ""
     },
     {
-      "GUID": "caec1df9-1a5f-4f47-80a8-c31964ae6604",
       "index": "149",
-      "name": "驗收管理鎖定權限",
+      "name": "藥庫監控",
       "type": "網頁",
       "group": "業庫",
       "description": ""
     },
     {
-      "GUID": "15441cb3-30bf-445e-b2d3-29bf7c3e3aa0",
       "index": "150",
-      "name": "藥檔編輯權限",
+      "name": "庫存查詢系統",
       "type": "網頁",
       "group": "共同管理",
       "description": ""
     },
     {
-      "GUID": "c07aad06-cdad-4500-a458-4a7f71412fc7",
       "index": "151",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "中藥醫令",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
-      "GUID": "e7a03ad1-c167-453a-a140-14423bca7b08",
       "index": "152",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "中藥交易",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
-      "GUID": "233f3fdb-fce7-4667-93fc-90e9ed8dc594",
       "index": "153",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "申領簽收",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
-      "GUID": "e2c6c646-1244-47a7-8ee2-6135df0b90f0",
       "index": "154",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "撥補簽收",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
-      "GUID": "a10aa19a-bf22-4c80-aab7-1b2691be809d",
       "index": "155",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "醫令查詢",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
@@ -1240,17 +1233,17 @@
     {
       "GUID": "23a3badd-cf5c-4300-ab85-8549a0a42ba5",
       "index": "161",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "驗收管理鎖定權限",
+      "type": "網頁",
+      "group": "業庫",
       "description": ""
     },
     {
       "GUID": "564d728a-395e-487b-a77f-c22c23bbc79a",
       "index": "162",
-      "name": "None",
-      "type": "",
-      "group": "",
+      "name": "藥檔編輯權限",
+      "type": "網頁",
+      "group": "共同管理",
       "description": ""
     },
     {
