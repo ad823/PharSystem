@@ -180,6 +180,8 @@ namespace 勤務傳送系統
         static public PLC_Device PLC_Device_開門異常時間 = new PLC_Device("D3000");
         static public PLC_Device PLC_Device_單層格數 = new PLC_Device("D3001");
         static public PLC_Device PLC_Device_單行格數 = new PLC_Device("D3005");
+        static public PLC_Device PLC_Device_格子X寬度 = new PLC_Device("D3006");
+        static public PLC_Device PLC_Device_格子Y寬度 = new PLC_Device("D3007");
         static public PLC_Device PLC_Device_勤務關門閃燈提醒 = new PLC_Device("S4510");
 
         public Main_Form()

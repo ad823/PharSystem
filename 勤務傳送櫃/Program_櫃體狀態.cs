@@ -373,6 +373,8 @@ namespace 勤務傳送系統
         {
             int row_num = PLC_Device_單層格數.Value;
             int col_num = PLC_Device_單行格數.Value;
+            int panel_width = PLC_Device_格子X寬度.Value;
+            int panel_height = PLC_Device_格子Y寬度.Value;
             int panel_max = row_num * col_num;
             panel_max = panel_max + 1;
             if (row_num <= 0) row_num = 1;
@@ -389,13 +391,14 @@ namespace 勤務傳送系統
             for (int i = 0; i < panel_max * 4; i++)
             {
 
-
                 Pannel_Box pannel_Box = new Pannel_Box();
                 pannel_Box.Init(i, this.rfiD_UI, this.storageUI_EPD_266);
                 pannel_Box.TabIndex = i + 5;
-                //pannel_Box.Width = 195;
                 pannel_Box.Width = flowLayoutPanels[0].Width / col_num - 10;
                 pannel_Box.Height = flowLayoutPanels[0].Height / row_num - 10;
+
+                if (panel_width > 0) pannel_Box.Width = panel_width;
+                if (panel_height > 0) pannel_Box.Height = panel_height;
                 pannel_Box.Visible = false;
 
                 flowLayoutPanels[i / panel_max].Controls.Add(pannel_Box);
