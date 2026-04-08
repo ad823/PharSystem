@@ -14,10 +14,16 @@ using FingerprintLib;
 using System.Threading;
 using SQLUI;
 using H_Pannel_lib;
+
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace 調劑台管理系統
 {
     public partial class Dialog_自動出藥 : MyDialog
     {
+        private IpCallCounter ipCallCounter = new IpCallCounter();
         private MyThread myThread = new MyThread();
         public personPageClass personPage = new personPageClass();
         public List<takeMedicineStackClass> takeMedicines = new List<takeMedicineStackClass>();
@@ -206,6 +212,12 @@ namespace 調劑台管理系統
                         if (time < 0) time = 0;
                     }
                 }
+                Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(IP);
+                if(storage !=null)
+                {
+                    Main_Form._storageUI_EPD_266.Set_Stroage_LED_UDP(storage, Color.Blue);
+                }
+         
                 Main_Form._storageUI_EPD_266.Set_ADCMotorTrigger(IP, 29000, time);
                 cnt++;
             
@@ -221,6 +233,15 @@ namespace 調劑台管理系統
                     if (uDP_READ_Basic.FADC_motorCnt != MotorCnt)
                     {
                         Console.WriteLine($"[出貨一次] - 出料一次完成");
+                        ipCallCounter.Record(IP);
+                        if(ipCallCounter.GetCount(IP) >= 2)
+                        {
+                            Main_Form.voice.SpeakOnTask("請先取出藥品");
+                            MyMessageBox.ShowDialog("請先取出藥品後按下確認");
+
+                            ipCallCounter.Remove(IP);
+                        }
+
                         cnt++;
                     }
 
@@ -276,7 +297,7 @@ namespace 調劑台管理系統
            
             if (cnt == 65500)
             {
-                "取藥完成".PlayGooleVoiceAsync(Main_Form.API_Server);
+                Main_Form.voice.SpeakOnTask("取藥完成");
                 refresh_ip = refresh_ip.Select(x => x).Distinct().ToList();
 
                 List<Task> tasks = new List<Task>();
@@ -285,7 +306,11 @@ namespace 調劑台管理系統
                     Storage storage = Main_Form._storageUI_EPD_266.SQL_GetStorage(IP);
                     tasks.Add(Task.Run(new Action(delegate
                     {
-                        if (storage != null) Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
+                        if (storage != null)
+                        {
+                            Main_Form._storageUI_EPD_266.DrawToEpd_UDP(storage);
+                            Main_Form._storageUI_EPD_266.Set_Stroage_LED_UDP(storage, Color.Black);
+                        }
                     })));
                 }
 
@@ -297,6 +322,68 @@ namespace 調劑台管理系統
                 this.Close();
             }
         }
-      
+
+
+        public class IpCallCounter
+        {
+            // 使用 Thread-safe Dictionary
+            private readonly ConcurrentDictionary<string, int> _ipCounter
+                = new ConcurrentDictionary<string, int>();
+
+            /// <summary>
+            /// 記錄 IP 呼叫一次
+            /// </summary>
+            public void Record(string ip)
+            {
+                if (string.IsNullOrWhiteSpace(ip)) return;
+
+                _ipCounter.AddOrUpdate(ip, 1, (key, oldValue) => oldValue + 1);
+            }
+
+            /// <summary>
+            /// 取得某個 IP 的呼叫次數
+            /// </summary>
+            public int GetCount(string ip)
+            {
+                if (string.IsNullOrWhiteSpace(ip)) return 0;
+
+                return _ipCounter.TryGetValue(ip, out int count) ? count : 0;
+            }
+
+            /// <summary>
+            /// 取得所有 IP 與次數
+            /// </summary>
+            public Dictionary<string, int> GetAll()
+            {
+                return _ipCounter.ToDictionary(k => k.Key, v => v.Value);
+            }
+
+            /// <summary>
+            /// 取得 Top N 呼叫最多的 IP
+            /// </summary>
+            public List<KeyValuePair<string, int>> GetTop(int topN)
+            {
+                return _ipCounter
+                    .OrderByDescending(x => x.Value)
+                    .Take(topN)
+                    .ToList();
+            }
+            /// <summary>
+            /// 清除指定 IP 的計數
+            /// </summary>
+            public bool Remove(string ip)
+            {
+                if (string.IsNullOrWhiteSpace(ip)) return false;
+
+                return _ipCounter.TryRemove(ip, out _);
+            }
+            /// <summary>
+            /// 清除所有紀錄
+            /// </summary>
+            public void Clear()
+            {
+                _ipCounter.Clear();
+            }
+        }
     }
 }

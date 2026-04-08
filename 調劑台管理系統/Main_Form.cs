@@ -42,7 +42,6 @@ namespace 調劑台管理系統
         public static System.Windows.Forms.TextBox _textBox_工程模式_領藥台_名稱;
         public static Pannel_Locker_Design _pannel_Locker_Design;
         public static PLC_ScreenPage _plC_ScreenPage_Main;
-
         public static string 領藥台_01名稱
         {
             get

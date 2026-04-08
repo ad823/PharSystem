@@ -281,7 +281,7 @@ namespace 調劑台管理系統
                             Storage storage = List_EPD266_雲端資料.SortByIP(IP);
                             if (storage != null)
                             {
-                                if (storage.IsFADC == false) this.storageUI_EPD_266.Set_LockOpen(storage);
+                                this.storageUI_EPD_266.Set_LockOpen(storage);
                             }
                         }));
                         taskList.Add(Task.Run(() =>

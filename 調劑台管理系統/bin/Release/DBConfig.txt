@@ -1,4 +1,4 @@
 {
-  "Name": "ADC(ER)",
-  "Api_Server": "http://127.0.0.1:4433"
+  "Name": "FADC(¦w¹ç¯f©Ð)",
+  "Api_Server": "http://10.20.5.55:4433"
 }

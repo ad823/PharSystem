@@ -1066,6 +1066,31 @@ namespace 調劑台管理系統
 
             return list_value;
         }
+        static public List<object> Function_從雲端資料取得儲位_ByIP(string IP)
+        {
+            List<object> list_value = new List<object>();
+
+            // 使用 Task 執行每個集合的 SortByCode 操作
+            var taskBoxes = Task.Run(() => List_EPD583_雲端資料.SortByIP(IP));
+            var taskBoxes1020 = Task.Run(() => List_EPD1020_雲端資料.SortByIP(IP));
+            var taskStorages = Task.Run(() => List_EPD266_雲端資料.SortByIP(IP));
+            var taskPannels = Task.Run(() => List_Pannel35_雲端資料.SortByIP(IP));
+            var taskRowsDevices = Task.Run(() => List_RowsLED_雲端資料.SortByIP(IP));
+            var taskRFIDDevices = Task.Run(() => List_RFID_雲端資料.SortByIP(IP));
+
+            // 使用 Task.WaitAll 同步等待所有任務完成
+            Task.WaitAll(taskBoxes, taskBoxes1020, taskStorages, taskPannels, taskRowsDevices, taskRFIDDevices);
+
+            // 將所有結果加入 list_value
+            if (taskStorages.Result != null) list_value.Add(taskStorages.Result);// storages
+            if (taskBoxes.Result != null) list_value.Add(taskBoxes.Result); // boxes
+            if (taskBoxes1020.Result != null) list_value.Add(taskBoxes1020.Result); // boxes_1020
+            if (taskPannels.Result != null) list_value.Add(taskPannels.Result); // pannels
+            if (taskRowsDevices.Result != null) list_value.Add(taskRowsDevices.Result); // rowsDevices
+            if (taskRFIDDevices.Result != null) list_value.Add(taskRFIDDevices.Result); // rFIDDevices
+
+            return list_value;
+        }
         static public void Function_從雲端資料取得儲位(string 藥品碼, ref List<string> TYPE, ref List<object> values)
         {
             List<object> list_value = Function_從雲端資料取得儲位(藥品碼);
@@ -2598,9 +2623,17 @@ namespace 調劑台管理系統
             if (lightOns_buf.Count == 0) lightOns.Add(lightOn);
 
             List<object> list_Device = new List<object>();
-            list_Device.LockAdd(Function_從雲端資料取得儲位(藥品碼));
-            //list_Device.LockAdd(Function_從共用區取得儲位(藥品碼));
-            Task allTask;
+            if (lightOn.IP.StringIsEmpty() == false)
+            {
+                list_Device.LockAdd(Function_從雲端資料取得儲位_ByIP(lightOn.IP));
+
+            }
+            else
+            {
+                list_Device.LockAdd(Function_從雲端資料取得儲位(藥品碼));
+            }
+
+                Task allTask;
             List<Task> taskList = new List<Task>();
             List<string> list_IP = new List<string>();
             List<string> list_IP_buf = new List<string>();
@@ -2623,7 +2656,7 @@ namespace 調劑台管理系統
                         if (storage != null)
                         {
                             list_IP.Add(IP);
-                            if (device.DeviceType.GetEnumName().Contains("lock") && storage.IsFADC == false)
+                            if (device.DeviceType.GetEnumName().Contains("lock")/* && storage.IsFADC == false*/)
                             {
                                 list_lock_IP.Add(IP);
                             }
