@@ -785,6 +785,20 @@ namespace 調劑台管理系統
             object device_object = value[(int)enum_收支作業_單品入庫_儲位搜尋.Value];
             if (!(device_object is Device)) return;
             Device device = device_object as Device;
+            if(PLC_Device_收支入庫要確認圖片.Bool)
+            {
+                List<Image> images = Function_取得藥品圖片(device.Code);
+                if (images != null)
+                {
+                    if (images.Count > 0)
+                    {
+                        Dialog_藥品圖片確認 dialog_藥品圖片確認 = new Dialog_藥品圖片確認(images[0]);
+                        if (dialog_藥品圖片確認.ShowDialog() != DialogResult.Yes) return;
+                    }
+                }
+            }
+          
+
 
             string 輸入效期 = "";
             string 輸入批號 = "";

@@ -584,6 +584,12 @@
     <Compile Include="Dialog\Dialog_時段設定.Designer.cs">
       <DependentUpon>Dialog_時段設定.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialog\Dialog_藥品圖片確認.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog\Dialog_藥品圖片確認.Designer.cs">
+      <DependentUpon>Dialog_藥品圖片確認.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -835,6 +841,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\Dialog_自動出藥.resx">
       <DependentUpon>Dialog_自動出藥.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog\Dialog_藥品圖片確認.resx">
+      <DependentUpon>Dialog_藥品圖片確認.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialog\藥品群組\Dialog_藥品群組設定.resx">
       <DependentUpon>Dialog_藥品群組設定.cs</DependentUpon>

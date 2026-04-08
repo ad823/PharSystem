@@ -2810,6 +2810,18 @@ namespace 調劑台管理系統
                         {
                             taskList.Add(Task.Run(() =>
                             {
+                                if (Storage.ContainsBitmap(storage.Code) == false)
+                                {
+                                    List<Image> images = Function_取得藥品圖片(storage.Code);
+                                    if (images != null)
+                                    {
+                                        if (images.Count > 0)
+                                        {
+                                            Storage.SetBitmapToCache(storage.Code, (Bitmap)images[0]);
+                                        }
+                                    }
+                                }
+
                                 _storageUI_EPD_266.DrawToEpd_UDP(storage);
                             }));
 
@@ -2919,6 +2931,18 @@ namespace 調劑台管理系統
                             }
                             else
                             {
+                                if (Storage.ContainsBitmap(storage.Code) == false)
+                                {
+                                    List<Image> images = Function_取得藥品圖片(storage.Code);
+                                    if (images != null)
+                                    {
+                                        if (images.Count > 0)
+                                        {
+                                            Storage.SetBitmapToCache(storage.Code, (Bitmap)images[0]);
+                                        }
+                                    }
+                                }
+
                                 this.storageUI_EPD_266.DrawToEpd_UDP(storage);
                             }
                         

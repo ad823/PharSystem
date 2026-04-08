@@ -120,6 +120,7 @@ namespace 調劑台管理系統
         static public PLC_Device PLC_Device_盤點異常排除不改動庫存 = new PLC_Device("S5061");
         static public PLC_Device PLC_Device_盤點異常排除要修正原因 = new PLC_Device("S5062");
         static public PLC_Device PLC_Device_亮燈要檢查料號 = new PLC_Device("S5063");
+        static public PLC_Device PLC_Device_收支入庫要確認圖片 = new PLC_Device("S5064");
 
 
         static public PLC_Device PLC_Device_使用藥品群組排序盤點 = new PLC_Device("S5051");
