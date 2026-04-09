@@ -64,6 +64,7 @@ namespace 調劑台管理系統
             foreach(object[] obj in RowsList)
             {
                 string guid = obj[(int)enum_medRecheckLog.交易紀錄_GUID].ObjectToString();
+                if (transactionsClasses == null) continue;
                 transactionsClass transactions = transactionsClasses.Where(x => x.GUID == guid).FirstOrDefault();
                 if (transactions != null) obj[(int)enum_medRecheckLog.差異值] = transactions.交易量;
                 else obj[(int)enum_medRecheckLog.差異值] = "-";
