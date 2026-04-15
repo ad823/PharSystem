@@ -136,6 +136,9 @@
   <data name="matticons_solid_Change_PAssword-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\matticons_solid_Change_PAssword-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="發藥ON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\發藥ON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="trash-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trash-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -144,6 +147,12 @@
   </data>
   <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="發藥OFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\發藥OFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="大型點滴OFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\大型點滴OFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Update.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,22 +166,16 @@
   <data name="serach_document-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\serach_document-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="大型點滴ON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\大型點滴ON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Files_and_Folders_file_export_arrow-512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Files_and_Folders_file_export_arrow-512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="adjusted_checkmark-removebg-preview" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\adjusted_checkmark-removebg-preview.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="大型點滴OFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\大型點滴OFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="大型點滴ON" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\大型點滴ON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="發藥OFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\發藥OFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="發藥ON" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\發藥ON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="發藥ON1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\發藥ON1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

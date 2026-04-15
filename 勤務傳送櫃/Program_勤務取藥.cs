@@ -638,7 +638,7 @@ namespace 勤務傳送系統
                 var configMap = new Dictionary<string, Image>()
                 {
                     { "大瓶藥", global::勤務傳送系統.Properties.Resources.大型點滴ON },
-                    { "不發藥", global::勤務傳送系統.Properties.Resources.發藥ON }
+                    { "不發藥", global::勤務傳送系統.Properties.Resources.發藥ON1 }
                 };
 
                 var sortOrder = new Dictionary<string, int>()

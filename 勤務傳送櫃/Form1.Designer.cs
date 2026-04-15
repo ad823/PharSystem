@@ -445,6 +445,10 @@
             this.系統頁面 = new System.Windows.Forms.TabPage();
             this.plC_ScreenPage_系統頁面 = new MyUI.PLC_ScreenPage();
             this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.plC_NumBox4 = new MyUI.PLC_NumBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.plC_NumBox5 = new MyUI.PLC_NumBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.plC_NumBox3 = new MyUI.PLC_NumBox();
             this.plC_CheckBox1 = new MyUI.PLC_CheckBox();
@@ -499,10 +503,6 @@
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pannel_Box1 = new 勤務傳送系統.Pannel_Box();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.plC_NumBox4 = new MyUI.PLC_NumBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.plC_NumBox5 = new MyUI.PLC_NumBox();
             this.panel_Main.SuspendLayout();
             this.panel232.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -615,6 +615,8 @@
             this.系統頁面.SuspendLayout();
             this.plC_ScreenPage_系統頁面.SuspendLayout();
             this.tabPage22.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -633,8 +635,6 @@
             this.tabPage20.SuspendLayout();
             this.tabPage21.SuspendLayout();
             this.panel_系統頁面.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveFileDialog_SaveExcel
@@ -665,7 +665,7 @@
             this.panel_Main.Controls.Add(this.plC_RJ_ScreenButton1);
             this.panel_Main.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Main.Location = new System.Drawing.Point(0, 0);
-            this.panel_Main.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel_Main.Margin = new System.Windows.Forms.Padding(4);
             this.panel_Main.Name = "panel_Main";
             this.panel_Main.Size = new System.Drawing.Size(304, 1142);
             this.panel_Main.TabIndex = 3;
@@ -689,7 +689,7 @@
             this.plC_RJ_Button_登入畫面_登出.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_登入畫面_登出.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_登入畫面_登出.Location = new System.Drawing.Point(0, 867);
-            this.plC_RJ_Button_登入畫面_登出.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_登入畫面_登出.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_登入畫面_登出.Name = "plC_RJ_Button_登入畫面_登出";
             this.plC_RJ_Button_登入畫面_登出.OFF_文字內容 = "登出";
             this.plC_RJ_Button_登入畫面_登出.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -1096,7 +1096,7 @@
             this.panel232.Controls.Add(this.rJ_Lable66);
             this.panel232.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel232.Location = new System.Drawing.Point(0, 949);
-            this.panel232.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel232.Margin = new System.Windows.Forms.Padding(4);
             this.panel232.Name = "panel232";
             this.panel232.Size = new System.Drawing.Size(304, 91);
             this.panel232.TabIndex = 98;
@@ -1113,7 +1113,7 @@
             this.rJ_TextBox_登入者顏色.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_登入者顏色.GUID = "";
             this.rJ_TextBox_登入者顏色.Location = new System.Drawing.Point(189, 2);
-            this.rJ_TextBox_登入者顏色.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_登入者顏色.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_登入者顏色.Multiline = false;
             this.rJ_TextBox_登入者顏色.Name = "rJ_TextBox_登入者顏色";
             this.rJ_TextBox_登入者顏色.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -1139,7 +1139,7 @@
             this.rJ_TextBox_登入者姓名.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_登入者姓名.GUID = "";
             this.rJ_TextBox_登入者姓名.Location = new System.Drawing.Point(91, 48);
-            this.rJ_TextBox_登入者姓名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_登入者姓名.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_登入者姓名.Multiline = false;
             this.rJ_TextBox_登入者姓名.Name = "rJ_TextBox_登入者姓名";
             this.rJ_TextBox_登入者姓名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -1165,7 +1165,7 @@
             this.rJ_TextBox_登入者ID.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_登入者ID.GUID = "";
             this.rJ_TextBox_登入者ID.Location = new System.Drawing.Point(91, 2);
-            this.rJ_TextBox_登入者ID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_登入者ID.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_登入者ID.Multiline = false;
             this.rJ_TextBox_登入者ID.Name = "rJ_TextBox_登入者ID";
             this.rJ_TextBox_登入者ID.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -1303,9 +1303,9 @@
             this.登入畫面.Controls.Add(this.panel28);
             this.登入畫面.Controls.Add(this.panel27);
             this.登入畫面.Location = new System.Drawing.Point(4, 25);
-            this.登入畫面.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.登入畫面.Margin = new System.Windows.Forms.Padding(4);
             this.登入畫面.Name = "登入畫面";
-            this.登入畫面.Size = new System.Drawing.Size(1612, 1105);
+            this.登入畫面.Size = new System.Drawing.Size(1612, 1113);
             this.登入畫面.TabIndex = 5;
             this.登入畫面.Text = "登入畫面";
             // 
@@ -1314,7 +1314,7 @@
             this.panel31.Controls.Add(this.rJ_GroupBox1);
             this.panel31.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel31.Location = new System.Drawing.Point(0, 473);
-            this.panel31.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel31.Margin = new System.Windows.Forms.Padding(4);
             this.panel31.Name = "panel31";
             this.panel31.Padding = new System.Windows.Forms.Padding(200, 0, 200, 0);
             this.panel31.Size = new System.Drawing.Size(1612, 379);
@@ -1335,7 +1335,7 @@
             this.rJ_GroupBox1.ContentsPanel.ForeColor = System.Drawing.Color.White;
             this.rJ_GroupBox1.ContentsPanel.IsSelected = false;
             this.rJ_GroupBox1.ContentsPanel.Location = new System.Drawing.Point(0, 46);
-            this.rJ_GroupBox1.ContentsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox1.ContentsPanel.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox1.ContentsPanel.Name = "ContentsPanel";
             this.rJ_GroupBox1.ContentsPanel.Padding = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.rJ_GroupBox1.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
@@ -1345,7 +1345,7 @@
             this.rJ_GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_GroupBox1.GUID = "";
             this.rJ_GroupBox1.Location = new System.Drawing.Point(200, 0);
-            this.rJ_GroupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox1.Name = "rJ_GroupBox1";
             this.rJ_GroupBox1.PannelBackColor = System.Drawing.SystemColors.Window;
             this.rJ_GroupBox1.PannelBorderColor = System.Drawing.Color.Black;
@@ -1372,7 +1372,7 @@
             this.panel32.Controls.Add(this.panel185);
             this.panel32.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel32.Location = new System.Drawing.Point(7, 8);
-            this.panel32.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel32.Margin = new System.Windows.Forms.Padding(4);
             this.panel32.Name = "panel32";
             this.panel32.Padding = new System.Windows.Forms.Padding(27, 25, 27, 0);
             this.panel32.Size = new System.Drawing.Size(1198, 317);
@@ -1385,7 +1385,7 @@
             this.panel183.Controls.Add(this.panel184);
             this.panel183.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel183.Location = new System.Drawing.Point(27, 133);
-            this.panel183.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel183.Margin = new System.Windows.Forms.Padding(4);
             this.panel183.Name = "panel183";
             this.panel183.Size = new System.Drawing.Size(1144, 82);
             this.panel183.TabIndex = 37;
@@ -1395,7 +1395,7 @@
             this.panel38.Controls.Add(this.textBox_登入畫面_密碼);
             this.panel38.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel38.Location = new System.Drawing.Point(117, 0);
-            this.panel38.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel38.Margin = new System.Windows.Forms.Padding(4);
             this.panel38.Name = "panel38";
             this.panel38.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
             this.panel38.Size = new System.Drawing.Size(1027, 82);
@@ -1414,7 +1414,7 @@
             this.textBox_登入畫面_密碼.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_登入畫面_密碼.GUID = "";
             this.textBox_登入畫面_密碼.Location = new System.Drawing.Point(0, 8);
-            this.textBox_登入畫面_密碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_登入畫面_密碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_登入畫面_密碼.Multiline = false;
             this.textBox_登入畫面_密碼.Name = "textBox_登入畫面_密碼";
             this.textBox_登入畫面_密碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -1432,7 +1432,7 @@
             // 
             this.panel37.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel37.Location = new System.Drawing.Point(86, 0);
-            this.panel37.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel37.Margin = new System.Windows.Forms.Padding(4);
             this.panel37.Name = "panel37";
             this.panel37.Size = new System.Drawing.Size(31, 82);
             this.panel37.TabIndex = 4;
@@ -1444,7 +1444,7 @@
             this.panel184.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel184.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel184.Location = new System.Drawing.Point(0, 0);
-            this.panel184.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel184.Margin = new System.Windows.Forms.Padding(4);
             this.panel184.Name = "panel184";
             this.panel184.Size = new System.Drawing.Size(86, 82);
             this.panel184.TabIndex = 0;
@@ -1453,7 +1453,7 @@
             // 
             this.panel33.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel33.Location = new System.Drawing.Point(27, 107);
-            this.panel33.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel33.Margin = new System.Windows.Forms.Padding(4);
             this.panel33.Name = "panel33";
             this.panel33.Size = new System.Drawing.Size(1144, 26);
             this.panel33.TabIndex = 36;
@@ -1463,7 +1463,7 @@
             this.panel34.Controls.Add(this.plC_RJ_Button_登入畫面_登入);
             this.panel34.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel34.Location = new System.Drawing.Point(27, 222);
-            this.panel34.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel34.Margin = new System.Windows.Forms.Padding(4);
             this.panel34.Name = "panel34";
             this.panel34.Padding = new System.Windows.Forms.Padding(0, 0, 0, 12);
             this.panel34.Size = new System.Drawing.Size(1144, 95);
@@ -1488,7 +1488,7 @@
             this.plC_RJ_Button_登入畫面_登入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_登入畫面_登入.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_登入畫面_登入.Location = new System.Drawing.Point(967, 0);
-            this.plC_RJ_Button_登入畫面_登入.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_登入畫面_登入.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_登入畫面_登入.Name = "plC_RJ_Button_登入畫面_登入";
             this.plC_RJ_Button_登入畫面_登入.OFF_文字內容 = "登入";
             this.plC_RJ_Button_登入畫面_登入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -1530,7 +1530,7 @@
             this.panel185.Controls.Add(this.panel186);
             this.panel185.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel185.Location = new System.Drawing.Point(27, 25);
-            this.panel185.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel185.Margin = new System.Windows.Forms.Padding(4);
             this.panel185.Name = "panel185";
             this.panel185.Size = new System.Drawing.Size(1144, 82);
             this.panel185.TabIndex = 33;
@@ -1540,7 +1540,7 @@
             this.panel36.Controls.Add(this.textBox_登入畫面_帳號);
             this.panel36.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel36.Location = new System.Drawing.Point(117, 0);
-            this.panel36.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel36.Margin = new System.Windows.Forms.Padding(4);
             this.panel36.Name = "panel36";
             this.panel36.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
             this.panel36.Size = new System.Drawing.Size(1027, 82);
@@ -1559,7 +1559,7 @@
             this.textBox_登入畫面_帳號.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_登入畫面_帳號.GUID = "";
             this.textBox_登入畫面_帳號.Location = new System.Drawing.Point(0, 8);
-            this.textBox_登入畫面_帳號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_登入畫面_帳號.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_登入畫面_帳號.Multiline = false;
             this.textBox_登入畫面_帳號.Name = "textBox_登入畫面_帳號";
             this.textBox_登入畫面_帳號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -1577,7 +1577,7 @@
             // 
             this.panel35.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel35.Location = new System.Drawing.Point(86, 0);
-            this.panel35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel35.Margin = new System.Windows.Forms.Padding(4);
             this.panel35.Name = "panel35";
             this.panel35.Size = new System.Drawing.Size(31, 82);
             this.panel35.TabIndex = 3;
@@ -1589,7 +1589,7 @@
             this.panel186.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel186.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel186.Location = new System.Drawing.Point(0, 0);
-            this.panel186.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel186.Margin = new System.Windows.Forms.Padding(4);
             this.panel186.Name = "panel186";
             this.panel186.Size = new System.Drawing.Size(86, 82);
             this.panel186.TabIndex = 0;
@@ -1598,7 +1598,7 @@
             // 
             this.panel30.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel30.Location = new System.Drawing.Point(0, 432);
-            this.panel30.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel30.Margin = new System.Windows.Forms.Padding(4);
             this.panel30.Name = "panel30";
             this.panel30.Size = new System.Drawing.Size(1612, 41);
             this.panel30.TabIndex = 114;
@@ -1608,7 +1608,7 @@
             this.panel28.Controls.Add(this.rJ_Lable1);
             this.panel28.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel28.Location = new System.Drawing.Point(0, 262);
-            this.panel28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel28.Margin = new System.Windows.Forms.Padding(4);
             this.panel28.Name = "panel28";
             this.panel28.Padding = new System.Windows.Forms.Padding(133, 0, 133, 0);
             this.panel28.Size = new System.Drawing.Size(1612, 170);
@@ -1642,7 +1642,7 @@
             // 
             this.panel27.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel27.Location = new System.Drawing.Point(0, 0);
-            this.panel27.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel27.Margin = new System.Windows.Forms.Padding(4);
             this.panel27.Name = "panel27";
             this.panel27.Size = new System.Drawing.Size(1612, 262);
             this.panel27.TabIndex = 111;
@@ -1652,9 +1652,9 @@
             this.勤務取藥.BackColor = System.Drawing.Color.White;
             this.勤務取藥.Controls.Add(this.panel10);
             this.勤務取藥.Location = new System.Drawing.Point(4, 25);
-            this.勤務取藥.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.勤務取藥.Margin = new System.Windows.Forms.Padding(4);
             this.勤務取藥.Name = "勤務取藥";
-            this.勤務取藥.Size = new System.Drawing.Size(2227, 1265);
+            this.勤務取藥.Size = new System.Drawing.Size(1612, 1113);
             this.勤務取藥.TabIndex = 11;
             this.勤務取藥.Text = "勤務取藥";
             // 
@@ -1663,9 +1663,9 @@
             this.panel10.Controls.Add(this.tabControlEx_勤務取藥);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(0, 0);
-            this.panel10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel10.Margin = new System.Windows.Forms.Padding(4);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(2227, 1265);
+            this.panel10.Size = new System.Drawing.Size(1612, 1113);
             this.panel10.TabIndex = 23;
             // 
             // tabControlEx_勤務取藥
@@ -1674,10 +1674,10 @@
             this.tabControlEx_勤務取藥.Controls.Add(this.勤務取藥_全處方);
             this.tabControlEx_勤務取藥.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlEx_勤務取藥.Location = new System.Drawing.Point(0, 0);
-            this.tabControlEx_勤務取藥.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlEx_勤務取藥.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlEx_勤務取藥.Name = "tabControlEx_勤務取藥";
             this.tabControlEx_勤務取藥.SelectedIndex = 0;
-            this.tabControlEx_勤務取藥.Size = new System.Drawing.Size(2227, 1265);
+            this.tabControlEx_勤務取藥.Size = new System.Drawing.Size(1612, 1113);
             this.tabControlEx_勤務取藥.TabIndex = 27;
             // 
             // 勤務取藥_單處方
@@ -1686,7 +1686,7 @@
             this.勤務取藥_單處方.Location = new System.Drawing.Point(4, 25);
             this.勤務取藥_單處方.Margin = new System.Windows.Forms.Padding(0);
             this.勤務取藥_單處方.Name = "勤務取藥_單處方";
-            this.勤務取藥_單處方.Size = new System.Drawing.Size(2219, 1236);
+            this.勤務取藥_單處方.Size = new System.Drawing.Size(1604, 1084);
             this.勤務取藥_單處方.TabIndex = 0;
             this.勤務取藥_單處方.Text = "勤務取藥_單處方";
             this.勤務取藥_單處方.UseVisualStyleBackColor = true;
@@ -1699,9 +1699,9 @@
             this.panel11.Controls.Add(this.rJ_Lable_勤務取藥系統);
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel11.Location = new System.Drawing.Point(0, 0);
-            this.panel11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel11.Margin = new System.Windows.Forms.Padding(4);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(2219, 1236);
+            this.panel11.Size = new System.Drawing.Size(1604, 1084);
             this.panel11.TabIndex = 3;
             // 
             // panel12
@@ -1712,9 +1712,9 @@
             this.panel12.Controls.Add(this.panel92);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(0, 376);
-            this.panel12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel12.Margin = new System.Windows.Forms.Padding(4);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(2219, 860);
+            this.panel12.Size = new System.Drawing.Size(1604, 708);
             this.panel12.TabIndex = 25;
             // 
             // panel13
@@ -1724,10 +1724,10 @@
             this.panel13.Controls.Add(this.panel16);
             this.panel13.Controls.Add(this.panel14);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel13.Location = new System.Drawing.Point(0, 568);
-            this.panel13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel13.Location = new System.Drawing.Point(0, 416);
+            this.panel13.Margin = new System.Windows.Forms.Padding(4);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(2219, 292);
+            this.panel13.Size = new System.Drawing.Size(1604, 292);
             this.panel13.TabIndex = 27;
             // 
             // panel25
@@ -1738,17 +1738,17 @@
             this.panel25.Controls.Add(this.rJ_Lable33);
             this.panel25.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel25.Location = new System.Drawing.Point(0, 210);
-            this.panel25.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel25.Margin = new System.Windows.Forms.Padding(4);
             this.panel25.Name = "panel25";
             this.panel25.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel25.Size = new System.Drawing.Size(2219, 70);
+            this.panel25.Size = new System.Drawing.Size(1604, 70);
             this.panel25.TabIndex = 28;
             // 
             // panel66
             // 
             this.panel66.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel66.Location = new System.Drawing.Point(863, 8);
-            this.panel66.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel66.Margin = new System.Windows.Forms.Padding(4);
             this.panel66.Name = "panel66";
             this.panel66.Size = new System.Drawing.Size(23, 54);
             this.panel66.TabIndex = 18;
@@ -1779,7 +1779,7 @@
             // 
             this.panel26.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel26.Location = new System.Drawing.Point(281, 8);
-            this.panel26.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel26.Margin = new System.Windows.Forms.Padding(4);
             this.panel26.Name = "panel26";
             this.panel26.Size = new System.Drawing.Size(23, 54);
             this.panel26.TabIndex = 15;
@@ -1818,10 +1818,10 @@
             this.panel21.Controls.Add(this.rJ_Lable24);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel21.Location = new System.Drawing.Point(0, 140);
-            this.panel21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel21.Margin = new System.Windows.Forms.Padding(4);
             this.panel21.Name = "panel21";
             this.panel21.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel21.Size = new System.Drawing.Size(2219, 70);
+            this.panel21.Size = new System.Drawing.Size(1604, 70);
             this.panel21.TabIndex = 27;
             // 
             // rJ_Lable_勤務取藥_單處方_病歷號
@@ -1850,7 +1850,7 @@
             // 
             this.panel24.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel24.Location = new System.Drawing.Point(943, 8);
-            this.panel24.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel24.Margin = new System.Windows.Forms.Padding(4);
             this.panel24.Name = "panel24";
             this.panel24.Size = new System.Drawing.Size(23, 54);
             this.panel24.TabIndex = 15;
@@ -1882,7 +1882,7 @@
             // 
             this.panel23.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel23.Location = new System.Drawing.Point(652, 8);
-            this.panel23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel23.Margin = new System.Windows.Forms.Padding(4);
             this.panel23.Name = "panel23";
             this.panel23.Size = new System.Drawing.Size(23, 54);
             this.panel23.TabIndex = 13;
@@ -1913,7 +1913,7 @@
             // 
             this.panel22.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel22.Location = new System.Drawing.Point(281, 8);
-            this.panel22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel22.Margin = new System.Windows.Forms.Padding(4);
             this.panel22.Name = "panel22";
             this.panel22.Size = new System.Drawing.Size(23, 54);
             this.panel22.TabIndex = 11;
@@ -1952,10 +1952,10 @@
             this.panel16.Controls.Add(this.rJ_Lable23);
             this.panel16.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel16.Location = new System.Drawing.Point(0, 70);
-            this.panel16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel16.Margin = new System.Windows.Forms.Padding(4);
             this.panel16.Name = "panel16";
             this.panel16.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel16.Size = new System.Drawing.Size(2219, 70);
+            this.panel16.Size = new System.Drawing.Size(1604, 70);
             this.panel16.TabIndex = 26;
             // 
             // rJ_Lable_勤務取藥_單處方_頻次
@@ -1985,7 +1985,7 @@
             // 
             this.panel20.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel20.Location = new System.Drawing.Point(943, 8);
-            this.panel20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel20.Margin = new System.Windows.Forms.Padding(4);
             this.panel20.Name = "panel20";
             this.panel20.Size = new System.Drawing.Size(23, 54);
             this.panel20.TabIndex = 9;
@@ -2018,7 +2018,7 @@
             // 
             this.panel19.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel19.Location = new System.Drawing.Point(652, 8);
-            this.panel19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel19.Margin = new System.Windows.Forms.Padding(4);
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(23, 54);
             this.panel19.TabIndex = 7;
@@ -2049,7 +2049,7 @@
             // 
             this.panel18.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel18.Location = new System.Drawing.Point(281, 8);
-            this.panel18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel18.Margin = new System.Windows.Forms.Padding(4);
             this.panel18.Name = "panel18";
             this.panel18.Size = new System.Drawing.Size(23, 54);
             this.panel18.TabIndex = 5;
@@ -2084,10 +2084,10 @@
             this.panel14.Controls.Add(this.rJ_Lable18);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel14.Location = new System.Drawing.Point(0, 0);
-            this.panel14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel14.Margin = new System.Windows.Forms.Padding(4);
             this.panel14.Name = "panel14";
             this.panel14.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel14.Size = new System.Drawing.Size(2219, 70);
+            this.panel14.Size = new System.Drawing.Size(1604, 70);
             this.panel14.TabIndex = 25;
             // 
             // rJ_Lable_勤務取藥_單處方_藥名
@@ -2107,7 +2107,7 @@
             this.rJ_Lable_勤務取藥_單處方_藥名.Name = "rJ_Lable_勤務取藥_單處方_藥名";
             this.rJ_Lable_勤務取藥_單處方_藥名.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥_單處方_藥名.ShadowSize = 0;
-            this.rJ_Lable_勤務取藥_單處方_藥名.Size = new System.Drawing.Size(1902, 54);
+            this.rJ_Lable_勤務取藥_單處方_藥名.Size = new System.Drawing.Size(1287, 54);
             this.rJ_Lable_勤務取藥_單處方_藥名.TabIndex = 3;
             this.rJ_Lable_勤務取藥_單處方_藥名.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rJ_Lable_勤務取藥_單處方_藥名.TextColor = System.Drawing.Color.Black;
@@ -2116,7 +2116,7 @@
             // 
             this.panel73.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel73.Location = new System.Drawing.Point(281, 8);
-            this.panel73.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel73.Margin = new System.Windows.Forms.Padding(4);
             this.panel73.Name = "panel73";
             this.panel73.Size = new System.Drawing.Size(23, 54);
             this.panel73.TabIndex = 2;
@@ -2152,10 +2152,10 @@
             this.panel89.Controls.Add(this.rJ_Lable45);
             this.panel89.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel89.Location = new System.Drawing.Point(0, 372);
-            this.panel89.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel89.Margin = new System.Windows.Forms.Padding(4);
             this.panel89.Name = "panel89";
             this.panel89.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.panel89.Size = new System.Drawing.Size(2219, 164);
+            this.panel89.Size = new System.Drawing.Size(1604, 164);
             this.panel89.TabIndex = 25;
             // 
             // textBox_勤務取藥_單處方_條碼刷入區
@@ -2163,10 +2163,10 @@
             this.textBox_勤務取藥_單處方_條碼刷入區.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox_勤務取藥_單處方_條碼刷入區.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.textBox_勤務取藥_單處方_條碼刷入區.Location = new System.Drawing.Point(302, 12);
-            this.textBox_勤務取藥_單處方_條碼刷入區.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_勤務取藥_單處方_條碼刷入區.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_勤務取藥_單處方_條碼刷入區.Multiline = true;
             this.textBox_勤務取藥_單處方_條碼刷入區.Name = "textBox_勤務取藥_單處方_條碼刷入區";
-            this.textBox_勤務取藥_單處方_條碼刷入區.Size = new System.Drawing.Size(1715, 140);
+            this.textBox_勤務取藥_單處方_條碼刷入區.Size = new System.Drawing.Size(1100, 140);
             this.textBox_勤務取藥_單處方_條碼刷入區.TabIndex = 33;
             // 
             // plC_RJ_Button_勤務取藥_條碼刷入區_清除
@@ -2187,8 +2187,8 @@
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.GUID = "";
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Image_padding = new System.Windows.Forms.Padding(0);
-            this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Location = new System.Drawing.Point(2017, 12);
-            this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Location = new System.Drawing.Point(1402, 12);
+            this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.Name = "plC_RJ_Button_勤務取藥_條碼刷入區_清除";
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.OFF_文字內容 = "清除";
             this.plC_RJ_Button_勤務取藥_條碼刷入區_清除.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 20.25F);
@@ -2228,7 +2228,7 @@
             // 
             this.panel90.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel90.Location = new System.Drawing.Point(281, 12);
-            this.panel90.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel90.Margin = new System.Windows.Forms.Padding(4);
             this.panel90.Name = "panel90";
             this.panel90.Size = new System.Drawing.Size(21, 140);
             this.panel90.TabIndex = 30;
@@ -2260,9 +2260,9 @@
             // 
             this.panel91.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel91.Location = new System.Drawing.Point(0, 342);
-            this.panel91.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel91.Margin = new System.Windows.Forms.Padding(4);
             this.panel91.Name = "panel91";
-            this.panel91.Size = new System.Drawing.Size(2219, 30);
+            this.panel91.Size = new System.Drawing.Size(1604, 30);
             this.panel91.TabIndex = 20;
             // 
             // panel92
@@ -2271,10 +2271,10 @@
             this.panel92.Controls.Add(this.rJ_Lable46);
             this.panel92.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel92.Location = new System.Drawing.Point(0, 0);
-            this.panel92.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel92.Margin = new System.Windows.Forms.Padding(4);
             this.panel92.Name = "panel92";
             this.panel92.Padding = new System.Windows.Forms.Padding(27, 25, 27, 0);
-            this.panel92.Size = new System.Drawing.Size(2219, 342);
+            this.panel92.Size = new System.Drawing.Size(1604, 342);
             this.panel92.TabIndex = 17;
             // 
             // rJ_Lable_勤務取藥_單處方_病房
@@ -2294,7 +2294,7 @@
             this.rJ_Lable_勤務取藥_單處方_病房.Name = "rJ_Lable_勤務取藥_單處方_病房";
             this.rJ_Lable_勤務取藥_單處方_病房.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥_單處方_病房.ShadowSize = 3;
-            this.rJ_Lable_勤務取藥_單處方_病房.Size = new System.Drawing.Size(2165, 246);
+            this.rJ_Lable_勤務取藥_單處方_病房.Size = new System.Drawing.Size(1550, 246);
             this.rJ_Lable_勤務取藥_單處方_病房.TabIndex = 17;
             this.rJ_Lable_勤務取藥_單處方_病房.Text = "XXXXXX";
             this.rJ_Lable_勤務取藥_單處方_病房.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2317,7 +2317,7 @@
             this.rJ_Lable46.Name = "rJ_Lable46";
             this.rJ_Lable46.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable46.ShadowSize = 0;
-            this.rJ_Lable46.Size = new System.Drawing.Size(2165, 71);
+            this.rJ_Lable46.Size = new System.Drawing.Size(1550, 71);
             this.rJ_Lable46.TabIndex = 16;
             this.rJ_Lable46.Text = "病房";
             this.rJ_Lable46.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2340,7 +2340,7 @@
             this.rJ_Lable_勤務取藥_單處方_狀態.Name = "rJ_Lable_勤務取藥_單處方_狀態";
             this.rJ_Lable_勤務取藥_單處方_狀態.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥_單處方_狀態.ShadowSize = 3;
-            this.rJ_Lable_勤務取藥_單處方_狀態.Size = new System.Drawing.Size(2219, 158);
+            this.rJ_Lable_勤務取藥_單處方_狀態.Size = new System.Drawing.Size(1604, 158);
             this.rJ_Lable_勤務取藥_單處方_狀態.TabIndex = 24;
             this.rJ_Lable_勤務取藥_單處方_狀態.Text = "等待刷藥單...";
             this.rJ_Lable_勤務取藥_單處方_狀態.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2350,9 +2350,9 @@
             // 
             this.panel93.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel93.Location = new System.Drawing.Point(0, 200);
-            this.panel93.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel93.Margin = new System.Windows.Forms.Padding(4);
             this.panel93.Name = "panel93";
-            this.panel93.Size = new System.Drawing.Size(2219, 18);
+            this.panel93.Size = new System.Drawing.Size(1604, 18);
             this.panel93.TabIndex = 23;
             // 
             // rJ_Lable_勤務取藥系統
@@ -2372,7 +2372,7 @@
             this.rJ_Lable_勤務取藥系統.Name = "rJ_Lable_勤務取藥系統";
             this.rJ_Lable_勤務取藥系統.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥系統.ShadowSize = 3;
-            this.rJ_Lable_勤務取藥系統.Size = new System.Drawing.Size(2219, 200);
+            this.rJ_Lable_勤務取藥系統.Size = new System.Drawing.Size(1604, 200);
             this.rJ_Lable_勤務取藥系統.TabIndex = 21;
             this.rJ_Lable_勤務取藥系統.Text = "勤 務 取 藥 系 統";
             this.rJ_Lable_勤務取藥系統.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2389,7 +2389,7 @@
             this.勤務取藥_全處方.Margin = new System.Windows.Forms.Padding(0);
             this.勤務取藥_全處方.Name = "勤務取藥_全處方";
             this.勤務取藥_全處方.Padding = new System.Windows.Forms.Padding(33, 25, 40, 25);
-            this.勤務取藥_全處方.Size = new System.Drawing.Size(636, 443);
+            this.勤務取藥_全處方.Size = new System.Drawing.Size(475, 349);
             this.勤務取藥_全處方.TabIndex = 1;
             this.勤務取藥_全處方.Text = "勤務取藥_全處方";
             this.勤務取藥_全處方.UseVisualStyleBackColor = true;
@@ -2399,7 +2399,7 @@
             this.button_勤務取藥_全處方_輸入醫令條碼.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button_勤務取藥_全處方_輸入醫令條碼.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_勤務取藥_全處方_輸入醫令條碼.Location = new System.Drawing.Point(2117, 229);
-            this.button_勤務取藥_全處方_輸入醫令條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button_勤務取藥_全處方_輸入醫令條碼.Margin = new System.Windows.Forms.Padding(4);
             this.button_勤務取藥_全處方_輸入醫令條碼.Name = "button_勤務取藥_全處方_輸入醫令條碼";
             this.button_勤務取藥_全處方_輸入醫令條碼.Size = new System.Drawing.Size(37, 38);
             this.button_勤務取藥_全處方_輸入醫令條碼.TabIndex = 145;
@@ -2447,7 +2447,7 @@
             this.sqL_DataGridView_勤務取藥_全處方.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_勤務取藥_全處方.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_勤務取藥_全處方.Server = "localhost";
-            this.sqL_DataGridView_勤務取藥_全處方.Size = new System.Drawing.Size(563, 0);
+            this.sqL_DataGridView_勤務取藥_全處方.Size = new System.Drawing.Size(402, 0);
             this.sqL_DataGridView_勤務取藥_全處方.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_勤務取藥_全處方.TabIndex = 144;
             this.sqL_DataGridView_勤務取藥_全處方.UserName = "root";
@@ -2480,7 +2480,7 @@
             this.rJ_Lable_勤務取藥_全處方_病房.Name = "rJ_Lable_勤務取藥_全處方_病房";
             this.rJ_Lable_勤務取藥_全處方_病房.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥_全處方_病房.ShadowSize = 0;
-            this.rJ_Lable_勤務取藥_全處方_病房.Size = new System.Drawing.Size(563, 185);
+            this.rJ_Lable_勤務取藥_全處方_病房.Size = new System.Drawing.Size(402, 185);
             this.rJ_Lable_勤務取藥_全處方_病房.TabIndex = 143;
             this.rJ_Lable_勤務取藥_全處方_病房.Text = "-";
             this.rJ_Lable_勤務取藥_全處方_病房.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2503,7 +2503,7 @@
             this.rJ_Lable_勤務取藥_全處方_狀態.Name = "rJ_Lable_勤務取藥_全處方_狀態";
             this.rJ_Lable_勤務取藥_全處方_狀態.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_勤務取藥_全處方_狀態.ShadowSize = 0;
-            this.rJ_Lable_勤務取藥_全處方_狀態.Size = new System.Drawing.Size(563, 118);
+            this.rJ_Lable_勤務取藥_全處方_狀態.Size = new System.Drawing.Size(402, 118);
             this.rJ_Lable_勤務取藥_全處方_狀態.TabIndex = 142;
             this.rJ_Lable_勤務取藥_全處方_狀態.Text = "等待刷藥單";
             this.rJ_Lable_勤務取藥_全處方_狀態.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2526,7 +2526,7 @@
             this.rJ_Lable25.Name = "rJ_Lable25";
             this.rJ_Lable25.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable25.ShadowSize = 0;
-            this.rJ_Lable25.Size = new System.Drawing.Size(563, 200);
+            this.rJ_Lable25.Size = new System.Drawing.Size(402, 200);
             this.rJ_Lable25.TabIndex = 5;
             this.rJ_Lable25.Text = "勤  務  取  藥  系  統";
             this.rJ_Lable25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2541,7 +2541,7 @@
             this.櫃體狀態.Location = new System.Drawing.Point(4, 25);
             this.櫃體狀態.Margin = new System.Windows.Forms.Padding(0);
             this.櫃體狀態.Name = "櫃體狀態";
-            this.櫃體狀態.Size = new System.Drawing.Size(2227, 1265);
+            this.櫃體狀態.Size = new System.Drawing.Size(1612, 1113);
             this.櫃體狀態.TabIndex = 0;
             this.櫃體狀態.Text = "櫃體狀態";
             // 
@@ -2557,10 +2557,10 @@
             this.plC_ScreenPage_櫃體狀態_PannelBox.ForekColor = System.Drawing.Color.Black;
             this.plC_ScreenPage_櫃體狀態_PannelBox.ItemSize = new System.Drawing.Size(54, 21);
             this.plC_ScreenPage_櫃體狀態_PannelBox.Location = new System.Drawing.Point(0, 60);
-            this.plC_ScreenPage_櫃體狀態_PannelBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_ScreenPage_櫃體狀態_PannelBox.Margin = new System.Windows.Forms.Padding(4);
             this.plC_ScreenPage_櫃體狀態_PannelBox.Name = "plC_ScreenPage_櫃體狀態_PannelBox";
             this.plC_ScreenPage_櫃體狀態_PannelBox.SelectedIndex = 0;
-            this.plC_ScreenPage_櫃體狀態_PannelBox.Size = new System.Drawing.Size(2227, 1205);
+            this.plC_ScreenPage_櫃體狀態_PannelBox.Size = new System.Drawing.Size(1612, 1053);
             this.plC_ScreenPage_櫃體狀態_PannelBox.TabBackColor = System.Drawing.Color.White;
             this.plC_ScreenPage_櫃體狀態_PannelBox.TabIndex = 25;
             this.plC_ScreenPage_櫃體狀態_PannelBox.顯示標籤列 = MyUI.PLC_ScreenPage.TabVisibleEnum.顯示;
@@ -2571,9 +2571,9 @@
             this.tabPage15.BackColor = System.Drawing.Color.White;
             this.tabPage15.Controls.Add(this.flowLayoutPanel_PannelBox01);
             this.tabPage15.Location = new System.Drawing.Point(4, 25);
-            this.tabPage15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage15.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Size = new System.Drawing.Size(2219, 1176);
+            this.tabPage15.Size = new System.Drawing.Size(1604, 1024);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = "01";
             // 
@@ -2582,9 +2582,9 @@
             this.flowLayoutPanel_PannelBox01.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel_PannelBox01.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox01.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_PannelBox01.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_PannelBox01.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_PannelBox01.Name = "flowLayoutPanel_PannelBox01";
-            this.flowLayoutPanel_PannelBox01.Size = new System.Drawing.Size(2219, 1176);
+            this.flowLayoutPanel_PannelBox01.Size = new System.Drawing.Size(1604, 1024);
             this.flowLayoutPanel_PannelBox01.TabIndex = 0;
             // 
             // tabPage16
@@ -2592,9 +2592,9 @@
             this.tabPage16.BackColor = System.Drawing.Color.White;
             this.tabPage16.Controls.Add(this.flowLayoutPanel_PannelBox02);
             this.tabPage16.Location = new System.Drawing.Point(4, 25);
-            this.tabPage16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage16.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(636, 383);
+            this.tabPage16.Size = new System.Drawing.Size(475, 289);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = "02";
             // 
@@ -2603,9 +2603,9 @@
             this.flowLayoutPanel_PannelBox02.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel_PannelBox02.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox02.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_PannelBox02.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_PannelBox02.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_PannelBox02.Name = "flowLayoutPanel_PannelBox02";
-            this.flowLayoutPanel_PannelBox02.Size = new System.Drawing.Size(636, 383);
+            this.flowLayoutPanel_PannelBox02.Size = new System.Drawing.Size(475, 289);
             this.flowLayoutPanel_PannelBox02.TabIndex = 1;
             // 
             // tabPage17
@@ -2613,9 +2613,9 @@
             this.tabPage17.BackColor = System.Drawing.Color.White;
             this.tabPage17.Controls.Add(this.flowLayoutPanel_PannelBox03);
             this.tabPage17.Location = new System.Drawing.Point(4, 25);
-            this.tabPage17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage17.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(636, 383);
+            this.tabPage17.Size = new System.Drawing.Size(475, 289);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "03";
             // 
@@ -2624,9 +2624,9 @@
             this.flowLayoutPanel_PannelBox03.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel_PannelBox03.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox03.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_PannelBox03.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_PannelBox03.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_PannelBox03.Name = "flowLayoutPanel_PannelBox03";
-            this.flowLayoutPanel_PannelBox03.Size = new System.Drawing.Size(636, 383);
+            this.flowLayoutPanel_PannelBox03.Size = new System.Drawing.Size(475, 289);
             this.flowLayoutPanel_PannelBox03.TabIndex = 1;
             // 
             // tabPage18
@@ -2634,9 +2634,9 @@
             this.tabPage18.BackColor = System.Drawing.Color.White;
             this.tabPage18.Controls.Add(this.flowLayoutPanel_PannelBox04);
             this.tabPage18.Location = new System.Drawing.Point(4, 25);
-            this.tabPage18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage18.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Size = new System.Drawing.Size(636, 383);
+            this.tabPage18.Size = new System.Drawing.Size(475, 289);
             this.tabPage18.TabIndex = 3;
             this.tabPage18.Text = "04";
             // 
@@ -2645,9 +2645,9 @@
             this.flowLayoutPanel_PannelBox04.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel_PannelBox04.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_PannelBox04.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_PannelBox04.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_PannelBox04.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_PannelBox04.Name = "flowLayoutPanel_PannelBox04";
-            this.flowLayoutPanel_PannelBox04.Size = new System.Drawing.Size(636, 383);
+            this.flowLayoutPanel_PannelBox04.Size = new System.Drawing.Size(475, 289);
             this.flowLayoutPanel_PannelBox04.TabIndex = 1;
             // 
             // panel_櫃體狀態_PannelBox
@@ -2660,9 +2660,9 @@
             this.panel_櫃體狀態_PannelBox.Controls.Add(this.plC_RJ_ScreenButton23);
             this.panel_櫃體狀態_PannelBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_櫃體狀態_PannelBox.Location = new System.Drawing.Point(0, 0);
-            this.panel_櫃體狀態_PannelBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel_櫃體狀態_PannelBox.Margin = new System.Windows.Forms.Padding(4);
             this.panel_櫃體狀態_PannelBox.Name = "panel_櫃體狀態_PannelBox";
-            this.panel_櫃體狀態_PannelBox.Size = new System.Drawing.Size(2227, 60);
+            this.panel_櫃體狀態_PannelBox.Size = new System.Drawing.Size(1612, 60);
             this.panel_櫃體狀態_PannelBox.TabIndex = 23;
             // 
             // plC_RJ_Button_櫃體狀態_重置設備
@@ -2683,8 +2683,8 @@
             this.plC_RJ_Button_櫃體狀態_重置設備.GUID = "";
             this.plC_RJ_Button_櫃體狀態_重置設備.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_櫃體狀態_重置設備.Image_padding = new System.Windows.Forms.Padding(0);
-            this.plC_RJ_Button_櫃體狀態_重置設備.Location = new System.Drawing.Point(2044, 0);
-            this.plC_RJ_Button_櫃體狀態_重置設備.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_櫃體狀態_重置設備.Location = new System.Drawing.Point(1429, 0);
+            this.plC_RJ_Button_櫃體狀態_重置設備.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_櫃體狀態_重置設備.Name = "plC_RJ_Button_櫃體狀態_重置設備";
             this.plC_RJ_Button_櫃體狀態_重置設備.OFF_文字內容 = "重置設備";
             this.plC_RJ_Button_櫃體狀態_重置設備.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -2881,9 +2881,9 @@
             this.配藥核對.BackColor = System.Drawing.Color.White;
             this.配藥核對.Controls.Add(this.tabControlEx_配藥核對);
             this.配藥核對.Location = new System.Drawing.Point(4, 25);
-            this.配藥核對.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.配藥核對.Margin = new System.Windows.Forms.Padding(4);
             this.配藥核對.Name = "配藥核對";
-            this.配藥核對.Size = new System.Drawing.Size(2227, 1265);
+            this.配藥核對.Size = new System.Drawing.Size(1612, 1113);
             this.配藥核對.TabIndex = 10;
             this.配藥核對.Text = "配藥核對";
             // 
@@ -2893,10 +2893,10 @@
             this.tabControlEx_配藥核對.Controls.Add(this.配藥核對_全處方);
             this.tabControlEx_配藥核對.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlEx_配藥核對.Location = new System.Drawing.Point(0, 0);
-            this.tabControlEx_配藥核對.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlEx_配藥核對.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlEx_配藥核對.Name = "tabControlEx_配藥核對";
             this.tabControlEx_配藥核對.SelectedIndex = 0;
-            this.tabControlEx_配藥核對.Size = new System.Drawing.Size(2227, 1265);
+            this.tabControlEx_配藥核對.Size = new System.Drawing.Size(1612, 1113);
             this.tabControlEx_配藥核對.TabIndex = 0;
             // 
             // 配藥核對_單處方
@@ -2906,10 +2906,10 @@
             this.配藥核對_單處方.Controls.Add(this.panel3);
             this.配藥核對_單處方.Controls.Add(this.rJ_Lable100);
             this.配藥核對_單處方.Location = new System.Drawing.Point(4, 25);
-            this.配藥核對_單處方.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.配藥核對_單處方.Margin = new System.Windows.Forms.Padding(4);
             this.配藥核對_單處方.Name = "配藥核對_單處方";
-            this.配藥核對_單處方.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.配藥核對_單處方.Size = new System.Drawing.Size(2219, 1236);
+            this.配藥核對_單處方.Padding = new System.Windows.Forms.Padding(4);
+            this.配藥核對_單處方.Size = new System.Drawing.Size(1604, 1084);
             this.配藥核對_單處方.TabIndex = 0;
             this.配藥核對_單處方.Text = "配藥核對_單處方";
             this.配藥核對_單處方.UseVisualStyleBackColor = true;
@@ -2924,9 +2924,9 @@
             this.panel9.Controls.Add(this.panel39);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel9.Location = new System.Drawing.Point(4, 380);
-            this.panel9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel9.Margin = new System.Windows.Forms.Padding(4);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(2211, 852);
+            this.panel9.Size = new System.Drawing.Size(1596, 700);
             this.panel9.TabIndex = 21;
             // 
             // panel62
@@ -2934,11 +2934,11 @@
             this.panel62.Controls.Add(this.rJ_Lable_配藥核對_單處方_病房);
             this.panel62.Controls.Add(this.rJ_Lable14);
             this.panel62.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel62.Location = new System.Drawing.Point(0, 490);
-            this.panel62.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel62.Location = new System.Drawing.Point(0, 338);
+            this.panel62.Margin = new System.Windows.Forms.Padding(4);
             this.panel62.Name = "panel62";
             this.panel62.Padding = new System.Windows.Forms.Padding(27, 0, 27, 0);
-            this.panel62.Size = new System.Drawing.Size(2211, 362);
+            this.panel62.Size = new System.Drawing.Size(1596, 362);
             this.panel62.TabIndex = 26;
             // 
             // rJ_Lable_配藥核對_單處方_病房
@@ -2958,7 +2958,7 @@
             this.rJ_Lable_配藥核對_單處方_病房.Name = "rJ_Lable_配藥核對_單處方_病房";
             this.rJ_Lable_配藥核對_單處方_病房.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_配藥核對_單處方_病房.ShadowSize = 3;
-            this.rJ_Lable_配藥核對_單處方_病房.Size = new System.Drawing.Size(2157, 291);
+            this.rJ_Lable_配藥核對_單處方_病房.Size = new System.Drawing.Size(1542, 291);
             this.rJ_Lable_配藥核對_單處方_病房.TabIndex = 17;
             this.rJ_Lable_配藥核對_單處方_病房.Text = "-";
             this.rJ_Lable_配藥核對_單處方_病房.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2981,7 +2981,7 @@
             this.rJ_Lable14.Name = "rJ_Lable14";
             this.rJ_Lable14.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable14.ShadowSize = 3;
-            this.rJ_Lable14.Size = new System.Drawing.Size(2157, 71);
+            this.rJ_Lable14.Size = new System.Drawing.Size(1542, 71);
             this.rJ_Lable14.TabIndex = 16;
             this.rJ_Lable14.Text = "病房";
             this.rJ_Lable14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2994,10 +2994,10 @@
             this.panel57.Controls.Add(this.rJ_Lable12);
             this.panel57.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel57.Location = new System.Drawing.Point(0, 348);
-            this.panel57.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel57.Margin = new System.Windows.Forms.Padding(4);
             this.panel57.Name = "panel57";
             this.panel57.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel57.Size = new System.Drawing.Size(2211, 106);
+            this.panel57.Size = new System.Drawing.Size(1596, 106);
             this.panel57.TabIndex = 25;
             // 
             // rJ_Lable_配藥核對_單處方_開方時間
@@ -3026,7 +3026,7 @@
             // 
             this.panel61.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel61.Location = new System.Drawing.Point(281, 8);
-            this.panel61.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel61.Margin = new System.Windows.Forms.Padding(4);
             this.panel61.Name = "panel61";
             this.panel61.Size = new System.Drawing.Size(23, 90);
             this.panel61.TabIndex = 15;
@@ -3065,10 +3065,10 @@
             this.panel46.Controls.Add(this.rJ_Lable29);
             this.panel46.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel46.Location = new System.Drawing.Point(0, 242);
-            this.panel46.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel46.Margin = new System.Windows.Forms.Padding(4);
             this.panel46.Name = "panel46";
             this.panel46.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel46.Size = new System.Drawing.Size(2211, 106);
+            this.panel46.Size = new System.Drawing.Size(1596, 106);
             this.panel46.TabIndex = 24;
             // 
             // rJ_Lable_配藥核對_單處方_病歷號
@@ -3097,7 +3097,7 @@
             // 
             this.panel47.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel47.Location = new System.Drawing.Point(1128, 8);
-            this.panel47.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel47.Margin = new System.Windows.Forms.Padding(4);
             this.panel47.Name = "panel47";
             this.panel47.Size = new System.Drawing.Size(23, 90);
             this.panel47.TabIndex = 15;
@@ -3129,7 +3129,7 @@
             // 
             this.panel48.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel48.Location = new System.Drawing.Point(837, 8);
-            this.panel48.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel48.Margin = new System.Windows.Forms.Padding(4);
             this.panel48.Name = "panel48";
             this.panel48.Size = new System.Drawing.Size(23, 90);
             this.panel48.TabIndex = 13;
@@ -3160,7 +3160,7 @@
             // 
             this.panel49.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel49.Location = new System.Drawing.Point(281, 8);
-            this.panel49.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel49.Margin = new System.Windows.Forms.Padding(4);
             this.panel49.Name = "panel49";
             this.panel49.Size = new System.Drawing.Size(23, 90);
             this.panel49.TabIndex = 11;
@@ -3199,10 +3199,10 @@
             this.panel42.Controls.Add(this.rJ_Lable31);
             this.panel42.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel42.Location = new System.Drawing.Point(0, 136);
-            this.panel42.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel42.Margin = new System.Windows.Forms.Padding(4);
             this.panel42.Name = "panel42";
             this.panel42.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel42.Size = new System.Drawing.Size(2211, 106);
+            this.panel42.Size = new System.Drawing.Size(1596, 106);
             this.panel42.TabIndex = 23;
             // 
             // rJ_Lable_配藥核對_單處方_頻次
@@ -3232,7 +3232,7 @@
             // 
             this.panel43.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel43.Location = new System.Drawing.Point(1128, 8);
-            this.panel43.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel43.Margin = new System.Windows.Forms.Padding(4);
             this.panel43.Name = "panel43";
             this.panel43.Size = new System.Drawing.Size(23, 90);
             this.panel43.TabIndex = 9;
@@ -3265,7 +3265,7 @@
             // 
             this.panel44.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel44.Location = new System.Drawing.Point(837, 8);
-            this.panel44.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel44.Margin = new System.Windows.Forms.Padding(4);
             this.panel44.Name = "panel44";
             this.panel44.Size = new System.Drawing.Size(23, 90);
             this.panel44.TabIndex = 7;
@@ -3296,7 +3296,7 @@
             // 
             this.panel45.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel45.Location = new System.Drawing.Point(281, 8);
-            this.panel45.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel45.Margin = new System.Windows.Forms.Padding(4);
             this.panel45.Name = "panel45";
             this.panel45.Size = new System.Drawing.Size(23, 90);
             this.panel45.TabIndex = 5;
@@ -3331,10 +3331,10 @@
             this.panel40.Controls.Add(this.rJ_Lable28);
             this.panel40.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel40.Location = new System.Drawing.Point(0, 30);
-            this.panel40.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel40.Margin = new System.Windows.Forms.Padding(4);
             this.panel40.Name = "panel40";
             this.panel40.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
-            this.panel40.Size = new System.Drawing.Size(2211, 106);
+            this.panel40.Size = new System.Drawing.Size(1596, 106);
             this.panel40.TabIndex = 22;
             // 
             // rJ_Lable_配藥核對_單處方_藥名
@@ -3354,7 +3354,7 @@
             this.rJ_Lable_配藥核對_單處方_藥名.Name = "rJ_Lable_配藥核對_單處方_藥名";
             this.rJ_Lable_配藥核對_單處方_藥名.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_配藥核對_單處方_藥名.ShadowSize = 0;
-            this.rJ_Lable_配藥核對_單處方_藥名.Size = new System.Drawing.Size(1894, 90);
+            this.rJ_Lable_配藥核對_單處方_藥名.Size = new System.Drawing.Size(1279, 90);
             this.rJ_Lable_配藥核對_單處方_藥名.TabIndex = 3;
             this.rJ_Lable_配藥核對_單處方_藥名.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rJ_Lable_配藥核對_單處方_藥名.TextColor = System.Drawing.Color.Black;
@@ -3363,7 +3363,7 @@
             // 
             this.panel41.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel41.Location = new System.Drawing.Point(281, 8);
-            this.panel41.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel41.Margin = new System.Windows.Forms.Padding(4);
             this.panel41.Name = "panel41";
             this.panel41.Size = new System.Drawing.Size(23, 90);
             this.panel41.TabIndex = 2;
@@ -3395,9 +3395,9 @@
             // 
             this.panel39.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel39.Location = new System.Drawing.Point(0, 0);
-            this.panel39.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel39.Margin = new System.Windows.Forms.Padding(4);
             this.panel39.Name = "panel39";
-            this.panel39.Size = new System.Drawing.Size(2211, 30);
+            this.panel39.Size = new System.Drawing.Size(1596, 30);
             this.panel39.TabIndex = 21;
             // 
             // rJ_Lable_配藥核對_單處方_狀態
@@ -3417,7 +3417,7 @@
             this.rJ_Lable_配藥核對_單處方_狀態.Name = "rJ_Lable_配藥核對_單處方_狀態";
             this.rJ_Lable_配藥核對_單處方_狀態.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_配藥核對_單處方_狀態.ShadowSize = 3;
-            this.rJ_Lable_配藥核對_單處方_狀態.Size = new System.Drawing.Size(2211, 158);
+            this.rJ_Lable_配藥核對_單處方_狀態.Size = new System.Drawing.Size(1596, 158);
             this.rJ_Lable_配藥核對_單處方_狀態.TabIndex = 20;
             this.rJ_Lable_配藥核對_單處方_狀態.Text = "等待刷藥單...";
             this.rJ_Lable_配藥核對_單處方_狀態.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3427,9 +3427,9 @@
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(4, 204);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(2211, 18);
+            this.panel3.Size = new System.Drawing.Size(1596, 18);
             this.panel3.TabIndex = 19;
             // 
             // rJ_Lable100
@@ -3449,7 +3449,7 @@
             this.rJ_Lable100.Name = "rJ_Lable100";
             this.rJ_Lable100.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable100.ShadowSize = 3;
-            this.rJ_Lable100.Size = new System.Drawing.Size(2211, 200);
+            this.rJ_Lable100.Size = new System.Drawing.Size(1596, 200);
             this.rJ_Lable100.TabIndex = 2;
             this.rJ_Lable100.Text = "配  藥  核  對  系  統";
             this.rJ_Lable100.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3459,10 +3459,10 @@
             // 
             this.配藥核對_全處方.Controls.Add(this.rJ_Pannel_);
             this.配藥核對_全處方.Location = new System.Drawing.Point(4, 25);
-            this.配藥核對_全處方.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.配藥核對_全處方.Margin = new System.Windows.Forms.Padding(4);
             this.配藥核對_全處方.Name = "配藥核對_全處方";
-            this.配藥核對_全處方.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.配藥核對_全處方.Size = new System.Drawing.Size(636, 443);
+            this.配藥核對_全處方.Padding = new System.Windows.Forms.Padding(4);
+            this.配藥核對_全處方.Size = new System.Drawing.Size(475, 349);
             this.配藥核對_全處方.TabIndex = 1;
             this.配藥核對_全處方.Text = "配藥核對_全處方";
             this.配藥核對_全處方.UseVisualStyleBackColor = true;
@@ -3484,12 +3484,12 @@
             this.rJ_Pannel_.ForeColor = System.Drawing.Color.Black;
             this.rJ_Pannel_.IsSelected = false;
             this.rJ_Pannel_.Location = new System.Drawing.Point(4, 4);
-            this.rJ_Pannel_.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel_.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel_.Name = "rJ_Pannel_";
             this.rJ_Pannel_.Padding = new System.Windows.Forms.Padding(33, 25, 40, 25);
             this.rJ_Pannel_.ShadowColor = System.Drawing.Color.Gainsboro;
             this.rJ_Pannel_.ShadowSize = 5;
-            this.rJ_Pannel_.Size = new System.Drawing.Size(628, 435);
+            this.rJ_Pannel_.Size = new System.Drawing.Size(467, 341);
             this.rJ_Pannel_.TabIndex = 139;
             // 
             // button_配藥核對_全處方_輸入醫令條碼
@@ -3497,7 +3497,7 @@
             this.button_配藥核對_全處方_輸入醫令條碼.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button_配藥核對_全處方_輸入醫令條碼.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_配藥核對_全處方_輸入醫令條碼.Location = new System.Drawing.Point(2112, 229);
-            this.button_配藥核對_全處方_輸入醫令條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button_配藥核對_全處方_輸入醫令條碼.Margin = new System.Windows.Forms.Padding(4);
             this.button_配藥核對_全處方_輸入醫令條碼.Name = "button_配藥核對_全處方_輸入醫令條碼";
             this.button_配藥核對_全處方_輸入醫令條碼.Size = new System.Drawing.Size(37, 38);
             this.button_配藥核對_全處方_輸入醫令條碼.TabIndex = 139;
@@ -3545,7 +3545,7 @@
             this.sqL_DataGridView_配藥核對_全處方.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_配藥核對_全處方.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_配藥核對_全處方.Server = "localhost";
-            this.sqL_DataGridView_配藥核對_全處方.Size = new System.Drawing.Size(555, 0);
+            this.sqL_DataGridView_配藥核對_全處方.Size = new System.Drawing.Size(394, 0);
             this.sqL_DataGridView_配藥核對_全處方.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_配藥核對_全處方.TabIndex = 138;
             this.sqL_DataGridView_配藥核對_全處方.UserName = "root";
@@ -3569,9 +3569,9 @@
             this.panel15.Controls.Add(this.rJ_Lable35);
             this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel15.Location = new System.Drawing.Point(33, 528);
-            this.panel15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel15.Margin = new System.Windows.Forms.Padding(4);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(555, 99);
+            this.panel15.Size = new System.Drawing.Size(394, 99);
             this.panel15.TabIndex = 137;
             // 
             // rJ_Lable_配藥核對_全處方_病歷號
@@ -3683,7 +3683,7 @@
             this.rJ_Lable_配藥核對_全處方_病房.Name = "rJ_Lable_配藥核對_全處方_病房";
             this.rJ_Lable_配藥核對_全處方_病房.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_配藥核對_全處方_病房.ShadowSize = 0;
-            this.rJ_Lable_配藥核對_全處方_病房.Size = new System.Drawing.Size(555, 185);
+            this.rJ_Lable_配藥核對_全處方_病房.Size = new System.Drawing.Size(394, 185);
             this.rJ_Lable_配藥核對_全處方_病房.TabIndex = 136;
             this.rJ_Lable_配藥核對_全處方_病房.Text = "-";
             this.rJ_Lable_配藥核對_全處方_病房.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3706,7 +3706,7 @@
             this.rJ_Lable_配藥核對_全處方_狀態.Name = "rJ_Lable_配藥核對_全處方_狀態";
             this.rJ_Lable_配藥核對_全處方_狀態.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable_配藥核對_全處方_狀態.ShadowSize = 0;
-            this.rJ_Lable_配藥核對_全處方_狀態.Size = new System.Drawing.Size(555, 118);
+            this.rJ_Lable_配藥核對_全處方_狀態.Size = new System.Drawing.Size(394, 118);
             this.rJ_Lable_配藥核對_全處方_狀態.TabIndex = 135;
             this.rJ_Lable_配藥核對_全處方_狀態.Text = "等待刷藥單";
             this.rJ_Lable_配藥核對_全處方_狀態.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3729,7 +3729,7 @@
             this.rJ_Lable16.Name = "rJ_Lable16";
             this.rJ_Lable16.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Lable16.ShadowSize = 0;
-            this.rJ_Lable16.Size = new System.Drawing.Size(555, 200);
+            this.rJ_Lable16.Size = new System.Drawing.Size(394, 200);
             this.rJ_Lable16.TabIndex = 4;
             this.rJ_Lable16.Text = "配  藥  核  對  系  統";
             this.rJ_Lable16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3759,9 +3759,9 @@
             this.醫令資料.Controls.Add(this.rJ_Lable116);
             this.醫令資料.Controls.Add(this.sqL_DataGridView_醫令資料);
             this.醫令資料.Location = new System.Drawing.Point(4, 25);
-            this.醫令資料.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.醫令資料.Margin = new System.Windows.Forms.Padding(4);
             this.醫令資料.Name = "醫令資料";
-            this.醫令資料.Size = new System.Drawing.Size(2227, 1265);
+            this.醫令資料.Size = new System.Drawing.Size(1612, 1113);
             this.醫令資料.TabIndex = 12;
             this.醫令資料.Text = "醫令資料";
             // 
@@ -3783,7 +3783,7 @@
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.Location = new System.Drawing.Point(484, 1162);
-            this.plC_RJ_Button_醫令資料_領藥號_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_領藥號_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.Name = "plC_RJ_Button_醫令資料_領藥號_搜尋";
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_醫令資料_領藥號_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -3837,7 +3837,7 @@
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.Location = new System.Drawing.Point(484, 1095);
-            this.plC_RJ_Button_醫令資料_病歷號_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_病歷號_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.Name = "plC_RJ_Button_醫令資料_病歷號_搜尋";
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_醫令資料_病歷號_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -3891,7 +3891,7 @@
             this.plC_RJ_Button_醫令資料_藥名_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_藥名_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_藥名_搜尋.Location = new System.Drawing.Point(484, 1028);
-            this.plC_RJ_Button_醫令資料_藥名_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_藥名_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_藥名_搜尋.Name = "plC_RJ_Button_醫令資料_藥名_搜尋";
             this.plC_RJ_Button_醫令資料_藥名_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_醫令資料_藥名_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -3945,7 +3945,7 @@
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.Location = new System.Drawing.Point(484, 959);
-            this.plC_RJ_Button_醫令資料_藥碼_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_藥碼_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.Name = "plC_RJ_Button_醫令資料_藥碼_搜尋";
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_醫令資料_藥碼_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -3992,7 +3992,7 @@
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.GUID = "";
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Location = new System.Drawing.Point(189, 1168);
-            this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Multiline = false;
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Name = "rJ_TextBox_醫令資料_搜尋條件_領藥號";
             this.rJ_TextBox_醫令資料_搜尋條件_領藥號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4040,7 +4040,7 @@
             this.plC_RJ_Pannel1.ForeColor = System.Drawing.Color.White;
             this.plC_RJ_Pannel1.IsSelected = false;
             this.plC_RJ_Pannel1.Location = new System.Drawing.Point(1465, 995);
-            this.plC_RJ_Pannel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Pannel1.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Pannel1.Name = "plC_RJ_Pannel1";
             this.plC_RJ_Pannel1.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_Pannel1.ShadowSize = 0;
@@ -4051,7 +4051,7 @@
             // textBox_醫令資料_PRI_KEY
             // 
             this.textBox_醫令資料_PRI_KEY.Location = new System.Drawing.Point(161, 12);
-            this.textBox_醫令資料_PRI_KEY.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_醫令資料_PRI_KEY.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_醫令資料_PRI_KEY.Multiline = true;
             this.textBox_醫令資料_PRI_KEY.Name = "textBox_醫令資料_PRI_KEY";
             this.textBox_醫令資料_PRI_KEY.Size = new System.Drawing.Size(585, 123);
@@ -4097,7 +4097,7 @@
             this.plC_RJ_Button_醫令資料_設為未過帳.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_設為未過帳.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_設為未過帳.Location = new System.Drawing.Point(1967, 1168);
-            this.plC_RJ_Button_醫令資料_設為未過帳.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_設為未過帳.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_設為未過帳.Name = "plC_RJ_Button_醫令資料_設為未過帳";
             this.plC_RJ_Button_醫令資料_設為未過帳.OFF_文字內容 = "設為未過帳";
             this.plC_RJ_Button_醫令資料_設為未過帳.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -4142,7 +4142,7 @@
             this.dateTimePicke_醫令資料_開方日期_起始.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicke_醫令資料_開方日期_起始.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicke_醫令資料_開方日期_起始.Location = new System.Drawing.Point(897, 1176);
-            this.dateTimePicke_醫令資料_開方日期_起始.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicke_醫令資料_開方日期_起始.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicke_醫令資料_開方日期_起始.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicke_醫令資料_開方日期_起始.Name = "dateTimePicke_醫令資料_開方日期_起始";
             this.dateTimePicke_醫令資料_開方日期_起始.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -4171,7 +4171,7 @@
             this.dateTimePicke_醫令資料_開方日期_結束.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicke_醫令資料_開方日期_結束.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicke_醫令資料_開方日期_結束.Location = new System.Drawing.Point(1104, 1176);
-            this.dateTimePicke_醫令資料_開方日期_結束.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicke_醫令資料_開方日期_結束.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicke_醫令資料_開方日期_結束.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicke_醫令資料_開方日期_結束.Name = "dateTimePicke_醫令資料_開方日期_結束";
             this.dateTimePicke_醫令資料_開方日期_結束.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -4221,7 +4221,7 @@
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.Location = new System.Drawing.Point(1299, 1169);
-            this.plC_RJ_Button_醫令資料_開方日期_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_醫令資料_開方日期_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.Name = "plC_RJ_Button_醫令資料_開方日期_搜尋";
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_醫令資料_開方日期_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -4268,7 +4268,7 @@
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.GUID = "";
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Location = new System.Drawing.Point(189, 965);
-            this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Multiline = false;
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Name = "rJ_TextBox_醫令資料_搜尋條件_藥碼";
             this.rJ_TextBox_醫令資料_搜尋條件_藥碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4315,7 +4315,7 @@
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.GUID = "";
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Location = new System.Drawing.Point(189, 1102);
-            this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Multiline = false;
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Name = "rJ_TextBox_醫令資料_搜尋條件_病歷號";
             this.rJ_TextBox_醫令資料_搜尋條件_病歷號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4340,7 +4340,7 @@
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.GUID = "";
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.Location = new System.Drawing.Point(189, 1034);
-            this.rJ_TextBox_醫令資料_搜尋條件_藥名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_醫令資料_搜尋條件_藥名.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.Multiline = false;
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.Name = "rJ_TextBox_醫令資料_搜尋條件_藥名";
             this.rJ_TextBox_醫令資料_搜尋條件_藥名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4423,7 +4423,7 @@
             this.sqL_DataGridView_醫令資料.Font = new System.Drawing.Font("新細明體", 9F);
             this.sqL_DataGridView_醫令資料.ImageBox = false;
             this.sqL_DataGridView_醫令資料.Location = new System.Drawing.Point(0, 0);
-            this.sqL_DataGridView_醫令資料.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.sqL_DataGridView_醫令資料.Margin = new System.Windows.Forms.Padding(5);
             this.sqL_DataGridView_醫令資料.Name = "sqL_DataGridView_醫令資料";
             this.sqL_DataGridView_醫令資料.OnlineState = SQLUI.SQL_DataGridView.OnlineEnum.Online;
             this.sqL_DataGridView_醫令資料.Password = "user82822040";
@@ -4440,7 +4440,7 @@
             this.sqL_DataGridView_醫令資料.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_醫令資料.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_醫令資料.Server = "127.0.0.0";
-            this.sqL_DataGridView_醫令資料.Size = new System.Drawing.Size(2227, 938);
+            this.sqL_DataGridView_醫令資料.Size = new System.Drawing.Size(1612, 938);
             this.sqL_DataGridView_醫令資料.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_醫令資料.TabIndex = 7;
             this.sqL_DataGridView_醫令資料.TableName = "order_list";
@@ -4499,9 +4499,9 @@
             this.交易紀錄.Controls.Add(this.plC_RJ_Button_交易記錄查詢_顯示全部);
             this.交易紀錄.Controls.Add(this.sqL_DataGridView_交易記錄查詢);
             this.交易紀錄.Location = new System.Drawing.Point(4, 25);
-            this.交易紀錄.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.交易紀錄.Margin = new System.Windows.Forms.Padding(4);
             this.交易紀錄.Name = "交易紀錄";
-            this.交易紀錄.Size = new System.Drawing.Size(2227, 1265);
+            this.交易紀錄.Size = new System.Drawing.Size(1612, 1113);
             this.交易紀錄.TabIndex = 7;
             this.交易紀錄.Text = "交易紀錄";
             // 
@@ -4523,7 +4523,7 @@
             this.plC_RJ_Button_交易記錄查詢_匯出.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_匯出.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_匯出.Location = new System.Drawing.Point(1967, 1042);
-            this.plC_RJ_Button_交易記錄查詢_匯出.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_匯出.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_匯出.Name = "plC_RJ_Button_交易記錄查詢_匯出";
             this.plC_RJ_Button_交易記錄查詢_匯出.OFF_文字內容 = "匯出";
             this.plC_RJ_Button_交易記錄查詢_匯出.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -4566,9 +4566,9 @@
             this.groupBox5.Controls.Add(this.plC_CheckBox_交易記錄查詢_顯示細節);
             this.groupBox5.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox5.Location = new System.Drawing.Point(1189, 871);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox5.Size = new System.Drawing.Size(444, 98);
             this.groupBox5.TabIndex = 199;
             this.groupBox5.TabStop = false;
@@ -4583,7 +4583,7 @@
             this.plC_CheckBox_交易記錄查詢_顯示未領用.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_交易記錄查詢_顯示未領用.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_交易記錄查詢_顯示未領用.Location = new System.Drawing.Point(271, 40);
-            this.plC_CheckBox_交易記錄查詢_顯示未領用.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_交易記錄查詢_顯示未領用.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_交易記錄查詢_顯示未領用.Name = "plC_CheckBox_交易記錄查詢_顯示未領用";
             this.plC_CheckBox_交易記錄查詢_顯示未領用.Size = new System.Drawing.Size(118, 38);
             this.plC_CheckBox_交易記錄查詢_顯示未領用.TabIndex = 177;
@@ -4604,7 +4604,7 @@
             this.plC_CheckBox_交易記錄查詢_顯示已領用.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_交易記錄查詢_顯示已領用.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_交易記錄查詢_顯示已領用.Location = new System.Drawing.Point(137, 40);
-            this.plC_CheckBox_交易記錄查詢_顯示已領用.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_交易記錄查詢_顯示已領用.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_交易記錄查詢_顯示已領用.Name = "plC_CheckBox_交易記錄查詢_顯示已領用";
             this.plC_CheckBox_交易記錄查詢_顯示已領用.Size = new System.Drawing.Size(118, 38);
             this.plC_CheckBox_交易記錄查詢_顯示已領用.TabIndex = 176;
@@ -4625,7 +4625,7 @@
             this.plC_CheckBox_交易記錄查詢_顯示細節.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_交易記錄查詢_顯示細節.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_交易記錄查詢_顯示細節.Location = new System.Drawing.Point(32, 40);
-            this.plC_CheckBox_交易記錄查詢_顯示細節.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_交易記錄查詢_顯示細節.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_交易記錄查詢_顯示細節.Name = "plC_CheckBox_交易記錄查詢_顯示細節";
             this.plC_CheckBox_交易記錄查詢_顯示細節.Size = new System.Drawing.Size(91, 38);
             this.plC_CheckBox_交易記錄查詢_顯示細節.TabIndex = 175;
@@ -4655,7 +4655,7 @@
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Location = new System.Drawing.Point(1044, 878);
-            this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.Name = "plC_RJ_Button_交易記錄查詢_病房號_搜尋";
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -4702,7 +4702,7 @@
             this.rJ_TextBox_交易記錄查詢_病房號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_交易記錄查詢_病房號.GUID = "";
             this.rJ_TextBox_交易記錄查詢_病房號.Location = new System.Drawing.Point(775, 882);
-            this.rJ_TextBox_交易記錄查詢_病房號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_交易記錄查詢_病房號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_交易記錄查詢_病房號.Multiline = false;
             this.rJ_TextBox_交易記錄查詢_病房號.Name = "rJ_TextBox_交易記錄查詢_病房號";
             this.rJ_TextBox_交易記錄查詢_病房號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4756,7 +4756,7 @@
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Location = new System.Drawing.Point(468, 1148);
-            this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.Name = "plC_RJ_Button_交易記錄查詢_病歷號_搜尋";
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -4803,7 +4803,7 @@
             this.rJ_TextBox_交易記錄查詢_病歷號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_交易記錄查詢_病歷號.GUID = "";
             this.rJ_TextBox_交易記錄查詢_病歷號.Location = new System.Drawing.Point(199, 1152);
-            this.rJ_TextBox_交易記錄查詢_病歷號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_交易記錄查詢_病歷號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_交易記錄查詢_病歷號.Multiline = false;
             this.rJ_TextBox_交易記錄查詢_病歷號.Name = "rJ_TextBox_交易記錄查詢_病歷號";
             this.rJ_TextBox_交易記錄查詢_病歷號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -4857,7 +4857,7 @@
             this.plC_RJ_Button_交易記錄查詢_刪除資料.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_刪除資料.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_刪除資料.Location = new System.Drawing.Point(1751, 1141);
-            this.plC_RJ_Button_交易記錄查詢_刪除資料.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_刪除資料.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_刪除資料.Name = "plC_RJ_Button_交易記錄查詢_刪除資料";
             this.plC_RJ_Button_交易記錄查詢_刪除資料.OFF_文字內容 = "刪除資料";
             this.plC_RJ_Button_交易記錄查詢_刪除資料.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -4912,7 +4912,7 @@
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Location = new System.Drawing.Point(1205, 1140);
-            this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.Name = "plC_RJ_Button_交易記錄查詢_領用時間_搜尋";
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_領用時間_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -4978,7 +4978,7 @@
             this.dateTimePicker_交易記錄查詢_領用時間_結束.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_領用時間_結束.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_領用時間_結束.Location = new System.Drawing.Point(1009, 1148);
-            this.dateTimePicker_交易記錄查詢_領用時間_結束.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_領用時間_結束.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_領用時間_結束.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_領用時間_結束.Name = "dateTimePicker_交易記錄查詢_領用時間_結束";
             this.dateTimePicker_交易記錄查詢_領用時間_結束.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5007,7 +5007,7 @@
             this.dateTimePicker_交易記錄查詢_領用時間_起始.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_領用時間_起始.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_領用時間_起始.Location = new System.Drawing.Point(791, 1148);
-            this.dateTimePicker_交易記錄查詢_領用時間_起始.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_領用時間_起始.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_領用時間_起始.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_領用時間_起始.Name = "dateTimePicker_交易記錄查詢_領用時間_起始";
             this.dateTimePicker_交易記錄查詢_領用時間_起始.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5035,7 +5035,7 @@
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Location = new System.Drawing.Point(1205, 1075);
-            this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.Name = "plC_RJ_Button_交易記錄查詢_開方時間_搜尋";
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_開方時間_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5101,7 +5101,7 @@
             this.dateTimePicker_交易記錄查詢_開方時間_結束.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_開方時間_結束.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_開方時間_結束.Location = new System.Drawing.Point(1009, 1082);
-            this.dateTimePicker_交易記錄查詢_開方時間_結束.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_開方時間_結束.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_開方時間_結束.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_開方時間_結束.Name = "dateTimePicker_交易記錄查詢_開方時間_結束";
             this.dateTimePicker_交易記錄查詢_開方時間_結束.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5130,7 +5130,7 @@
             this.dateTimePicker_交易記錄查詢_開方時間_起始.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_開方時間_起始.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_開方時間_起始.Location = new System.Drawing.Point(791, 1082);
-            this.dateTimePicker_交易記錄查詢_開方時間_起始.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_開方時間_起始.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_開方時間_起始.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_開方時間_起始.Name = "dateTimePicker_交易記錄查詢_開方時間_起始";
             this.dateTimePicker_交易記錄查詢_開方時間_起始.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5158,7 +5158,7 @@
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Location = new System.Drawing.Point(1205, 1009);
-            this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.Name = "plC_RJ_Button_交易記錄查詢_操作時間_搜尋";
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_操作時間_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5224,7 +5224,7 @@
             this.dateTimePicker_交易記錄查詢_操作時間_結束.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_操作時間_結束.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_操作時間_結束.Location = new System.Drawing.Point(1009, 1016);
-            this.dateTimePicker_交易記錄查詢_操作時間_結束.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_操作時間_結束.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_操作時間_結束.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_操作時間_結束.Name = "dateTimePicker_交易記錄查詢_操作時間_結束";
             this.dateTimePicker_交易記錄查詢_操作時間_結束.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5253,7 +5253,7 @@
             this.dateTimePicker_交易記錄查詢_操作時間_起始.Font = new System.Drawing.Font("新細明體", 15.75F);
             this.dateTimePicker_交易記錄查詢_操作時間_起始.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker_交易記錄查詢_操作時間_起始.Location = new System.Drawing.Point(791, 1016);
-            this.dateTimePicker_交易記錄查詢_操作時間_起始.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker_交易記錄查詢_操作時間_起始.Margin = new System.Windows.Forms.Padding(4);
             this.dateTimePicker_交易記錄查詢_操作時間_起始.MinimumSize = new System.Drawing.Size(132, 35);
             this.dateTimePicker_交易記錄查詢_操作時間_起始.Name = "dateTimePicker_交易記錄查詢_操作時間_起始";
             this.dateTimePicker_交易記錄查詢_操作時間_起始.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
@@ -5281,7 +5281,7 @@
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Location = new System.Drawing.Point(468, 1079);
-            this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.Name = "plC_RJ_Button_交易記錄查詢_領用人_搜尋";
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_領用人_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5328,7 +5328,7 @@
             this.rJ_TextBox_交易記錄查詢_領用人.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_交易記錄查詢_領用人.GUID = "";
             this.rJ_TextBox_交易記錄查詢_領用人.Location = new System.Drawing.Point(199, 1085);
-            this.rJ_TextBox_交易記錄查詢_領用人.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_交易記錄查詢_領用人.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_交易記錄查詢_領用人.Multiline = false;
             this.rJ_TextBox_交易記錄查詢_領用人.Name = "rJ_TextBox_交易記錄查詢_領用人";
             this.rJ_TextBox_交易記錄查詢_領用人.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -5382,7 +5382,7 @@
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Location = new System.Drawing.Point(468, 1012);
-            this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.Name = "plC_RJ_Button__交易記錄查詢_調劑人_搜尋";
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button__交易記錄查詢_調劑人_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5429,7 +5429,7 @@
             this.rJ_TextBox_交易記錄查詢_調劑人.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_交易記錄查詢_調劑人.GUID = "";
             this.rJ_TextBox_交易記錄查詢_調劑人.Location = new System.Drawing.Point(199, 1018);
-            this.rJ_TextBox_交易記錄查詢_調劑人.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_交易記錄查詢_調劑人.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_交易記錄查詢_調劑人.Multiline = false;
             this.rJ_TextBox_交易記錄查詢_調劑人.Name = "rJ_TextBox_交易記錄查詢_調劑人";
             this.rJ_TextBox_交易記錄查詢_調劑人.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -5483,7 +5483,7 @@
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Location = new System.Drawing.Point(468, 942);
-            this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.Name = "plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋";
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_藥品名稱_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5530,7 +5530,7 @@
             this.rJ_TextBox_交易記錄查詢_藥品名稱.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_交易記錄查詢_藥品名稱.GUID = "";
             this.rJ_TextBox_交易記錄查詢_藥品名稱.Location = new System.Drawing.Point(199, 949);
-            this.rJ_TextBox_交易記錄查詢_藥品名稱.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_交易記錄查詢_藥品名稱.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_交易記錄查詢_藥品名稱.Multiline = false;
             this.rJ_TextBox_交易記錄查詢_藥品名稱.Name = "rJ_TextBox_交易記錄查詢_藥品名稱";
             this.rJ_TextBox_交易記錄查詢_藥品名稱.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -5584,7 +5584,7 @@
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Location = new System.Drawing.Point(468, 878);
-            this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.Name = "plC_RJ_Button_交易記錄查詢_藥品碼_搜尋";
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_交易記錄查詢_藥品碼_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5631,7 +5631,7 @@
             this.textBox_交易記錄查詢_藥品碼.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_交易記錄查詢_藥品碼.GUID = "";
             this.textBox_交易記錄查詢_藥品碼.Location = new System.Drawing.Point(199, 882);
-            this.textBox_交易記錄查詢_藥品碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_交易記錄查詢_藥品碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_交易記錄查詢_藥品碼.Multiline = false;
             this.textBox_交易記錄查詢_藥品碼.Name = "textBox_交易記錄查詢_藥品碼";
             this.textBox_交易記錄查詢_藥品碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -5685,7 +5685,7 @@
             this.plC_RJ_Button_交易記錄查詢_顯示全部.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_交易記錄查詢_顯示全部.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_交易記錄查詢_顯示全部.Location = new System.Drawing.Point(1967, 1141);
-            this.plC_RJ_Button_交易記錄查詢_顯示全部.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_交易記錄查詢_顯示全部.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_交易記錄查詢_顯示全部.Name = "plC_RJ_Button_交易記錄查詢_顯示全部";
             this.plC_RJ_Button_交易記錄查詢_顯示全部.OFF_文字內容 = "顯示全部";
             this.plC_RJ_Button_交易記錄查詢_顯示全部.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -5764,7 +5764,7 @@
             this.sqL_DataGridView_交易記錄查詢.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_交易記錄查詢.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_交易記錄查詢.Server = "localhost";
-            this.sqL_DataGridView_交易記錄查詢.Size = new System.Drawing.Size(2227, 862);
+            this.sqL_DataGridView_交易記錄查詢.Size = new System.Drawing.Size(1612, 862);
             this.sqL_DataGridView_交易記錄查詢.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_交易記錄查詢.TabIndex = 44;
             this.sqL_DataGridView_交易記錄查詢.TableName = "trading";
@@ -5788,9 +5788,9 @@
             this.藥品資料.Controls.Add(this.rJ_GroupBox13);
             this.藥品資料.Controls.Add(this.sqL_DataGridView_藥品資料_藥檔資料);
             this.藥品資料.Location = new System.Drawing.Point(4, 25);
-            this.藥品資料.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.藥品資料.Margin = new System.Windows.Forms.Padding(4);
             this.藥品資料.Name = "藥品資料";
-            this.藥品資料.Size = new System.Drawing.Size(2227, 1265);
+            this.藥品資料.Size = new System.Drawing.Size(1612, 1113);
             this.藥品資料.TabIndex = 8;
             this.藥品資料.Text = "藥品資料";
             // 
@@ -5814,23 +5814,23 @@
             this.rJ_GroupBox12.ContentsPanel.ForeColor = System.Drawing.Color.White;
             this.rJ_GroupBox12.ContentsPanel.IsSelected = false;
             this.rJ_GroupBox12.ContentsPanel.Location = new System.Drawing.Point(0, 46);
-            this.rJ_GroupBox12.ContentsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox12.ContentsPanel.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox12.ContentsPanel.Name = "ContentsPanel";
-            this.rJ_GroupBox12.ContentsPanel.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox12.ContentsPanel.Padding = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox12.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_GroupBox12.ContentsPanel.ShadowSize = 0;
-            this.rJ_GroupBox12.ContentsPanel.Size = new System.Drawing.Size(1172, 531);
+            this.rJ_GroupBox12.ContentsPanel.Size = new System.Drawing.Size(557, 379);
             this.rJ_GroupBox12.ContentsPanel.TabIndex = 2;
             this.rJ_GroupBox12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_GroupBox12.GUID = "";
             this.rJ_GroupBox12.Location = new System.Drawing.Point(0, 688);
-            this.rJ_GroupBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox12.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox12.Name = "rJ_GroupBox12";
             this.rJ_GroupBox12.PannelBackColor = System.Drawing.Color.White;
             this.rJ_GroupBox12.PannelBorderColor = System.Drawing.Color.SkyBlue;
             this.rJ_GroupBox12.PannelBorderRadius = 0;
             this.rJ_GroupBox12.PannelBorderSize = 2;
-            this.rJ_GroupBox12.Size = new System.Drawing.Size(1172, 577);
+            this.rJ_GroupBox12.Size = new System.Drawing.Size(557, 425);
             this.rJ_GroupBox12.TabIndex = 143;
             this.rJ_GroupBox12.TitleBackColor = System.Drawing.Color.White;
             this.rJ_GroupBox12.TitleBorderColor = System.Drawing.Color.PaleVioletRed;
@@ -5860,7 +5860,7 @@
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Location = new System.Drawing.Point(621, 458);
-            this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.Name = "plC_RJ_Button_藥品資料_HIS下載全部藥檔";
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.OFF_文字內容 = "HIS下載全部藥檔";
             this.plC_RJ_Button_藥品資料_HIS下載全部藥檔.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5915,7 +5915,7 @@
             this.plC_RJ_Button_藥品資料_HIS填入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_HIS填入.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_HIS填入.Location = new System.Drawing.Point(8, 458);
-            this.plC_RJ_Button_藥品資料_HIS填入.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_HIS填入.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_HIS填入.Name = "plC_RJ_Button_藥品資料_HIS填入";
             this.plC_RJ_Button_藥品資料_HIS填入.OFF_文字內容 = "HIS資料填入";
             this.plC_RJ_Button_藥品資料_HIS填入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -5969,7 +5969,7 @@
             this.plC_RJ_Button_藥品資料_刪除.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_刪除.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_刪除.Location = new System.Drawing.Point(513, 458);
-            this.plC_RJ_Button_藥品資料_刪除.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_刪除.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_刪除.Name = "plC_RJ_Button_藥品資料_刪除";
             this.plC_RJ_Button_藥品資料_刪除.OFF_文字內容 = "刪除";
             this.plC_RJ_Button_藥品資料_刪除.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -6023,7 +6023,7 @@
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.Location = new System.Drawing.Point(192, 458);
-            this.plC_RJ_Button_藥品資料_更新藥櫃資料.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_更新藥櫃資料.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.Name = "plC_RJ_Button_藥品資料_更新藥櫃資料";
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.OFF_文字內容 = "更新藥櫃資料";
             this.plC_RJ_Button_藥品資料_更新藥櫃資料.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -6080,9 +6080,9 @@
             this.panel6.Controls.Add(this.panel7);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel6.Location = new System.Drawing.Point(4, 4);
-            this.panel6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel6.Margin = new System.Windows.Forms.Padding(4);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1164, 446);
+            this.panel6.Size = new System.Drawing.Size(549, 446);
             this.panel6.TabIndex = 129;
             // 
             // groupBox35
@@ -6095,9 +6095,9 @@
             this.groupBox35.Controls.Add(this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品);
             this.groupBox35.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
             this.groupBox35.Location = new System.Drawing.Point(767, 259);
-            this.groupBox35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox35.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox35.Name = "groupBox35";
-            this.groupBox35.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox35.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox35.Size = new System.Drawing.Size(337, 155);
             this.groupBox35.TabIndex = 139;
             this.groupBox35.TabStop = false;
@@ -6110,7 +6110,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Location = new System.Drawing.Point(28, 30);
-            this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Name = "plC_CheckBox_藥品資料_藥檔資料_警訊藥品";
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_警訊藥品.TabIndex = 12;
@@ -6129,7 +6129,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Location = new System.Drawing.Point(160, 108);
-            this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Name = "plC_CheckBox_藥品資料_藥檔資料_發音相似";
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_發音相似.TabIndex = 138;
@@ -6149,7 +6149,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Location = new System.Drawing.Point(28, 68);
-            this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Name = "plC_CheckBox_藥品資料_藥檔資料_高價藥品";
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_高價藥品.TabIndex = 132;
@@ -6168,7 +6168,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Location = new System.Drawing.Point(160, 68);
-            this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Name = "plC_CheckBox_藥品資料_藥檔資料_形狀相似";
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_形狀相似.TabIndex = 137;
@@ -6188,7 +6188,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Location = new System.Drawing.Point(28, 108);
-            this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Name = "plC_CheckBox_藥品資料_藥檔資料_生物製劑";
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_生物製劑.TabIndex = 133;
@@ -6208,7 +6208,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Location = new System.Drawing.Point(160, 30);
-            this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Name = "plC_CheckBox_藥品資料_藥檔資料_麻醉藥品";
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_麻醉藥品.TabIndex = 136;
@@ -6227,7 +6227,7 @@
             this.panel85.Controls.Add(this.panel86);
             this.panel85.Controls.Add(this.label27);
             this.panel85.Location = new System.Drawing.Point(405, 295);
-            this.panel85.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel85.Margin = new System.Windows.Forms.Padding(4);
             this.panel85.Name = "panel85";
             this.panel85.Size = new System.Drawing.Size(353, 45);
             this.panel85.TabIndex = 135;
@@ -6244,7 +6244,7 @@
             this.textBox_藥品資料_藥檔資料_許可證號.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_許可證號.GUID = "";
             this.textBox_藥品資料_藥檔資料_許可證號.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_許可證號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_許可證號.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_許可證號.Multiline = false;
             this.textBox_藥品資料_藥檔資料_許可證號.Name = "textBox_藥品資料_藥檔資料_許可證號";
             this.textBox_藥品資料_藥檔資料_許可證號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6262,7 +6262,7 @@
             // 
             this.panel86.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel86.Location = new System.Drawing.Point(149, 0);
-            this.panel86.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel86.Margin = new System.Windows.Forms.Padding(4);
             this.panel86.Name = "panel86";
             this.panel86.Size = new System.Drawing.Size(13, 45);
             this.panel86.TabIndex = 1;
@@ -6287,7 +6287,7 @@
             this.panel81.Controls.Add(this.panel82);
             this.panel81.Controls.Add(this.label20);
             this.panel81.Location = new System.Drawing.Point(4, 298);
-            this.panel81.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel81.Margin = new System.Windows.Forms.Padding(4);
             this.panel81.Name = "panel81";
             this.panel81.Size = new System.Drawing.Size(393, 45);
             this.panel81.TabIndex = 134;
@@ -6304,7 +6304,7 @@
             this.textBox_藥品資料_藥檔資料_廠牌.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_廠牌.GUID = "";
             this.textBox_藥品資料_藥檔資料_廠牌.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_廠牌.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_廠牌.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_廠牌.Multiline = false;
             this.textBox_藥品資料_藥檔資料_廠牌.Name = "textBox_藥品資料_藥檔資料_廠牌";
             this.textBox_藥品資料_藥檔資料_廠牌.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6322,7 +6322,7 @@
             // 
             this.panel82.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel82.Location = new System.Drawing.Point(149, 0);
-            this.panel82.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel82.Margin = new System.Windows.Forms.Padding(4);
             this.panel82.Name = "panel82";
             this.panel82.Size = new System.Drawing.Size(13, 45);
             this.panel82.TabIndex = 1;
@@ -6359,7 +6359,7 @@
             this.plC_RJ_Button_藥品資料_條碼管理.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_條碼管理.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_條碼管理.Location = new System.Drawing.Point(363, 5);
-            this.plC_RJ_Button_藥品資料_條碼管理.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_條碼管理.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_條碼管理.Name = "plC_RJ_Button_藥品資料_條碼管理";
             this.plC_RJ_Button_藥品資料_條碼管理.OFF_文字內容 = "條碼管理";
             this.plC_RJ_Button_藥品資料_條碼管理.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -6403,7 +6403,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Location = new System.Drawing.Point(767, 12);
-            this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Name = "plC_CheckBox_藥品資料_藥檔資料_自定義設定";
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.Size = new System.Drawing.Size(174, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_自定義設定.TabIndex = 14;
@@ -6427,9 +6427,9 @@
             this.groupBox_藥品資料_藥檔資料_設定.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox_藥品資料_藥檔資料_設定.ForeColor = System.Drawing.Color.Black;
             this.groupBox_藥品資料_藥檔資料_設定.Location = new System.Drawing.Point(767, 55);
-            this.groupBox_藥品資料_藥檔資料_設定.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox_藥品資料_藥檔資料_設定.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox_藥品資料_藥檔資料_設定.Name = "groupBox_藥品資料_藥檔資料_設定";
-            this.groupBox_藥品資料_藥檔資料_設定.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox_藥品資料_藥檔資料_設定.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox_藥品資料_藥檔資料_設定.Size = new System.Drawing.Size(337, 196);
             this.groupBox_藥品資料_藥檔資料_設定.TabIndex = 13;
             this.groupBox_藥品資料_藥檔資料_設定.TabStop = false;
@@ -6443,7 +6443,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Location = new System.Drawing.Point(36, 139);
-            this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Name = "plC_CheckBox_藥品資料_藥檔資料_雙人覆核";
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_雙人覆核.TabIndex = 17;
@@ -6462,7 +6462,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Location = new System.Drawing.Point(125, 68);
-            this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Name = "plC_CheckBox_藥品資料_藥檔資料_盲盤";
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.Size = new System.Drawing.Size(74, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_盲盤.TabIndex = 16;
@@ -6481,7 +6481,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Location = new System.Drawing.Point(36, 102);
-            this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Name = "plC_CheckBox_藥品資料_藥檔資料_結存報表";
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_結存報表.TabIndex = 15;
@@ -6500,7 +6500,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.Location = new System.Drawing.Point(36, 68);
-            this.plC_CheckBox_藥品資料_藥檔資料_複盤.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_複盤.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.Name = "plC_CheckBox_藥品資料_藥檔資料_複盤";
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.Size = new System.Drawing.Size(74, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_複盤.TabIndex = 14;
@@ -6519,7 +6519,7 @@
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Location = new System.Drawing.Point(36, 35);
-            this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Name = "plC_CheckBox_藥品資料_藥檔資料_效期管理";
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.Size = new System.Drawing.Size(114, 29);
             this.plC_CheckBox_藥品資料_藥檔資料_效期管理.TabIndex = 13;
@@ -6537,7 +6537,7 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Location = new System.Drawing.Point(528, 346);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(231, 45);
             this.panel1.TabIndex = 11;
@@ -6562,7 +6562,7 @@
             this.comboBox_藥品資料_藥檔資料_管制級別.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
             this.comboBox_藥品資料_藥檔資料_管制級別.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBox_藥品資料_藥檔資料_管制級別.Location = new System.Drawing.Point(121, 0);
-            this.comboBox_藥品資料_藥檔資料_管制級別.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBox_藥品資料_藥檔資料_管制級別.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox_藥品資料_藥檔資料_管制級別.MinimumSize = new System.Drawing.Size(67, 38);
             this.comboBox_藥品資料_藥檔資料_管制級別.Name = "comboBox_藥品資料_藥檔資料_管制級別";
             this.comboBox_藥品資料_藥檔資料_管制級別.Padding = new System.Windows.Forms.Padding(1);
@@ -6574,7 +6574,7 @@
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(108, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(13, 45);
             this.panel2.TabIndex = 1;
@@ -6599,7 +6599,7 @@
             this.panel69.Controls.Add(this.panel70);
             this.panel69.Controls.Add(this.label24);
             this.panel69.Location = new System.Drawing.Point(265, 346);
-            this.panel69.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel69.Margin = new System.Windows.Forms.Padding(4);
             this.panel69.Name = "panel69";
             this.panel69.Size = new System.Drawing.Size(255, 45);
             this.panel69.TabIndex = 9;
@@ -6616,7 +6616,7 @@
             this.textBox_藥品資料_藥檔資料_安全庫存.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_安全庫存.GUID = "";
             this.textBox_藥品資料_藥檔資料_安全庫存.Location = new System.Drawing.Point(121, 0);
-            this.textBox_藥品資料_藥檔資料_安全庫存.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_安全庫存.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_安全庫存.Multiline = false;
             this.textBox_藥品資料_藥檔資料_安全庫存.Name = "textBox_藥品資料_藥檔資料_安全庫存";
             this.textBox_藥品資料_藥檔資料_安全庫存.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6634,7 +6634,7 @@
             // 
             this.panel70.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel70.Location = new System.Drawing.Point(108, 0);
-            this.panel70.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel70.Margin = new System.Windows.Forms.Padding(4);
             this.panel70.Name = "panel70";
             this.panel70.Size = new System.Drawing.Size(13, 45);
             this.panel70.TabIndex = 1;
@@ -6659,7 +6659,7 @@
             this.panel64.Controls.Add(this.panel65);
             this.panel64.Controls.Add(this.label22);
             this.panel64.Location = new System.Drawing.Point(4, 346);
-            this.panel64.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel64.Margin = new System.Windows.Forms.Padding(4);
             this.panel64.Name = "panel64";
             this.panel64.Size = new System.Drawing.Size(253, 45);
             this.panel64.TabIndex = 8;
@@ -6677,7 +6677,7 @@
             this.textBox_藥品資料_藥檔資料_庫存.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_庫存.GUID = "";
             this.textBox_藥品資料_藥檔資料_庫存.Location = new System.Drawing.Point(121, 0);
-            this.textBox_藥品資料_藥檔資料_庫存.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_庫存.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_庫存.Multiline = false;
             this.textBox_藥品資料_藥檔資料_庫存.Name = "textBox_藥品資料_藥檔資料_庫存";
             this.textBox_藥品資料_藥檔資料_庫存.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6695,7 +6695,7 @@
             // 
             this.panel65.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel65.Location = new System.Drawing.Point(108, 0);
-            this.panel65.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel65.Margin = new System.Windows.Forms.Padding(4);
             this.panel65.Name = "panel65";
             this.panel65.Size = new System.Drawing.Size(13, 45);
             this.panel65.TabIndex = 1;
@@ -6720,7 +6720,7 @@
             this.panel67.Controls.Add(this.panel68);
             this.panel67.Controls.Add(this.label23);
             this.panel67.Location = new System.Drawing.Point(405, 200);
-            this.panel67.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel67.Margin = new System.Windows.Forms.Padding(4);
             this.panel67.Name = "panel67";
             this.panel67.Size = new System.Drawing.Size(353, 45);
             this.panel67.TabIndex = 7;
@@ -6737,7 +6737,7 @@
             this.textBox_藥品資料_藥檔資料_包裝單位.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_包裝單位.GUID = "";
             this.textBox_藥品資料_藥檔資料_包裝單位.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_包裝單位.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_包裝單位.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_包裝單位.Multiline = false;
             this.textBox_藥品資料_藥檔資料_包裝單位.Name = "textBox_藥品資料_藥檔資料_包裝單位";
             this.textBox_藥品資料_藥檔資料_包裝單位.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6755,7 +6755,7 @@
             // 
             this.panel68.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel68.Location = new System.Drawing.Point(149, 0);
-            this.panel68.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel68.Margin = new System.Windows.Forms.Padding(4);
             this.panel68.Name = "panel68";
             this.panel68.Size = new System.Drawing.Size(13, 45);
             this.panel68.TabIndex = 1;
@@ -6780,7 +6780,7 @@
             this.panel60.Controls.Add(this.panel63);
             this.panel60.Controls.Add(this.label4);
             this.panel60.Location = new System.Drawing.Point(405, 248);
-            this.panel60.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel60.Margin = new System.Windows.Forms.Padding(4);
             this.panel60.Name = "panel60";
             this.panel60.Size = new System.Drawing.Size(353, 45);
             this.panel60.TabIndex = 6;
@@ -6798,7 +6798,7 @@
             this.textBox_藥品資料_藥檔資料_藥品條碼.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_藥品條碼.GUID = "";
             this.textBox_藥品資料_藥檔資料_藥品條碼.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_藥品條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_藥品條碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_藥品條碼.Multiline = false;
             this.textBox_藥品資料_藥檔資料_藥品條碼.Name = "textBox_藥品資料_藥檔資料_藥品條碼";
             this.textBox_藥品資料_藥檔資料_藥品條碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6816,7 +6816,7 @@
             // 
             this.panel63.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel63.Location = new System.Drawing.Point(149, 0);
-            this.panel63.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel63.Margin = new System.Windows.Forms.Padding(4);
             this.panel63.Name = "panel63";
             this.panel63.Size = new System.Drawing.Size(13, 45);
             this.panel63.TabIndex = 1;
@@ -6841,7 +6841,7 @@
             this.panel58.Controls.Add(this.panel59);
             this.panel58.Controls.Add(this.label16);
             this.panel58.Location = new System.Drawing.Point(4, 248);
-            this.panel58.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel58.Margin = new System.Windows.Forms.Padding(4);
             this.panel58.Name = "panel58";
             this.panel58.Size = new System.Drawing.Size(393, 45);
             this.panel58.TabIndex = 5;
@@ -6858,7 +6858,7 @@
             this.textBox_藥品資料_藥檔資料_健保碼.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_健保碼.GUID = "";
             this.textBox_藥品資料_藥檔資料_健保碼.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_健保碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_健保碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_健保碼.Multiline = false;
             this.textBox_藥品資料_藥檔資料_健保碼.Name = "textBox_藥品資料_藥檔資料_健保碼";
             this.textBox_藥品資料_藥檔資料_健保碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6876,7 +6876,7 @@
             // 
             this.panel59.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel59.Location = new System.Drawing.Point(149, 0);
-            this.panel59.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel59.Margin = new System.Windows.Forms.Padding(4);
             this.panel59.Name = "panel59";
             this.panel59.Size = new System.Drawing.Size(13, 45);
             this.panel59.TabIndex = 1;
@@ -6898,7 +6898,7 @@
             // panel56
             // 
             this.panel56.Location = new System.Drawing.Point(4, 200);
-            this.panel56.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel56.Margin = new System.Windows.Forms.Padding(4);
             this.panel56.Name = "panel56";
             this.panel56.Size = new System.Drawing.Size(393, 45);
             this.panel56.TabIndex = 4;
@@ -6909,7 +6909,7 @@
             this.panel54.Controls.Add(this.panel55);
             this.panel54.Controls.Add(this.label12);
             this.panel54.Location = new System.Drawing.Point(4, 151);
-            this.panel54.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel54.Margin = new System.Windows.Forms.Padding(4);
             this.panel54.Name = "panel54";
             this.panel54.Size = new System.Drawing.Size(755, 45);
             this.panel54.TabIndex = 3;
@@ -6926,7 +6926,7 @@
             this.textBox_藥品資料_藥檔資料_中文名稱.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_中文名稱.GUID = "";
             this.textBox_藥品資料_藥檔資料_中文名稱.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_中文名稱.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_中文名稱.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_中文名稱.Multiline = false;
             this.textBox_藥品資料_藥檔資料_中文名稱.Name = "textBox_藥品資料_藥檔資料_中文名稱";
             this.textBox_藥品資料_藥檔資料_中文名稱.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -6944,7 +6944,7 @@
             // 
             this.panel55.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel55.Location = new System.Drawing.Point(149, 0);
-            this.panel55.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel55.Margin = new System.Windows.Forms.Padding(4);
             this.panel55.Name = "panel55";
             this.panel55.Size = new System.Drawing.Size(13, 45);
             this.panel55.TabIndex = 1;
@@ -6969,7 +6969,7 @@
             this.panel52.Controls.Add(this.panel53);
             this.panel52.Controls.Add(this.label10);
             this.panel52.Location = new System.Drawing.Point(4, 102);
-            this.panel52.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel52.Margin = new System.Windows.Forms.Padding(4);
             this.panel52.Name = "panel52";
             this.panel52.Size = new System.Drawing.Size(755, 45);
             this.panel52.TabIndex = 2;
@@ -6986,7 +6986,7 @@
             this.textBox_藥品資料_藥檔資料_藥品學名.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_藥品學名.GUID = "";
             this.textBox_藥品資料_藥檔資料_藥品學名.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_藥品學名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_藥品學名.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_藥品學名.Multiline = false;
             this.textBox_藥品資料_藥檔資料_藥品學名.Name = "textBox_藥品資料_藥檔資料_藥品學名";
             this.textBox_藥品資料_藥檔資料_藥品學名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7004,7 +7004,7 @@
             // 
             this.panel53.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel53.Location = new System.Drawing.Point(149, 0);
-            this.panel53.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel53.Margin = new System.Windows.Forms.Padding(4);
             this.panel53.Name = "panel53";
             this.panel53.Size = new System.Drawing.Size(13, 45);
             this.panel53.TabIndex = 1;
@@ -7029,7 +7029,7 @@
             this.panel50.Controls.Add(this.panel51);
             this.panel50.Controls.Add(this.label9);
             this.panel50.Location = new System.Drawing.Point(4, 52);
-            this.panel50.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel50.Margin = new System.Windows.Forms.Padding(4);
             this.panel50.Name = "panel50";
             this.panel50.Size = new System.Drawing.Size(755, 45);
             this.panel50.TabIndex = 1;
@@ -7046,7 +7046,7 @@
             this.textBox_藥品資料_藥檔資料_藥品名稱.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_藥品名稱.GUID = "";
             this.textBox_藥品資料_藥檔資料_藥品名稱.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_藥品名稱.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_藥品名稱.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_藥品名稱.Multiline = false;
             this.textBox_藥品資料_藥檔資料_藥品名稱.Name = "textBox_藥品資料_藥檔資料_藥品名稱";
             this.textBox_藥品資料_藥檔資料_藥品名稱.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7064,7 +7064,7 @@
             // 
             this.panel51.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel51.Location = new System.Drawing.Point(149, 0);
-            this.panel51.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel51.Margin = new System.Windows.Forms.Padding(4);
             this.panel51.Name = "panel51";
             this.panel51.Size = new System.Drawing.Size(13, 45);
             this.panel51.TabIndex = 1;
@@ -7089,7 +7089,7 @@
             this.panel7.Controls.Add(this.panel17);
             this.panel7.Controls.Add(this.label21);
             this.panel7.Location = new System.Drawing.Point(4, 5);
-            this.panel7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel7.Margin = new System.Windows.Forms.Padding(4);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(351, 45);
             this.panel7.TabIndex = 0;
@@ -7106,7 +7106,7 @@
             this.textBox_藥品資料_藥檔資料_藥品碼.ForeColor = System.Drawing.Color.Black;
             this.textBox_藥品資料_藥檔資料_藥品碼.GUID = "";
             this.textBox_藥品資料_藥檔資料_藥品碼.Location = new System.Drawing.Point(162, 0);
-            this.textBox_藥品資料_藥檔資料_藥品碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_藥品碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_藥品碼.Multiline = false;
             this.textBox_藥品資料_藥檔資料_藥品碼.Name = "textBox_藥品資料_藥檔資料_藥品碼";
             this.textBox_藥品資料_藥檔資料_藥品碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7124,7 +7124,7 @@
             // 
             this.panel17.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel17.Location = new System.Drawing.Point(149, 0);
-            this.panel17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel17.Margin = new System.Windows.Forms.Padding(4);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(13, 45);
             this.panel17.TabIndex = 1;
@@ -7161,7 +7161,7 @@
             this.plC_RJ_Button_藥品資料_登錄.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_登錄.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_登錄.Location = new System.Drawing.Point(405, 458);
-            this.plC_RJ_Button_藥品資料_登錄.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_登錄.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_登錄.Name = "plC_RJ_Button_藥品資料_登錄";
             this.plC_RJ_Button_藥品資料_登錄.OFF_文字內容 = "登錄";
             this.plC_RJ_Button_藥品資料_登錄.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7220,22 +7220,22 @@
             this.rJ_GroupBox13.ContentsPanel.ForeColor = System.Drawing.Color.White;
             this.rJ_GroupBox13.ContentsPanel.IsSelected = false;
             this.rJ_GroupBox13.ContentsPanel.Location = new System.Drawing.Point(0, 46);
-            this.rJ_GroupBox13.ContentsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox13.ContentsPanel.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox13.ContentsPanel.Name = "ContentsPanel";
             this.rJ_GroupBox13.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_GroupBox13.ContentsPanel.ShadowSize = 0;
-            this.rJ_GroupBox13.ContentsPanel.Size = new System.Drawing.Size(1055, 531);
+            this.rJ_GroupBox13.ContentsPanel.Size = new System.Drawing.Size(1055, 379);
             this.rJ_GroupBox13.ContentsPanel.TabIndex = 2;
             this.rJ_GroupBox13.Dock = System.Windows.Forms.DockStyle.Right;
             this.rJ_GroupBox13.GUID = "";
-            this.rJ_GroupBox13.Location = new System.Drawing.Point(1172, 688);
-            this.rJ_GroupBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox13.Location = new System.Drawing.Point(557, 688);
+            this.rJ_GroupBox13.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox13.Name = "rJ_GroupBox13";
             this.rJ_GroupBox13.PannelBackColor = System.Drawing.Color.White;
             this.rJ_GroupBox13.PannelBorderColor = System.Drawing.Color.SkyBlue;
             this.rJ_GroupBox13.PannelBorderRadius = 0;
             this.rJ_GroupBox13.PannelBorderSize = 2;
-            this.rJ_GroupBox13.Size = new System.Drawing.Size(1055, 577);
+            this.rJ_GroupBox13.Size = new System.Drawing.Size(1055, 425);
             this.rJ_GroupBox13.TabIndex = 142;
             this.rJ_GroupBox13.TitleBackColor = System.Drawing.Color.White;
             this.rJ_GroupBox13.TitleBorderColor = System.Drawing.Color.PaleVioletRed;
@@ -7259,7 +7259,7 @@
             this.rJ_Pannel1.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel1.IsSelected = false;
             this.rJ_Pannel1.Location = new System.Drawing.Point(536, 181);
-            this.rJ_Pannel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel1.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel1.Name = "rJ_Pannel1";
             this.rJ_Pannel1.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel1.ShadowSize = 0;
@@ -7284,7 +7284,7 @@
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.Name = "plC_RJ_Button_藥品資料_高價藥品_搜尋";
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_高價藥品_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7355,7 +7355,7 @@
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.IsSelected = false;
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.Location = new System.Drawing.Point(535, 100);
-            this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.Name = "rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別";
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel_藥品資料_藥檔資料_資料查詢_管制級別.ShadowSize = 0;
@@ -7381,7 +7381,7 @@
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.ListTextColor = System.Drawing.Color.DimGray;
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.Location = new System.Drawing.Point(188, 14);
-            this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.MinimumSize = new System.Drawing.Size(67, 38);
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.Name = "rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別";
             this.rJ_ComboBox_藥品資料_藥檔資料_資料查詢_管制級別.Padding = new System.Windows.Forms.Padding(1);
@@ -7407,7 +7407,7 @@
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_管制級別_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_管制級別_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.Name = "plC_RJ_Button_藥品資料_管制級別_搜尋";
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_管制級別_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7478,7 +7478,7 @@
             this.rJ_Pannel21.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel21.IsSelected = false;
             this.rJ_Pannel21.Location = new System.Drawing.Point(8, 344);
-            this.rJ_Pannel21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel21.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel21.Name = "rJ_Pannel21";
             this.rJ_Pannel21.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel21.ShadowSize = 0;
@@ -7503,7 +7503,7 @@
             this.plC_RJ_Button_藥品資料_商品名_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_商品名_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_商品名_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_商品名_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_商品名_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_商品名_搜尋.Name = "plC_RJ_Button_藥品資料_商品名_搜尋";
             this.plC_RJ_Button_藥品資料_商品名_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_商品名_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7550,7 +7550,7 @@
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.GUID = "";
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Location = new System.Drawing.Point(188, 11);
-            this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Multiline = false;
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Name = "textBox_藥品資料_藥檔資料_資料查詢_商品名";
             this.textBox_藥品資料_藥檔資料_資料查詢_商品名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7604,7 +7604,7 @@
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Location = new System.Drawing.Point(832, 8);
-            this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.Name = "plC_RJ_Button__藥品資料_藥檔資料_顯示全部";
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.OFF_文字內容 = "顯示全部";
             this.plC_RJ_Button__藥品資料_藥檔資料_顯示全部.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7653,7 +7653,7 @@
             this.rJ_Pannel4.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel4.IsSelected = false;
             this.rJ_Pannel4.Location = new System.Drawing.Point(8, 262);
-            this.rJ_Pannel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel4.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel4.Name = "rJ_Pannel4";
             this.rJ_Pannel4.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel4.ShadowSize = 0;
@@ -7678,7 +7678,7 @@
             this.plC_RJ_Button_藥品資料_中文名_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_中文名_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_中文名_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_中文名_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_中文名_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_中文名_搜尋.Name = "plC_RJ_Button_藥品資料_中文名_搜尋";
             this.plC_RJ_Button_藥品資料_中文名_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_中文名_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7725,7 +7725,7 @@
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.GUID = "";
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Location = new System.Drawing.Point(188, 11);
-            this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Multiline = false;
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Name = "textBox_藥品資料_藥檔資料_資料查詢_中文名";
             this.textBox_藥品資料_藥檔資料_資料查詢_中文名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7768,9 +7768,9 @@
             this.groupBox16.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox16.ForeColor = System.Drawing.Color.Black;
             this.groupBox16.Location = new System.Drawing.Point(8, 11);
-            this.groupBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox16.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox16.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox16.Size = new System.Drawing.Size(272, 82);
             this.groupBox16.TabIndex = 140;
             this.groupBox16.TabStop = false;
@@ -7784,7 +7784,7 @@
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Checked = true;
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.ForeColor = System.Drawing.Color.Black;
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Location = new System.Drawing.Point(132, 30);
-            this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.MinimumSize = new System.Drawing.Size(0, 26);
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Name = "rJ_RatioButton_藥品資料_藥檔資料_模糊";
             this.rJ_RatioButton_藥品資料_藥檔資料_模糊.Size = new System.Drawing.Size(91, 34);
@@ -7801,7 +7801,7 @@
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.CheckColor = System.Drawing.Color.MediumSlateBlue;
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.ForeColor = System.Drawing.Color.Black;
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.Location = new System.Drawing.Point(32, 30);
-            this.rJ_RatioButton_藥品資料_藥檔資料_前綴.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_RatioButton_藥品資料_藥檔資料_前綴.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.MinimumSize = new System.Drawing.Size(0, 26);
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.Name = "rJ_RatioButton_藥品資料_藥檔資料_前綴";
             this.rJ_RatioButton_藥品資料_藥檔資料_前綴.Size = new System.Drawing.Size(91, 34);
@@ -7823,7 +7823,7 @@
             this.rJ_Pannel5.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel5.IsSelected = false;
             this.rJ_Pannel5.Location = new System.Drawing.Point(8, 425);
-            this.rJ_Pannel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel5.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel5.Name = "rJ_Pannel5";
             this.rJ_Pannel5.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel5.ShadowSize = 0;
@@ -7848,7 +7848,7 @@
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.Name = "plC_RJ_Button_藥品資料_藥品條碼_搜尋";
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_藥品條碼_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -7895,7 +7895,7 @@
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.GUID = "";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Location = new System.Drawing.Point(188, 11);
-            this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Multiline = false;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Name = "textBox_藥品資料_藥檔資料_資料查詢_藥品條碼";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品條碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -7944,7 +7944,7 @@
             this.rJ_Pannel3.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel3.IsSelected = false;
             this.rJ_Pannel3.Location = new System.Drawing.Point(8, 181);
-            this.rJ_Pannel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel3.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel3.Name = "rJ_Pannel3";
             this.rJ_Pannel3.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel3.ShadowSize = 0;
@@ -7969,7 +7969,7 @@
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.Name = "plC_RJ_Button_藥品資料_藥品名稱_搜尋";
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_藥品名稱_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8016,7 +8016,7 @@
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.GUID = "";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Location = new System.Drawing.Point(188, 11);
-            this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Multiline = false;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Name = "textBox_藥品資料_藥檔資料_資料查詢_藥品名稱";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品名稱.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8065,7 +8065,7 @@
             this.rJ_Pannel2.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel2.IsSelected = false;
             this.rJ_Pannel2.Location = new System.Drawing.Point(8, 100);
-            this.rJ_Pannel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel2.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel2.Name = "rJ_Pannel2";
             this.rJ_Pannel2.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel2.ShadowSize = 0;
@@ -8090,7 +8090,7 @@
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Location = new System.Drawing.Point(392, 8);
-            this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.Name = "plC_RJ_Button_藥品資料_藥品碼_搜尋";
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_藥品資料_藥品碼_搜尋.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8137,7 +8137,7 @@
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.ForeColor = System.Drawing.Color.DimGray;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.GUID = "";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Location = new System.Drawing.Point(188, 11);
-            this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Margin = new System.Windows.Forms.Padding(4);
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Multiline = false;
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Name = "textBox_藥品資料_藥檔資料_資料查詢_藥品碼";
             this.textBox_藥品資料_藥檔資料_資料查詢_藥品碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8216,7 +8216,7 @@
             this.sqL_DataGridView_藥品資料_藥檔資料.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_藥品資料_藥檔資料.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_藥品資料_藥檔資料.Server = "localhost";
-            this.sqL_DataGridView_藥品資料_藥檔資料.Size = new System.Drawing.Size(2227, 688);
+            this.sqL_DataGridView_藥品資料_藥檔資料.Size = new System.Drawing.Size(1612, 688);
             this.sqL_DataGridView_藥品資料_藥檔資料.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_藥品資料_藥檔資料.TabIndex = 115;
             this.sqL_DataGridView_藥品資料_藥檔資料.TableName = "medicine_page";
@@ -8242,7 +8242,7 @@
             this.人員資料.Location = new System.Drawing.Point(4, 25);
             this.人員資料.Margin = new System.Windows.Forms.Padding(0);
             this.人員資料.Name = "人員資料";
-            this.人員資料.Size = new System.Drawing.Size(2227, 1265);
+            this.人員資料.Size = new System.Drawing.Size(1612, 1113);
             this.人員資料.TabIndex = 1;
             this.人員資料.Text = "人員資料";
             // 
@@ -8265,22 +8265,22 @@
             this.rJ_GroupBox2.ContentsPanel.ForeColor = System.Drawing.Color.White;
             this.rJ_GroupBox2.ContentsPanel.IsSelected = false;
             this.rJ_GroupBox2.ContentsPanel.Location = new System.Drawing.Point(0, 46);
-            this.rJ_GroupBox2.ContentsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox2.ContentsPanel.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox2.ContentsPanel.Name = "ContentsPanel";
             this.rJ_GroupBox2.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_GroupBox2.ContentsPanel.ShadowSize = 0;
-            this.rJ_GroupBox2.ContentsPanel.Size = new System.Drawing.Size(737, 574);
+            this.rJ_GroupBox2.ContentsPanel.Size = new System.Drawing.Size(122, 422);
             this.rJ_GroupBox2.ContentsPanel.TabIndex = 2;
             this.rJ_GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rJ_GroupBox2.GUID = "";
             this.rJ_GroupBox2.Location = new System.Drawing.Point(0, 645);
-            this.rJ_GroupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox2.Name = "rJ_GroupBox2";
             this.rJ_GroupBox2.PannelBackColor = System.Drawing.SystemColors.Window;
             this.rJ_GroupBox2.PannelBorderColor = System.Drawing.Color.SkyBlue;
             this.rJ_GroupBox2.PannelBorderRadius = 0;
             this.rJ_GroupBox2.PannelBorderSize = 2;
-            this.rJ_GroupBox2.Size = new System.Drawing.Size(737, 620);
+            this.rJ_GroupBox2.Size = new System.Drawing.Size(122, 468);
             this.rJ_GroupBox2.TabIndex = 120;
             this.rJ_GroupBox2.TitleBackColor = System.Drawing.SystemColors.Window;
             this.rJ_GroupBox2.TitleBorderColor = System.Drawing.Color.PaleVioletRed;
@@ -8310,7 +8310,7 @@
             this.plC_RJ_Button_人員資料_顯示全部.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_顯示全部.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_顯示全部.Location = new System.Drawing.Point(501, 352);
-            this.plC_RJ_Button_人員資料_顯示全部.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_顯示全部.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_顯示全部.Name = "plC_RJ_Button_人員資料_顯示全部";
             this.plC_RJ_Button_人員資料_顯示全部.OFF_文字內容 = "顯示全部";
             this.plC_RJ_Button_人員資料_顯示全部.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8359,7 +8359,7 @@
             this.rJ_Pannel14.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel14.IsSelected = false;
             this.rJ_Pannel14.Location = new System.Drawing.Point(31, 270);
-            this.rJ_Pannel14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel14.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel14.Name = "rJ_Pannel14";
             this.rJ_Pannel14.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel14.ShadowSize = 0;
@@ -8384,7 +8384,7 @@
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Location = new System.Drawing.Point(391, 8);
-            this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.Name = "plC_RJ_Button_人員資料_資料查詢_一維條碼";
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_人員資料_資料查詢_一維條碼.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8431,7 +8431,7 @@
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.GUID = "";
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.Location = new System.Drawing.Point(139, 11);
-            this.rJ_TextBox_人員資料_資料查詢_一維條碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_資料查詢_一維條碼.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.Multiline = false;
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.Name = "rJ_TextBox_人員資料_資料查詢_一維條碼";
             this.rJ_TextBox_人員資料_資料查詢_一維條碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8480,7 +8480,7 @@
             this.rJ_Pannel13.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel13.IsSelected = false;
             this.rJ_Pannel13.Location = new System.Drawing.Point(31, 188);
-            this.rJ_Pannel13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel13.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel13.Name = "rJ_Pannel13";
             this.rJ_Pannel13.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel13.ShadowSize = 0;
@@ -8505,7 +8505,7 @@
             this.plC_RJ_Button_人員資料_資料查詢_卡號.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_資料查詢_卡號.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_資料查詢_卡號.Location = new System.Drawing.Point(391, 8);
-            this.plC_RJ_Button_人員資料_資料查詢_卡號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_資料查詢_卡號.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_資料查詢_卡號.Name = "plC_RJ_Button_人員資料_資料查詢_卡號";
             this.plC_RJ_Button_人員資料_資料查詢_卡號.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_人員資料_資料查詢_卡號.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8552,7 +8552,7 @@
             this.rJ_TextBox_人員資料_資料查詢_卡號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_資料查詢_卡號.GUID = "";
             this.rJ_TextBox_人員資料_資料查詢_卡號.Location = new System.Drawing.Point(139, 11);
-            this.rJ_TextBox_人員資料_資料查詢_卡號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_資料查詢_卡號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_資料查詢_卡號.Multiline = false;
             this.rJ_TextBox_人員資料_資料查詢_卡號.Name = "rJ_TextBox_人員資料_資料查詢_卡號";
             this.rJ_TextBox_人員資料_資料查詢_卡號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8601,7 +8601,7 @@
             this.rJ_Pannel18.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel18.IsSelected = false;
             this.rJ_Pannel18.Location = new System.Drawing.Point(31, 108);
-            this.rJ_Pannel18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel18.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel18.Name = "rJ_Pannel18";
             this.rJ_Pannel18.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel18.ShadowSize = 0;
@@ -8626,7 +8626,7 @@
             this.plC_RJ_Button_人員資料_資料查詢_姓名.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_資料查詢_姓名.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_資料查詢_姓名.Location = new System.Drawing.Point(391, 8);
-            this.plC_RJ_Button_人員資料_資料查詢_姓名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_資料查詢_姓名.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_資料查詢_姓名.Name = "plC_RJ_Button_人員資料_資料查詢_姓名";
             this.plC_RJ_Button_人員資料_資料查詢_姓名.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_人員資料_資料查詢_姓名.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8673,7 +8673,7 @@
             this.rJ_TextBox_人員資料_資料查詢_姓名.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_資料查詢_姓名.GUID = "";
             this.rJ_TextBox_人員資料_資料查詢_姓名.Location = new System.Drawing.Point(139, 11);
-            this.rJ_TextBox_人員資料_資料查詢_姓名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_資料查詢_姓名.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_資料查詢_姓名.Multiline = false;
             this.rJ_TextBox_人員資料_資料查詢_姓名.Name = "rJ_TextBox_人員資料_資料查詢_姓名";
             this.rJ_TextBox_人員資料_資料查詢_姓名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8722,7 +8722,7 @@
             this.rJ_Pannel19.ForeColor = System.Drawing.Color.White;
             this.rJ_Pannel19.IsSelected = false;
             this.rJ_Pannel19.Location = new System.Drawing.Point(31, 26);
-            this.rJ_Pannel19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_Pannel19.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_Pannel19.Name = "rJ_Pannel19";
             this.rJ_Pannel19.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_Pannel19.ShadowSize = 0;
@@ -8747,7 +8747,7 @@
             this.plC_RJ_Button_人員資料_資料查詢_ID.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_資料查詢_ID.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_資料查詢_ID.Location = new System.Drawing.Point(391, 8);
-            this.plC_RJ_Button_人員資料_資料查詢_ID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_資料查詢_ID.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_資料查詢_ID.Name = "plC_RJ_Button_人員資料_資料查詢_ID";
             this.plC_RJ_Button_人員資料_資料查詢_ID.OFF_文字內容 = "搜尋";
             this.plC_RJ_Button_人員資料_資料查詢_ID.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -8794,7 +8794,7 @@
             this.rJ_TextBox_人員資料_資料查詢_ID.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_資料查詢_ID.GUID = "";
             this.rJ_TextBox_人員資料_資料查詢_ID.Location = new System.Drawing.Point(139, 11);
-            this.rJ_TextBox_人員資料_資料查詢_ID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_資料查詢_ID.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_資料查詢_ID.Multiline = false;
             this.rJ_TextBox_人員資料_資料查詢_ID.Name = "rJ_TextBox_人員資料_資料查詢_ID";
             this.rJ_TextBox_人員資料_資料查詢_ID.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -8836,10 +8836,10 @@
             this.panel8.Controls.Add(this.panel4);
             this.panel8.Controls.Add(this.panel_人員資料_權限設定);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel8.Location = new System.Drawing.Point(737, 645);
-            this.panel8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel8.Location = new System.Drawing.Point(122, 645);
+            this.panel8.Margin = new System.Windows.Forms.Padding(4);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(1490, 620);
+            this.panel8.Size = new System.Drawing.Size(1490, 468);
             this.panel8.TabIndex = 119;
             // 
             // panel4
@@ -8847,9 +8847,9 @@
             this.panel4.Controls.Add(this.plC_ScreenPage_人員資料_權限設定);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 71);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel4.Margin = new System.Windows.Forms.Padding(4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1488, 547);
+            this.panel4.Size = new System.Drawing.Size(1488, 395);
             this.panel4.TabIndex = 117;
             // 
             // plC_ScreenPage_人員資料_權限設定
@@ -8862,10 +8862,10 @@
             this.plC_ScreenPage_人員資料_權限設定.ForekColor = System.Drawing.Color.Black;
             this.plC_ScreenPage_人員資料_權限設定.ItemSize = new System.Drawing.Size(54, 21);
             this.plC_ScreenPage_人員資料_權限設定.Location = new System.Drawing.Point(0, 0);
-            this.plC_ScreenPage_人員資料_權限設定.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_ScreenPage_人員資料_權限設定.Margin = new System.Windows.Forms.Padding(4);
             this.plC_ScreenPage_人員資料_權限設定.Name = "plC_ScreenPage_人員資料_權限設定";
             this.plC_ScreenPage_人員資料_權限設定.SelectedIndex = 0;
-            this.plC_ScreenPage_人員資料_權限設定.Size = new System.Drawing.Size(1488, 547);
+            this.plC_ScreenPage_人員資料_權限設定.Size = new System.Drawing.Size(1488, 395);
             this.plC_ScreenPage_人員資料_權限設定.TabBackColor = System.Drawing.Color.White;
             this.plC_ScreenPage_人員資料_權限設定.TabIndex = 116;
             this.plC_ScreenPage_人員資料_權限設定.顯示標籤列 = MyUI.PLC_ScreenPage.TabVisibleEnum.顯示;
@@ -8877,9 +8877,9 @@
             this.tabPage5.Controls.Add(this.plC_ScreenPage_人員資料_開門權限);
             this.tabPage5.Controls.Add(this.panel_人員資料_開門權限);
             this.tabPage5.Location = new System.Drawing.Point(4, 25);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage5.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1480, 518);
+            this.tabPage5.Size = new System.Drawing.Size(1480, 366);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "開門權限";
             // 
@@ -8899,10 +8899,10 @@
             this.plC_ScreenPage_人員資料_開門權限.ForekColor = System.Drawing.Color.Black;
             this.plC_ScreenPage_人員資料_開門權限.ItemSize = new System.Drawing.Size(54, 21);
             this.plC_ScreenPage_人員資料_開門權限.Location = new System.Drawing.Point(0, 0);
-            this.plC_ScreenPage_人員資料_開門權限.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_ScreenPage_人員資料_開門權限.Margin = new System.Windows.Forms.Padding(4);
             this.plC_ScreenPage_人員資料_開門權限.Name = "plC_ScreenPage_人員資料_開門權限";
             this.plC_ScreenPage_人員資料_開門權限.SelectedIndex = 0;
-            this.plC_ScreenPage_人員資料_開門權限.Size = new System.Drawing.Size(1480, 436);
+            this.plC_ScreenPage_人員資料_開門權限.Size = new System.Drawing.Size(1480, 284);
             this.plC_ScreenPage_人員資料_開門權限.TabBackColor = System.Drawing.Color.White;
             this.plC_ScreenPage_人員資料_開門權限.TabIndex = 1;
             this.plC_ScreenPage_人員資料_開門權限.顯示標籤列 = MyUI.PLC_ScreenPage.TabVisibleEnum.顯示;
@@ -8913,9 +8913,9 @@
             this.tabPage7.BackColor = System.Drawing.Color.White;
             this.tabPage7.Controls.Add(this.flowLayoutPanel_開門權限_01);
             this.tabPage7.Location = new System.Drawing.Point(4, 25);
-            this.tabPage7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage7.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(1472, 407);
+            this.tabPage7.Size = new System.Drawing.Size(1472, 255);
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "01";
             // 
@@ -8924,7 +8924,7 @@
             this.flowLayoutPanel_開門權限_01.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_01.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_01.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_01.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_01.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_01.Name = "flowLayoutPanel_開門權限_01";
             this.flowLayoutPanel_開門權限_01.Size = new System.Drawing.Size(1472, 382);
             this.flowLayoutPanel_開門權限_01.TabIndex = 1;
@@ -8934,9 +8934,9 @@
             this.tabPage8.BackColor = System.Drawing.Color.White;
             this.tabPage8.Controls.Add(this.flowLayoutPanel_開門權限_02);
             this.tabPage8.Location = new System.Drawing.Point(4, 25);
-            this.tabPage8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage8.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage8.Size = new System.Drawing.Size(1472, 0);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "02";
             // 
@@ -8945,9 +8945,9 @@
             this.flowLayoutPanel_開門權限_02.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_02.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_02.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_02.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_02.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_02.Name = "flowLayoutPanel_開門權限_02";
-            this.flowLayoutPanel_開門權限_02.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_02.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_02.TabIndex = 2;
             // 
             // tabPage9
@@ -8955,9 +8955,9 @@
             this.tabPage9.BackColor = System.Drawing.Color.White;
             this.tabPage9.Controls.Add(this.flowLayoutPanel_開門權限_03);
             this.tabPage9.Location = new System.Drawing.Point(4, 25);
-            this.tabPage9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage9.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage9.Size = new System.Drawing.Size(1472, 0);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "03";
             // 
@@ -8966,9 +8966,9 @@
             this.flowLayoutPanel_開門權限_03.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_03.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_03.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_03.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_03.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_03.Name = "flowLayoutPanel_開門權限_03";
-            this.flowLayoutPanel_開門權限_03.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_03.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_03.TabIndex = 2;
             // 
             // tabPage10
@@ -8976,9 +8976,9 @@
             this.tabPage10.BackColor = System.Drawing.Color.White;
             this.tabPage10.Controls.Add(this.flowLayoutPanel_開門權限_04);
             this.tabPage10.Location = new System.Drawing.Point(4, 25);
-            this.tabPage10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage10.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage10.Size = new System.Drawing.Size(1472, 0);
             this.tabPage10.TabIndex = 3;
             this.tabPage10.Text = "04";
             // 
@@ -8987,9 +8987,9 @@
             this.flowLayoutPanel_開門權限_04.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_04.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_04.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_04.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_04.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_04.Name = "flowLayoutPanel_開門權限_04";
-            this.flowLayoutPanel_開門權限_04.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_04.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_04.TabIndex = 2;
             // 
             // tabPage11
@@ -8997,9 +8997,9 @@
             this.tabPage11.BackColor = System.Drawing.Color.White;
             this.tabPage11.Controls.Add(this.flowLayoutPanel_開門權限_05);
             this.tabPage11.Location = new System.Drawing.Point(4, 25);
-            this.tabPage11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage11.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage11.Size = new System.Drawing.Size(1472, 0);
             this.tabPage11.TabIndex = 4;
             this.tabPage11.Text = "05";
             // 
@@ -9008,9 +9008,9 @@
             this.flowLayoutPanel_開門權限_05.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_05.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_05.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_05.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_05.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_05.Name = "flowLayoutPanel_開門權限_05";
-            this.flowLayoutPanel_開門權限_05.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_05.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_05.TabIndex = 2;
             // 
             // tabPage12
@@ -9018,9 +9018,9 @@
             this.tabPage12.BackColor = System.Drawing.Color.White;
             this.tabPage12.Controls.Add(this.flowLayoutPanel_開門權限_06);
             this.tabPage12.Location = new System.Drawing.Point(4, 25);
-            this.tabPage12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage12.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage12.Size = new System.Drawing.Size(1472, 0);
             this.tabPage12.TabIndex = 5;
             this.tabPage12.Text = "06";
             // 
@@ -9029,9 +9029,9 @@
             this.flowLayoutPanel_開門權限_06.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_06.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_06.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_06.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_06.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_06.Name = "flowLayoutPanel_開門權限_06";
-            this.flowLayoutPanel_開門權限_06.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_06.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_06.TabIndex = 2;
             // 
             // tabPage13
@@ -9039,9 +9039,9 @@
             this.tabPage13.BackColor = System.Drawing.Color.White;
             this.tabPage13.Controls.Add(this.flowLayoutPanel_開門權限_07);
             this.tabPage13.Location = new System.Drawing.Point(4, 25);
-            this.tabPage13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage13.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage13.Size = new System.Drawing.Size(1472, 0);
             this.tabPage13.TabIndex = 6;
             this.tabPage13.Text = "07";
             // 
@@ -9050,9 +9050,9 @@
             this.flowLayoutPanel_開門權限_07.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_07.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_07.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_07.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_07.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_07.Name = "flowLayoutPanel_開門權限_07";
-            this.flowLayoutPanel_開門權限_07.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_07.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_07.TabIndex = 2;
             // 
             // tabPage14
@@ -9060,9 +9060,9 @@
             this.tabPage14.BackColor = System.Drawing.Color.White;
             this.tabPage14.Controls.Add(this.flowLayoutPanel_開門權限_08);
             this.tabPage14.Location = new System.Drawing.Point(4, 25);
-            this.tabPage14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage14.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Size = new System.Drawing.Size(1469, 0);
+            this.tabPage14.Size = new System.Drawing.Size(1472, 0);
             this.tabPage14.TabIndex = 7;
             this.tabPage14.Text = "08";
             // 
@@ -9071,9 +9071,9 @@
             this.flowLayoutPanel_開門權限_08.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel_開門權限_08.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel_開門權限_08.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel_開門權限_08.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel_開門權限_08.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel_開門權限_08.Name = "flowLayoutPanel_開門權限_08";
-            this.flowLayoutPanel_開門權限_08.Size = new System.Drawing.Size(1469, 385);
+            this.flowLayoutPanel_開門權限_08.Size = new System.Drawing.Size(1472, 385);
             this.flowLayoutPanel_開門權限_08.TabIndex = 2;
             // 
             // panel_人員資料_開門權限
@@ -9087,8 +9087,8 @@
             this.panel_人員資料_開門權限.Controls.Add(this.plC_RJ_ScreenButton9);
             this.panel_人員資料_開門權限.Controls.Add(this.plC_RJ_ScreenButton8);
             this.panel_人員資料_開門權限.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_人員資料_開門權限.Location = new System.Drawing.Point(0, 436);
-            this.panel_人員資料_開門權限.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel_人員資料_開門權限.Location = new System.Drawing.Point(0, 284);
+            this.panel_人員資料_開門權限.Margin = new System.Windows.Forms.Padding(4);
             this.panel_人員資料_開門權限.Name = "panel_人員資料_開門權限";
             this.panel_人員資料_開門權限.Size = new System.Drawing.Size(1480, 82);
             this.panel_人員資料_開門權限.TabIndex = 0;
@@ -9411,7 +9411,7 @@
             this.tabPage3.Controls.Add(this.loginIndex_Pannel);
             this.tabPage3.Controls.Add(this.panel29);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1480, 0);
             this.tabPage3.TabIndex = 0;
@@ -9452,7 +9452,7 @@
             this.panel29.Controls.Add(this.plC_RJ_ComboBox_權限管理_權限等級);
             this.panel29.Controls.Add(this.plC_Button_權限設定_設定至Server);
             this.panel29.Location = new System.Drawing.Point(12, 4);
-            this.panel29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel29.Margin = new System.Windows.Forms.Padding(4);
             this.panel29.Name = "panel29";
             this.panel29.Size = new System.Drawing.Size(869, 82);
             this.panel29.TabIndex = 126;
@@ -9513,7 +9513,7 @@
             this.plC_RJ_ComboBox_權限管理_權限等級.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
             this.plC_RJ_ComboBox_權限管理_權限等級.ListTextColor = System.Drawing.Color.DimGray;
             this.plC_RJ_ComboBox_權限管理_權限等級.Location = new System.Drawing.Point(169, 22);
-            this.plC_RJ_ComboBox_權限管理_權限等級.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_ComboBox_權限管理_權限等級.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_ComboBox_權限管理_權限等級.MinimumSize = new System.Drawing.Size(133, 38);
             this.plC_RJ_ComboBox_權限管理_權限等級.Name = "plC_RJ_ComboBox_權限管理_權限等級";
             this.plC_RJ_ComboBox_權限管理_權限等級.Padding = new System.Windows.Forms.Padding(1);
@@ -9540,7 +9540,7 @@
             this.plC_Button_權限設定_設定至Server.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_Button_權限設定_設定至Server.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_Button_權限設定_設定至Server.Location = new System.Drawing.Point(371, 5);
-            this.plC_Button_權限設定_設定至Server.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_Button_權限設定_設定至Server.Margin = new System.Windows.Forms.Padding(4);
             this.plC_Button_權限設定_設定至Server.Name = "plC_Button_權限設定_設定至Server";
             this.plC_Button_權限設定_設定至Server.OFF_文字內容 = "上傳資料";
             this.plC_Button_權限設定_設定至Server.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -9581,7 +9581,7 @@
             this.panel_人員資料_權限設定.Controls.Add(this.plC_RJ_ScreenButton7);
             this.panel_人員資料_權限設定.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_人員資料_權限設定.Location = new System.Drawing.Point(0, 0);
-            this.panel_人員資料_權限設定.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel_人員資料_權限設定.Margin = new System.Windows.Forms.Padding(4);
             this.panel_人員資料_權限設定.Name = "panel_人員資料_權限設定";
             this.panel_人員資料_權限設定.Size = new System.Drawing.Size(1488, 71);
             this.panel_人員資料_權限設定.TabIndex = 115;
@@ -9671,9 +9671,9 @@
             this.panel5.Controls.Add(this.rJ_GroupBox20);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
-            this.panel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel5.Margin = new System.Windows.Forms.Padding(4);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(2227, 645);
+            this.panel5.Size = new System.Drawing.Size(1612, 645);
             this.panel5.TabIndex = 118;
             // 
             // sqL_DataGridView_人員資料
@@ -9702,7 +9702,7 @@
             this.sqL_DataGridView_人員資料.Font = new System.Drawing.Font("新細明體", 9F);
             this.sqL_DataGridView_人員資料.ImageBox = false;
             this.sqL_DataGridView_人員資料.Location = new System.Drawing.Point(0, 0);
-            this.sqL_DataGridView_人員資料.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.sqL_DataGridView_人員資料.Margin = new System.Windows.Forms.Padding(5);
             this.sqL_DataGridView_人員資料.Name = "sqL_DataGridView_人員資料";
             this.sqL_DataGridView_人員資料.OnlineState = SQLUI.SQL_DataGridView.OnlineEnum.Online;
             this.sqL_DataGridView_人員資料.Password = "user82822040";
@@ -9719,7 +9719,7 @@
             this.sqL_DataGridView_人員資料.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_人員資料.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_人員資料.Server = "localhost";
-            this.sqL_DataGridView_人員資料.Size = new System.Drawing.Size(1522, 645);
+            this.sqL_DataGridView_人員資料.Size = new System.Drawing.Size(907, 645);
             this.sqL_DataGridView_人員資料.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_人員資料.TabIndex = 115;
             this.sqL_DataGridView_人員資料.TableName = "person_page";
@@ -9758,9 +9758,9 @@
             this.rJ_GroupBox20.ContentsPanel.ForeColor = System.Drawing.Color.White;
             this.rJ_GroupBox20.ContentsPanel.IsSelected = false;
             this.rJ_GroupBox20.ContentsPanel.Location = new System.Drawing.Point(0, 46);
-            this.rJ_GroupBox20.ContentsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox20.ContentsPanel.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox20.ContentsPanel.Name = "ContentsPanel";
-            this.rJ_GroupBox20.ContentsPanel.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox20.ContentsPanel.Padding = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox20.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.rJ_GroupBox20.ContentsPanel.ShadowSize = 0;
             this.rJ_GroupBox20.ContentsPanel.Size = new System.Drawing.Size(705, 599);
@@ -9768,8 +9768,8 @@
             this.rJ_GroupBox20.Dock = System.Windows.Forms.DockStyle.Right;
             this.rJ_GroupBox20.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.rJ_GroupBox20.GUID = "";
-            this.rJ_GroupBox20.Location = new System.Drawing.Point(1522, 0);
-            this.rJ_GroupBox20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_GroupBox20.Location = new System.Drawing.Point(907, 0);
+            this.rJ_GroupBox20.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_GroupBox20.Name = "rJ_GroupBox20";
             this.rJ_GroupBox20.PannelBackColor = System.Drawing.SystemColors.Window;
             this.rJ_GroupBox20.PannelBorderColor = System.Drawing.Color.SkyBlue;
@@ -9805,7 +9805,7 @@
             this.plC_RJ_Button_人員資料_開門權限全關.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_開門權限全關.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_開門權限全關.Location = new System.Drawing.Point(185, 514);
-            this.plC_RJ_Button_人員資料_開門權限全關.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_開門權限全關.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_開門權限全關.Name = "plC_RJ_Button_人員資料_開門權限全關";
             this.plC_RJ_Button_人員資料_開門權限全關.OFF_文字內容 = "開門權限全關";
             this.plC_RJ_Button_人員資料_開門權限全關.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -9860,7 +9860,7 @@
             this.plC_RJ_Button_人員資料_開門權限全開.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_開門權限全開.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_開門權限全開.Location = new System.Drawing.Point(433, 514);
-            this.plC_RJ_Button_人員資料_開門權限全開.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_開門權限全開.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_開門權限全開.Name = "plC_RJ_Button_人員資料_開門權限全開";
             this.plC_RJ_Button_人員資料_開門權限全開.OFF_文字內容 = "開門權限全開";
             this.plC_RJ_Button_人員資料_開門權限全開.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -9915,7 +9915,7 @@
             this.plC_RJ_Button_人員資料_清除內容.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_清除內容.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_清除內容.Location = new System.Drawing.Point(519, 422);
-            this.plC_RJ_Button_人員資料_清除內容.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_清除內容.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_清除內容.Name = "plC_RJ_Button_人員資料_清除內容";
             this.plC_RJ_Button_人員資料_清除內容.OFF_文字內容 = "清除內容";
             this.plC_RJ_Button_人員資料_清除內容.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -9969,7 +9969,7 @@
             this.plC_RJ_Button_人員資料_刪除.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_刪除.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_刪除.Location = new System.Drawing.Point(268, 422);
-            this.plC_RJ_Button_人員資料_刪除.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_刪除.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_刪除.Name = "plC_RJ_Button_人員資料_刪除";
             this.plC_RJ_Button_人員資料_刪除.OFF_文字內容 = "刪除";
             this.plC_RJ_Button_人員資料_刪除.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -10023,7 +10023,7 @@
             this.plC_RJ_Button_人員資料_登錄.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_登錄.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_登錄.Location = new System.Drawing.Point(393, 422);
-            this.plC_RJ_Button_人員資料_登錄.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_登錄.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_登錄.Name = "plC_RJ_Button_人員資料_登錄";
             this.plC_RJ_Button_人員資料_登錄.OFF_文字內容 = "登錄";
             this.plC_RJ_Button_人員資料_登錄.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -10077,7 +10077,7 @@
             this.plC_RJ_Button_人員資料_匯入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_匯入.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_匯入.Location = new System.Drawing.Point(143, 422);
-            this.plC_RJ_Button_人員資料_匯入.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_匯入.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_匯入.Name = "plC_RJ_Button_人員資料_匯入";
             this.plC_RJ_Button_人員資料_匯入.OFF_文字內容 = "匯入";
             this.plC_RJ_Button_人員資料_匯入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -10131,7 +10131,7 @@
             this.plC_RJ_Button_人員資料_匯出.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_人員資料_匯出.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_人員資料_匯出.Location = new System.Drawing.Point(17, 422);
-            this.plC_RJ_Button_人員資料_匯出.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_人員資料_匯出.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_人員資料_匯出.Name = "plC_RJ_Button_人員資料_匯出";
             this.plC_RJ_Button_人員資料_匯出.OFF_文字內容 = "匯出";
             this.plC_RJ_Button_人員資料_匯出.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -10189,7 +10189,7 @@
             this.tableLayoutPanel5.Controls.Add(this.rJ_TextBox_人員資料_卡號, 1, 6);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 14;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
@@ -10256,7 +10256,7 @@
             this.comboBox_人員資料_權限等級.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
             this.comboBox_人員資料_權限等級.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBox_人員資料_權限等級.Location = new System.Drawing.Point(130, 230);
-            this.comboBox_人員資料_權限等級.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBox_人員資料_權限等級.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox_人員資料_權限等級.MinimumSize = new System.Drawing.Size(67, 38);
             this.comboBox_人員資料_權限等級.Name = "comboBox_人員資料_權限等級";
             this.comboBox_人員資料_權限等級.Padding = new System.Windows.Forms.Padding(1);
@@ -10275,7 +10275,7 @@
             this.rJ_TextBox_人員資料_單位.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_單位.GUID = "";
             this.rJ_TextBox_人員資料_單位.Location = new System.Drawing.Point(130, 185);
-            this.rJ_TextBox_人員資料_單位.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_單位.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_單位.Multiline = false;
             this.rJ_TextBox_人員資料_單位.Name = "rJ_TextBox_人員資料_單位";
             this.rJ_TextBox_人員資料_單位.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -10300,7 +10300,7 @@
             this.rJ_TextBox_人員資料_密碼.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_密碼.GUID = "";
             this.rJ_TextBox_人員資料_密碼.Location = new System.Drawing.Point(130, 140);
-            this.rJ_TextBox_人員資料_密碼.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_密碼.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_密碼.Multiline = false;
             this.rJ_TextBox_人員資料_密碼.Name = "rJ_TextBox_人員資料_密碼";
             this.rJ_TextBox_人員資料_密碼.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -10325,7 +10325,7 @@
             this.rJ_TextBox_人員資料_姓名.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_姓名.GUID = "";
             this.rJ_TextBox_人員資料_姓名.Location = new System.Drawing.Point(130, 50);
-            this.rJ_TextBox_人員資料_姓名.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_姓名.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_姓名.Multiline = false;
             this.rJ_TextBox_人員資料_姓名.Name = "rJ_TextBox_人員資料_姓名";
             this.rJ_TextBox_人員資料_姓名.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -10350,7 +10350,7 @@
             this.rJ_TextBox_人員資料_ID.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_ID.GUID = "";
             this.rJ_TextBox_人員資料_ID.Location = new System.Drawing.Point(130, 5);
-            this.rJ_TextBox_人員資料_ID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_ID.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_ID.Multiline = false;
             this.rJ_TextBox_人員資料_ID.Name = "rJ_TextBox_人員資料_ID";
             this.rJ_TextBox_人員資料_ID.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -10448,7 +10448,7 @@
             this.flowLayoutPanel2.Controls.Add(this.rJ_RatioButton_人員資料_女);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(130, 95);
-            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(562, 36);
             this.flowLayoutPanel2.TabIndex = 114;
@@ -10478,7 +10478,7 @@
             this.rJ_RatioButton_人員資料_女.CheckColor = System.Drawing.Color.MediumSlateBlue;
             this.rJ_RatioButton_人員資料_女.ForeColor = System.Drawing.Color.Black;
             this.rJ_RatioButton_人員資料_女.Location = new System.Drawing.Point(88, 4);
-            this.rJ_RatioButton_人員資料_女.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_RatioButton_人員資料_女.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_RatioButton_人員資料_女.MinimumSize = new System.Drawing.Size(0, 26);
             this.rJ_RatioButton_人員資料_女.Name = "rJ_RatioButton_人員資料_女";
             this.rJ_RatioButton_人員資料_女.Size = new System.Drawing.Size(62, 29);
@@ -10498,7 +10498,7 @@
             this.rJ_TextBox_人員資料_卡號.ForeColor = System.Drawing.Color.DimGray;
             this.rJ_TextBox_人員資料_卡號.GUID = "";
             this.rJ_TextBox_人員資料_卡號.Location = new System.Drawing.Point(130, 275);
-            this.rJ_TextBox_人員資料_卡號.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rJ_TextBox_人員資料_卡號.Margin = new System.Windows.Forms.Padding(4);
             this.rJ_TextBox_人員資料_卡號.Multiline = false;
             this.rJ_TextBox_人員資料_卡號.Name = "rJ_TextBox_人員資料_卡號";
             this.rJ_TextBox_人員資料_卡號.Padding = new System.Windows.Forms.Padding(13, 8, 13, 8);
@@ -10519,7 +10519,7 @@
             this.系統頁面.Controls.Add(this.plC_ScreenPage_系統頁面);
             this.系統頁面.Controls.Add(this.panel_系統頁面);
             this.系統頁面.Location = new System.Drawing.Point(4, 25);
-            this.系統頁面.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.系統頁面.Margin = new System.Windows.Forms.Padding(4);
             this.系統頁面.Name = "系統頁面";
             this.系統頁面.Size = new System.Drawing.Size(1612, 1113);
             this.系統頁面.TabIndex = 2;
@@ -10540,7 +10540,7 @@
             this.plC_ScreenPage_系統頁面.ForekColor = System.Drawing.Color.Black;
             this.plC_ScreenPage_系統頁面.ItemSize = new System.Drawing.Size(54, 21);
             this.plC_ScreenPage_系統頁面.Location = new System.Drawing.Point(0, 65);
-            this.plC_ScreenPage_系統頁面.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_ScreenPage_系統頁面.Margin = new System.Windows.Forms.Padding(4);
             this.plC_ScreenPage_系統頁面.Name = "plC_ScreenPage_系統頁面";
             this.plC_ScreenPage_系統頁面.SelectedIndex = 0;
             this.plC_ScreenPage_系統頁面.Size = new System.Drawing.Size(1612, 1048);
@@ -10568,19 +10568,87 @@
             this.tabPage22.Controls.Add(this.groupBox2);
             this.tabPage22.Controls.Add(this.groupBox1);
             this.tabPage22.Location = new System.Drawing.Point(4, 25);
-            this.tabPage22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage22.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage22.Name = "tabPage22";
             this.tabPage22.Size = new System.Drawing.Size(1604, 1019);
             this.tabPage22.TabIndex = 6;
             this.tabPage22.Text = "設定";
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.plC_NumBox4);
+            this.groupBox8.Location = new System.Drawing.Point(251, 503);
+            this.groupBox8.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox8.Size = new System.Drawing.Size(223, 75);
+            this.groupBox8.TabIndex = 202;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "格子Y寬度";
+            // 
+            // plC_NumBox4
+            // 
+            this.plC_NumBox4.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.plC_NumBox4.Location = new System.Drawing.Point(8, 26);
+            this.plC_NumBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.plC_NumBox4.mBackColor = System.Drawing.SystemColors.Window;
+            this.plC_NumBox4.mForeColor = System.Drawing.SystemColors.WindowText;
+            this.plC_NumBox4.Name = "plC_NumBox4";
+            this.plC_NumBox4.ReadOnly = false;
+            this.plC_NumBox4.Size = new System.Drawing.Size(149, 41);
+            this.plC_NumBox4.TabIndex = 0;
+            this.plC_NumBox4.Value = 0;
+            this.plC_NumBox4.字元長度 = MyUI.PLC_NumBox.WordLengthEnum.單字元;
+            this.plC_NumBox4.密碼欄位 = false;
+            this.plC_NumBox4.寫入元件位置 = "D3007";
+            this.plC_NumBox4.小數點位置 = 0;
+            this.plC_NumBox4.微調數值 = 0;
+            this.plC_NumBox4.讀取元件位置 = "D3007";
+            this.plC_NumBox4.音效 = true;
+            this.plC_NumBox4.顯示微調按鈕 = false;
+            this.plC_NumBox4.顯示螢幕小鍵盤 = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.plC_NumBox5);
+            this.groupBox9.Location = new System.Drawing.Point(20, 503);
+            this.groupBox9.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox9.Size = new System.Drawing.Size(223, 75);
+            this.groupBox9.TabIndex = 201;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "格子X寬度";
+            // 
+            // plC_NumBox5
+            // 
+            this.plC_NumBox5.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.plC_NumBox5.Location = new System.Drawing.Point(8, 26);
+            this.plC_NumBox5.Margin = new System.Windows.Forms.Padding(4);
+            this.plC_NumBox5.mBackColor = System.Drawing.SystemColors.Window;
+            this.plC_NumBox5.mForeColor = System.Drawing.SystemColors.WindowText;
+            this.plC_NumBox5.Name = "plC_NumBox5";
+            this.plC_NumBox5.ReadOnly = false;
+            this.plC_NumBox5.Size = new System.Drawing.Size(149, 41);
+            this.plC_NumBox5.TabIndex = 0;
+            this.plC_NumBox5.Value = 0;
+            this.plC_NumBox5.字元長度 = MyUI.PLC_NumBox.WordLengthEnum.單字元;
+            this.plC_NumBox5.密碼欄位 = false;
+            this.plC_NumBox5.寫入元件位置 = "D3006";
+            this.plC_NumBox5.小數點位置 = 0;
+            this.plC_NumBox5.微調數值 = 0;
+            this.plC_NumBox5.讀取元件位置 = "D3006";
+            this.plC_NumBox5.音效 = true;
+            this.plC_NumBox5.顯示微調按鈕 = false;
+            this.plC_NumBox5.顯示螢幕小鍵盤 = true;
+            // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.plC_NumBox3);
             this.groupBox7.Location = new System.Drawing.Point(251, 420);
-            this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox7.Size = new System.Drawing.Size(223, 75);
             this.groupBox7.TabIndex = 36;
             this.groupBox7.TabStop = false;
@@ -10590,7 +10658,7 @@
             // 
             this.plC_NumBox3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox3.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox3.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox3.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox3.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox3.Name = "plC_NumBox3";
@@ -10615,7 +10683,7 @@
             this.plC_CheckBox1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox1.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox1.Location = new System.Drawing.Point(273, 98);
-            this.plC_CheckBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox1.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox1.Name = "plC_CheckBox1";
             this.plC_CheckBox1.Size = new System.Drawing.Size(191, 24);
             this.plC_CheckBox1.TabIndex = 200;
@@ -10633,9 +10701,9 @@
             // 
             this.groupBox6.Controls.Add(this.plC_NumBox_配藥完成藥籃亮燈延遲時間);
             this.groupBox6.Location = new System.Drawing.Point(20, 264);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox6.Size = new System.Drawing.Size(223, 75);
             this.groupBox6.TabIndex = 199;
             this.groupBox6.TabStop = false;
@@ -10645,7 +10713,7 @@
             // 
             this.plC_NumBox_配藥完成藥籃亮燈延遲時間.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox_配藥完成藥籃亮燈延遲時間.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox_配藥完成藥籃亮燈延遲時間.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox_配藥完成藥籃亮燈延遲時間.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox_配藥完成藥籃亮燈延遲時間.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox_配藥完成藥籃亮燈延遲時間.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox_配藥完成藥籃亮燈延遲時間.Name = "plC_NumBox_配藥完成藥籃亮燈延遲時間";
@@ -10670,7 +10738,7 @@
             this.plC_CheckBox_不檢查處方亮燈.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox_不檢查處方亮燈.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_不檢查處方亮燈.Location = new System.Drawing.Point(403, 16);
-            this.plC_CheckBox_不檢查處方亮燈.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_不檢查處方亮燈.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_不檢查處方亮燈.Name = "plC_CheckBox_不檢查處方亮燈";
             this.plC_CheckBox_不檢查處方亮燈.Size = new System.Drawing.Size(171, 24);
             this.plC_CheckBox_不檢查處方亮燈.TabIndex = 198;
@@ -10691,7 +10759,7 @@
             this.plC_CheckBox_氣送作業.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox_氣送作業.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_氣送作業.Location = new System.Drawing.Point(532, 59);
-            this.plC_CheckBox_氣送作業.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_氣送作業.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_氣送作業.Name = "plC_CheckBox_氣送作業";
             this.plC_CheckBox_氣送作業.Size = new System.Drawing.Size(111, 24);
             this.plC_CheckBox_氣送作業.TabIndex = 197;
@@ -10712,7 +10780,7 @@
             this.plC_CheckBox_配藥核對.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox_配藥核對.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_配藥核對.Location = new System.Drawing.Point(273, 59);
-            this.plC_CheckBox_配藥核對.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_配藥核對.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_配藥核對.Name = "plC_CheckBox_配藥核對";
             this.plC_CheckBox_配藥核對.Size = new System.Drawing.Size(111, 24);
             this.plC_CheckBox_配藥核對.TabIndex = 196;
@@ -10733,7 +10801,7 @@
             this.plC_CheckBox_勤務取藥.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox_勤務取藥.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_勤務取藥.Location = new System.Drawing.Point(403, 59);
-            this.plC_CheckBox_勤務取藥.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_勤務取藥.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_勤務取藥.Name = "plC_CheckBox_勤務取藥";
             this.plC_CheckBox_勤務取藥.Size = new System.Drawing.Size(111, 24);
             this.plC_CheckBox_勤務取藥.TabIndex = 195;
@@ -10754,7 +10822,7 @@
             this.plC_CheckBox_主機模式.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.plC_CheckBox_主機模式.ForeColor = System.Drawing.Color.Black;
             this.plC_CheckBox_主機模式.Location = new System.Drawing.Point(273, 16);
-            this.plC_CheckBox_主機模式.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_CheckBox_主機模式.Margin = new System.Windows.Forms.Padding(4);
             this.plC_CheckBox_主機模式.Name = "plC_CheckBox_主機模式";
             this.plC_CheckBox_主機模式.Size = new System.Drawing.Size(111, 24);
             this.plC_CheckBox_主機模式.TabIndex = 194;
@@ -10786,7 +10854,7 @@
             this.plC_RJ_Button_檢查病房有藥未過帳.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_檢查病房有藥未過帳.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_檢查病房有藥未過帳.Location = new System.Drawing.Point(791, 16);
-            this.plC_RJ_Button_檢查病房有藥未過帳.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_檢查病房有藥未過帳.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_檢查病房有藥未過帳.Name = "plC_RJ_Button_檢查病房有藥未過帳";
             this.plC_RJ_Button_檢查病房有藥未過帳.OFF_文字內容 = "檢查病房有藥未過帳";
             this.plC_RJ_Button_檢查病房有藥未過帳.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -10827,9 +10895,9 @@
             // 
             this.groupBox4.Controls.Add(this.plC_NumBox_病房提示亮燈);
             this.groupBox4.Location = new System.Drawing.Point(20, 180);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox4.Size = new System.Drawing.Size(223, 75);
             this.groupBox4.TabIndex = 37;
             this.groupBox4.TabStop = false;
@@ -10839,7 +10907,7 @@
             // 
             this.plC_NumBox_病房提示亮燈.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox_病房提示亮燈.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox_病房提示亮燈.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox_病房提示亮燈.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox_病房提示亮燈.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox_病房提示亮燈.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox_病房提示亮燈.Name = "plC_NumBox_病房提示亮燈";
@@ -10861,9 +10929,9 @@
             // 
             this.groupBox3.Controls.Add(this.plC_NumBox2);
             this.groupBox3.Location = new System.Drawing.Point(20, 99);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox3.Size = new System.Drawing.Size(223, 75);
             this.groupBox3.TabIndex = 36;
             this.groupBox3.TabStop = false;
@@ -10873,7 +10941,7 @@
             // 
             this.plC_NumBox2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox2.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox2.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox2.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox2.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox2.Name = "plC_NumBox2";
@@ -10895,9 +10963,9 @@
             // 
             this.groupBox2.Controls.Add(this.plC_NumBox1);
             this.groupBox2.Location = new System.Drawing.Point(20, 420);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(223, 75);
             this.groupBox2.TabIndex = 35;
             this.groupBox2.TabStop = false;
@@ -10907,7 +10975,7 @@
             // 
             this.plC_NumBox1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox1.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox1.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox1.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox1.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox1.Name = "plC_NumBox1";
@@ -10929,9 +10997,9 @@
             // 
             this.groupBox1.Controls.Add(this.plC_NumBox_開門異常時間);
             this.groupBox1.Location = new System.Drawing.Point(20, 16);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(223, 75);
             this.groupBox1.TabIndex = 34;
             this.groupBox1.TabStop = false;
@@ -10941,7 +11009,7 @@
             // 
             this.plC_NumBox_開門異常時間.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.plC_NumBox_開門異常時間.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox_開門異常時間.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_NumBox_開門異常時間.Margin = new System.Windows.Forms.Padding(4);
             this.plC_NumBox_開門異常時間.mBackColor = System.Drawing.SystemColors.Window;
             this.plC_NumBox_開門異常時間.mForeColor = System.Drawing.SystemColors.WindowText;
             this.plC_NumBox_開門異常時間.Name = "plC_NumBox_開門異常時間";
@@ -10966,9 +11034,9 @@
             this.tabPage1.Controls.Add(this.lowerMachine_Pane);
             this.tabPage1.Controls.Add(this.plC_UI_Init);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(636, 379);
+            this.tabPage1.Size = new System.Drawing.Size(475, 284);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "PLC";
             // 
@@ -10976,9 +11044,9 @@
             // 
             this.groupBox18.Controls.Add(this.rfiD_FX600_UI);
             this.groupBox18.Location = new System.Drawing.Point(1175, -8);
-            this.groupBox18.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox18.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox18.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox18.Size = new System.Drawing.Size(531, 250);
             this.groupBox18.TabIndex = 30;
             this.groupBox18.TabStop = false;
@@ -10988,7 +11056,7 @@
             // 
             this.rfiD_FX600_UI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rfiD_FX600_UI.Location = new System.Drawing.Point(8, 26);
-            this.rfiD_FX600_UI.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.rfiD_FX600_UI.Margin = new System.Windows.Forms.Padding(5);
             this.rfiD_FX600_UI.Name = "rfiD_FX600_UI";
             this.rfiD_FX600_UI.Size = new System.Drawing.Size(497, 197);
             this.rfiD_FX600_UI.TabIndex = 25;
@@ -10999,7 +11067,7 @@
             // lowerMachine_Pane
             // 
             this.lowerMachine_Pane.Location = new System.Drawing.Point(8, 8);
-            this.lowerMachine_Pane.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.lowerMachine_Pane.Margin = new System.Windows.Forms.Padding(5);
             this.lowerMachine_Pane.Name = "lowerMachine_Pane";
             this.lowerMachine_Pane.Size = new System.Drawing.Size(1159, 706);
             this.lowerMachine_Pane.TabIndex = 25;
@@ -11009,7 +11077,7 @@
             // 
             this.plC_UI_Init.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.plC_UI_Init.Location = new System.Drawing.Point(8, 721);
-            this.plC_UI_Init.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.plC_UI_Init.Margin = new System.Windows.Forms.Padding(5);
             this.plC_UI_Init.Name = "plC_UI_Init";
             this.plC_UI_Init.Size = new System.Drawing.Size(96, 31);
             this.plC_UI_Init.TabIndex = 26;
@@ -11029,9 +11097,9 @@
             this.tabPage4.BackColor = System.Drawing.Color.White;
             this.tabPage4.Controls.Add(this.rfiD_UI);
             this.tabPage4.Location = new System.Drawing.Point(4, 25);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(636, 379);
+            this.tabPage4.Size = new System.Drawing.Size(475, 284);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "RFID";
             // 
@@ -11047,14 +11115,14 @@
             this.rfiD_UI.IP_Adress = "0.0.0.0";
             this.rfiD_UI.Local_Port = "0";
             this.rfiD_UI.Location = new System.Drawing.Point(0, 0);
-            this.rfiD_UI.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.rfiD_UI.Margin = new System.Windows.Forms.Padding(5);
             this.rfiD_UI.Name = "rfiD_UI";
             this.rfiD_UI.Password = "user82822040";
             this.rfiD_UI.Port = ((uint)(3306u));
             this.rfiD_UI.RFID_Enable = "0";
             this.rfiD_UI.Server_IP_Adress = "0.0.0.0";
             this.rfiD_UI.Server_Port = "0";
-            this.rfiD_UI.Size = new System.Drawing.Size(636, 379);
+            this.rfiD_UI.Size = new System.Drawing.Size(475, 284);
             this.rfiD_UI.SSID = "";
             this.rfiD_UI.Station = "0";
             this.rfiD_UI.Subnet = "0.0.0.0";
@@ -11073,9 +11141,9 @@
             this.tabPage6.Controls.Add(this.plC_RJ_Button_Box_Index_Table_匯出);
             this.tabPage6.Controls.Add(this.plC_RJ_GroupBox9);
             this.tabPage6.Location = new System.Drawing.Point(4, 25);
-            this.tabPage6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage6.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(636, 379);
+            this.tabPage6.Size = new System.Drawing.Size(475, 284);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "BoxIndex";
             // 
@@ -11097,7 +11165,7 @@
             this.plC_RJ_Button_Box_Index_Table_刪除.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_Box_Index_Table_刪除.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_Box_Index_Table_刪除.Location = new System.Drawing.Point(584, 682);
-            this.plC_RJ_Button_Box_Index_Table_刪除.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_Box_Index_Table_刪除.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_Box_Index_Table_刪除.Name = "plC_RJ_Button_Box_Index_Table_刪除";
             this.plC_RJ_Button_Box_Index_Table_刪除.OFF_文字內容 = "刪除";
             this.plC_RJ_Button_Box_Index_Table_刪除.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -11151,7 +11219,7 @@
             this.plC_RJ_Button_Box_Index_Table_更新.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_Box_Index_Table_更新.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_Box_Index_Table_更新.Location = new System.Drawing.Point(391, 682);
-            this.plC_RJ_Button_Box_Index_Table_更新.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_Box_Index_Table_更新.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_Box_Index_Table_更新.Name = "plC_RJ_Button_Box_Index_Table_更新";
             this.plC_RJ_Button_Box_Index_Table_更新.OFF_文字內容 = "更新";
             this.plC_RJ_Button_Box_Index_Table_更新.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -11205,7 +11273,7 @@
             this.plC_RJ_Button_Box_Index_Table_匯入.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_Box_Index_Table_匯入.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_Box_Index_Table_匯入.Location = new System.Drawing.Point(197, 682);
-            this.plC_RJ_Button_Box_Index_Table_匯入.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_Box_Index_Table_匯入.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_Box_Index_Table_匯入.Name = "plC_RJ_Button_Box_Index_Table_匯入";
             this.plC_RJ_Button_Box_Index_Table_匯入.OFF_文字內容 = "匯入";
             this.plC_RJ_Button_Box_Index_Table_匯入.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -11259,7 +11327,7 @@
             this.plC_RJ_Button_Box_Index_Table_匯出.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_Box_Index_Table_匯出.Image_padding = new System.Windows.Forms.Padding(0);
             this.plC_RJ_Button_Box_Index_Table_匯出.Location = new System.Drawing.Point(4, 682);
-            this.plC_RJ_Button_Box_Index_Table_匯出.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_Button_Box_Index_Table_匯出.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_Button_Box_Index_Table_匯出.Name = "plC_RJ_Button_Box_Index_Table_匯出";
             this.plC_RJ_Button_Box_Index_Table_匯出.OFF_文字內容 = "匯出";
             this.plC_RJ_Button_Box_Index_Table_匯出.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14F);
@@ -11313,18 +11381,18 @@
             this.plC_RJ_GroupBox9.ContentsPanel.Name = "ContentsPanel";
             this.plC_RJ_GroupBox9.ContentsPanel.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_GroupBox9.ContentsPanel.ShadowSize = 0;
-            this.plC_RJ_GroupBox9.ContentsPanel.Size = new System.Drawing.Size(636, 638);
+            this.plC_RJ_GroupBox9.ContentsPanel.Size = new System.Drawing.Size(475, 638);
             this.plC_RJ_GroupBox9.ContentsPanel.TabIndex = 2;
             this.plC_RJ_GroupBox9.Dock = System.Windows.Forms.DockStyle.Top;
             this.plC_RJ_GroupBox9.GUID = "";
             this.plC_RJ_GroupBox9.Location = new System.Drawing.Point(0, 0);
-            this.plC_RJ_GroupBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plC_RJ_GroupBox9.Margin = new System.Windows.Forms.Padding(4);
             this.plC_RJ_GroupBox9.Name = "plC_RJ_GroupBox9";
             this.plC_RJ_GroupBox9.PannelBackColor = System.Drawing.Color.White;
             this.plC_RJ_GroupBox9.PannelBorderColor = System.Drawing.Color.SkyBlue;
             this.plC_RJ_GroupBox9.PannelBorderRadius = 5;
             this.plC_RJ_GroupBox9.PannelBorderSize = 2;
-            this.plC_RJ_GroupBox9.Size = new System.Drawing.Size(636, 675);
+            this.plC_RJ_GroupBox9.Size = new System.Drawing.Size(475, 675);
             this.plC_RJ_GroupBox9.TabIndex = 48;
             this.plC_RJ_GroupBox9.TitleBackColor = System.Drawing.Color.DeepSkyBlue;
             this.plC_RJ_GroupBox9.TitleBorderColor = System.Drawing.Color.PaleVioletRed;
@@ -11378,7 +11446,7 @@
             this.sqL_DataGridView_Box_Index_Table.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_Box_Index_Table.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_Box_Index_Table.Server = "127.0.0.0";
-            this.sqL_DataGridView_Box_Index_Table.Size = new System.Drawing.Size(636, 638);
+            this.sqL_DataGridView_Box_Index_Table.Size = new System.Drawing.Size(475, 638);
             this.sqL_DataGridView_Box_Index_Table.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_Box_Index_Table.TabIndex = 28;
             this.sqL_DataGridView_Box_Index_Table.TableName = "box_index_table";
@@ -11400,9 +11468,9 @@
             this.tabPage2.BackColor = System.Drawing.Color.White;
             this.tabPage2.Controls.Add(this.loginUI);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(636, 379);
+            this.tabPage2.Size = new System.Drawing.Size(475, 284);
             this.tabPage2.TabIndex = 3;
             this.tabPage2.Text = "權限設定";
             // 
@@ -11420,7 +11488,7 @@
             this.loginUI.Login_data_Port = ((uint)(3306u));
             this.loginUI.Login_data_Server = "localhost";
             this.loginUI.Login_data_UserName = "user";
-            this.loginUI.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.loginUI.Margin = new System.Windows.Forms.Padding(5);
             this.loginUI.Name = "loginUI";
             this.loginUI.Size = new System.Drawing.Size(1148, 802);
             this.loginUI.TabIndex = 2;
@@ -11430,9 +11498,9 @@
             this.tabPage19.BackColor = System.Drawing.Color.White;
             this.tabPage19.Controls.Add(this.tabControl1);
             this.tabPage19.Location = new System.Drawing.Point(4, 25);
-            this.tabPage19.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage19.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage19.Name = "tabPage19";
-            this.tabPage19.Size = new System.Drawing.Size(636, 379);
+            this.tabPage19.Size = new System.Drawing.Size(475, 284);
             this.tabPage19.TabIndex = 4;
             this.tabPage19.Text = "資料庫";
             // 
@@ -11441,19 +11509,19 @@
             this.tabControl1.Controls.Add(this.tabPage20);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(636, 379);
+            this.tabControl1.Size = new System.Drawing.Size(475, 284);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage20
             // 
             this.tabPage20.Controls.Add(this.sqL_DataGridView_雲端藥檔);
             this.tabPage20.Location = new System.Drawing.Point(4, 25);
-            this.tabPage20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage20.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage20.Name = "tabPage20";
-            this.tabPage20.Size = new System.Drawing.Size(628, 350);
+            this.tabPage20.Size = new System.Drawing.Size(467, 255);
             this.tabPage20.TabIndex = 0;
             this.tabPage20.Text = "雲端藥檔";
             this.tabPage20.UseVisualStyleBackColor = true;
@@ -11500,7 +11568,7 @@
             this.sqL_DataGridView_雲端藥檔.selectedRowBorderColor = System.Drawing.Color.Blue;
             this.sqL_DataGridView_雲端藥檔.selectedRowForeColor = System.Drawing.Color.White;
             this.sqL_DataGridView_雲端藥檔.Server = "localhost";
-            this.sqL_DataGridView_雲端藥檔.Size = new System.Drawing.Size(628, 700);
+            this.sqL_DataGridView_雲端藥檔.Size = new System.Drawing.Size(467, 700);
             this.sqL_DataGridView_雲端藥檔.SSLMode = MySql.Data.MySqlClient.MySqlSslMode.None;
             this.sqL_DataGridView_雲端藥檔.TabIndex = 147;
             this.sqL_DataGridView_雲端藥檔.UserName = "root";
@@ -11521,9 +11589,9 @@
             this.tabPage21.BackColor = System.Drawing.Color.White;
             this.tabPage21.Controls.Add(this.storageUI_EPD_266);
             this.tabPage21.Location = new System.Drawing.Point(4, 25);
-            this.tabPage21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage21.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage21.Name = "tabPage21";
-            this.tabPage21.Size = new System.Drawing.Size(636, 379);
+            this.tabPage21.Size = new System.Drawing.Size(475, 284);
             this.tabPage21.TabIndex = 5;
             this.tabPage21.Text = "EPD290";
             // 
@@ -11538,13 +11606,13 @@
             this.storageUI_EPD_266.IP_Adress = "0.0.0.0";
             this.storageUI_EPD_266.Local_Port = "0";
             this.storageUI_EPD_266.Location = new System.Drawing.Point(0, 0);
-            this.storageUI_EPD_266.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.storageUI_EPD_266.Margin = new System.Windows.Forms.Padding(5);
             this.storageUI_EPD_266.Name = "storageUI_EPD_266";
             this.storageUI_EPD_266.Password = "user82822040";
             this.storageUI_EPD_266.Port = ((uint)(3306u));
             this.storageUI_EPD_266.Server_IP_Adress = "0.0.0.0";
             this.storageUI_EPD_266.Server_Port = "0";
-            this.storageUI_EPD_266.Size = new System.Drawing.Size(636, 379);
+            this.storageUI_EPD_266.Size = new System.Drawing.Size(475, 284);
             this.storageUI_EPD_266.SSID = "";
             this.storageUI_EPD_266.Station = "0";
             this.storageUI_EPD_266.Subnet = "0.0.0.0";
@@ -11565,7 +11633,7 @@
             this.panel_系統頁面.Controls.Add(this.plC_RJ_ScreenButton5);
             this.panel_系統頁面.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_系統頁面.Location = new System.Drawing.Point(0, 0);
-            this.panel_系統頁面.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel_系統頁面.Margin = new System.Windows.Forms.Padding(4);
             this.panel_系統頁面.Name = "panel_系統頁面";
             this.panel_系統頁面.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel_系統頁面.Size = new System.Drawing.Size(1612, 65);
@@ -11810,19 +11878,19 @@
             this.暫存區.AutoScroll = true;
             this.暫存區.BackColor = System.Drawing.SystemColors.Window;
             this.暫存區.Location = new System.Drawing.Point(4, 25);
-            this.暫存區.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.暫存區.Margin = new System.Windows.Forms.Padding(4);
             this.暫存區.Name = "暫存區";
-            this.暫存區.Size = new System.Drawing.Size(2227, 1265);
+            this.暫存區.Size = new System.Drawing.Size(1612, 1113);
             this.暫存區.TabIndex = 3;
             this.暫存區.Text = "暫存區";
             // 
             // plC_AlarmFlow1
             // 
             this.plC_AlarmFlow1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.plC_AlarmFlow1.Location = new System.Drawing.Point(0, 1134);
-            this.plC_AlarmFlow1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.plC_AlarmFlow1.Location = new System.Drawing.Point(0, 1142);
+            this.plC_AlarmFlow1.Margin = new System.Windows.Forms.Padding(5);
             this.plC_AlarmFlow1.Name = "plC_AlarmFlow1";
-            this.plC_AlarmFlow1.Size = new System.Drawing.Size(1924, 41);
+            this.plC_AlarmFlow1.Size = new System.Drawing.Size(1924, 33);
             this.plC_AlarmFlow1.TabIndex = 0;
             this.plC_AlarmFlow1.Visible = false;
             this.plC_AlarmFlow1.捲動速度 = 200;
@@ -11863,74 +11931,6 @@
             this.pannel_Box1.TabIndex = 0;
             this.pannel_Box1.WardFont = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.plC_NumBox4);
-            this.groupBox8.Location = new System.Drawing.Point(251, 503);
-            this.groupBox8.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox8.Size = new System.Drawing.Size(223, 75);
-            this.groupBox8.TabIndex = 202;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "格子Y寬度";
-            // 
-            // plC_NumBox4
-            // 
-            this.plC_NumBox4.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.plC_NumBox4.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.plC_NumBox4.mBackColor = System.Drawing.SystemColors.Window;
-            this.plC_NumBox4.mForeColor = System.Drawing.SystemColors.WindowText;
-            this.plC_NumBox4.Name = "plC_NumBox4";
-            this.plC_NumBox4.ReadOnly = false;
-            this.plC_NumBox4.Size = new System.Drawing.Size(149, 41);
-            this.plC_NumBox4.TabIndex = 0;
-            this.plC_NumBox4.Value = 0;
-            this.plC_NumBox4.字元長度 = MyUI.PLC_NumBox.WordLengthEnum.單字元;
-            this.plC_NumBox4.密碼欄位 = false;
-            this.plC_NumBox4.寫入元件位置 = "D3007";
-            this.plC_NumBox4.小數點位置 = 0;
-            this.plC_NumBox4.微調數值 = 0;
-            this.plC_NumBox4.讀取元件位置 = "D3007";
-            this.plC_NumBox4.音效 = true;
-            this.plC_NumBox4.顯示微調按鈕 = false;
-            this.plC_NumBox4.顯示螢幕小鍵盤 = true;
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.plC_NumBox5);
-            this.groupBox9.Location = new System.Drawing.Point(20, 503);
-            this.groupBox9.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox9.Size = new System.Drawing.Size(223, 75);
-            this.groupBox9.TabIndex = 201;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "格子X寬度";
-            // 
-            // plC_NumBox5
-            // 
-            this.plC_NumBox5.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.plC_NumBox5.Location = new System.Drawing.Point(8, 26);
-            this.plC_NumBox5.Margin = new System.Windows.Forms.Padding(4);
-            this.plC_NumBox5.mBackColor = System.Drawing.SystemColors.Window;
-            this.plC_NumBox5.mForeColor = System.Drawing.SystemColors.WindowText;
-            this.plC_NumBox5.Name = "plC_NumBox5";
-            this.plC_NumBox5.ReadOnly = false;
-            this.plC_NumBox5.Size = new System.Drawing.Size(149, 41);
-            this.plC_NumBox5.TabIndex = 0;
-            this.plC_NumBox5.Value = 0;
-            this.plC_NumBox5.字元長度 = MyUI.PLC_NumBox.WordLengthEnum.單字元;
-            this.plC_NumBox5.密碼欄位 = false;
-            this.plC_NumBox5.寫入元件位置 = "D3006";
-            this.plC_NumBox5.小數點位置 = 0;
-            this.plC_NumBox5.微調數值 = 0;
-            this.plC_NumBox5.讀取元件位置 = "D3006";
-            this.plC_NumBox5.音效 = true;
-            this.plC_NumBox5.顯示微調按鈕 = false;
-            this.plC_NumBox5.顯示螢幕小鍵盤 = true;
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -11940,7 +11940,7 @@
             this.Controls.Add(this.panel_Main);
             this.Controls.Add(this.plC_AlarmFlow1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_Form";
             this.Text = "勤務傳送系統";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -12069,6 +12069,8 @@
             this.plC_ScreenPage_系統頁面.ResumeLayout(false);
             this.tabPage22.ResumeLayout(false);
             this.tabPage22.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
@@ -12087,8 +12089,6 @@
             this.tabPage20.ResumeLayout(false);
             this.tabPage21.ResumeLayout(false);
             this.panel_系統頁面.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

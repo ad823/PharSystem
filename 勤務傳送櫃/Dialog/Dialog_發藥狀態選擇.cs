@@ -44,7 +44,7 @@ namespace 勤務傳送系統
                 }
             }
 
-            panel_不發藥.BackgroundImage = flag_不發藥 ? global::勤務傳送系統.Properties.Resources.發藥ON : global::勤務傳送系統.Properties.Resources.發藥OFF;
+            panel_不發藥.BackgroundImage = flag_不發藥 ? global::勤務傳送系統.Properties.Resources.發藥ON1 : global::勤務傳送系統.Properties.Resources.發藥OFF;
             panel_大瓶藥.BackgroundImage = flag_大瓶藥 ? global::勤務傳送系統.Properties.Resources.大型點滴ON : global::勤務傳送系統.Properties.Resources.大型點滴OFF;
 
         }
@@ -57,7 +57,7 @@ namespace 勤務傳送系統
         private void Panel_不發藥_Click(object sender, EventArgs e)
         {
             flag_不發藥 = !flag_不發藥;
-            panel_不發藥.BackgroundImage = flag_不發藥 ? global::勤務傳送系統.Properties.Resources.發藥ON : global::勤務傳送系統.Properties.Resources.發藥OFF;
+            panel_不發藥.BackgroundImage = flag_不發藥 ? global::勤務傳送系統.Properties.Resources.發藥ON1 : global::勤務傳送系統.Properties.Resources.發藥OFF;
         }
 
         private void Dialog_發藥狀態選擇_FormClosing(object sender, FormClosingEventArgs e)

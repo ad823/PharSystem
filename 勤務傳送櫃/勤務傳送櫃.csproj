@@ -362,6 +362,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="awmce-q6d5v-001.ico" />
+    <None Include="Resources\發藥ON1.png" />
     <None Include="Resources\發藥ON.png" />
     <None Include="Resources\發藥OFF.png" />
     <None Include="Resources\大型點滴ON.png" />

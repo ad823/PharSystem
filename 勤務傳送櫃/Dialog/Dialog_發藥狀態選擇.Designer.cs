@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.plC_RJ_Button_確認 = new MyUI.PLC_RJ_Button();
-            this.panel_不發藥 = new System.Windows.Forms.Panel();
             this.panel_大瓶藥 = new System.Windows.Forms.Panel();
+            this.panel_不發藥 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // plC_RJ_Button_確認
@@ -51,7 +51,8 @@
             this.plC_RJ_Button_確認.GUID = "";
             this.plC_RJ_Button_確認.Icon = System.Windows.Forms.MessageBoxIcon.Warning;
             this.plC_RJ_Button_確認.Image_padding = new System.Windows.Forms.Padding(0);
-            this.plC_RJ_Button_確認.Location = new System.Drawing.Point(4, 300);
+            this.plC_RJ_Button_確認.Location = new System.Drawing.Point(4, 376);
+            this.plC_RJ_Button_確認.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plC_RJ_Button_確認.Name = "plC_RJ_Button_確認";
             this.plC_RJ_Button_確認.OFF_文字內容 = "確認";
             this.plC_RJ_Button_確認.OFF_文字字體 = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -68,7 +69,7 @@
             this.plC_RJ_Button_確認.ShadowColor = System.Drawing.Color.DimGray;
             this.plC_RJ_Button_確認.ShadowSize = 3;
             this.plC_RJ_Button_確認.ShowLoadingForm = false;
-            this.plC_RJ_Button_確認.Size = new System.Drawing.Size(594, 82);
+            this.plC_RJ_Button_確認.Size = new System.Drawing.Size(795, 102);
             this.plC_RJ_Button_確認.State = false;
             this.plC_RJ_Button_確認.TabIndex = 133;
             this.plC_RJ_Button_確認.Text = "確認";
@@ -86,33 +87,36 @@
             this.plC_RJ_Button_確認.顯示 = false;
             this.plC_RJ_Button_確認.顯示狀態 = false;
             // 
-            // panel_不發藥
-            // 
-            this.panel_不發藥.BackgroundImage = global::勤務傳送系統.Properties.Resources.發藥OFF;
-            this.panel_不發藥.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_不發藥.Location = new System.Drawing.Point(42, 41);
-            this.panel_不發藥.Name = "panel_不發藥";
-            this.panel_不發藥.Size = new System.Drawing.Size(237, 231);
-            this.panel_不發藥.TabIndex = 134;
-            // 
             // panel_大瓶藥
             // 
             this.panel_大瓶藥.BackgroundImage = global::勤務傳送系統.Properties.Resources.大型點滴OFF;
             this.panel_大瓶藥.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_大瓶藥.Location = new System.Drawing.Point(315, 41);
+            this.panel_大瓶藥.Location = new System.Drawing.Point(420, 51);
+            this.panel_大瓶藥.Margin = new System.Windows.Forms.Padding(4);
             this.panel_大瓶藥.Name = "panel_大瓶藥";
-            this.panel_大瓶藥.Size = new System.Drawing.Size(237, 231);
+            this.panel_大瓶藥.Size = new System.Drawing.Size(316, 289);
             this.panel_大瓶藥.TabIndex = 135;
+            // 
+            // panel_不發藥
+            // 
+            this.panel_不發藥.BackgroundImage = global::勤務傳送系統.Properties.Resources.發藥OFF;
+            this.panel_不發藥.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_不發藥.Location = new System.Drawing.Point(56, 51);
+            this.panel_不發藥.Margin = new System.Windows.Forms.Padding(4);
+            this.panel_不發藥.Name = "panel_不發藥";
+            this.panel_不發藥.Size = new System.Drawing.Size(316, 289);
+            this.panel_不發藥.TabIndex = 134;
             // 
             // Dialog_發藥狀態選擇
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(602, 386);
+            this.ClientSize = new System.Drawing.Size(803, 482);
             this.Controls.Add(this.panel_大瓶藥);
             this.Controls.Add(this.panel_不發藥);
             this.Controls.Add(this.plC_RJ_Button_確認);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Dialog_發藥狀態選擇";
             this.ResumeLayout(false);
 
