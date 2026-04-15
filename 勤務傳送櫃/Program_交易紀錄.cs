@@ -200,44 +200,57 @@ namespace 勤務傳送系統
         }
         private void SqL_DataGridView_交易記錄查詢_DataGridRowsChangeRefEvent(ref List<object[]> RowsList)
         {
-          
-            List<object[]> RowsList_buf = new List<object[]>();
-           
-            if(plC_CheckBox_交易記錄查詢_顯示已領用.Checked == true)
+
+            List<object[]> RowsList_buf = RowsList.ToList();
+
+            // 已領用 / 未領用
+            if (plC_CheckBox_交易記錄查詢_顯示已領用.Checked && !plC_CheckBox_交易記錄查詢_顯示未領用.Checked)
             {
-                List<object[]> temp_buf = (from temp in RowsList
-                                           where temp[(int)enum_交易記錄查詢資料.領用時間].ToDateString() != "1999/01/01"
-                                           select temp).ToList();
-                RowsList_buf.LockAdd(temp_buf);
+                RowsList_buf = RowsList_buf
+                    .Where(temp => temp[(int)enum_交易記錄查詢資料.領用時間].ToDateString() != "1999/01/01")
+                    .ToList();
             }
-            if (plC_CheckBox_交易記錄查詢_顯示未領用.Checked == true)
+            else if (!plC_CheckBox_交易記錄查詢_顯示已領用.Checked && plC_CheckBox_交易記錄查詢_顯示未領用.Checked)
             {
-                List<object[]> temp_buf = (from temp in RowsList
-                                           where temp[(int)enum_交易記錄查詢資料.領用時間].ToDateString() == "1999/01/01"
-                                           select temp).ToList();
-                RowsList_buf.LockAdd(temp_buf);
+                RowsList_buf = RowsList_buf
+                    .Where(temp => temp[(int)enum_交易記錄查詢資料.領用時間].ToDateString() == "1999/01/01")
+                    .ToList();
             }
+            // 如果兩個都勾，就不過濾
+            // 如果兩個都沒勾，可視需求決定是否清空
+            else if (!plC_CheckBox_交易記錄查詢_顯示已領用.Checked && !plC_CheckBox_交易記錄查詢_顯示未領用.Checked)
+            {
+                RowsList_buf = new List<object[]>();
+            }
+
+            // 顯示細節
             if (plC_CheckBox_交易記錄查詢_顯示細節.Checked == false)
             {
-                RowsList_buf = RowsList_buf.GetRows((int)enum_交易記錄查詢資料.動作, enum_交易記錄查詢動作.藥袋刷入.GetEnumName());
+                RowsList_buf = RowsList_buf
+                    .Where(temp => temp[(int)enum_交易記錄查詢資料.動作].ToString() == enum_交易記錄查詢動作.藥袋刷入.GetEnumName())
+                    .ToList();
             }
-            if(plC_CheckBox_交易記錄查詢_顯示要發藥.Checked == true)
+
+            // 要發藥 / 不發藥
+            if (plC_CheckBox_交易記錄查詢_顯示要發藥.Checked && !plC_CheckBox_交易記錄查詢_顯示不發藥.Checked)
             {
-                List<object[]> temp_buf = (from temp in RowsList
-                                           where temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == false
-                                           select temp).ToList();
-                RowsList_buf.LockAdd(temp_buf);
+                RowsList_buf = RowsList_buf
+                    .Where(temp => temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == false)
+                    .ToList();
             }
-            if (plC_CheckBox_交易記錄查詢_顯示要發藥.Checked == false)
+            else if (!plC_CheckBox_交易記錄查詢_顯示要發藥.Checked && plC_CheckBox_交易記錄查詢_顯示不發藥.Checked)
             {
-                List<object[]> temp_buf = (from temp in RowsList
-                                           where temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == true
-                                           select temp).ToList();
-                RowsList_buf.LockAdd(temp_buf);
+                RowsList_buf = RowsList_buf
+                    .Where(temp => temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == true)
+                    .ToList();
+            }
+            else if (!plC_CheckBox_交易記錄查詢_顯示要發藥.Checked && !plC_CheckBox_交易記錄查詢_顯示不發藥.Checked)
+            {
+                RowsList_buf = new List<object[]>();
             }
             RowsList_buf.Sort(new ICP_交易記錄查詢());
             RowsList = RowsList_buf;
-           
+
         }
         private void SqL_DataGridView_交易記錄查詢_DataGridRefreshEvent()
         {
@@ -246,7 +259,7 @@ namespace 勤務傳送系統
             for (int i = 0; i < this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows.Count; i++)
             {
                 date = this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].Cells[enum_交易記錄查詢資料.領用時間.GetEnumName()].Value.ToString();
-                if(date == "1999-01-01 00:00:00")
+                if(date.Replace("/","-") == "1999-01-01 00:00:00")
                 {
                     this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].Cells[enum_交易記錄查詢資料.領用時間.GetEnumName()].Value = "-";
                     this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
