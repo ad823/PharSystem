@@ -1715,9 +1715,18 @@ namespace HIS_WebApi
             for (int i = 0; i < contents.Count; i++)
             {
                 inv_Combinelist_Stock_Classes_buf = keyValuePairs_inv_Combinelist_Stock_Classes.SortDictionaryByCode(contents[i].藥品碼);
+                if (inv_Combinelist_Stock_Classes_buf.Count == 0) 
+                    inv_Combinelist_Stock_Classes_buf = keyValuePairs_inv_Combinelist_Stock_Classes.SortDictionaryByCode(contents[i].料號);
                 inv_Combinelist_price_Classes_buf = keyValuePairs_inv_Combinelist_price_Classes.SortDictionaryByCode(contents[i].藥品碼);
+                if (inv_Combinelist_price_Classes_buf.Count == 0)
+                    inv_Combinelist_price_Classes_buf = keyValuePairs_inv_Combinelist_price_Classes.SortDictionaryByCode(contents[i].料號);
                 inv_Combinelist_note_Classes_buf = keyValuePairs_inv_Combinelist_note_Classes.SortDictionaryByCode(contents[i].藥品碼);
+                if (inv_Combinelist_note_Classes_buf.Count == 0)
+                    inv_Combinelist_note_Classes_buf = keyValuePairs_inv_Combinelist_note_Classes.SortDictionaryByCode(contents[i].料號);
                 inv_Combinelist_review_Classes_buf = keyValuePairs_inv_Combinelist_review_Classes.SortDictionaryByCode(contents[i].藥品碼);
+                if (inv_Combinelist_review_Classes_buf.Count == 0)
+                    inv_Combinelist_review_Classes_buf = keyValuePairs_inv_Combinelist_review_Classes.SortDictionaryByCode(contents[i].料號);
+
                 medClasses_cloud_buf = keyValuePairs_med_cloud.SortDictionaryByCode(contents[i].藥品碼);
                 if (medClasses_cloud_buf.Count > 0)
                 {

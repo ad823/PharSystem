@@ -405,14 +405,12 @@ namespace HIS_WebApi
                 textVision.操作者姓名 = textVisionClasses[0].操作者姓名;
                 textVision.圖片 = textVisionClasses[0].圖片;
                 textVision.PRI_KEY = $"{textVision.驗收單號}_{textVision.單號}";
+                textVision = EditExpirydate(textVision);
                 if (textVision.效期.Check_Date_String() == false)
                 {
                     textVision.效期 = DateTime.MinValue.ToDateTimeString();
                 }
-                else
-                {
-                    textVision = EditExpirydate(textVision);
-                }
+                
                 object[] update_text = textVision.ClassToSQL<textVisionClass, enum_textVision>();
                 sQLControl_textVision.UpdateByDefulteExtra(null, update_text);
                 //if (textVision.效期.StringIsEmpty())
