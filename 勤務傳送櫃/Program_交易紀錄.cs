@@ -221,6 +221,20 @@ namespace 勤務傳送系統
             {
                 RowsList_buf = RowsList_buf.GetRows((int)enum_交易記錄查詢資料.動作, enum_交易記錄查詢動作.藥袋刷入.GetEnumName());
             }
+            if(plC_CheckBox_交易記錄查詢_顯示要發藥.Checked == true)
+            {
+                List<object[]> temp_buf = (from temp in RowsList
+                                           where temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == false
+                                           select temp).ToList();
+                RowsList_buf.LockAdd(temp_buf);
+            }
+            if (plC_CheckBox_交易記錄查詢_顯示要發藥.Checked == false)
+            {
+                List<object[]> temp_buf = (from temp in RowsList
+                                           where temp[(int)enum_交易記錄查詢資料.備註].ToString().Contains("[不發藥]") == true
+                                           select temp).ToList();
+                RowsList_buf.LockAdd(temp_buf);
+            }
             RowsList_buf.Sort(new ICP_交易記錄查詢());
             RowsList = RowsList_buf;
            
@@ -235,6 +249,8 @@ namespace 勤務傳送系統
                 if(date == "1999-01-01 00:00:00")
                 {
                     this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].Cells[enum_交易記錄查詢資料.領用時間.GetEnumName()].Value = "-";
+                    this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
+                    this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.ForeColor = Color.Black;
                 }
 
                 動作 = this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].Cells[(int)enum_交易記錄查詢資料.動作].Value.ToString();
