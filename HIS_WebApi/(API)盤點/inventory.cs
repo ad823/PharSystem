@@ -1182,6 +1182,8 @@ namespace HIS_WebApi
                 string medGroup = GetVal("medGroup") ?? "";
                 string control = GetVal("control") ?? "";
                 string medType = GetVal("medType") ?? "";
+                string evdInv = GetVal("evdInv") ?? "";
+
                 GET_init(returnData);
 
 
