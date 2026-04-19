@@ -750,25 +750,20 @@ namespace HIS_WebApi
         /// <returns></returns>
         [Route("get_evdInv")]
         [HttpPost]
-        public string get_evdInv([FromBody] returnData returnData)
+        public async Task<string> get_evdInv([FromBody] returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "get_evdInv";
             try
             {
-                returnData.RequestUrl = Method.GetRequestPath(HttpContext, includeQuery: false);
-
-
 
                 (string Server, string DB, string UserName, string Password, uint Port) = HIS_WebApi.Method.GetServerInfo("Main", "網頁", "藥檔資料");
                 string TableName = "med_config";
                 SQLControl sQLControl_med_config = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
-                List<object[]> list_med_config = new List<object[]>();
-                string command = $"select * from {DB}.{TableName} where '每日盤點';";
-                DataTable dataTable = sQLControl_med_config.WtrteCommandAndExecuteReader(command);
-                list_med_config = dataTable.DataTableToRowList();
+                
+                string command = $"select * from {DB}.{TableName} where (每日盤點 <> '' OR 每日盤點 IS NOT NULL);";
+                List<object[]> list_med_config = await sQLControl_med_config.WriteCommandAsync(command);
                 List<medConfigClass> medConfigClasses = list_med_config.SQLToClass<medConfigClass, enum_medConfig>();
-
 
                 returnData.Code = 200;
                 returnData.TimeTaken = $"{myTimerBasic}";
@@ -790,6 +785,14 @@ namespace HIS_WebApi
             List<Table> tables = new List<Table>();
             tables.Add(MethodClass.CheckCreatTable(sys_serverSettingClass, new enum_medConfig()));
             return tables.JsonSerializationt(true);
+        }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<returnData> get_evdInv()
+        {
+            returnData returnData = new returnData();
+            string result = await get_evdInv(returnData);
+            returnData = result.JsonDeserializet<returnData>();
+            return returnData;
         }
 
     }

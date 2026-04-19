@@ -537,6 +537,28 @@ namespace HIS_DB_Lib
                 return;
             }
         }
+        static public returnData creat_lock_by_IC_SN(string API_Server, string IC_SN)
+        {
+            string url = $"{API_Server}/api/inventory/creat_lock_by_IC_SN";
+
+            returnData returnData = new returnData();
+            returnData.Value = IC_SN;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
+        static public returnData creat_lock_by_IC_SN(string API_Server, List<string> IC_SN)
+        {
+            string url = $"{API_Server}/api/inventory/creat_lock_by_IC_SN";
+
+            returnData returnData = new returnData();
+            returnData.Value = string.Join(";", IC_SN);
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
         static public returnData creat_evd_auto_add(string API_Server, creat _creat, string valueAry)
         {
             string url = $"{API_Server}/api/inventory/creat_evd_auto_add";
@@ -549,7 +571,17 @@ namespace HIS_DB_Lib
             returnData = json_out.JsonDeserializet<returnData>();
             return returnData;
         }
+        static public returnData update_content(string API_Server, List<string> EvdInv)
+        {
+            string url = $"{API_Server}/api/inv_daily/update_content";
 
+            returnData returnData = new returnData();
+            returnData.Value = string.Join(";", EvdInv);
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData = json_out.JsonDeserializet<returnData>();
+            return returnData;
+        }
     }
 
   
