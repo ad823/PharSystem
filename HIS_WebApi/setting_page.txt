@@ -328,6 +328,14 @@
             "value_type": "checkbox",
             "option_str": "",
             "value_db": "True"
+        },
+        {
+            "page_name": "inventory_daily_report",
+            "cht": "每日盤點報表功能開啟",
+            "name": "daily_report",
+            "value_type": "checkbox",
+            "option_str": "",
+            "value_db": "False"
         }
 
         
