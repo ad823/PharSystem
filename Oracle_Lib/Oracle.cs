@@ -28,6 +28,15 @@ namespace Oracle_Lib
             Password = password;
             Port = port;
         }
+        public ORCControl(string server, string serviceName, string owner, string userName, string password, int port)
+        {
+            Server = server;
+            ServiceName = serviceName;
+            Owner = owner;
+            UserName = userName;
+            Password = password;
+            Port = port;
+        }
 
         // 按你指定的格式組出連線字串
         public string conn_str =>

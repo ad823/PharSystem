@@ -339,6 +339,22 @@ namespace HIS_DB_Lib
             Console.WriteLine($"[{returnData_out.Method}]:{returnData_out.Result}");
             return;
         }
+        static public returnData delete_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
+        {
+            string url = $"{API_Server}/api/drugStotreDistribution/delete_by_guid";
+
+            List<string> GUID = drugStotreDistributionClasses.Select(x => x.GUID).ToList();
+            returnData returnData = new returnData();
+      
+            returnData.ValueAry.Add(string.Join(";", GUID));
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+
+           
+            return returnData_out;
+        }
+
         static public returnData update_by_guid(string API_Server, List<drugStotreDistributionClass> drugStotreDistributionClasses)
         {
             string url = $"{API_Server}/api/drugStotreDistribution/update_by_guid";
