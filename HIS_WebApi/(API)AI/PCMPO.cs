@@ -2432,7 +2432,7 @@ namespace HIS_WebApi
             {
                 textVisionClass.效期 = "2" + textVisionClass.效期; // 轉為 2025/08/16
             }
-            string[] formats = { "MM/dd/yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "M/d/yyyy", "yyyy.MM.dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd","yyyyMMdd" }; // 可擴展格式
+            string[] formats = { "MM/dd/yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "M/d/yyyy", "yyyy.MM.dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd", "yyyy/M/d", "yyyyMMdd" }; // 可擴展格式
 
             if (DateTime.TryParseExact(textVisionClass.效期, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
