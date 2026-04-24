@@ -1083,11 +1083,13 @@ namespace 調劑台管理系統
 
             // 將所有結果加入 list_value
             if (taskStorages.Result != null) list_value.Add(taskStorages.Result);// storages
-            if (taskBoxes.Result != null) list_value.Add(taskBoxes.Result); // boxes
+            if (taskBoxes.Result != null)
+            {
+                list_value.AddRange(taskBoxes.Result.GetAllBoxes()); // boxes
+            }
             if (taskBoxes1020.Result != null) list_value.Add(taskBoxes1020.Result); // boxes_1020
             if (taskPannels.Result != null) list_value.Add(taskPannels.Result); // pannels
-            if (taskRowsDevices.Result != null) list_value.Add(taskRowsDevices.Result); // rowsDevices
-            if (taskRFIDDevices.Result != null) list_value.Add(taskRFIDDevices.Result); // rFIDDevices
+            if (taskRowsDevices.Result != null) list_value.AddRange(taskRowsDevices.Result.GetAllRowsDevices()); // rowsDevices
 
             return list_value;
         }
