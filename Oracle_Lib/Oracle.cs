@@ -37,10 +37,24 @@ namespace Oracle_Lib
             Password = password;
             Port = port;
         }
+        public ORCControl(string server, string serviceName, string userName, string password, int port)
+        {
+            Server = server;
+            ServiceName = serviceName;
+            UserName = userName;
+            Password = password;
+            Port = port;
+        }
 
         // 按你指定的格式組出連線字串
+        //public string conn_str =>
+        //     $"Data Source={Server}:{Port}/{ServiceName};User ID={UserName};Password={Password};";
+
         public string conn_str =>
-             $"Data Source={Server}:{Port}/{ServiceName};User ID={UserName};Password={Password};";
+            $"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={Server})(PORT={Port}))(CONNECT_DATA=(SERVICE_NAME={ServiceName})));"
+          + $"User ID={UserName};"
+          + $"Password={Password};"
+          + $"Pooling=true;Min Pool Size=5;Max Pool Size=80;Connection Lifetime=600;Connection Timeout=10;";
 
         public string[] GetAllColumn_Name()
         {
