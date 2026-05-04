@@ -3122,6 +3122,35 @@ namespace batch_StackDataAccounting
         }
 
 
+        static public void Function_取藥堆疊資料_刷新面板(string 藥品碼)
+        {
+            Function_取藥堆疊資料_刷新面板(藥品碼, -1);
+        }
+        static public void Function_取藥堆疊資料_刷新面板(string 藥品碼, int 庫存)
+        {
+            List<object[]> list_value = sQLControl_取藥堆疊母資料.GetRowsByDefult(null ,(int)enum_取藥堆疊母資料.藥品碼, 藥品碼);
+            list_value = list_value.GetRows((int)enum_取藥堆疊母資料.調劑台名稱, "刷新面板");
+            List<object[]> list_value_add = new List<object[]>();
+            if (list_value.Count == 0)
+            {
+                takeMedicineStackClass takeMedicineStackClass = new takeMedicineStackClass();
+                takeMedicineStackClass.GUID = Guid.NewGuid().ToString();
+                takeMedicineStackClass.藥品碼 = 藥品碼;
+                takeMedicineStackClass.動作 = enum_交易記錄查詢動作.None.GetEnumName();
+                takeMedicineStackClass.狀態 = enum_取藥堆疊母資料_狀態.None.GetEnumName();
+                takeMedicineStackClass.操作時間 = DateTime.Now.ToDateTimeString_6();
+                takeMedicineStackClass.開方時間 = DateTime.Now.ToDateTimeString_6();
+                takeMedicineStackClass.調劑台名稱 = "刷新面板";
+                if (庫存 != -1) takeMedicineStackClass.庫存量 = 庫存.ToString();
+                object[] value = takeMedicineStackClass.ClassToSQL<takeMedicineStackClass, enum_取藥堆疊母資料>();
+                value[(int)enum_取藥堆疊母資料.動作] = enum_交易記錄查詢動作.None.GetEnumName();
+                value[(int)enum_取藥堆疊母資料.狀態] = enum_取藥堆疊母資料_狀態.None.GetEnumName();
+                list_value_add.Add(value);
+                Console.WriteLine($"{takeMedicineStackClass.JsonSerializationt(true)}");
+            }
+            if (list_value_add.Count > 0) sQLControl_取藥堆疊母資料.AddRows(null, list_value_add);
+        }
+
         static public void Function_從SQL取得儲位到入賬資料(string 藥品碼)
         {
             List<object> list_value = new List<object>();
@@ -3410,9 +3439,12 @@ namespace batch_StackDataAccounting
             list_取藥堆疊母資料 = sQLControl_取藥堆疊母資料.GetAllRows(null);
             list_取藥堆疊母資料 = (from temp in list_取藥堆疊母資料
                             where temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.無儲位.GetEnumName()
-                            || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.庫存不足.GetEnumName()
-                            || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.已領用過.GetEnumName()
-                            || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.入賬完成.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.庫存不足.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.已領用過.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.DC處方.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.未授權.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.入賬完成.GetEnumName()
+                                  || temp[(int)enum_取藥堆疊母資料.狀態].ObjectToString() == enum_取藥堆疊母資料_狀態.無可匹配數量.GetEnumName()
                             select temp).ToList();
             List<object[]> list_取藥堆疊母資料_delete = new List<object[]>();
             int 處方存在時間_temp = 處方存在時間 / 1000;
@@ -3426,7 +3458,7 @@ namespace batch_StackDataAccounting
                 {
                     Console.WriteLine($"藥碼:{code} 處方時間到達 $ ({ts.TotalSeconds} >= {處方存在時間_temp})");
                     list_取藥堆疊母資料_delete.Add(list_取藥堆疊母資料[i]);
-
+                    Function_取藥堆疊資料_刷新面板(code);
                 }
             }
             if (list_取藥堆疊母資料_delete.Count > 0) sQLControl_取藥堆疊母資料.DeleteExtra(null, list_取藥堆疊母資料_delete);
