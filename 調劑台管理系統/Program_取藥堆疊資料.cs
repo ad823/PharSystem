@@ -1067,9 +1067,10 @@ namespace 調劑台管理系統
             // *****************************************************
             else if (str_TYPE == DeviceType.EPD266.GetEnumName() || str_TYPE == DeviceType.EPD266_lock.GetEnumName()
                  || str_TYPE == DeviceType.EPD290.GetEnumName() || str_TYPE == DeviceType.EPD290_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD290G.GetEnumName() || str_TYPE == DeviceType.EPD290G_lock.GetEnumName()
                  || str_TYPE == DeviceType.EPD420.GetEnumName() || str_TYPE == DeviceType.EPD420_lock.GetEnumName()
-                 || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName()
                  || str_TYPE == DeviceType.EPD420G.GetEnumName() || str_TYPE == DeviceType.EPD420G_lock.GetEnumName()
+                 || str_TYPE == DeviceType.EPD213.GetEnumName() || str_TYPE == DeviceType.EPD213_lock.GetEnumName()  
                  || str_TYPE == DeviceType.EPD360E.GetEnumName() || str_TYPE == DeviceType.EPD360E_lock.GetEnumName())
             {
                 Logger.Log("→ 設備類型：EPD266 / 290 / 420 / 213 / 360E 系列");
@@ -4269,6 +4270,7 @@ namespace 調劑台管理系統
             }
             for (int i = 0; i < list_儲位刷新_藥品碼.Count; i++)
             {
+                Function_從SQL取得儲位到本地資料(list_儲位刷新_藥品碼[i]);
                 Function_儲位刷新(list_儲位刷新_藥品碼[i]);
             }
 

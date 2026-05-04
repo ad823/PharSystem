@@ -2803,6 +2803,7 @@ namespace 調劑台管理系統
                     if (device.DeviceType == DeviceType.EPD213 || device.DeviceType == DeviceType.EPD213_lock
                      || device.DeviceType == DeviceType.EPD266 || device.DeviceType == DeviceType.EPD266_lock
                      || device.DeviceType == DeviceType.EPD290 || device.DeviceType == DeviceType.EPD290_lock
+                     || device.DeviceType == DeviceType.EPD290G || device.DeviceType == DeviceType.EPD290G_lock
                      || device.DeviceType == DeviceType.EPD420 || device.DeviceType == DeviceType.EPD420_lock
                      || device.DeviceType == DeviceType.EPD420G || device.DeviceType == DeviceType.EPD420G_lock
                       || device.DeviceType == DeviceType.EPD360E || device.DeviceType == DeviceType.EPD360E_lock)

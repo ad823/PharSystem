@@ -175,10 +175,33 @@ namespace HIS_WebApi
             public string DeviceName { get; set; }
         }
 
-        static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
+        /// <summary>
+        /// POST_set_device_tradding 流程內部使用的執行環境。
+        /// </summary>
+        /// <remarks>
+        /// 用於集中保存儲位 ServerSetting、儲位設備資料與藥碼索引，
+        /// 避免單一方法內傳遞過多參數並降低維護難度。
+        /// </remarks>
+        private class SetDeviceTradingContext
+        {
+            /// <summary>
+            /// 儲位資料 ServerSetting。
+            /// </summary>
+            public sys_serverSettingClass StorageServerSetting { get; set; }
 
+            /// <summary>
+            /// 儲位設備清單。
+            /// </summary>
+            public List<DeviceBasic> DeviceBasics { get; set; } = new List<DeviceBasic>();
+
+            /// <summary>
+            /// 依藥碼分組後的設備索引。
+            /// </summary>
+            public Dictionary<string, List<DeviceBasic>> DeviceMapByCode { get; set; } = new Dictionary<string, List<DeviceBasic>>();
+        }
+
+        static private string API_Server = "http://127.0.0.1:4433/api/serversetting";
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
-        MyTimer myTimer = new MyTimer(50000);
 
 
         [Route("init")]
@@ -422,169 +445,176 @@ namespace HIS_WebApi
         }
 
         /// <summary>
-        /// 設定扣帳資訊
+        /// 設定扣帳資訊。
         /// </summary>
         /// <remarks>
-        /// 以下為範例JSON範例
+        /// 此 API 會根據傳入的 takeMedicineStackClass 清單，
+        /// 對對應藥品儲位執行庫存異動，並同步建立交易紀錄。
+        /// 
+        /// API URL:
+        /// /api/OutTakeMed/set_device_tradding
+        /// 
+        /// HTTP Method:
+        /// POST
+        /// 
+        /// Request Body(JSON)範例:
         /// <code>
-        ///   {
-        ///     "ServerName" : "A6",
-        ///     "ServerType" : "調劑台",
-        ///     "ValueAry" : 
-        ///     [
-        ///       
-        ///     ],
-        ///     "Data" : 
+        /// {
+        ///   "ServerName": "A6",
+        ///   "ServerType": "調劑台",
+        ///   "TableName": "Main",
+        ///   "Data": [
         ///     {
-        ///        [takeMedicineStackClass]
+        ///       "GUID": "6E4A17A1-CC6D-4B69-AF1A-09F2A3CC0001",
+        ///       "Order_GUID": "ORDER-0001",
+        ///       "serial_number": "202605051030000001",
+        ///       "dispensing_station_name": "PC001",
+        ///       "ip_address": "192.168.1.10",
+        ///       "operator": "王曉明",
+        ///       "ID": "HS001",
+        ///       "pharmacist_license_number": "PH0001",
+        ///       "recheck_name": "李藥師",
+        ///       "recheck_id": "R001",
+        ///       "action": "系統領藥",
+        ///       "operation_mode": "自動",
+        ///       "medicine_bag_serial_number": "TEST-TAKE-DEDUCT-001",
+        ///       "medicine_bag_number": "001",
+        ///       "ward_number": "6A",
+        ///       "category": "F",
+        ///       "medicine_code": "25003",
+        ///       "medicine_name": "測試藥品A",
+        ///       "unit": "TAB",
+        ///       "patient_record_number": "00000000",
+        ///       "patient_name": "章大同",
+        ///       "bed_number": "34-06061",
+        ///       "frequency": "BID",
+        ///       "prescription_time": "2026-05-05 10:00:00",
+        ///       "operation_time": "2026-05-05 10:00:01",
+        ///       "color": "255,0,0",
+        ///       "status": "等待刷新",
+        ///       "inventory": "100",
+        ///       "total_change": "-1",
+        ///       "balance": "99",
+        ///       "inventory_count": "",
+        ///       "expiry_date": "2027-12-31",
+        ///       "batch_number": "LOT001",
+        ///       "remarks": "",
+        ///       "reason": "測試扣帳",
+        ///       "clinic_type": "OPD",
+        ///       "storage_note": "第一抽屜左側"
         ///     }
-        ///     
-        ///   }
+        ///   ]
+        /// }
         /// </code>
+        /// 
+        /// 成功 Response(JSON)範例:
+        /// <code>
+        /// {
+        ///   "Code": 200,
+        ///   "Result": "設定扣帳資訊,共&lt;1&gt;筆資料,TableName : Main",
+        ///   "TimeTaken": "00:00:00.1234567",
+        ///   "Data": [
+        ///     {
+        ///       "GUID": "D2E4D64E-6A9A-4D9D-9F90-3E5A2A5F0001",
+        ///       "動作": "系統領藥",
+        ///       "診別": "OPD",
+        ///       "藥品碼": "25003",
+        ///       "藥品名稱": "測試藥品A",
+        ///       "藥袋序號": "TEST-TAKE-DEDUCT-001",
+        ///       "藥師證字號": "PH0001",
+        ///       "領藥號": "001",
+        ///       "病房號": "6A",
+        ///       "類別": "F",
+        ///       "庫存量": "100",
+        ///       "交易量": "-1",
+        ///       "結存量": "99",
+        ///       "盤點量": "",
+        ///       "操作人": "王曉明",
+        ///       "病人姓名": "章大同",
+        ///       "床號": "34-06061",
+        ///       "頻次": "BID",
+        ///       "病歷號": "00000000",
+        ///       "操作時間": "2026-05-05 10:00:01",
+        ///       "開方時間": "2026-05-05 10:00:00",
+        ///       "備註": "[效期]:2027-12-31,[批號]:LOT001",
+        ///       "收支原因": "測試扣帳"
+        ///     }
+        ///   ]
+        /// }
+        /// </code>
+        /// 
+        /// 失敗 Response(JSON)範例:
+        /// <code>
+        /// {
+        ///   "Code": -200,
+        ///   "Result": "傳入資料空白"
+        /// }
+        /// </code>
+        /// 
+        /// 注意事項:
+        /// 1. Request 的 Data 欄位需為 takeMedicineStackClass 陣列，欄位名稱須符合 JsonPropertyName 定義。
+        /// 2. 若傳入 Data 無法轉換為 List&lt;takeMedicineStackClass&gt;，將回傳「傳入資料異常」。
+        /// 3. 若傳入 Data 筆數為 0，將回傳「傳入資料空白」。
+        /// 4. 若找不到對應藥品碼的儲位資料，該筆資料會略過，不中斷整批流程。
+        /// 5. 此 API 會同時執行儲位庫存異動與交易紀錄新增。
+        /// 6. 回傳的 Data 為 transactionsClass 陣列，其欄位格式依 transactionsClass 定義為主。
         /// </remarks>
-        /// <param name="returnData">共用傳遞資料結構</param>
-        /// <returns>[returnData.Data]為[transactionsClass]陣列結構</returns>
+        /// <param name="returnData">共用傳遞資料結構，Data 欄位需為 takeMedicineStackClass 陣列。</param>
+        /// <returns>成功時回傳包含 transactionsClass 陣列的 returnData；失敗時回傳錯誤訊息。</returns>
         [Route("set_device_tradding")]
         [HttpPost]
         public string POST_set_device_tradding(returnData returnData)
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             myTimerBasic.StartTickTime(50000);
-            try
-            {
-                returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
-            }
-            catch
-            {
 
-                returnData.Method = "set_device_tradding";
-            }
             try
             {
-                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
-                List<sys_serverSettingClass> sys_serverSettingClasses_buf = new List<sys_serverSettingClass>();
-                sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "儲位資料");
-                sys_serverSettingClass sys_serverSettingClass_儲位資料 = sys_serverSettingClasses_buf[0];
-                if (sys_serverSettingClass_儲位資料 == null)
+                try
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"找無Server資料!";
-                    return returnData.JsonSerializationt();
+                    returnData.RequestUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}";
                 }
+                catch
+                {
+                    returnData.Method = "set_device_tradding";
+                }
+
+                // 1. 驗證傳入資料
+                string validateResult = ValidateSetDeviceTradingInput(returnData);
+                if (validateResult.StringIsEmpty() == false)
+                {
+                    return validateResult;
+                }
+
+                // 2. 轉換資料
                 List<takeMedicineStackClass> takeMedicineStackClasses = returnData.Data.ObjToClass<List<takeMedicineStackClass>>();
-                if (takeMedicineStackClasses == null)
+
+                // 3. 載入執行環境
+                SetDeviceTradingContext context = LoadSetDeviceTradingContext(returnData);
+                if (context == null)
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"傳入資料異常";
                     return returnData.JsonSerializationt();
                 }
-                if (takeMedicineStackClasses.Count == 0)
+
+                // 4. 執行庫存異動並建立交易紀錄
+                List<transactionsClass> transactionsClasses = ProcessSetDeviceTrading(
+                    context,
+                    takeMedicineStackClasses,
+                    returnData
+                );
+
+                if (returnData.Code == -200)
                 {
-                    returnData.Code = -200;
-                    returnData.Result = $"傳入資料空白";
                     return returnData.JsonSerializationt();
                 }
-                List<DeviceBasic> deviceBasics = deviceController.Function_Get_device(sys_serverSettingClass_儲位資料, returnData.TableName);
-                Dictionary<string, List<DeviceBasic>> keyValuePairs = deviceBasics.CoverToDictionaryByCode();
 
-                string GUID = "";
-                string Master_GUID = "";
-                double 庫存量 = 0;
-                double 結存量 = 0;
-                double 總異動量 = 0;
-                string 盤點量 = "";
-                string 動作 = "";
-                string 藥品碼 = "";
-                string 藥品名稱 = "";
-                string 藥袋序號 = "";
-                string 類別 = "";
-                string 交易量 = "";
-                string 操作人 = "";
-                string 病人姓名 = "";
-                string 床號 = "";
-                string 頻次 = "";
-                string 病歷號 = "";
-                string 操作時間 = "";
-                string 開方時間 = "";
-                string 備註 = "";
-                string 收支原因 = "";
-                string 診別 = "";
-                string 藥師證字號 = "";
-                string 效期 = "";
-                string 批號 = "";
-                string 顏色 = "";
-                string 領藥號 = "";
-                string 病房號 = "";
-                string 醫令_GUID = "";
-                string 交易紀錄_GUID = "";
-
-                List<DeviceBasic> deviceBasics_buf = new List<DeviceBasic>();
-                List<DeviceBasic> deviceBasics_result = new List<DeviceBasic>();
-                List<transactionsClass> transactionsClasses = new List<transactionsClass>();
-                for (int i = 0; i < takeMedicineStackClasses.Count; i++)
-                {
-                    deviceBasics_buf = keyValuePairs.SortDictionaryByCode(takeMedicineStackClasses[i].藥品碼);
-                    if (deviceBasics_buf.Count == 0)
-                    {
-                        continue;
-                    }
-                    transactionsClass _transactionsClass = new transactionsClass();
-
-                    庫存量 = deviceBasics_buf.GetInventory();
-                    總異動量 = takeMedicineStackClasses[i].總異動量.StringToInt32();
-                    結存量 = (庫存量 + 總異動量);
-                   
-
-                    List<object[]> list_儲位資訊 = deviceController.Function_取得異動儲位資訊(deviceBasics_buf, takeMedicineStackClasses[i].藥品碼, 總異動量);
-
-                    for (int k = 0; k < list_儲位資訊.Count; k++)
-                    {
-
-                        deviceController.Function_庫存異動(list_儲位資訊[k], sys_serverSettingClass_儲位資料);
-                        備註 += $"[效期]:{list_儲位資訊[k][(int)deviceController.enum_儲位資訊.效期].ObjectToString()},[批號]:{list_儲位資訊[k][(int)deviceController.enum_儲位資訊.批號].ObjectToString()}";
-                        if (k != list_儲位資訊.Count - 1) 備註 += "\n";
-                    }
-
-                    _transactionsClass.GUID = Guid.NewGuid().ToString();
-                    _transactionsClass.動作 = takeMedicineStackClasses[i].動作.GetEnumName();
-                    _transactionsClass.診別 = takeMedicineStackClasses[i].診別;
-                    _transactionsClass.藥品碼 = takeMedicineStackClasses[i].藥品碼;
-                    _transactionsClass.藥品名稱 = takeMedicineStackClasses[i].藥品名稱;
-                    _transactionsClass.藥袋序號 = takeMedicineStackClasses[i].藥袋序號;
-                    _transactionsClass.藥師證字號 = takeMedicineStackClasses[i].藥師證字號;
-                    _transactionsClass.領藥號 = takeMedicineStackClasses[i].領藥號;
-                    _transactionsClass.病房號 = takeMedicineStackClasses[i].病房號;
-                    _transactionsClass.類別 = takeMedicineStackClasses[i].類別;
-                    _transactionsClass.庫存量 = 庫存量.ToString();
-                    _transactionsClass.交易量 = 總異動量.ToString();
-                    _transactionsClass.結存量 = 結存量.ToString();
-                    _transactionsClass.盤點量 = takeMedicineStackClasses[i].盤點量;
-                    _transactionsClass.操作人 = takeMedicineStackClasses[i].操作人;
-                    _transactionsClass.病人姓名 = takeMedicineStackClasses[i].病人姓名;
-                    _transactionsClass.床號 = takeMedicineStackClasses[i].床號;
-                    _transactionsClass.頻次 = takeMedicineStackClasses[i].頻次;
-                    _transactionsClass.病歷號 = takeMedicineStackClasses[i].病歷號;
-                    _transactionsClass.操作時間 = DateTime.Now.ToDateTimeString_6();
-                    if (開方時間.StringIsEmpty()) 開方時間 = DateTime.Now.ToDateTimeString_6();
-                    _transactionsClass.開方時間 = takeMedicineStackClasses[i].開方時間;
-                    _transactionsClass.備註 = takeMedicineStackClasses[i].備註;
-                    收支原因 = $"{收支原因}";
-                    _transactionsClass.收支原因 = takeMedicineStackClasses[i].收支原因;
-
-                    transactionsClass.add("http://127.0.0.1:4433", _transactionsClass, returnData.ServerName, returnData.ServerType);
-
-                    transactionsClasses.Add(_transactionsClass);
-                }
-           
-
+                // 5. 回傳結果
                 returnData.TimeTaken = $"{myTimerBasic}";
                 returnData.Code = 200;
                 returnData.Result = $"設定扣帳資訊,共<{transactionsClasses.Count}>筆資料,TableName : {returnData.TableName}";
                 returnData.Data = transactionsClasses;
 
-                string json_out = returnData.JsonSerializationt();
-
-                return json_out;
+                return returnData.JsonSerializationt();
             }
             catch (Exception e)
             {
@@ -592,8 +622,6 @@ namespace HIS_WebApi
                 returnData.Value = $"{e.Message}";
                 return returnData.JsonSerializationt();
             }
-
-
         }
 
         #region Function
@@ -1659,6 +1687,227 @@ namespace HIS_WebApi
             }
 
             return Color.Red;
+        }
+
+
+        /// <summary>
+        /// 驗證 POST_set_device_tradding 的輸入資料。
+        /// </summary>
+        /// <param name="returnData">共用傳遞資料結構。</param>
+        /// <returns>若驗證失敗回傳錯誤 JSON；成功回傳空字串。</returns>
+        private string ValidateSetDeviceTradingInput(returnData returnData)
+        {
+            List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+            List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind(
+                returnData.ServerName,
+                returnData.ServerType,
+                "儲位資料"
+            );
+
+            if (sys_serverSettingClasses_buf.Count == 0)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"找無Server資料!";
+                return returnData.JsonSerializationt();
+            }
+
+            List<takeMedicineStackClass> takeMedicineStackClasses = returnData.Data.ObjToClass<List<takeMedicineStackClass>>();
+            if (takeMedicineStackClasses == null)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"傳入資料異常";
+                return returnData.JsonSerializationt();
+            }
+
+            if (takeMedicineStackClasses.Count == 0)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"傳入資料空白";
+                return returnData.JsonSerializationt();
+            }
+
+            return "";
+        }
+        /// <summary>
+        /// 載入 POST_set_device_tradding 所需的儲位資料與藥碼索引。
+        /// </summary>
+        /// <param name="returnData">共用傳遞資料結構。</param>
+        /// <returns>執行環境；若載入失敗回傳 null。</returns>
+        private SetDeviceTradingContext LoadSetDeviceTradingContext(returnData returnData)
+        {
+            List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+            List<sys_serverSettingClass> sys_serverSettingClasses_buf = sys_serverSettingClasses.MyFind(
+                returnData.ServerName,
+                returnData.ServerType,
+                "儲位資料"
+            );
+
+            if (sys_serverSettingClasses_buf.Count == 0)
+            {
+                return null;
+            }
+
+            sys_serverSettingClass sys_serverSettingClass_儲位資料 = sys_serverSettingClasses_buf[0];
+            if (sys_serverSettingClass_儲位資料 == null)
+            {
+                return null;
+            }
+
+            List<DeviceBasic> deviceBasics = deviceController.Function_Get_device(sys_serverSettingClass_儲位資料, returnData.TableName);
+            Dictionary<string, List<DeviceBasic>> keyValuePairs = deviceBasics.CoverToDictionaryByCode();
+
+            return new SetDeviceTradingContext
+            {
+                StorageServerSetting = sys_serverSettingClass_儲位資料,
+                DeviceBasics = deviceBasics,
+                DeviceMapByCode = keyValuePairs
+            };
+        }
+        /// <summary>
+        /// 逐筆處理 takeMedicineStackClass，執行庫存異動並建立交易紀錄。
+        /// </summary>
+        /// <param name="context">POST_set_device_tradding 執行環境。</param>
+        /// <param name="takeMedicineStackClasses">取藥堆疊母資料清單。</param>
+        /// <param name="returnData">共用傳遞資料結構。</param>
+        /// <returns>交易紀錄清單。</returns>
+        private List<transactionsClass> ProcessSetDeviceTrading(
+            SetDeviceTradingContext context,
+            List<takeMedicineStackClass> takeMedicineStackClasses,
+            returnData returnData)
+        {
+            List<transactionsClass> transactionsClasses = new List<transactionsClass>();
+
+            for (int i = 0; i < takeMedicineStackClasses.Count; i++)
+            {
+                takeMedicineStackClass stack = takeMedicineStackClasses[i];
+
+                List<DeviceBasic> deviceBasics_buf = GetDeviceBasicsByCode(context, stack.藥品碼);
+                if (deviceBasics_buf.Count == 0)
+                {
+                    continue;
+                }
+
+                double inventory = deviceBasics_buf.GetInventory();
+                double totalQty = stack.總異動量.StringToInt32();
+                double balance = inventory + totalQty;
+
+                List<object[]> list_儲位資訊 = deviceController.Function_取得異動儲位資訊(
+                    deviceBasics_buf,
+                    stack.藥品碼,
+                    totalQty
+                );
+
+                string storageRemark = ApplyStorageChangesAndBuildRemark(
+                    list_儲位資訊,
+                    context.StorageServerSetting
+                );
+
+                transactionsClass transaction = BuildTransactionClass(
+                    stack,
+                    inventory,
+                    totalQty,
+                    balance,
+                    storageRemark
+                );
+
+                transactionsClass.add("http://127.0.0.1:4433", transaction, returnData.ServerName, returnData.ServerType);
+                transactionsClasses.Add(transaction);
+            }
+
+            return transactionsClasses;
+        }
+        /// <summary>
+        /// 依藥品碼取得對應的設備清單。
+        /// </summary>
+        /// <param name="context">POST_set_device_tradding 執行環境。</param>
+        /// <param name="drugCode">藥品碼。</param>
+        /// <returns>設備清單。</returns>
+        private List<DeviceBasic> GetDeviceBasicsByCode(SetDeviceTradingContext context, string drugCode)
+        {
+            if (context.DeviceMapByCode == null)
+            {
+                return new List<DeviceBasic>();
+            }
+
+            return context.DeviceMapByCode.SortDictionaryByCode(drugCode);
+        }
+        /// <summary>
+        /// 執行儲位庫存異動，並產出儲位效期/批號備註字串。
+        /// </summary>
+        /// <param name="storageRows">異動儲位資訊。</param>
+        /// <param name="storageServerSetting">儲位 ServerSetting。</param>
+        /// <returns>儲位備註字串。</returns>
+        private string ApplyStorageChangesAndBuildRemark(
+            List<object[]> storageRows,
+            sys_serverSettingClass storageServerSetting)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < storageRows.Count; i++)
+            {
+                deviceController.Function_庫存異動(storageRows[i], storageServerSetting);
+
+                stringBuilder.Append(
+                    $"[效期]:{storageRows[i][(int)deviceController.enum_儲位資訊.效期].ObjectToString()},[批號]:{storageRows[i][(int)deviceController.enum_儲位資訊.批號].ObjectToString()}"
+                );
+
+                if (i != storageRows.Count - 1)
+                {
+                    stringBuilder.Append("\n");
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+        /// <summary>
+        /// 由 takeMedicineStackClass 建立 transactionsClass。
+        /// </summary>
+        /// <param name="stack">取藥堆疊母資料。</param>
+        /// <param name="inventory">庫存量。</param>
+        /// <param name="totalQty">交易量。</param>
+        /// <param name="balance">結存量。</param>
+        /// <param name="storageRemark">由儲位異動產生的備註字串。</param>
+        /// <returns>交易紀錄物件。</returns>
+        private transactionsClass BuildTransactionClass(
+            takeMedicineStackClass stack,
+            double inventory,
+            double totalQty,
+            double balance,
+            string storageRemark)
+        {
+            transactionsClass transaction = new transactionsClass();
+
+            string remark = stack.備註;
+            if (remark.StringIsEmpty())
+            {
+                remark = storageRemark;
+            }
+
+            transaction.GUID = Guid.NewGuid().ToString();
+            transaction.動作 = stack.動作.GetEnumName();
+            transaction.診別 = stack.診別;
+            transaction.藥品碼 = stack.藥品碼;
+            transaction.藥品名稱 = stack.藥品名稱;
+            transaction.藥袋序號 = stack.藥袋序號;
+            transaction.藥師證字號 = stack.藥師證字號;
+            transaction.領藥號 = stack.領藥號;
+            transaction.病房號 = stack.病房號;
+            transaction.類別 = stack.類別;
+            transaction.庫存量 = inventory.ToString();
+            transaction.交易量 = totalQty.ToString();
+            transaction.結存量 = balance.ToString();
+            transaction.盤點量 = stack.盤點量;
+            transaction.操作人 = stack.操作人;
+            transaction.病人姓名 = stack.病人姓名;
+            transaction.床號 = stack.床號;
+            transaction.頻次 = stack.頻次;
+            transaction.病歷號 = stack.病歷號;
+            transaction.操作時間 = DateTime.Now.ToDateTimeString_6();
+            transaction.開方時間 = stack.開方時間.StringIsEmpty() ? DateTime.Now.ToDateTimeString_6() : stack.開方時間;
+            transaction.備註 = remark;
+            transaction.收支原因 = stack.收支原因;
+
+            return transaction;
         }
 
         #endregion
