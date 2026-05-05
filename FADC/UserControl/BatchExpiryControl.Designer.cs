@@ -28,39 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rJ_Lable1 = new MyUI.RJ_Lable();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.sqL_DataGridView_效期批號 = new SQLUI.SQL_DataGridView();
             this.rJ_TextBox_批號 = new MyUI.RJ_TextBox();
             this.rJ_Lable3 = new MyUI.RJ_Lable();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.rJ_DatePicker_效期 = new MyUI.RJ_DatePicker();
             this.rJ_Lable2 = new MyUI.RJ_Lable();
-            this.sqL_DataGridView_效期批號 = new SQLUI.SQL_DataGridView();
+            this.rJ_Lable1 = new MyUI.RJ_Lable();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // rJ_Lable1
-            // 
-            this.rJ_Lable1.BackColor = System.Drawing.SystemColors.Control;
-            this.rJ_Lable1.BackgroundColor = System.Drawing.Color.DarkGray;
-            this.rJ_Lable1.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rJ_Lable1.BorderRadius = 10;
-            this.rJ_Lable1.BorderSize = 0;
-            this.rJ_Lable1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rJ_Lable1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable1.Font = new System.Drawing.Font("微軟正黑體", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rJ_Lable1.ForeColor = System.Drawing.Color.Transparent;
-            this.rJ_Lable1.GUID = "";
-            this.rJ_Lable1.Location = new System.Drawing.Point(0, 0);
-            this.rJ_Lable1.Name = "rJ_Lable1";
-            this.rJ_Lable1.ShadowColor = System.Drawing.Color.DimGray;
-            this.rJ_Lable1.ShadowSize = 3;
-            this.rJ_Lable1.Size = new System.Drawing.Size(852, 108);
-            this.rJ_Lable1.TabIndex = 2;
-            this.rJ_Lable1.Text = "效期批號輸入";
-            this.rJ_Lable1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.rJ_Lable1.TextColor = System.Drawing.Color.White;
             // 
             // panel1
             // 
@@ -75,52 +53,6 @@
             this.panel1.Size = new System.Drawing.Size(852, 54);
             this.panel1.TabIndex = 3;
             // 
-            // rJ_TextBox_批號
-            // 
-            this.rJ_TextBox_批號.BackColor = System.Drawing.SystemColors.Window;
-            this.rJ_TextBox_批號.BorderColor = System.Drawing.Color.Black;
-            this.rJ_TextBox_批號.BorderFocusColor = System.Drawing.Color.HotPink;
-            this.rJ_TextBox_批號.BorderRadius = 0;
-            this.rJ_TextBox_批號.BorderSize = 2;
-            this.rJ_TextBox_批號.Font = new System.Drawing.Font("新細明體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rJ_TextBox_批號.ForeColor = System.Drawing.Color.DimGray;
-            this.rJ_TextBox_批號.GUID = "";
-            this.rJ_TextBox_批號.Location = new System.Drawing.Point(630, 7);
-            this.rJ_TextBox_批號.Multiline = false;
-            this.rJ_TextBox_批號.Name = "rJ_TextBox_批號";
-            this.rJ_TextBox_批號.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
-            this.rJ_TextBox_批號.PassWordChar = false;
-            this.rJ_TextBox_批號.PlaceholderColor = System.Drawing.Color.DarkGray;
-            this.rJ_TextBox_批號.PlaceholderText = "";
-            this.rJ_TextBox_批號.ShowTouchPannel = false;
-            this.rJ_TextBox_批號.Size = new System.Drawing.Size(210, 40);
-            this.rJ_TextBox_批號.TabIndex = 5;
-            this.rJ_TextBox_批號.TextAlgin = System.Windows.Forms.HorizontalAlignment.Left;
-            this.rJ_TextBox_批號.Texts = "";
-            this.rJ_TextBox_批號.UnderlineStyle = false;
-            // 
-            // rJ_Lable3
-            // 
-            this.rJ_Lable3.BackColor = System.Drawing.SystemColors.Control;
-            this.rJ_Lable3.BackgroundColor = System.Drawing.Color.Silver;
-            this.rJ_Lable3.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rJ_Lable3.BorderRadius = 10;
-            this.rJ_Lable3.BorderSize = 0;
-            this.rJ_Lable3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rJ_Lable3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable3.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rJ_Lable3.ForeColor = System.Drawing.Color.Transparent;
-            this.rJ_Lable3.GUID = "";
-            this.rJ_Lable3.Location = new System.Drawing.Point(461, 0);
-            this.rJ_Lable3.Name = "rJ_Lable3";
-            this.rJ_Lable3.ShadowColor = System.Drawing.Color.DimGray;
-            this.rJ_Lable3.ShadowSize = 3;
-            this.rJ_Lable3.Size = new System.Drawing.Size(163, 54);
-            this.rJ_Lable3.TabIndex = 4;
-            this.rJ_Lable3.Text = "批號";
-            this.rJ_Lable3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.rJ_Lable3.TextColor = System.Drawing.Color.White;
-            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.rJ_DatePicker_效期);
@@ -129,44 +61,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(293, 54);
             this.panel3.TabIndex = 3;
-            // 
-            // rJ_DatePicker_效期
-            // 
-            this.rJ_DatePicker_效期.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rJ_DatePicker_效期.BorderSize = 0;
-            this.rJ_DatePicker_效期.CalendarFont = new System.Drawing.Font("新細明體", 15.75F);
-            this.rJ_DatePicker_效期.Font = new System.Drawing.Font("新細明體", 15.75F);
-            this.rJ_DatePicker_效期.Location = new System.Drawing.Point(14, 10);
-            this.rJ_DatePicker_效期.MinimumSize = new System.Drawing.Size(250, 35);
-            this.rJ_DatePicker_效期.Name = "rJ_DatePicker_效期";
-            this.rJ_DatePicker_效期.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
-            this.rJ_DatePicker_效期.PickerFore = System.Drawing.SystemColors.ControlText;
-            this.rJ_DatePicker_效期.Size = new System.Drawing.Size(250, 35);
-            this.rJ_DatePicker_效期.SkinColor = System.Drawing.Color.Gainsboro;
-            this.rJ_DatePicker_效期.TabIndex = 4;
-            this.rJ_DatePicker_效期.TextColor = System.Drawing.Color.Black;
-            // 
-            // rJ_Lable2
-            // 
-            this.rJ_Lable2.BackColor = System.Drawing.SystemColors.Control;
-            this.rJ_Lable2.BackgroundColor = System.Drawing.Color.Silver;
-            this.rJ_Lable2.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rJ_Lable2.BorderRadius = 10;
-            this.rJ_Lable2.BorderSize = 0;
-            this.rJ_Lable2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rJ_Lable2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rJ_Lable2.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rJ_Lable2.ForeColor = System.Drawing.Color.Transparent;
-            this.rJ_Lable2.GUID = "";
-            this.rJ_Lable2.Location = new System.Drawing.Point(5, 0);
-            this.rJ_Lable2.Name = "rJ_Lable2";
-            this.rJ_Lable2.ShadowColor = System.Drawing.Color.DimGray;
-            this.rJ_Lable2.ShadowSize = 3;
-            this.rJ_Lable2.Size = new System.Drawing.Size(163, 54);
-            this.rJ_Lable2.TabIndex = 2;
-            this.rJ_Lable2.Text = "效期";
-            this.rJ_Lable2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.rJ_Lable2.TextColor = System.Drawing.Color.White;
             // 
             // sqL_DataGridView_效期批號
             // 
@@ -225,6 +119,117 @@
             this.sqL_DataGridView_效期批號.顯示首行 = false;
             this.sqL_DataGridView_效期批號.首列樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
             this.sqL_DataGridView_效期批號.首行樣式 = System.Windows.Forms.DataGridViewHeaderBorderStyle.Raised;
+            // 
+            // rJ_TextBox_批號
+            // 
+            this.rJ_TextBox_批號.BackColor = System.Drawing.SystemColors.Window;
+            this.rJ_TextBox_批號.BorderColor = System.Drawing.Color.Black;
+            this.rJ_TextBox_批號.BorderFocusColor = System.Drawing.Color.HotPink;
+            this.rJ_TextBox_批號.BorderRadius = 0;
+            this.rJ_TextBox_批號.BorderSize = 2;
+            this.rJ_TextBox_批號.Font = new System.Drawing.Font("新細明體", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_TextBox_批號.ForeColor = System.Drawing.Color.DimGray;
+            this.rJ_TextBox_批號.GUID = "";
+            this.rJ_TextBox_批號.Location = new System.Drawing.Point(630, 7);
+            this.rJ_TextBox_批號.Multiline = false;
+            this.rJ_TextBox_批號.Name = "rJ_TextBox_批號";
+            this.rJ_TextBox_批號.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
+            this.rJ_TextBox_批號.PassWordChar = false;
+            this.rJ_TextBox_批號.PlaceholderColor = System.Drawing.Color.DarkGray;
+            this.rJ_TextBox_批號.PlaceholderText = "";
+            this.rJ_TextBox_批號.ShowTouchPannel = false;
+            this.rJ_TextBox_批號.Size = new System.Drawing.Size(210, 40);
+            this.rJ_TextBox_批號.TabIndex = 5;
+            this.rJ_TextBox_批號.TextAlgin = System.Windows.Forms.HorizontalAlignment.Left;
+            this.rJ_TextBox_批號.Texts = "";
+            this.rJ_TextBox_批號.UnderlineStyle = false;
+            // 
+            // rJ_Lable3
+            // 
+            this.rJ_Lable3.BackColor = System.Drawing.SystemColors.Control;
+            this.rJ_Lable3.BackgroundColor = System.Drawing.Color.Silver;
+            this.rJ_Lable3.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_Lable3.BorderRadius = 10;
+            this.rJ_Lable3.BorderSize = 0;
+            this.rJ_Lable3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.rJ_Lable3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rJ_Lable3.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Lable3.ForeColor = System.Drawing.Color.Transparent;
+            this.rJ_Lable3.GUID = "";
+            this.rJ_Lable3.Location = new System.Drawing.Point(461, 0);
+            this.rJ_Lable3.Name = "rJ_Lable3";
+            this.rJ_Lable3.ShadowColor = System.Drawing.Color.DimGray;
+            this.rJ_Lable3.ShadowSize = 3;
+            this.rJ_Lable3.Size = new System.Drawing.Size(163, 54);
+            this.rJ_Lable3.TabIndex = 4;
+            this.rJ_Lable3.Text = "批號";
+            this.rJ_Lable3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rJ_Lable3.TextColor = System.Drawing.Color.White;
+            // 
+            // rJ_DatePicker_效期
+            // 
+            this.rJ_DatePicker_效期.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_DatePicker_效期.BorderSize = 0;
+            this.rJ_DatePicker_效期.CalendarFont = new System.Drawing.Font("新細明體", 15.75F);
+            this.rJ_DatePicker_效期.CustomFormat = "yyyy/MM/dd";
+            this.rJ_DatePicker_效期.Font = new System.Drawing.Font("新細明體", 15.75F);
+            this.rJ_DatePicker_效期.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.rJ_DatePicker_效期.Location = new System.Drawing.Point(14, 10);
+            this.rJ_DatePicker_效期.MaxDate = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.rJ_DatePicker_效期.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.rJ_DatePicker_效期.MinimumSize = new System.Drawing.Size(250, 35);
+            this.rJ_DatePicker_效期.Name = "rJ_DatePicker_效期";
+            this.rJ_DatePicker_效期.PickerFont = new System.Drawing.Font("新細明體", 15.75F);
+            this.rJ_DatePicker_效期.PickerFore = System.Drawing.SystemColors.ControlText;
+            this.rJ_DatePicker_效期.Size = new System.Drawing.Size(250, 35);
+            this.rJ_DatePicker_效期.SkinColor = System.Drawing.Color.Gainsboro;
+            this.rJ_DatePicker_效期.TabIndex = 4;
+            this.rJ_DatePicker_效期.TextColor = System.Drawing.Color.Black;
+            this.rJ_DatePicker_效期.日期選擇方式 = MyUI.enum_日期選擇方式.年月日下拉選單;
+            // 
+            // rJ_Lable2
+            // 
+            this.rJ_Lable2.BackColor = System.Drawing.SystemColors.Control;
+            this.rJ_Lable2.BackgroundColor = System.Drawing.Color.Silver;
+            this.rJ_Lable2.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_Lable2.BorderRadius = 10;
+            this.rJ_Lable2.BorderSize = 0;
+            this.rJ_Lable2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.rJ_Lable2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rJ_Lable2.Font = new System.Drawing.Font("微軟正黑體", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Lable2.ForeColor = System.Drawing.Color.Transparent;
+            this.rJ_Lable2.GUID = "";
+            this.rJ_Lable2.Location = new System.Drawing.Point(5, 0);
+            this.rJ_Lable2.Name = "rJ_Lable2";
+            this.rJ_Lable2.ShadowColor = System.Drawing.Color.DimGray;
+            this.rJ_Lable2.ShadowSize = 3;
+            this.rJ_Lable2.Size = new System.Drawing.Size(163, 54);
+            this.rJ_Lable2.TabIndex = 2;
+            this.rJ_Lable2.Text = "效期";
+            this.rJ_Lable2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rJ_Lable2.TextColor = System.Drawing.Color.White;
+            // 
+            // rJ_Lable1
+            // 
+            this.rJ_Lable1.BackColor = System.Drawing.SystemColors.Control;
+            this.rJ_Lable1.BackgroundColor = System.Drawing.Color.DarkGray;
+            this.rJ_Lable1.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rJ_Lable1.BorderRadius = 10;
+            this.rJ_Lable1.BorderSize = 0;
+            this.rJ_Lable1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rJ_Lable1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rJ_Lable1.Font = new System.Drawing.Font("微軟正黑體", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.rJ_Lable1.ForeColor = System.Drawing.Color.Transparent;
+            this.rJ_Lable1.GUID = "";
+            this.rJ_Lable1.Location = new System.Drawing.Point(0, 0);
+            this.rJ_Lable1.Name = "rJ_Lable1";
+            this.rJ_Lable1.ShadowColor = System.Drawing.Color.DimGray;
+            this.rJ_Lable1.ShadowSize = 3;
+            this.rJ_Lable1.Size = new System.Drawing.Size(852, 108);
+            this.rJ_Lable1.TabIndex = 2;
+            this.rJ_Lable1.Text = "效期批號輸入";
+            this.rJ_Lable1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rJ_Lable1.TextColor = System.Drawing.Color.White;
             // 
             // BatchExpiryControl
             // 

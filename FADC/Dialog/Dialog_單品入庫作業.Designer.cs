@@ -53,6 +53,7 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.userControl_NumPanel1 = new MyUI.UserControl_NumPanel();
             this.rJ_Lable2 = new MyUI.RJ_Lable();
+            this.batchExpiryControl = new FADC.BatchExpiryControl();
             this.確認結果 = new System.Windows.Forms.TabPage();
             this.rJ_Button_確認 = new MyUI.RJ_Button();
             this.panel12 = new System.Windows.Forms.Panel();
@@ -72,8 +73,6 @@
             this.rJ_Lable4 = new MyUI.RJ_Lable();
             this.panel7 = new System.Windows.Forms.Panel();
             this.rJ_Lable3 = new MyUI.RJ_Lable();
-            this.gestureRecognitionCanvas = new GestureRecognitionUseerControl.GestureRecognitionCanvas();
-            this.batchExpiryControl = new FADC.BatchExpiryControl();
             this.panel5.SuspendLayout();
             this.panel_下一步.SuspendLayout();
             this.tabControlEx.SuspendLayout();
@@ -602,9 +601,16 @@
             this.rJ_Lable2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.rJ_Lable2.TextColor = System.Drawing.Color.White;
             // 
+            // batchExpiryControl
+            // 
+            this.batchExpiryControl.Dock = System.Windows.Forms.DockStyle.Left;
+            this.batchExpiryControl.Location = new System.Drawing.Point(0, 0);
+            this.batchExpiryControl.Name = "batchExpiryControl";
+            this.batchExpiryControl.Size = new System.Drawing.Size(852, 593);
+            this.batchExpiryControl.TabIndex = 0;
+            // 
             // 確認結果
             // 
-            this.確認結果.Controls.Add(this.gestureRecognitionCanvas);
             this.確認結果.Controls.Add(this.rJ_Button_確認);
             this.確認結果.Controls.Add(this.panel12);
             this.確認結果.Controls.Add(this.panel11);
@@ -954,23 +960,6 @@
             this.rJ_Lable3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.rJ_Lable3.TextColor = System.Drawing.Color.White;
             // 
-            // gestureRecognitionCanvas
-            // 
-            this.gestureRecognitionCanvas.Location = new System.Drawing.Point(1081, 33);
-            this.gestureRecognitionCanvas.Margin = new System.Windows.Forms.Padding(0);
-            this.gestureRecognitionCanvas.Name = "gestureRecognitionCanvas";
-            this.gestureRecognitionCanvas.Size = new System.Drawing.Size(256, 223);
-            this.gestureRecognitionCanvas.TabIndex = 22;
-            this.gestureRecognitionCanvas.Visible = false;
-            // 
-            // batchExpiryControl
-            // 
-            this.batchExpiryControl.Dock = System.Windows.Forms.DockStyle.Left;
-            this.batchExpiryControl.Location = new System.Drawing.Point(0, 0);
-            this.batchExpiryControl.Name = "batchExpiryControl";
-            this.batchExpiryControl.Size = new System.Drawing.Size(852, 593);
-            this.batchExpiryControl.TabIndex = 0;
-            // 
             // Dialog_單品入庫作業
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1051,6 +1040,5 @@
         private System.Windows.Forms.Panel panel7;
         private MyUI.RJ_Lable rJ_Lable3;
         private MyUI.RJ_Button rJ_Button_確認;
-        private GestureRecognitionUseerControl.GestureRecognitionCanvas gestureRecognitionCanvas;
     }
 }

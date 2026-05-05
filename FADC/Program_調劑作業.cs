@@ -24,6 +24,7 @@ namespace FADC
 {
     public partial class Main_Form : Form
     {
+        static bool flag_dialog_單品入庫_IsShown = false;
         static public List<chemotherapyOrderClass>  chemotherapyOrders = null;
         static public personPageClass personpageClass_調劑畫面 = null;
         public enum enum_處方藥品
@@ -73,7 +74,7 @@ namespace FADC
             this.sqL_DataGridView_調劑畫面_處方藥品.Set_ColumnWidth(80, enum_處方藥品.審核藥師);
             this.sqL_DataGridView_調劑畫面_處方藥品.DataGridRefreshEvent += SqL_DataGridView_調劑畫面_處方藥品_DataGridRefreshEvent;
 
-            tabControlEx_調劑畫面.TabIndexChanged += TabControlEx_調劑畫面_TabIndexChanged;
+            tabControlEx_調劑畫面.SelectedIndexChanged += TabControlEx_調劑畫面_SelectedIndexChanged;
             rJ_TextBox_調劑畫面_密碼.PassWordChar = true;
             rJ_TextBox_調劑畫面_密碼.KeyPress += RJ_TextBox_調劑畫面_密碼_KeyPress;
             flowLayoutPanel_調劑畫面_處方內容.SuspendLayout();
@@ -144,11 +145,11 @@ namespace FADC
 
             }
             flowLayoutPanel_調劑畫面_處方內容.ResumeLayout(true);
-
+            gestureRecognitionCanvas.UpdateRecognitionResultEvent += GestureRecognitionCanvas_UpdateRecognitionResultEvent;
             this.plC_UI_Init.Add_Method(Program_調劑作業);
         }
 
-  
+    
 
         private void Program_調劑作業()
         {
@@ -208,23 +209,41 @@ namespace FADC
             chemotherapyOrders = chemotherapyOrderClasses;
             this.Invoke(new Action(delegate 
             {
-                rJ_Lable_調劑畫面_病歷號.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].病歷號 : "-----------";
-                rJ_Lable_調劑畫面_處方名稱.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].化療處方名稱 : "-----------";
-                rJ_Lable_調劑畫面_處方流水號.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].化療處方流水號 : "-----------";
-                rJ_Lable_調劑畫面_處方來源.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].處方來源 : "-----------";
-                rJ_Lable_調劑畫面_處方階段.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].類型_化療階段 : "-----------";
-                rJ_Lable_調劑畫面_頻次.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].頻次 : "-----------";
-                rJ_Lable_調劑畫面_途徑.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].用藥途徑 : "-----------";
-                rJ_Lable_調劑畫面_自費.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].費用別 : "-----------";
-                rJ_Lable_調劑畫面_流速.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false   ? chemotherapyOrderClasses[0].流速 : "-----------";
-                rJ_Lable_調劑畫面_總時間.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false  ? chemotherapyOrderClasses[0].總時間分鐘 : "-----------";
-                rJ_Lable_調劑畫面_開始執行.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].開始執行日期 : "-----------";
-                rJ_Lable_調劑畫面_結束執行.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].結束執行日期 : "-----------";
+                //rJ_Lable_調劑畫面_病歷號.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].病歷號 : "-----------";
+                //rJ_Lable_調劑畫面_處方名稱.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].化療處方名稱 : "-----------";
+                //rJ_Lable_調劑畫面_處方流水號.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].化療處方流水號 : "-----------";
+                //rJ_Lable_調劑畫面_處方來源.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].處方來源 : "-----------";
+                //rJ_Lable_調劑畫面_處方階段.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].類型_化療階段 : "-----------";
+                //rJ_Lable_調劑畫面_頻次.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].頻次 : "-----------";
+                //rJ_Lable_調劑畫面_途徑.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].用藥途徑 : "-----------";
+                //rJ_Lable_調劑畫面_自費.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].費用別 : "-----------";
+                //rJ_Lable_調劑畫面_流速.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false   ? chemotherapyOrderClasses[0].流速 : "-----------";
+                //rJ_Lable_調劑畫面_總時間.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false  ? chemotherapyOrderClasses[0].總時間分鐘 : "-----------";
+                //rJ_Lable_調劑畫面_開始執行.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].開始執行日期 : "-----------";
+                //rJ_Lable_調劑畫面_結束執行.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses[0].結束執行日期 : "-----------";
                 rJ_Lable_調劑畫面_總筆數.Text = (chemotherapyOrderClasses == null || chemotherapyOrderClasses.Count == 0) == false ? chemotherapyOrderClasses.Count.ToString() : "-----------";
             }));
-      
-            
-   
+               
+        }
+        private void Function_調劑畫面_處方UI資訊更新(chemotherapyOrderClass chemotherapyOrder)
+        {
+
+            this.Invoke(new Action(delegate
+            {
+                rJ_Lable_調劑畫面_病歷號.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.病歷號 : "-----------";
+                rJ_Lable_調劑畫面_處方名稱.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.化療處方名稱 : "-----------";
+                rJ_Lable_調劑畫面_處方流水號.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.化療處方流水號 : "-----------";
+                rJ_Lable_調劑畫面_處方來源.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.處方來源 : "-----------";
+                rJ_Lable_調劑畫面_處方階段.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.類型_化療階段 : "-----------";
+                rJ_Lable_調劑畫面_頻次.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.頻次 : "-----------";
+                rJ_Lable_調劑畫面_途徑.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.用藥途徑 : "-----------";
+                rJ_Lable_調劑畫面_自費.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.費用別 : "-----------";
+                rJ_Lable_調劑畫面_流速.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.流速 : "-----------";
+                rJ_Lable_調劑畫面_總時間.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.總時間分鐘 : "-----------";
+                rJ_Lable_調劑畫面_開始執行.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.開始執行日期 : "-----------";
+                rJ_Lable_調劑畫面_結束執行.Text = (chemotherapyOrder == null ) == false ? chemotherapyOrder.結束執行日期 : "-----------";
+            }));
+
         }
 
         private void SqL_DataGridView_調劑畫面_處方藥品_DataGridRefreshEvent()
@@ -238,13 +257,63 @@ namespace FADC
                 }
             }
         }
-        private void TabControlEx_調劑畫面_TabIndexChanged(object sender, EventArgs e)
+        private void TabControlEx_調劑畫面_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
+            if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
+            {
+                gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
+            }
+        }
+        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<GestureRecognitionDll.HandPoseInfo> result)
+        {
+            if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單" && flag_dialog_單品入庫_IsShown == false)
             {
 
+                if (result != null && result.State && result.Data != null)
+                {
+                    Console.WriteLine($"手勢: {result.Data.Pose}");
+                    if (result.Data.Pose == "1")
+                    {
+                        if (pLC_RJ_Buttons[0].Enabled == true)
+                        {
+                            PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[0], null);
+                        }
+                    }
+                    else if (result.Data.Pose == "2")
+                    {
+                        if (pLC_RJ_Buttons[1].Enabled == true)
+                        {
+                            PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[1], null);
+                        }
+                    }
+                    else if (result.Data.Pose == "3")
+                    {
+                        if (pLC_RJ_Buttons[2].Enabled == true)
+                        {
+                            PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[2], null);
+                        }
+                    }
+                    else if (result.Data.Pose == "4")
+                    {
+                        if (pLC_RJ_Buttons[3].Enabled == true)
+                        {
+                            PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[3], null);
+                        }
+                    }
+                    else if (result.Data.Pose == "5")
+                    {
+                        if (pLC_RJ_Buttons[4].Enabled == true)
+                        {
+                            PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[4], null);
+                        }
+                    }
+                }
+                else
+                {
+                    //Console.WriteLine($"無法辨識");
+                }
             }
-        }   
+        }
         private void RJ_Button_調劑畫面_登入_MouseDownEvent(MouseEventArgs mevent)
         {
             if (rJ_TextBox_調劑畫面_帳號.Text.StringIsEmpty() == true)
@@ -300,7 +369,11 @@ namespace FADC
                 List<chemotherapyOrderClass> chemotherapyOrderClasses = Function_取得醫令(this.rJ_TextBox_調劑畫面_輸入條碼.Text);
                 if (chemotherapyOrderClasses == null) return;
                 Function_調劑畫面_處方資訊更新(chemotherapyOrderClasses);
-                List<DateTime> dateTimes = chemotherapyOrderClasses.GetOrderAllDates();
+                if (chemotherapyOrderClasses.Count > 0) Function_調劑畫面_處方UI資訊更新(chemotherapyOrderClasses[0]);
+                List<DateTime> dateTimes = chemotherapyOrderClasses.GetOrderAllDates()
+                     .OrderByDescending(x => x)   // 最新的排前面
+                     .Take(10)                    // 最多 10 個
+                     .ToList();
 
                 this.Invoke(new Action(delegate 
                 {
@@ -327,6 +400,10 @@ namespace FADC
                         pLC_RJ_Buttons[index].ON_文字內容 = date.ToDateString();
                         pLC_RJ_Buttons[index].Text = date.ToDateString();
                         index++;
+                    }
+                    if (pLC_RJ_Buttons[0].Enabled == true)
+                    {
+                        PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[0], null);
                     }
                 }));
            
@@ -397,22 +474,24 @@ namespace FADC
         {
             sqL_DataGridView_調劑畫面_處方藥品.ClearDataKeys();
             sqL_DataGridView_調劑畫面_處方藥品.ClearGrid();
-
+            List<object[]> objects = new List<object[]>();
             foreach (PLC_RJ_Button pLC_RJ_Button in pLC_RJ_Buttons)
             {
                 pLC_RJ_Button.Bool = false;
                 pLC_RJ_Button.Set_LoadState(false);
                 if (rJ_Button.Text == pLC_RJ_Button.Text) pLC_RJ_Button.Bool = true;
+                else continue;
 
                 if (chemotherapyOrders != null)
                 {
-                    List<object[]> objects = new List<object[]>();
+
                     for (int i = 0; i < chemotherapyOrders.Count; i++)
                     {
                         object[] value = new object[new enum_處方藥品().GetLength()];
-
+                        bool flag_current_date = false;
                         for (int k = 0; k < chemotherapyOrders[i].每日紀錄.Count; k++)
                         {
+
                             if (chemotherapyOrders[i].每日紀錄[k].日期.StringToDateTime().ToDateString() == rJ_Button.Text.StringToDateTime().ToDateString())
                             {
                                 value[(int)enum_處方藥品.GUID] = chemotherapyOrders[i].每日紀錄[k].GUID;
@@ -428,15 +507,24 @@ namespace FADC
                                 if (chemotherapyOrders[i].每日紀錄[k].審核藥師.StringIsEmpty()) chemotherapyOrders[i].每日紀錄[k].審核藥師 = "-";
                                 value[(int)enum_處方藥品.審核藥師] = chemotherapyOrders[i].每日紀錄[k].審核藥師;
                                 objects.Add(value);
+                                flag_current_date = true;
                             }
-                       
-                        }                        
+
+                        }
+                        if (flag_current_date)
+                        {
+                            //Function_調劑畫面_處方UI資訊更新(chemotherapyOrders[i]);
+                        }
                     }
-                    sqL_DataGridView_調劑畫面_處方藥品.RefreshGrid(objects);
+
+
+
 
                 }
             }
-     
+            sqL_DataGridView_調劑畫面_處方藥品.RefreshGrid(objects);
+            sqL_DataGridView_調劑畫面_處方藥品.SetDataKeys(objects);
+            sqL_DataGridView_調劑畫面_處方藥品.RefreshGrid();
         }
         private void PlC_RJ_Button_調劑作業_指紋登入_MouseDownEvent(MouseEventArgs mevent)
         {
@@ -465,8 +553,22 @@ namespace FADC
         }
         private void PlC_RJ_Button_調劑作業_入庫作業_MouseDownEvent(MouseEventArgs mevent)
         {
-            Dialog_單品入庫作業 dialog_入庫作業 = new Dialog_單品入庫作業();
-            dialog_入庫作業.ShowDialog();
+            try
+            {
+                Dialog_單品入庫作業 dialog_入庫作業 = new Dialog_單品入庫作業();
+                flag_dialog_單品入庫_IsShown = true;
+                dialog_入庫作業.ShowDialog();
+          
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                flag_dialog_單品入庫_IsShown = false;
+            }
+        
         }
         private void PlC_RJ_Button_調劑作業_藥品組合_MouseDownEvent(MouseEventArgs mevent)
         {

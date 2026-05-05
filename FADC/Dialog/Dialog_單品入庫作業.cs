@@ -1,26 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using Basic;
+using DrawingClass;
+using FaceRecognitionDll.Models;
+using FaceRecognitionUserControl;
+using FingerprintLib;
+using GestureRecognitionDll;
+using GestureRecognitionUseerControl;
+using H_Pannel_lib;
+using HIS_DB_Lib;
+using MyUI;
+using NPOI.SS.UserModel;
+using SQLUI;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using HIS_DB_Lib;
-using Basic;
-using MyUI;
-using FingerprintLib;
-using System.Threading;
-using FaceRecognitionUserControl;
-using System;
-using NPOI.SS.UserModel;
-using FaceRecognitionDll.Models;
-using SQLUI;
-using H_Pannel_lib;
-using DrawingClass;
-using GestureRecognitionDll;
-using System.Text.RegularExpressions;
-using System.Reflection;
 namespace FADC
 {
     public partial class Dialog_單品入庫作業 : MyDialog
@@ -89,11 +90,38 @@ namespace FADC
             }
            
         }
-
         private void Dialog_單品入庫作業_FormClosed(object sender, FormClosedEventArgs e)
         {
-            gestureRecognitionCanvas.StopCaptureSoft();
+            Main_Form.gestureRecognitionCanvas.UpdateRecognitionResultEvent -= GestureRecognitionCanvas_UpdateRecognitionResultEvent;
         }
+        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<HandPoseInfo> result)
+        {
+            // 顯示 Log
+
+            if (result != null && result.State && result.Data != null)
+            {
+                Console.WriteLine($"手勢: {result.Data.Pose}");
+                if (result.Data.Pose == "ok" || result.Data.Pose == "good")
+                {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【確認手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_確認_MouseDownEvent(null);
+                }
+                else if (result.Data.Pose == "bad")
+                {
+                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【取消手勢】", 1500, Color.Green);
+                    dialog_AlarmForm.ShowDialog();
+                    RJ_Button_取消_MouseDownEvent(null);
+
+                }
+            }
+            else
+            {
+                //Console.WriteLine($"無法辨識");
+            }
+
+        }
+
         private void RJ_Button_確認_MouseDownEvent(MouseEventArgs mevent)
         {
             double 庫存 = Main_Form.Function_從SQL取得庫存(_medClass.藥品碼);
@@ -176,8 +204,8 @@ namespace FADC
                     rJ_Lable_批號.Text = batchExpiryControl.GetStock().Lot_number;
                     rJ_Lable_數量.Text = userControl_NumPanel1.Value.ToString();
 
-                    gestureRecognitionCanvas.UpdateRecognitionResultEvent += GestureRecognitionCanvas_UpdateRecognitionResultEvent;
-                    gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
+                    Main_Form.gestureRecognitionCanvas.UpdateRecognitionResultEvent += GestureRecognitionCanvas_UpdateRecognitionResultEvent;
+                    //gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
                     Console.WriteLine($"手勢感測開始...");
 
                     this.stepViewer1.Next();
@@ -243,35 +271,7 @@ namespace FADC
             }
         
         }
-
-        private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<HandPoseInfo> result)
-        {
-            // 顯示 Log
-
-            if (result != null && result.State && result.Data != null)
-            {
-                Console.WriteLine($"手勢: {result.Data.Pose}");
-                if (result.Data.Pose == "ok" || result.Data.Pose == "good")
-                {
-                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【確認手勢】", 1500, Color.Green);
-                    dialog_AlarmForm.ShowDialog();
-                    RJ_Button_確認_MouseDownEvent(null);
-                }
-                else if (result.Data.Pose == "bad")
-                {
-                    Dialog_AlarmForm dialog_AlarmForm = new Dialog_AlarmForm("【取消手勢】", 1500, Color.Green);
-                    dialog_AlarmForm.ShowDialog();
-                    RJ_Button_取消_MouseDownEvent(null);
-
-                }
-            }
-            else
-            {
-                //Console.WriteLine($"無法辨識");
-            }
-
-        }
-
+   
         private void SqL_DataGridView_儲位選擇_RowPostPaintingEvent(DataGridViewRowPostPaintEventArgs e)
         {
             Color row_Backcolor = Color.LightGray;

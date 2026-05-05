@@ -247,7 +247,6 @@ namespace FADC
             LoadDBConfig();
             LoadMyConfig();
         }
-
         private void PlC_UI_Init_UI_Finished_Event()
         {
             
@@ -276,47 +275,7 @@ namespace FADC
 
          
         }
-
-        private void SpeechRecognitionUserControl_OnRecognized(SpeechRecognitionDll.Response<SpeechRecognitionDll.Detail> response)
-        {
-            StringBuilder log = new StringBuilder();
-
-            log.AppendLine($"Success: {response.State}");
-            log.AppendLine($"Message: {response.Message}");
-            log.AppendLine($"ErrorCode: {response.ErrorCode}");
-            log.AppendLine($"Command: {response.Command}");
-
-            var data = response.Data.JsonSerializationt(true);
-            log.AppendLine($"Data: {data}");
-
-            Console.WriteLine(log);
-            string SelectedTabText = "";
-            this.Invoke(new Action(delegate
-            {
-                SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
-            }));
-            if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
-            {
-                if (response.Command == null) return;
-                if(response.Command.ToUpper() == "LOGIN" || response.Command.ToUpper() == "DISPENSE")
-                {
-                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
-                    PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(null);
-                }
-
-            } 
-            if (SelectedTabText == "刷取藥單" && plC_ScreenPage_Main.PageText == "調劑作業")
-            {
-                if (response.Command == null) return;
-                if (response.Command.ToUpper() == "LOGOUT")
-                {
-                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
-                    RJ_Button_調劑畫面_登出_MouseDownEvent(null);
-                }
-
-            }
-        }
-
+        
         private void RFID_Iint()
         {
             Task.Run(new Action(delegate
@@ -485,6 +444,46 @@ namespace FADC
             if (OrderByCodeApi_URL.StringIsEmpty())
             {
                 OrderByCodeApi_URL = Order_URL;
+            }
+        }
+
+        private void SpeechRecognitionUserControl_OnRecognized(SpeechRecognitionDll.Response<SpeechRecognitionDll.Detail> response)
+        {
+            StringBuilder log = new StringBuilder();
+
+            log.AppendLine($"Success: {response.State}");
+            log.AppendLine($"Message: {response.Message}");
+            log.AppendLine($"ErrorCode: {response.ErrorCode}");
+            log.AppendLine($"Command: {response.Command}");
+
+            var data = response.Data.JsonSerializationt(true);
+            log.AppendLine($"Data: {data}");
+
+            Console.WriteLine(log);
+            string SelectedTabText = "";
+            this.Invoke(new Action(delegate
+            {
+                SelectedTabText = tabControlEx_調劑畫面.SelectedTab.Text;
+            }));
+            if (SelectedTabText == "登入畫面" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if (response.Command.ToUpper() == "LOGIN" || response.Command.ToUpper() == "DISPENSE")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(null);
+                }
+
+            }
+            if (SelectedTabText == "刷取藥單" && plC_ScreenPage_Main.PageText == "調劑作業")
+            {
+                if (response.Command == null) return;
+                if (response.Command.ToUpper() == "LOGOUT")
+                {
+                    "語音識別成功".PlayGooleVoiceAsync(Main_Form.API_Server);
+                    RJ_Button_調劑畫面_登出_MouseDownEvent(null);
+                }
+
             }
         }
     }
