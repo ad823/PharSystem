@@ -2809,6 +2809,7 @@ namespace 調劑台管理系統
                       || device.DeviceType == DeviceType.EPD360E || device.DeviceType == DeviceType.EPD360E_lock)
                     {
                         Storage storage = list_Device[i] as Storage;
+                        Logger.Log($"儲位刷新EPD({storage.DeviceType}),庫存 : {storage.Inventory}");
                         if (storage != null)
                         {
                             taskList.Add(Task.Run(() =>
@@ -2824,7 +2825,7 @@ namespace 調劑台管理系統
                                         }
                                     }
                                 }
-
+              
                                 _storageUI_EPD_266.DrawToEpd_UDP(storage);
                             }));
 
