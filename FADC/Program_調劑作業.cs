@@ -260,10 +260,7 @@ namespace FADC
         }
         private void TabControlEx_調劑畫面_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
-            //{
-            //    gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
-            //}
+            gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
         }
         private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<GestureRecognitionDll.HandPoseInfo> result)
         {
