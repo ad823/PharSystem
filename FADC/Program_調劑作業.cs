@@ -1,24 +1,25 @@
 ﻿using Basic;
+using DPUruNet;
+using FingerprintLib;
+using FontAwesome.Sharp;
+using FpMatchLib;
+using GestureRecognitionUseerControl;
 using H_Pannel_lib;
+using HIS_DB_Lib;
 using MinasA6DLL;
 using MyUI;
+using NPOI.SS.Formula.Functions;
+using SQLUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SQLUI;
-using HIS_DB_Lib;
-using System.Diagnostics;
-using FpMatchLib;
-using FingerprintLib;
-using NPOI.SS.Formula.Functions;
-using DPUruNet;
-using FontAwesome.Sharp;
 
 namespace FADC
 {
@@ -259,25 +260,40 @@ namespace FADC
         }
         private void TabControlEx_調劑畫面_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
-            {
-                gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
-            }
+            //if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單")
+            //{
+            //    gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
+            //}
         }
         private void GestureRecognitionCanvas_UpdateRecognitionResultEvent(StringBuilder builder, GestureRecognitionDll.Response<GestureRecognitionDll.HandPoseInfo> result)
         {
+            if (tabControlEx_調劑畫面.SelectedTab.Text == "登入畫面")
+            {
+                if (result != null && result.State && result.Data != null)
+                {
+                    Console.WriteLine($"[登入畫面]手勢: {result.Data.Pose}");
+                    if (result.Data.Pose == "good")
+                    {
+                        PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(null);
+                    }
+                }
+            }
             if (tabControlEx_調劑畫面.SelectedTab.Text == "刷取藥單" && flag_dialog_單品入庫_IsShown == false)
             {
 
                 if (result != null && result.State && result.Data != null)
                 {
-                    Console.WriteLine($"手勢: {result.Data.Pose}");
+                    Console.WriteLine($"[刷取藥單]手勢: {result.Data.Pose}");
                     if (result.Data.Pose == "1")
                     {
                         if (pLC_RJ_Buttons[0].Enabled == true)
                         {
                             PLC_RJ_Button_MouseDownEventEx(pLC_RJ_Buttons[0], null);
                         }
+                    }
+                    else if (result.Data.Pose == "good")
+                    {
+                        RJ_Button_調劑畫面_開始調劑_MouseDownEvent(null);
                     }
                     else if (result.Data.Pose == "2")
                     {
@@ -540,25 +556,40 @@ namespace FADC
         }
         private void PlC_RJ_Button_調劑作業_辨識登入_MouseDownEvent(MouseEventArgs mevent)
         {
-            Dialog_人臉辨識 dialog_人臉辨識 = new Dialog_人臉辨識();
-            if (dialog_人臉辨識.ShowDialog() != DialogResult.Yes) return;
-            personPageClass personPageClass = dialog_人臉辨識.Value;
-            this.Invoke(new Action(delegate
+            gestureRecognitionCanvas.StopCaptureSoft();
+            try
             {
-                personpageClass_調劑畫面 = personPageClass;
-                rJ_Lable_調劑畫面_登入資訊.Text = $"{personPageClass.姓名}({personPageClass.ID})";
-                tabControlEx_調劑畫面.SelectTab("刷取藥單");
-            }));
-    
+                Dialog_人臉辨識 dialog_人臉辨識 = new Dialog_人臉辨識();
+                if (dialog_人臉辨識.ShowDialog() != DialogResult.Yes) return;
+                personPageClass personPageClass = dialog_人臉辨識.Value;
+                this.Invoke(new Action(delegate
+                {
+                    personpageClass_調劑畫面 = personPageClass;
+                    rJ_Lable_調劑畫面_登入資訊.Text = $"{personPageClass.姓名}({personPageClass.ID})";
+                    tabControlEx_調劑畫面.SelectTab("刷取藥單");
+                }));
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
+            }
+        
+       
+
         }
         private void PlC_RJ_Button_調劑作業_入庫作業_MouseDownEvent(MouseEventArgs mevent)
         {
             try
             {
+                gestureRecognitionCanvas.StopCaptureSoft();
                 Dialog_單品入庫作業 dialog_入庫作業 = new Dialog_單品入庫作業();
                 flag_dialog_單品入庫_IsShown = true;
                 dialog_入庫作業.ShowDialog();
-          
+              
             }
             catch
             {
@@ -567,6 +598,7 @@ namespace FADC
             finally
             {
                 flag_dialog_單品入庫_IsShown = false;
+                gestureRecognitionCanvas.StartCapture(Main_Form.videoCapture);
             }
         
         }
