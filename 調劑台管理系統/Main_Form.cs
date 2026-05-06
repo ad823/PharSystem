@@ -698,9 +698,22 @@ namespace 調劑台管理系統
 
             Task task = Task.Run(new Action(delegate
             {
-                if (!this.ControlMode) Function_從SQL取得儲位到本地資料();
+                if (!this.ControlMode)
+                {
+                    Function_從SQL取得儲位到本地資料();
 
-              
+                    systemConfigClass.init(API_Server);
+                    Image image1 = systemConfigClass.get_image(API_Server, "圖片設定", "自定義_1");
+                    Image image2 = systemConfigClass.get_image(API_Server, "圖片設定", "自定義_2");
+                    Image image3 = systemConfigClass.get_image(API_Server, "圖片設定", "自定義_3");
+
+                    if (image1 != null) Storage.SetBitmapToCache("自定義_1", (Bitmap)image1);
+                    if (image2 != null) Storage.SetBitmapToCache("自定義_2", (Bitmap)image2);
+                    if (image3 != null) Storage.SetBitmapToCache("自定義_3", (Bitmap)image3);
+
+                }
+
+
             }));
             if (!this.ControlMode) this.plC_ScreenPage_Main.SelecteTabText("調劑作業");
 

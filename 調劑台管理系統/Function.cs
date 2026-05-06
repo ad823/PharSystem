@@ -615,7 +615,6 @@ namespace 調劑台管理系統
             Voice.MediaPlayAsync($@"{currentDirectory}\sucess_01.wav");
         }
 
-
         public void Function_從SQL取得儲位到入賬資料(string 藥品碼)
         {
             List<object> list_value = new List<object>();

@@ -580,7 +580,7 @@
             <param name="remark">備註。</param>
             <returns>回傳 systemConfigClass。</returns>
         </member>
-        <member name="M:HIS_DB_Lib.systemConfigClass.CreateImageBase64(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateImageBase64(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             建立圖片 Base64 參數物件。
             </summary>
@@ -588,13 +588,22 @@
             <param name="key">鍵值。</param>
             <param name="name">名稱。</param>
             <param name="base64">圖片 Base64。</param>
-            <param name="fileName">檔案名稱。</param>
-            <param name="extension">副檔名。</param>
-            <param name="contentType">ContentType。</param>
             <param name="remark">備註。</param>
             <returns>回傳 systemConfigClass。</returns>
         </member>
-        <member name="M:HIS_DB_Lib.systemConfigClass.CreateFileBase64(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateImage(System.String,System.String,System.String,System.Drawing.Image,System.String)">
+            <summary>
+            建立圖片參數物件。
+            圖片會固定轉成 PNG Base64。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="image">圖片物件。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateFileBase64(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             建立檔案 Base64 參數物件。
             </summary>
@@ -602,11 +611,15 @@
             <param name="key">鍵值。</param>
             <param name="name">名稱。</param>
             <param name="base64">檔案 Base64。</param>
-            <param name="fileName">檔案名稱。</param>
-            <param name="extension">副檔名。</param>
-            <param name="contentType">ContentType。</param>
             <param name="remark">備註。</param>
             <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.ImageToBase64(System.Drawing.Image)">
+            <summary>
+            將 Image 轉成 PNG Base64 字串。
+            </summary>
+            <param name="image">圖片物件。</param>
+            <returns>回傳 Base64 字串，失敗回傳空字串。</returns>
         </member>
         <member name="M:HIS_DB_Lib.systemConfigClass.FileToBase64(System.String)">
             <summary>
@@ -697,7 +710,7 @@
             <param name="remark">備註。</param>
             <returns>回傳 API 執行結果。</returns>
         </member>
-        <member name="M:HIS_DB_Lib.systemConfigClass.set_image_base64(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_image_base64(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             更新或新增圖片 Base64 參數。
             </summary>
@@ -706,13 +719,23 @@
             <param name="key">鍵值。</param>
             <param name="name">名稱。</param>
             <param name="base64">圖片 Base64。</param>
-            <param name="fileName">檔案名稱。</param>
-            <param name="extension">副檔名。</param>
-            <param name="contentType">ContentType。</param>
             <param name="remark">備註。</param>
             <returns>回傳 API 執行結果。</returns>
         </member>
-        <member name="M:HIS_DB_Lib.systemConfigClass.set_file_base64(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_image(System.String,System.String,System.String,System.String,System.Drawing.Image,System.String)">
+            <summary>
+            更新或新增圖片參數。
+            圖片會固定轉成 PNG Base64。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="image">圖片物件。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_file_base64(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             更新或新增檔案 Base64 參數。
             </summary>
@@ -721,9 +744,6 @@
             <param name="key">鍵值。</param>
             <param name="name">名稱。</param>
             <param name="base64">檔案 Base64。</param>
-            <param name="fileName">檔案名稱。</param>
-            <param name="extension">副檔名。</param>
-            <param name="contentType">ContentType。</param>
             <param name="remark">備註。</param>
             <returns>回傳 API 執行結果。</returns>
         </member>
@@ -848,6 +868,15 @@
             <param name="category">類別。</param>
             <param name="key">鍵值。</param>
             <returns>回傳 byte[]，失敗回傳 null。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_image(System.String,System.String,System.String)">
+            <summary>
+            取得 Image 圖片物件。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳 Image，失敗回傳 null。</returns>
         </member>
         <member name="M:HIS_DB_Lib.systemConfigClass.save_file_to_path(System.String,System.String,System.String,System.String)">
             <summary>
