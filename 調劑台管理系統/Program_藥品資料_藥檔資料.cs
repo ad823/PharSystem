@@ -1105,7 +1105,19 @@ namespace 調劑台管理系統
         private void PlC_RJ_Button_藥品資料_登錄_MouseDownEvent(MouseEventArgs mevent)
         {
             LoadingForm.ShowLoadingForm();
-            Function_藥品資料_藥檔資料_登錄();
+            try
+            {
+                Function_藥品資料_藥檔資料_登錄();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Exception : {ex.Message}");
+            }
+            finally
+            {
+
+            }
+   
             LoadingForm.CloseLoadingForm();
         }
         private void PlC_RJ_Button_藥品資料_匯出_MouseDownEvent(MouseEventArgs mevent)

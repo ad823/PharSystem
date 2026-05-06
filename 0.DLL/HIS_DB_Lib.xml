@@ -249,6 +249,645 @@
             備註
             </summary>
         </member>
+        <member name="T:HIS_DB_Lib.enum_system_config">
+             <summary>
+             系統參數資料表欄位定義。
+             </summary>
+             <remarks>
+             資料表名稱：system_config
+            
+             用途：
+             1. 儲存一般系統參數。
+             2. 儲存 JSON 設定。
+             3. 儲存圖片 Base64。
+             4. 儲存檔案 Base64。
+             5. 儲存報表模板、列印模板、Logo、授權檔等資料。
+            
+             唯一規則：
+             類別 + 鍵值 不可重複。
+            
+             檔案限制：
+             單筆 Base64 原始檔案大小不可超過 10MB，由 API 端檢查。
+             </remarks>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.GUID">
+            <summary>
+            唯一識別碼。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.類別">
+            <summary>
+            參數類別，例如：系統設定、圖片設定、報表模板、列印設定。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.名稱">
+            <summary>
+            顯示名稱。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.鍵值">
+            <summary>
+            程式查詢用鍵值。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.資料類型">
+            <summary>
+            資料類型。
+            string / number / bool / json / image / file
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.文字值">
+            <summary>
+            一般文字值。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.JSON值">
+            <summary>
+            JSON 字串值。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.base64">
+            <summary>
+            圖片或檔案 Base64。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.檔案名稱">
+            <summary>
+            檔案名稱。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.副檔名">
+            <summary>
+            副檔名。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.ContentType">
+            <summary>
+            Content-Type。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.檔案大小">
+            <summary>
+            檔案大小，單位 bytes。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.版本">
+            <summary>
+            版本。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.啟用">
+            <summary>
+            是否啟用。
+            true / false
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.備註">
+            <summary>
+            備註。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.建立時間">
+            <summary>
+            建立時間。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config.更新時間">
+            <summary>
+            更新時間。
+            </summary>
+        </member>
+        <member name="T:HIS_DB_Lib.enum_system_config_value_type">
+            <summary>
+            系統參數資料類型。
+            </summary>
+            <remarks>
+            string 與 bool 為 C# 關鍵字，因此 enum 成員使用 @string、@bool。
+            存入資料庫時仍會轉成 string、bool。
+            </remarks>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.string">
+            <summary>
+            一般字串。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.number">
+            <summary>
+            數字。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.bool">
+            <summary>
+            布林值。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.json">
+            <summary>
+            JSON 字串。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.image">
+            <summary>
+            圖片 Base64。
+            </summary>
+        </member>
+        <member name="F:HIS_DB_Lib.enum_system_config_value_type.file">
+            <summary>
+            檔案 Base64。
+            </summary>
+        </member>
+        <member name="T:HIS_DB_Lib.systemConfigClass">
+             <summary>
+             系統參數資料類別。
+             </summary>
+             <remarks>
+             可儲存：
+             1. 一般參數。
+             2. 數字參數。
+             3. 布林參數。
+             4. JSON 設定。
+             5. 圖片 Base64。
+             6. 檔案 Base64。
+            
+             主要 API：
+             POST /api/systemConfig/init
+             POST /api/systemConfig/set
+             POST /api/systemConfig/set_list
+             POST /api/systemConfig/get_by_key
+             POST /api/systemConfig/get_by_category
+             POST /api/systemConfig/get_all
+             POST /api/systemConfig/delete_by_guid
+             POST /api/systemConfig/delete_by_key
+            
+             更新參數：
+             呼叫 set() 即可。
+             若 類別 + 鍵值 已存在，API 端會更新。
+             若 類別 + 鍵值 不存在，API 端會新增。
+             </remarks>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.GUID">
+            <summary>
+            唯一識別碼。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.類別">
+            <summary>
+            類別。
+            例如：系統設定、圖片設定、報表模板、列印設定。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.名稱">
+            <summary>
+            顯示名稱。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.鍵值">
+            <summary>
+            鍵值。
+            程式查詢用，建議使用英文，例如：company_name、login_logo。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.資料類型">
+            <summary>
+            資料類型。
+            string / number / bool / json / image / file
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.文字值">
+            <summary>
+            一般文字值。
+            適用 string / number / bool。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.JSON值">
+            <summary>
+            JSON 字串值。
+            適用 json。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.base64">
+            <summary>
+            圖片或檔案 Base64。
+            適用 image / file。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.檔案名稱">
+            <summary>
+            檔案名稱。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.副檔名">
+            <summary>
+            副檔名。
+            例如：.png、.jpg、.pdf、.xlsx。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.ContentType">
+            <summary>
+            ContentType。
+            例如：image/png、application/pdf。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.檔案大小">
+            <summary>
+            檔案大小。
+            單位 bytes，以字串儲存。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.版本">
+            <summary>
+            版本。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.啟用">
+            <summary>
+            是否啟用。
+            true / false。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.備註">
+            <summary>
+            備註。
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.建立時間">
+            <summary>
+            建立時間。
+            格式：yyyy-MM-dd HH:mm:ss
+            </summary>
+        </member>
+        <member name="P:HIS_DB_Lib.systemConfigClass.更新時間">
+            <summary>
+            更新時間。
+            格式：yyyy-MM-dd HH:mm:ss
+            </summary>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.GetValueTypeName(HIS_DB_Lib.enum_system_config_value_type)">
+            <summary>
+            取得系統參數資料類型字串。
+            </summary>
+            <param name="valueType">系統參數資料類型 enum。</param>
+            <returns>回傳 string / number / bool / json / image / file。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.IsValidValueType(System.String)">
+            <summary>
+            判斷資料類型是否合法。
+            </summary>
+            <param name="valueType">資料類型字串。</param>
+            <returns>合法回傳 true，否則回傳 false。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateString(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            建立一般文字參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">文字值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateNumber(System.String,System.String,System.String,System.Double,System.String)">
+            <summary>
+            建立數字參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">數字值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateBool(System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            建立布林參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">布林值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateJson(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            建立 JSON 參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="jsonValue">JSON 字串。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateImageBase64(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            建立圖片 Base64 參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="base64">圖片 Base64。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateImage(System.String,System.String,System.String,System.Drawing.Image,System.String)">
+            <summary>
+            建立圖片參數物件。
+            圖片會固定轉成 PNG Base64。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="image">圖片物件。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.CreateFileBase64(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            建立檔案 Base64 參數物件。
+            </summary>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="base64">檔案 Base64。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 systemConfigClass。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.ImageToBase64(System.Drawing.Image)">
+            <summary>
+            將 Image 轉成 PNG Base64 字串。
+            </summary>
+            <param name="image">圖片物件。</param>
+            <returns>回傳 Base64 字串，失敗回傳空字串。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.FileToBase64(System.String)">
+            <summary>
+            將檔案轉成 Base64 字串。
+            </summary>
+            <param name="filePath">檔案路徑。</param>
+            <returns>回傳 Base64 字串。若檔案不存在則回傳空字串。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.GetContentTypeByExtension(System.String)">
+            <summary>
+            取得常見副檔名對應的 ContentType。
+            </summary>
+            <param name="extension">副檔名，例如 .png。</param>
+            <returns>回傳 ContentType。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.init(System.String)">
+            <summary>
+            初始化 system_config 資料表。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <returns>回傳資料表資訊。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set(System.String,HIS_DB_Lib.systemConfigClass)">
+            <summary>
+            新增或更新單一系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="config">系統參數物件。</param>
+            <returns>回傳 API 執行結果。</returns>
+            <remarks>
+            若 類別 + 鍵值 已存在，API 端會更新。
+            若 類別 + 鍵值 不存在，API 端會新增。
+            </remarks>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_list(System.String,System.Collections.Generic.List{HIS_DB_Lib.systemConfigClass})">
+            <summary>
+            新增或更新多筆系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="configs">系統參數清單。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_string(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            更新或新增文字參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">文字值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_number(System.String,System.String,System.String,System.String,System.Double,System.String)">
+            <summary>
+            更新或新增數字參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">數字值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_bool(System.String,System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            更新或新增布林參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="value">布林值。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_json(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            更新或新增 JSON 參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="jsonValue">JSON 字串。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_image_base64(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            更新或新增圖片 Base64 參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="base64">圖片 Base64。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_image(System.String,System.String,System.String,System.String,System.Drawing.Image,System.String)">
+            <summary>
+            更新或新增圖片參數。
+            圖片會固定轉成 PNG Base64。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="image">圖片物件。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_file_base64(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            更新或新增檔案 Base64 參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="base64">檔案 Base64。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.set_file_from_path(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            更新或新增本機檔案參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="name">名稱。</param>
+            <param name="filePath">本機檔案路徑。</param>
+            <param name="isImage">是否為圖片。</param>
+            <param name="remark">備註。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_by_key(System.String,System.String,System.String)">
+            <summary>
+            依照類別與鍵值取得系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳系統參數物件，查無資料則回傳 null。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_by_category(System.String,System.String)">
+            <summary>
+            依照類別取得系統參數清單。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <returns>回傳系統參數清單。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_all(System.String)">
+            <summary>
+            取得全部系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <returns>回傳系統參數清單。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.delete_by_guid(System.String,System.String)">
+            <summary>
+            依 GUID 刪除系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="guid">GUID。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.delete_by_key(System.String,System.String,System.String)">
+            <summary>
+            依類別與鍵值刪除系統參數。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳 API 執行結果。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_value(System.String,System.String,System.String,System.String)">
+            <summary>
+            取得文字值。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="defaultValue">預設值。</param>
+            <returns>回傳文字值。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_json(System.String,System.String,System.String,System.String)">
+            <summary>
+            取得 JSON 字串值。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="defaultValue">預設值。</param>
+            <returns>回傳 JSON 字串。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_bool(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            取得布林值。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="defaultValue">預設值。</param>
+            <returns>回傳布林值。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_int(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            取得整數值。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="defaultValue">預設值。</param>
+            <returns>回傳整數值。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_double(System.String,System.String,System.String,System.Double)">
+            <summary>
+            取得 double 數值。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="defaultValue">預設值。</param>
+            <returns>回傳 double 數值。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_base64(System.String,System.String,System.String)">
+            <summary>
+            取得 Base64。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳 Base64 字串。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_file_bytes(System.String,System.String,System.String)">
+            <summary>
+            取得檔案 bytes。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳 byte[]，失敗回傳 null。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.get_image(System.String,System.String,System.String)">
+            <summary>
+            取得 Image 圖片物件。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <returns>回傳 Image，失敗回傳 null。</returns>
+        </member>
+        <member name="M:HIS_DB_Lib.systemConfigClass.save_file_to_path(System.String,System.String,System.String,System.String)">
+            <summary>
+            將系統參數中的 Base64 檔案另存到本機路徑。
+            </summary>
+            <param name="API_Server">API Server 位址。</param>
+            <param name="category">類別。</param>
+            <param name="key">鍵值。</param>
+            <param name="savePath">儲存路徑。</param>
+            <returns>成功回傳 true，失敗回傳 false。</returns>
+        </member>
         <member name="P:HIS_DB_Lib.medComboClass.GUID">
             <summary>
             唯一KEY。
