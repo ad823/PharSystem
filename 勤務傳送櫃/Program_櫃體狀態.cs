@@ -421,16 +421,16 @@ namespace 勤務傳送系統
 
         private void Pannel_Box_InSideBoxOnEvent(Pannel_Box pannel_Box)
         {
-            this.新增交易紀錄(enum_交易記錄查詢動作.藥品放入, this.登入者名稱, $"{pannel_Box.WardName}", "");
+            this.新增交易紀錄(enum_交易記錄查詢動作.藥品放入, this.登入者名稱, $"{pannel_Box.WardName}", $"{this.登入者ID}");
         }
         private void Pannel_Box_AlarmEvent(Pannel_Box pannel_Box)
         {
-            this.新增交易紀錄(enum_交易記錄查詢動作.門片未關閉異常, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+            this.新增交易紀錄(enum_交易記錄查詢動作.門片未關閉異常, pannel_Box.CT_Name, $"{pannel_Box.WardName}", $"{pannel_Box.CT_ID}");
         }
         private void Pannel_Box_CloseEvent(Pannel_Box pannel_Box)
         {
             if (pannel_Box.CT_Name.StringIsEmpty()) return;
-            this.新增交易紀錄(enum_交易記錄查詢動作.關閉門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+            this.新增交易紀錄(enum_交易記錄查詢動作.關閉門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", $"{pannel_Box.CT_ID}");
             Funtion_關門回寫API(pannel_Box.CT_Name, pannel_Box.CT_ID, pannel_Box.WardName);
             pannel_Box.CT_Name = "";
             pannel_Box.CT_ID = "";
@@ -438,7 +438,7 @@ namespace 勤務傳送系統
         private void Pannel_Box_OpenEvent(Pannel_Box pannel_Box)
         {
             if (pannel_Box.CT_Name.StringIsEmpty()) return;
-            this.新增交易紀錄(enum_交易記錄查詢動作.開啟門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", "");
+            this.新增交易紀錄(enum_交易記錄查詢動作.開啟門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", $"{pannel_Box.CT_ID}");
             string[] serch_colName = { enum_交易記錄查詢資料.領用時間.GetEnumName() };
             string[] serch_Value = { "1999-01-01 00:00:00" };
 

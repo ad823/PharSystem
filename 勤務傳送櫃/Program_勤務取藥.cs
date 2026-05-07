@@ -453,6 +453,7 @@ namespace 勤務傳送系統
                 }
 
                 List<OrderClass> orderClasses = this.Function_醫令資料_API呼叫(dBConfigClass.OrderApiURL, text);
+                List<OrderClass> orderClasses_update = new List<OrderClass>();
                 List<transactionsClass> transactions = transactionsClass.get_by_order_guids(API_Server, orderClasses.Select(x => x.GUID).ToList(), ServerName, ServerType);
 
                 if (MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.IsTimeOut() || true)
@@ -535,6 +536,14 @@ namespace 勤務傳送系統
                 for(int i = 0; i < transactions.Count; i++)
                 {
                     DateTime dt = transactions[i].領用時間.StringToDateTime();
+                    string order_guid = transactions[i].Order_GUID;
+                    OrderClass order = orderClasses.Where(x => x.GUID == order_guid).FirstOrDefault();
+                    if(order != null)
+                    {
+                        order.領藥姓名 = transactions[i].操作人;
+                        order.領藥ID = transactions[i].備註;
+                        orderClasses_update.Add(order);
+                    }
                     if (dt.ToDateString('-') == "1999-01-01")
                     {
                         transactions[i].領用時間 = DateTime.Now.ToDateTimeString_6();
@@ -546,7 +555,7 @@ namespace 勤務傳送系統
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.TickStop();
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(120000);
                 transactionsClass.update_by_guid(API_Server, transactions, ServerName, ServerType);
-                //OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
+                OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses_update);
                 Funtion_勤務取藥API(orderClasses);
 
             }
