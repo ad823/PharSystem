@@ -21,8 +21,8 @@ using MyPrinterlib;
 using MyOffice;
 using HIS_DB_Lib;
 using H_Pannel_lib;
-[assembly: AssemblyVersion("1.0.26.05051")]
-[assembly: AssemblyFileVersion("1.0.26.05051")]
+[assembly: AssemblyVersion("1.0.26.05073")]
+[assembly: AssemblyFileVersion("1.0.26.05073")]
 namespace 調劑台管理系統
 {
 
@@ -405,13 +405,11 @@ namespace 調劑台管理系統
         private void Main_Form_Load(object sender, EventArgs e)
         {
             CloseProcessByName("batch_StackDataAccounting");
-
+            //Console.WriteLine("請按 Enter繼續...");
+            //Console.ReadKey();
             _textBox_工程模式_領藥台_名稱 = this.textBox_工程模式_領藥台_名稱;
             _pannel_Locker_Design = this.pannel_Locker_Design;
             _plC_ScreenPage_Main = this.plC_ScreenPage_Main;
-
-            
-
             H_Pannel_lib.Communication.ConsoleWrite = false;
             Net.DebugLog = false;
             if (this.DesignMode == false)
