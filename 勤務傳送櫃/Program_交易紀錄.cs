@@ -136,7 +136,7 @@ namespace 勤務傳送系統
         }
         #region Function
 
-        private void 新增交易紀錄(enum_交易記錄查詢動作 _enum_交易記錄查詢動作, string 操作人, string 房名, string 備註)
+        private void 新增交易紀錄(enum_交易記錄查詢動作 _enum_交易記錄查詢動作, string 操作人 , string 房名, string 備註)
         {
             string GUID = $"{_enum_交易記錄查詢動作.GetEnumName()};{操作人};{房名};{DateTime.Now.ToDateTimeString()}";
             List<object[]> list_value = this.sqL_DataGridView_交易記錄查詢.SQL_GetRows((int)enum_交易記錄查詢資料.GUID, GUID, false);

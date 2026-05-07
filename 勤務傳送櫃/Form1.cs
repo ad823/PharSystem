@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.25.12158")]
-[assembly: AssemblyFileVersion("1.0.25.12158")]
+[assembly: AssemblyVersion("1.0.26.05081")]
+[assembly: AssemblyFileVersion("1.0.26.05081")]
 namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
@@ -58,6 +58,8 @@ namespace 勤務傳送系統
             private string medApiURL = "";
             private string orderCheckinApiURL = "";
             private string orderTakeOutApiURL = "";
+            private string doorOpenApiURL = "";
+            private string doorCloseApiURL = "";
             [JsonIgnore]
             public SQL_DataGridView.ConnentionClass DB_Basic { get => dB_Basic; set => dB_Basic = value; }
             [JsonIgnore]
@@ -88,6 +90,10 @@ namespace 勤務傳送系統
             public string OrderCheckinApiURL { get => orderCheckinApiURL; set => orderCheckinApiURL = value; }
             [JsonIgnore]
             public string OrderTakeOutApiURL { get => orderTakeOutApiURL; set => orderTakeOutApiURL = value; }
+            [JsonIgnore]
+            public string DoorOpenApiURL { get => doorOpenApiURL; set => doorOpenApiURL = value; }
+            [JsonIgnore]
+            public string DoorCloseApiURL { get => doorCloseApiURL; set => doorCloseApiURL = value; }
         }
         private void LoadDBConfig()
         {
@@ -407,6 +413,10 @@ namespace 勤務傳送系統
             if (sys_serverSettingClass != null) dBConfigClass.OrderCheckinApiURL = sys_serverSettingClass.Server;
             sys_serverSettingClass = sys_serverSettingClasses.MyFind(dBConfigClass.Name, enum_sys_serverSetting_Type.傳送櫃, "OrderTakeOut_API");
             if (sys_serverSettingClass != null) dBConfigClass.OrderTakeOutApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.MyFind(dBConfigClass.Name, enum_sys_serverSetting_Type.傳送櫃, "DoorOpen_API");
+            if (sys_serverSettingClass != null) dBConfigClass.DoorOpenApiURL = sys_serverSettingClass.Server;
+            sys_serverSettingClass = sys_serverSettingClasses.MyFind(dBConfigClass.Name, enum_sys_serverSetting_Type.傳送櫃, "DoorClose_API");
+            if (sys_serverSettingClass != null) dBConfigClass.DoorCloseApiURL = sys_serverSettingClass.Server;
 
             API_Server = dBConfigClass.Api_URL;
             ServerName = dBConfigClass.Name;

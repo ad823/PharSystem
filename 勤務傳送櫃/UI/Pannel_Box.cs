@@ -354,7 +354,19 @@ namespace 勤務傳送系統
                 cT_Name = value;
             }
         }
-
+        private string cT_ID = "";
+        [ReadOnly(false), Browsable(false), Category("Config"), Description(""), DefaultValue("")]
+        public string CT_ID
+        {
+            get
+            {
+                return cT_ID;
+            }
+            set
+            {
+                cT_ID = value;
+            }
+        }
         private List<string> list_serchName = new List<string>();
         [ReadOnly(false), Browsable(false), Category("Config"), Description(""), DefaultValue("")]
         public List<string> List_serchName

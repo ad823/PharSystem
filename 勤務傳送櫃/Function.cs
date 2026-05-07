@@ -125,6 +125,7 @@ namespace 勤務傳送系統
             Console.WriteLine($"----------------------[藥袋刷入]----------------------");
             Console.WriteLine($"{json_result}");
         }
+
         private void Funtion_藥袋刷入API(OrderClass orderClass , string 操作人 ,string ID)
         {
             string url = dBConfigClass.OrderCheckinApiURL;
@@ -139,6 +140,19 @@ namespace 勤務傳送系統
             Console.WriteLine($"----------------------[藥袋刷入]----------------------");
             Console.WriteLine($"{json_result}");
         }
+        private void Funtion_勤務取藥API(List<OrderClass> orderClasses)
+        {
+            string url = dBConfigClass.OrderTakeOutApiURL;
+
+            if (url.StringIsEmpty() == true) return;
+            returnData returnData = new returnData();
+            returnData.Data = orderClasses;
+            string jsonin = returnData.JsonSerializationt();
+            string json_result = Net.WEBApiPostJson(url, jsonin);
+            Console.WriteLine($"\n");
+            Console.WriteLine($"----------------------[勤務取藥]----------------------");
+            Console.WriteLine($"{json_result}");
+        }
         private void Funtion_勤務取藥API(OrderClass orderClass, string 操作人, string ID)
         {
             string url = dBConfigClass.OrderTakeOutApiURL;
@@ -151,6 +165,39 @@ namespace 勤務傳送系統
             string json_result = Net.WEBApiPostJson(url, jsonin);
             Console.WriteLine($"\n");
             Console.WriteLine($"----------------------[勤務取藥]----------------------");
+            Console.WriteLine($"{json_result}");
+        }
+
+        private void Funtion_開門回寫API(string 操作人, string ID , string WardName)
+        {
+            string url = dBConfigClass.DoorOpenApiURL;
+
+            if (url.StringIsEmpty() == true) return;
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add($"name={操作人}");
+            returnData.ValueAry.Add($"id={ID}");
+            returnData.ValueAry.Add($"wardname={WardName}");
+
+            string jsonin = returnData.JsonSerializationt();
+            string json_result = Net.WEBApiPostJson(url, jsonin);
+            Console.WriteLine($"\n");
+            Console.WriteLine($"----------------------[開門回寫]----------------------");
+            Console.WriteLine($"{json_result}");
+        }
+        private void Funtion_關門回寫API(string 操作人, string ID, string WardName)
+        {
+            string url = dBConfigClass.DoorCloseApiURL;
+
+            if (url.StringIsEmpty() == true) return;
+            returnData returnData = new returnData();
+            returnData.ValueAry.Add($"name={操作人}");
+            returnData.ValueAry.Add($"id={ID}");
+            returnData.ValueAry.Add($"wardname={WardName}");
+
+            string jsonin = returnData.JsonSerializationt();
+            string json_result = Net.WEBApiPostJson(url, jsonin);
+            Console.WriteLine($"\n");
+            Console.WriteLine($"----------------------[關門回寫]----------------------");
             Console.WriteLine($"{json_result}");
         }
     }

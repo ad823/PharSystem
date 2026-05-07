@@ -547,7 +547,7 @@ namespace 勤務傳送系統
                 MyTimerBasic_勤務取藥_全處方_刷藥單結束計時.StartTickTime(120000);
                 transactionsClass.update_by_guid(API_Server, transactions, ServerName, ServerType);
                 //OrderClass.add_and_updete_by_guid(API_Server, "", "", orderClasses);
-                //Funtion_藥袋刷入API(orderClasses);
+                Funtion_勤務取藥API(orderClasses);
 
             }
             catch (Exception ex)
