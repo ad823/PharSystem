@@ -168,7 +168,7 @@ namespace 勤務傳送系統
             Console.WriteLine($"{json_result}");
         }
 
-        private void Funtion_開門回寫API(string 操作人, string ID , string WardName)
+        private void Funtion_開門回寫API(string 操作人, string ID, string WardName, string DoornNumber)
         {
             string url = dBConfigClass.DoorOpenApiURL;
 
@@ -177,6 +177,7 @@ namespace 勤務傳送系統
             returnData.ValueAry.Add($"name={操作人}");
             returnData.ValueAry.Add($"id={ID}");
             returnData.ValueAry.Add($"wardname={WardName}");
+            returnData.ValueAry.Add($"doornumber={DoornNumber}");
 
             string jsonin = returnData.JsonSerializationt();
             string json_result = Net.WEBApiPostJson(url, jsonin);
@@ -184,7 +185,7 @@ namespace 勤務傳送系統
             Console.WriteLine($"----------------------[開門回寫]----------------------");
             Console.WriteLine($"{json_result}");
         }
-        private void Funtion_關門回寫API(string 操作人, string ID, string WardName)
+        private void Funtion_關門回寫API(string 操作人, string ID, string WardName, string DoornNumber)
         {
             string url = dBConfigClass.DoorCloseApiURL;
 
@@ -193,7 +194,7 @@ namespace 勤務傳送系統
             returnData.ValueAry.Add($"name={操作人}");
             returnData.ValueAry.Add($"id={ID}");
             returnData.ValueAry.Add($"wardname={WardName}");
-
+            returnData.ValueAry.Add($"doornumber={DoornNumber}");
             string jsonin = returnData.JsonSerializationt();
             string json_result = Net.WEBApiPostJson(url, jsonin);
             Console.WriteLine($"\n");

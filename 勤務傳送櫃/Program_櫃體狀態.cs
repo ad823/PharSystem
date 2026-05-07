@@ -431,7 +431,7 @@ namespace 勤務傳送系統
         {
             if (pannel_Box.CT_Name.StringIsEmpty()) return;
             this.新增交易紀錄(enum_交易記錄查詢動作.關閉門片, pannel_Box.CT_Name, $"{pannel_Box.WardName}", $"{pannel_Box.CT_ID}");
-            Funtion_關門回寫API(pannel_Box.CT_Name, pannel_Box.CT_ID, pannel_Box.WardName);
+            Funtion_關門回寫API(pannel_Box.CT_Name, pannel_Box.CT_ID, pannel_Box.WardName, pannel_Box.Number);
             pannel_Box.CT_Name = "";
             pannel_Box.CT_ID = "";
         }
@@ -457,7 +457,7 @@ namespace 勤務傳送系統
             this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_交易紀錄_buf, false);
             Console.WriteLine($"領用人寫入共<{list_交易紀錄_buf.Count}>筆 ,耗時{myTimer.ToString()} {DateTime.Now.ToDateTimeString()}");
 
-            Funtion_開門回寫API(pannel_Box.CT_Name, pannel_Box.CT_ID, pannel_Box.WardName);
+            Funtion_開門回寫API(pannel_Box.CT_Name, pannel_Box.CT_ID, pannel_Box.WardName, pannel_Box.Number);
         }
         private void Pannel_Box_EPDSettingEvent(string EPD_IP, string Name)
         {
