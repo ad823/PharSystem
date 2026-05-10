@@ -286,6 +286,16 @@ namespace HIS_DB_Lib
             inspectionClass.creat creat_out = returnData_out.Data.ObjToClass<inspectionClass.creat>();
             return creat_out;
         }
+        static public returnData creat_add_returnData(string API_Server, inspectionClass.creat creat)
+        {
+            string url = $"{API_Server}/api/inspection/creat_add";
+            returnData returnData = new returnData();
+            returnData.Data = creat;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            return returnData_out;
+        }
         static public inspectionClass.creat creat_update(string API_Server, inspectionClass.creat creat)
         {
             string url = $"{API_Server}/api/inspection/creat_update";
@@ -308,7 +318,17 @@ namespace HIS_DB_Lib
             return creat_out;
         }
 
-        
+        static public returnData content_update(string API_Server, List<inspectionClass.content> content)
+        {
+            string url = $"{API_Server}/api/inspection/content_update";
+            returnData returnData = new returnData();
+            returnData.Data = content;
+            string json_in = returnData.JsonSerializationt();
+            string json_out = Net.WEBApiPostJson(url, json_in);
+            returnData returnData_out = json_out.JsonDeserializet<returnData>();
+            return returnData_out;
+        }
+
         static public void creat_lock_by_IC_SN(string API_Server, string IC_SN)
         {
             string url = $"{API_Server}/api/inspection/creat_lock_by_IC_SN";
