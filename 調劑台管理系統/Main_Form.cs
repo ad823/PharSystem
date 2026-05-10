@@ -476,6 +476,7 @@ namespace 調劑台管理系統
             InitializeComponent();
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.UpdateStyles();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -501,6 +502,7 @@ namespace 調劑台管理系統
             ShowStartupProgress();
             StartupTrace("Main_Form_Load 開始");
             CloseProcessByName("batch_StackDataAccounting");
+        
             //Console.WriteLine("請按 Enter繼續...");
             //Console.ReadKey();
             _textBox_工程模式_領藥台_名稱 = this.textBox_工程模式_領藥台_名稱;
@@ -559,6 +561,8 @@ namespace 調劑台管理系統
                 this.FormText = this.Text;
                 this.plC_UI_Init.音效 = false;
                 this.plC_UI_Init.全螢幕顯示 = myConfigClass.全螢幕顯示;
+                //this.plC_UI_Init.啟動除錯Console = true;
+                this.plC_UI_Init.初始化效能紀錄 = true;
 
                 this.plC_UI_Init.UI_Finished_Event += PlC_UI_Init_UI_Finished_Event;
                 this.plC_UI_Init.Run(this.FindForm(), this.lowerMachine_Panel);
