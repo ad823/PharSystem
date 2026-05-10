@@ -332,7 +332,7 @@ namespace 調劑台管理系統
             this.MyThread_調劑作業.Add_Method(this.sub_Program_調劑作業);
             this.MyThread_調劑作業.AutoRun(true);
             this.MyThread_調劑作業.AutoStop(false);
-            this.MyThread_調劑作業.SetSleepTime(10);
+            this.MyThread_調劑作業.SetSleepTime(50);
             this.MyThread_調劑作業.Trigger();
             
 

@@ -602,6 +602,9 @@
     <Compile Include="Form_Buffer.Designer.cs">
       <DependentUpon>Form_Buffer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_StartupProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Function.cs">
       <SubType>Form</SubType>
     </Compile>

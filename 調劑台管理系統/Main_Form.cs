@@ -81,8 +81,101 @@ namespace 調劑台管理系統
         private LadderConnection.LowerMachine PLC;
         MyTimer MyTimer_TickTime = new MyTimer();
         private Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch startupStopwatch = new Stopwatch();
+        private Form_StartupProgress startupProgressForm;
+        private System.Threading.Thread startupProgressThread;
+        private readonly System.Threading.ManualResetEvent startupProgressReady = new System.Threading.ManualResetEvent(false);
         List<Pannel_Locker> List_Locker = new List<Pannel_Locker>();
         Basic.MyConvert myConvert = new Basic.MyConvert();
+
+        private void ShowStartupProgress()
+        {
+            if (startupProgressForm != null && !startupProgressForm.IsDisposed) return;
+
+            startupProgressReady.Reset();
+            startupProgressThread = new System.Threading.Thread(() =>
+            {
+                Form_StartupProgress form = new Form_StartupProgress();
+                startupProgressForm = form;
+                form.Shown += delegate
+                {
+                    startupProgressReady.Set();
+                };
+                Application.Run(form);
+            });
+            startupProgressThread.IsBackground = true;
+            startupProgressThread.SetApartmentState(System.Threading.ApartmentState.STA);
+            startupProgressThread.Start();
+            startupProgressReady.WaitOne(3000);
+            SetStartupProgress("正在載入設定...", 3);
+        }
+
+        private void SetStartupProgress(string message, int value)
+        {
+            Form_StartupProgress form = startupProgressForm;
+            if (form == null || form.IsDisposed) return;
+            form.SetProgress(message, value);
+        }
+
+        private void CloseStartupProgress()
+        {
+            Form_StartupProgress form = startupProgressForm;
+            if (form == null || form.IsDisposed) return;
+            form.SetProgress("啟動完成", 100);
+            if (form.InvokeRequired)
+            {
+                form.BeginInvoke(new Action(delegate
+                {
+                    form.Close();
+                }));
+            }
+            else
+            {
+                form.Close();
+            }
+            startupProgressForm = null;
+        }
+
+        private void StartupTrace(string message)
+        {
+            try
+            {
+                string log = $"{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff} [{startupStopwatch.ElapsedMilliseconds,6}ms] {message}";
+                Console.WriteLine(log);
+                File.AppendAllText(Path.Combine(currentDirectory, "StartupTrace.log"), log + Environment.NewLine, Encoding.UTF8);
+            }
+            catch
+            {
+            }
+        }
+
+        private void StartupStep(string name, Action action)
+        {
+            Stopwatch stepStopwatch = Stopwatch.StartNew();
+            StartupTrace($"{name} 開始");
+            StartupYield();
+            action();
+            StartupYield();
+            StartupTrace($"{name} 完成, 耗時 {stepStopwatch.ElapsedMilliseconds}ms");
+        }
+
+        private void StartupStep(string name, int progress, Action action)
+        {
+            SetStartupProgress(name, progress);
+            StartupStep(name, action);
+        }
+
+        private void StartupYield()
+        {
+            try
+            {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(1);
+            }
+            catch
+            {
+            }
+        }
 
         static public PLC_Device PLC_Device_主機輸出模式 = new PLC_Device("S1001");
         static public PLC_Device PLC_Device_申領_不需輸入申領量 = new PLC_Device("S5025");
@@ -404,6 +497,9 @@ namespace 調劑台管理系統
         }
         private void Main_Form_Load(object sender, EventArgs e)
         {
+            startupStopwatch.Restart();
+            ShowStartupProgress();
+            StartupTrace("Main_Form_Load 開始");
             CloseProcessByName("batch_StackDataAccounting");
             //Console.WriteLine("請按 Enter繼續...");
             //Console.ReadKey();
@@ -457,6 +553,8 @@ namespace 調劑台管理系統
                 ApiServerSetting();
 
                 this.stopwatch.Start();
+                SetStartupProgress("基本設定載入完成，正在初始化介面...", 8);
+                StartupTrace("基本設定載入完成");
 
                 this.FormText = this.Text;
                 this.plC_UI_Init.音效 = false;
@@ -464,6 +562,7 @@ namespace 調劑台管理系統
 
                 this.plC_UI_Init.UI_Finished_Event += PlC_UI_Init_UI_Finished_Event;
                 this.plC_UI_Init.Run(this.FindForm(), this.lowerMachine_Panel);
+                SetStartupProgress("正在等待 PLC UI 初始化完成...", 12);
 
 
                 Basic.Keyboard.Hook.KeyDown += Hook_KeyDown;
@@ -488,6 +587,7 @@ namespace 調劑台管理系統
                 MyMessageBox.TimerEvent += MyMessageBox_TimerEvent;
 
             }
+            StartupTrace("Main_Form_Load 結束");
         }
 
 
@@ -512,6 +612,8 @@ namespace 調劑台管理系統
         }
         private void PlC_UI_Init_UI_Finished_Event()
         {
+            SetStartupProgress("PLC UI 初始化完成，正在載入系統模組...", 18);
+            StartupTrace("PLC UI 初始化完成事件開始");
 
 
             if (myConfigClass.全螢幕顯示 == false)
@@ -593,12 +695,12 @@ namespace 調劑台管理系統
             this.plC_RJ_ScreenButton_Pannel35.Visible = myConfigClass.Pannel35_Enable;
 
 
-            this.DBConfigInit();
+            StartupStep("正在連線資料庫與初始化資料表...", 24, () => this.DBConfigInit());
 
-            this.Program_系統_Init();
+            StartupStep("正在載入系統設定...", 32, () => this.Program_系統_Init());
 
       
-            this.Program_Scanner_RS232_Init();
+            StartupStep("正在初始化掃碼槍...", 38, () => this.Program_Scanner_RS232_Init());
 
             _drawerUI_EPD_1020 = this.drawerUI_EPD_1020;
             _storageUI_EPD_266 = this.storageUI_EPD_266;
@@ -606,8 +708,10 @@ namespace 調劑台管理系統
             _drawerUI_EPD_583 = this.drawerUI_EPD_583;
             _storageUI_LCD_114 = this.storageUI_LCD_114;
 
-            this.Program_醫令資料_Init();
-            this.Program_藥品資料_藥檔資料_Init();
+            StartupStep("正在初始化醫令資料...", 45, () => this.Program_醫令資料_Init());
+            StartupStep("正在初始化藥檔資料...", 50, () => this.Program_藥品資料_藥檔資料_Init());
+            SetStartupProgress("正在初始化儲位與設備資料...", 56);
+            StartupTrace("儲位管理相關模組初始化開始");
             this.Program_藥品區域_Init();
             this.Program_儲位管理_EPD583_Init();
             this.Program_儲位管理_EPD266_Init();
@@ -616,13 +720,17 @@ namespace 調劑台管理系統
             this.Program_儲位管理_RFID_Init();
             this.Program_儲位管理_Pannel35_Init();
             this.Program_共用區_Init();
+            StartupYield();
+            StartupTrace("儲位管理相關模組初始化完成");
 
             this.Program_LCD114_索引表_Init();
-            this.Program_取藥堆疊資料_Init();
+            StartupStep("正在初始化取藥堆疊資料...", 64, () => this.Program_取藥堆疊資料_Init());
             RFID_Iint();
-            if (!this.ControlMode) this.Program_調劑作業_Init();
+            if (!this.ControlMode) StartupStep("正在初始化調劑作業...", 70, () => this.Program_調劑作業_Init());
 
 
+            SetStartupProgress("正在初始化後台、查詢與資料維護...", 76);
+            StartupTrace("資料維護/後台/查詢模組初始化開始");
             this.Program_藥品資料_儲位總庫存表_Init();
             this.Program_藥品資料_儲位效期表_Init();
             this.Program_藥品資料_管藥設定_Init();
@@ -645,8 +753,12 @@ namespace 調劑台管理系統
             this.Program_交班作業_交班表_Init();
             this.Program_藥品管制方式設定_Init();
             this.Program_藥品設定表_Init();
+            StartupYield();
+            StartupTrace("資料維護/後台/查詢模組初始化完成");
 
 
+            SetStartupProgress("正在初始化盤點、收支與辨識模組...", 86);
+            StartupTrace("盤點/收支/辨識模組初始化開始");
             this.sub_Program_盤點作業_定盤_Init();
             this.sub_Program_盤點作業_新增盤點_Init();
             this.sub_Program_盤點作業_單號查詢_Init();
@@ -662,6 +774,8 @@ namespace 調劑台管理系統
             this.Program_異常通知_盤點錯誤_Init();
             this.Program_聲紋辨識_Init();
             this.LoadConfig工程模式();
+            StartupYield();
+            StartupTrace("盤點/收支/辨識模組初始化完成");
 
             if (!this.ControlMode) Main_Form.Function_取藥堆疊資料_刪除指定調劑台名稱母資料(領藥台_01名稱);
             if (!this.ControlMode) Main_Form.Function_取藥堆疊資料_刪除指定調劑台名稱母資料(領藥台_02名稱);
@@ -674,28 +788,11 @@ namespace 調劑台管理系統
 
        
 
-            DateTime dateTime = sys_serverSettingClass.GetServerTime(API_Server);
-            Console.WriteLine($"從伺服器取得時間: {dateTime:yyyy/MM/dd HH:mm:ss}");
-
-            if (dateTime != DateTime.MinValue)
-            {
-                if (NTP_ServerLib.NTPServerClass.SyncTime(dateTime))
-                {
-                    Console.WriteLine("已同步系統時間。");
-                }
-                else
-                {
-                    Console.WriteLine("同步系統時間失敗。");
-
-                }
-            }
-            else
-            {
-                Console.WriteLine("取得伺服器時間失敗，未進行同步。");
-            }
+            StartBackgroundTimeSync();
 
             Task task = Task.Run(new Action(delegate
             {
+                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.BelowNormal;
                 if (!this.ControlMode)
                 {
                     Function_從SQL取得儲位到本地資料();
@@ -720,6 +817,43 @@ namespace 調劑台管理系統
 
 
             flag_Init = true;
+            SetStartupProgress("啟動完成", 100);
+            StartupTrace("PLC UI 初始化完成事件結束");
+            CloseStartupProgress();
+        }
+        private void StartBackgroundTimeSync()
+        {
+            Task.Run(new Action(delegate
+            {
+                try
+                {
+                    System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.BelowNormal;
+                    StartupTrace("背景同步系統時間開始");
+                    DateTime dateTime = sys_serverSettingClass.GetServerTime(API_Server);
+                    Console.WriteLine($"從伺服器取得時間: {dateTime:yyyy/MM/dd HH:mm:ss}");
+
+                    if (dateTime != DateTime.MinValue)
+                    {
+                        if (NTP_ServerLib.NTPServerClass.SyncTime(dateTime))
+                        {
+                            Console.WriteLine("已同步系統時間。");
+                        }
+                        else
+                        {
+                            Console.WriteLine("同步系統時間失敗。");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("取得伺服器時間失敗，未進行同步。");
+                    }
+                    StartupTrace("背景同步系統時間完成");
+                }
+                catch (Exception ex)
+                {
+                    StartupTrace($"背景同步系統時間失敗: {ex.Message}");
+                }
+            }));
         }
         private void PrinterClass_PrintPageEvent(object sender, Graphics g, int width, int height, int page_num)
         {

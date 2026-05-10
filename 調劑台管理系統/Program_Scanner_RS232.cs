@@ -135,6 +135,29 @@ namespace 調劑台管理系統
             包裝單位 = 8,
 
         }
+        private bool ScannerPortExists(string comPort, string scannerName)
+        {
+            if (comPort.StringIsEmpty()) return false;
+
+            string[] portNames = System.IO.Ports.SerialPort.GetPortNames();
+            bool exists = portNames.Any(temp => string.Equals(temp, comPort, StringComparison.OrdinalIgnoreCase));
+            if (!exists)
+            {
+                Console.WriteLine($"掃碼器[{scannerName}]略過初始化, 找不到 {comPort}");
+            }
+            return exists;
+        }
+
+        private void InitScannerPort(MySerialPort scannerPort, string comPort, string scannerName)
+        {
+            if (!ScannerPortExists(comPort, scannerName)) return;
+
+            scannerPort.Init(comPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+            if (!scannerPort.IsConnected)
+            {
+                Console.WriteLine($"掃碼器[{scannerName}]初始化失敗: {comPort}");
+            }
+        }
         void Program_Scanner_RS232_Init()
         {
             AddClipboardFormatListener(this.Handle);
@@ -148,39 +171,11 @@ namespace 調劑台管理系統
            
                 if(myConfigClass.鍵盤掃碼模式 == false)
                 {
-                    if (!myConfigClass.Scanner01_COMPort.StringIsEmpty())
-                    {
-                        MySerialPort_Scanner01.Init(myConfigClass.Scanner01_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
-                        if (!MySerialPort_Scanner01.IsConnected)
-                        {
-                            MyMessageBox.ShowDialog("掃碼器[01]初始化失敗!");
-                        }
-                    }
+                    InitScannerPort(MySerialPort_Scanner01, myConfigClass.Scanner01_COMPort, "01");
                 }
-                if (!myConfigClass.Scanner02_COMPort.StringIsEmpty())
-                {
-                    MySerialPort_Scanner02.Init(myConfigClass.Scanner02_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
-                    if (!MySerialPort_Scanner02.IsConnected)
-                    {
-                        MyMessageBox.ShowDialog("掃碼器[02]初始化失敗!");
-                    }
-                }
-                if (!myConfigClass.Scanner03_COMPort.StringIsEmpty())
-                {
-                    MySerialPort_Scanner03.Init(myConfigClass.Scanner03_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
-                    if (!MySerialPort_Scanner03.IsConnected)
-                    {
-                        MyMessageBox.ShowDialog("掃碼器[03]初始化失敗!");
-                    }
-                }
-                if (!myConfigClass.Scanner04_COMPort.StringIsEmpty())
-                {
-                    MySerialPort_Scanner04.Init(myConfigClass.Scanner04_COMPort, 9600, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
-                    if (!MySerialPort_Scanner04.IsConnected)
-                    {
-                        MyMessageBox.ShowDialog("掃碼器[04]初始化失敗!");
-                    }
-                }
+                InitScannerPort(MySerialPort_Scanner02, myConfigClass.Scanner02_COMPort, "02");
+                InitScannerPort(MySerialPort_Scanner03, myConfigClass.Scanner03_COMPort, "03");
+                InitScannerPort(MySerialPort_Scanner04, myConfigClass.Scanner04_COMPort, "04");
             }
 
             plC_UI_Init.Add_Method(sub_Program_Scanner_RS232);

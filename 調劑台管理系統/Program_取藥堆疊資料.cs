@@ -1474,6 +1474,7 @@ namespace 調劑台管理系統
             this.MyThread_取藥堆疊資料_檢查資料.Add_Method(this.sub_Program_取藥堆疊資料_狀態更新);
             this.MyThread_取藥堆疊資料_檢查資料.Add_Method(this.sub_Program_取藥堆疊資料_流程作業檢查);
             this.MyThread_取藥堆疊資料_檢查資料.Add_Method(this.sub_Program_取藥堆疊資料_入賬檢查);
+            this.MyThread_取藥堆疊資料_檢查資料.SetSleepTime(50);
             this.MyThread_取藥堆疊資料_檢查資料.Trigger();
 
 
@@ -1481,6 +1482,7 @@ namespace 調劑台管理系統
             this.MyThread_取藥堆疊資料_儲位亮燈.AutoRun(true);
             this.MyThread_取藥堆疊資料_儲位亮燈.AutoStop(true);
             this.MyThread_取藥堆疊資料_儲位亮燈.Add_Method(this.sub_Program_取藥堆疊資料_儲位亮燈);
+            this.MyThread_取藥堆疊資料_儲位亮燈.SetSleepTime(50);
             this.MyThread_取藥堆疊資料_儲位亮燈.Trigger();
         }
         public class LightOn

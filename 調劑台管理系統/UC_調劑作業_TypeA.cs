@@ -147,7 +147,7 @@ namespace 調劑台管理系統
             myThread_program.Add_Method(sub_program);
             myThread_program.AutoRun(true);
             myThread_program.AutoStop(true);
-            myThread_program.SetSleepTime(10);
+            myThread_program.SetSleepTime(50);
             myThread_program.Trigger();
         }
 
