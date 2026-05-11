@@ -561,7 +561,7 @@ namespace 調劑台管理系統
                 this.FormText = this.Text;
                 this.plC_UI_Init.音效 = false;
                 this.plC_UI_Init.全螢幕顯示 = myConfigClass.全螢幕顯示;
-                //this.plC_UI_Init.啟動除錯Console = true;
+                this.plC_UI_Init.顯示主視窗方式 = PLC_UI_Init.MainFormShowMode.延後全螢幕切換_等待外部呼叫函式顯示主視窗;
                 this.plC_UI_Init.初始化效能紀錄 = true;
 
                 this.plC_UI_Init.UI_Finished_Event += PlC_UI_Init_UI_Finished_Event;
@@ -824,6 +824,9 @@ namespace 調劑台管理系統
             SetStartupProgress("啟動完成", 100);
             StartupTrace("PLC UI 初始化完成事件結束");
             CloseStartupProgress();
+            if(myConfigClass.全螢幕顯示) this.plC_UI_Init.顯示全螢幕主視窗();
+            else this.plC_UI_Init.顯示主視窗();
+
         }
         private void StartBackgroundTimeSync()
         {
