@@ -1365,6 +1365,58 @@ namespace HIS_WebApi
 
 
         }
+        [HttpPost("content_update")]
+        public async Task<string> content_update([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                if (returnData.Data == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.Data 內容不可為空!";
+                    return returnData.JsonSerializationt(true);
+                }
+                List<inspectionClass.content> content = returnData.Data.ObjToClass<List<inspectionClass.content>>();
+                (string Server, string DB, string UserName, string Password, uint Port) = await HIS_WebApi.Method.GetServerInfoAsync("Main", "網頁", "VM端");
+                SQLControl sQLControl_inspection_content = new SQLControl(Server, DB, "inspection_content", UserName, Password, Port, SSLMode);
+                string[] guid = content.Select(x => x.GUID).ToArray();
+                List<object[]> objects = await sQLControl_inspection_content.GetRowsByDefultAsync(null, (int)enum_驗收內容.GUID, guid);
+                List<inspectionClass.content> content_sql = objects.SQLToClass<inspectionClass.content, enum_驗收內容>();
+                List<inspectionClass.content> content_update = new List<inspectionClass.content>();
+                foreach (var item in content)
+                {
+                    inspectionClass.content content_buff = content_sql.FirstOrDefault(x => x.GUID == item.GUID);
+                    if (content_buff == null) continue;
+                    if (item.API回寫註記.StringIsEmpty() == false ) content_buff.API回寫註記 = item.API回寫註記;
+                    content_update.Add(content_buff);
+                }
+
+                List<object[]> list_inspection_content_update = content_update.ClassToSQL<inspectionClass.content, enum_驗收內容>();
+                await sQLControl_inspection_content.UpdateRowsAsync(null, list_inspection_content_update);
+
+                returnData.Data = content_update;
+                returnData.Code = 200;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "content_update";
+
+                returnData.Result = $"成功更新驗收單! 共{content.Count}筆資料";
+                return returnData.JsonSerializationt(true);
+
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Method = "content_add";
+                returnData.Result = $"{ex.Message}";
+                return returnData.JsonSerializationt(true);
+
+            }
+
+
+
+        }
         /// <summary>
         /// 更新驗收單
         /// </summary>
@@ -2555,6 +2607,41 @@ namespace HIS_WebApi
                 returnData.Result = $"更新批效成功,共{sub_contents.Count}筆資料";
                 returnData.Method = "sub_content_update";
                 return returnData.JsonSerializationt();
+            }
+            catch (Exception ex)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"sub_content_updateAsync Error:{ex.Message}";
+                return returnData.JsonSerializationt();
+            }
+
+        }
+        [HttpPost("writeBack")]
+        public async Task<string> writeBack([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            try
+            {
+                string VM_API = Method.GetServerAPI("Main", "網頁", "inspection_writeBack");
+
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"回寫失敗";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_write = json_out.JsonDeserializet<returnData>();
+                    return returnData_write.JsonSerializationt(true);
+                }
+
+                returnData.Result = $"無須回寫";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                return returnData.JsonSerializationt(true);
             }
             catch (Exception ex)
             {

@@ -61,23 +61,21 @@ namespace batch_UDPlightRefrsh
             uDP_Class_rows_led = new UDP_Class("0.0.0.0", 30001, true);
             uDP_Class_lights = new UDP_Class("0.0.0.0", 30005, true);
             uDP_Class_lights_send = new UDP_Class("0.0.0.0", 29005, true);
-
+            List<medMap_sectionClass> medMap_SectionClasses = medMap_sectionClass.get_sections(API_Server);
+            // 🔥 建立 Dictionary
+            Dictionary<string, medMap_sectionClass> sectionMap =
+                medMap_SectionClasses
+                .Where(x => x.燈棒IP.StringIsEmpty() == false)
+                .GroupBy(x => x.燈棒IP)
+                .ToDictionary(g => g.Key, g => g.First());
+            //DateTime lastFetchTime = DateTime.MinValue;
             while (true)
             {
-                List<medMap_sectionClass> medMap_SectionClasses = medMap_sectionClass.get_sections(API_Server);
+                
                 List<string> jsons_lights = uDP_Class_lights.List_UDP_Rx.Select(x => x[(int)UDP_Class.UDP_Rx.Readline].ObjectToString()).ToList();
                 List<string> jsons_rows_led = uDP_Class_rows_led.List_UDP_Rx.Select(x => x[(int)UDP_Class.UDP_Rx.Readline].ObjectToString()).ToList();
 
-                Dictionary<string, bool> ipLightStatus = new Dictionary<string, bool>();
-                foreach (var sectionClass in medMap_SectionClasses)
-                {
-                    if (sectionClass.燈棒IP.StringIsEmpty())
-                    {
-                        Console.WriteLine("無IP位址跳過");
-                        continue;
-                    }
-                    else ipLightStatus[sectionClass.燈棒IP] = false;
-                }
+                Dictionary<string, bool> ipLightStatus = sectionMap.Keys.ToDictionary(ip => ip, ip => false);
 
                 foreach (string json in jsons_rows_led)
                 {
@@ -109,8 +107,7 @@ namespace batch_UDPlightRefrsh
 
                     if (isLightOn)
                     {
-                        var section = medMap_sectionClass.get_section_by_IP(API_Server, ip);
-                        if (section != null)
+                        if (sectionMap.TryGetValue(ip, out var section))
                         {
                             ipLightStatus[section.燈棒IP] = true;
                         }
@@ -135,7 +132,10 @@ namespace batch_UDPlightRefrsh
                     UDP_READ_basic u = json.JsonDeserializet<UDP_READ_basic>();
                     if (u != null) uDP_READ_Basics.Add(u);
                 }
-
+                var udevMap = uDP_READ_Basics
+                    .Where(x => !string.IsNullOrEmpty(x.IP))
+                    .GroupBy(x => x.IP)
+                    .ToDictionary(g => g.Key, g => g.First());
                 foreach (var kv in ipLightStatus.OrderBy(x =>
                 {
                     byte[] bytes = IPAddress.Parse(x.Key).GetAddressBytes();
@@ -144,13 +144,17 @@ namespace batch_UDPlightRefrsh
                 {
                     string ip = kv.Key;
                     bool lightOn = kv.Value;
-
-                    var udev = uDP_READ_Basics.FirstOrDefault(x => x.IP == ip);
-                    if (udev == null)
+                    if (!udevMap.TryGetValue(ip, out var udev))
                     {
                         Console.WriteLine(ip + " Not in UDP return");
                         continue;
                     }
+                    //var udev = uDP_READ_Basics.FirstOrDefault(x => x.IP == ip);
+                    //if (udev == null)
+                    //{
+                    //    Console.WriteLine(ip + " Not in UDP return");
+                    //    continue;
+                    //}
 
                     bool udpLightOutput = (udev.Output != 0);
 

@@ -144,6 +144,46 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt(true);
             }
         }
+        [HttpPost("writeBack")]
+        public async Task<string> writeBack(returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            myTimerBasic.StartTickTime(50000);
+            returnData.Method = "writeBack";
+            try
+            {
+                
+
+                string VM_API = Method.GetServerAPI("Main", "網頁", "materialRequisition_writeBack");
+
+                if (VM_API.StringIsEmpty() == false)
+                {
+                    string json_in = returnData.JsonSerializationt();
+                    string json_out = Net.WEBApiPostJson(VM_API, json_in);
+                    if (json_out.StringIsEmpty())
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥袋條碼回傳錯誤";
+                        return returnData.JsonSerializationt();
+                    }
+                    returnData returnData_write = json_out.JsonDeserializet<returnData>();
+                    return returnData_write.JsonSerializationt(true);
+                }
+
+               
+                returnData.Result = $"無須回寫";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Code = 200;
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Data = null;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
         /// <summary>
         /// 新增資料
         /// </summary>

@@ -40,6 +40,7 @@ namespace HIS_WebApi
             public List<object[]> list_value = new List<object[]>();
         }
         static public string API_Server = "http://127.0.0.1:4433/api/serversetting";
+        
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
 
         /// <summary>
@@ -1182,6 +1183,8 @@ namespace HIS_WebApi
                 string medGroup = GetVal("medGroup") ?? "";
                 string control = GetVal("control") ?? "";
                 string medType = GetVal("medType") ?? "";
+                string evdInv = GetVal("evdInv") ?? "";
+
                 GET_init(returnData);
 
 
@@ -1244,10 +1247,35 @@ namespace HIS_WebApi
                     }
                     medClasses = medClasses.Where(item => medType_.Contains(item.類別) && item.開檔狀態 != "關檔中").ToList();
                 }
-                if (medGroup.StringIsEmpty() && control.StringIsEmpty() && medType.StringIsEmpty())
+                if (evdInv.StringIsEmpty() == false)
                 {
-                    returnData returnData_med = await new MED_pageController().get_med_cloud();
-                    medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    returnData returnData_medConfig = await new medConfig().get_evdInv();
+                    if (returnData_medConfig == null || returnData_medConfig.Code != 200)
+                    {
+                        returnData.Code = -200;
+                        returnData.Result = $"藥品群組取得失敗";
+                        return returnData.JsonSerializationt();
+                    }
+                    List<medConfigClass> medConfigClasses = returnData_medConfig.Data.ObjToClass<List<medConfigClass>>();
+                    List<medConfigClass> medConfigClass_buff = medConfigClasses.Where(x => x.每日盤點.Contains(evdInv)).ToList();
+                    List<string> codes = medConfigClass_buff.Select(x => x.藥碼).Distinct().ToList();
+                    if (medClasses == null || medClasses.Count == 0)
+                    {
+                        returnData returnData_med = await new MED_pageController().get_med_cloud();
+                        medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                    }
+                    medClasses = medClasses.Where(item => codes.Contains(item.藥品碼) && item.開檔狀態 != "關檔中").ToList();
+                }
+                //if (medGroup.StringIsEmpty() && control.StringIsEmpty() && medType.StringIsEmpty())
+                //{
+                //    returnData returnData_med = await new MED_pageController().get_med_cloud();
+                //    medClasses = returnData_med.Data.ObjToListClass<medClass>();
+                //}
+                if (medClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = "無對應藥品";
+                    return returnData.JsonSerializationt();
                 }
                 inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
                 creat.盤點單號 = str_IC_SN;
@@ -1307,7 +1335,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_lock_by_IC_SN")]
         [HttpPost]
-        public string creat_lock([FromBody] returnData returnData)
+        public async Task<string> creat_lock([FromBody] returnData returnData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -1326,6 +1354,7 @@ namespace HIS_WebApi
                 returnData.Result = "returnData.Value空白,請輸入盤點單號!";
                 return returnData.JsonSerializationt();
             }
+            string[] IC_SN = returnData.Value.Split(";").ToArray();
             string Server = sys_serverSettingClasses[0].Server;
             string DB = sys_serverSettingClasses[0].DBName;
             string UserName = sys_serverSettingClasses[0].User;
@@ -1335,18 +1364,21 @@ namespace HIS_WebApi
             SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
             SQLControl sQLControl_inventory_content = new SQLControl(Server, DB, "inventory_content", UserName, Password, Port, SSLMode);
             SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
-      
-            List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
-            List<object[]> list_inventory_creat_buf = new List<object[]>();
-            list_inventory_creat_buf = list_inventory_creat.GetRows((int)enum_盤點單號.盤點單號, returnData.Value);
+
+            List<object[]> list_inventory_creat_buf = await sQLControl_inventory_creat.GetRowsByDefultAsync(null, (int)enum_盤點單號.盤點單號, IC_SN);
+            
             if (list_inventory_creat_buf.Count == 0)
             {
                 returnData.Code = -5;
                 returnData.Result += $"找無此盤點單號!";
                 return returnData.JsonSerializationt();
             }
-            list_inventory_creat_buf[0][(int)enum_盤點單號.盤點狀態] = "鎖定";
-            list_inventory_creat_buf[0][(int)enum_盤點單號.盤點結束時間] = DateTime.Now.ToDateTimeString();
+            for(int i =0; i < list_inventory_creat_buf.Count; i++)
+            {
+                list_inventory_creat_buf[i][(int)enum_盤點單號.盤點狀態] = "鎖定";
+                list_inventory_creat_buf[i][(int)enum_盤點單號.盤點結束時間] = DateTime.Now.ToDateTimeString();
+            }
+       
             sQLControl_inventory_creat.UpdateByDefulteExtra(null, list_inventory_creat_buf);
 
             inventoryClass.creat creat = returnData.Data.ObjToClass<inventoryClass.creat>();
@@ -1386,7 +1418,7 @@ namespace HIS_WebApi
         /// <returns>[returnData.Data]為盤點單結構</returns>
         [Route("creat_unlock_by_IC_SN")]
         [HttpPost]
-        public string creat_unlock([FromBody] returnData returnData)
+        public async Task<string> creat_unlock([FromBody] returnData returnData)
         {
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
@@ -1405,6 +1437,8 @@ namespace HIS_WebApi
                 returnData.Result = "returnData.Value空白,請輸入盤點單號!";
                 return returnData.JsonSerializationt();
             }
+            string[] IC_SN = returnData.Value.Split(";").ToArray();
+
             string Server = sys_serverSettingClasses[0].Server;
             string DB = sys_serverSettingClasses[0].DBName;
             string UserName = sys_serverSettingClasses[0].User;
@@ -1415,16 +1449,19 @@ namespace HIS_WebApi
             SQLControl sQLControl_inventory_content = new SQLControl(Server, DB, "inventory_content", UserName, Password, Port, SSLMode);
             SQLControl sQLControl_inventory_sub_content = new SQLControl(Server, DB, "inventory_sub_content", UserName, Password, Port, SSLMode);
         
-            List<object[]> list_inventory_creat = sQLControl_inventory_creat.GetAllRows(null);
-            List<object[]> list_inventory_creat_buf = new List<object[]>();
-            list_inventory_creat_buf = list_inventory_creat.GetRows((int)enum_盤點單號.盤點單號, returnData.Value);
+           
+            List<object[]> list_inventory_creat_buf = await sQLControl_inventory_creat.GetRowsByDefultAsync(null, (int)enum_盤點單號.盤點單號, IC_SN);
+
             if (list_inventory_creat_buf.Count == 0)
             {
                 returnData.Code = -5;
                 returnData.Result += $"找無此盤點單號!";
                 return returnData.JsonSerializationt();
             }
-            list_inventory_creat_buf[0][(int)enum_盤點單號.盤點狀態] = "等待盤點";
+            for(int i =0; i< list_inventory_creat_buf.Count; i++)
+            {
+                list_inventory_creat_buf[i][(int)enum_盤點單號.盤點狀態] = "等待盤點";
+            }
             sQLControl_inventory_creat.UpdateByDefulteExtra(null, list_inventory_creat_buf);
 
             inventoryClass.creat creat = new inventoryClass.creat();

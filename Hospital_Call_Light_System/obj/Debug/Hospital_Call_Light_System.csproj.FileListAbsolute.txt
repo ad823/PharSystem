@@ -711,4 +711,8 @@ C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe
 C:\Users\Administrator\source\repos\ad823\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.pdb
 C:\Users\Administrator\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete
+<<<<<<< HEAD
 C:\Users\user\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.csproj.CopyComplete
+=======
+C:\Users\User\Source\Repos\PharSystem\Hospital_Call_Light_System\obj\Debug\Hospital_Call_Light_System.exe.config
+>>>>>>> Anna
