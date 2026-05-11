@@ -1,0 +1,6 @@
+interface:
+  display_name: "HIS WebApi API Writing"
+  short_description: "Write APIs that follow the HIS_WebApi project conventions."
+  default_prompt: "Use $his-webapi-api-writing when adding or modifying APIs in the HIS_WebApi project."
+policy:
+  allow_implicit_invocation: true

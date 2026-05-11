@@ -146,6 +146,92 @@ namespace HIS_WebApi
             }
         }
 
+        /// <summary>
+        /// 取得指定調劑台的儲位資訊。
+        /// </summary>
+        /// <remarks>
+        /// 以 POST 方式查詢儲位資訊，功能同 <c>GET /api/device/list/{value}</c>，但改由 <c>returnData.ValueAry</c> 傳入查詢條件。
+        /// <code>
+        /// {
+        ///   "ValueAry": [
+        ///     "ServerName=調劑台名稱",
+        ///     "ServerType=調劑台"
+        ///   ]
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">
+        /// 共用傳遞資料結構。
+        /// <c>ValueAry</c> 需包含 <c>ServerName=調劑台名稱</c> 與 <c>ServerType=調劑台</c>。
+        /// </param>
+        /// <returns>
+        /// 成功時 <c>returnData.Data</c> 為 <c>List&lt;DeviceBasic&gt;</c>；失敗時回傳 <c>Code = -200</c> 與錯誤訊息。
+        /// </returns>
+        [Route("list")]
+        [HttpPost]
+        public string POST_list([FromBody] returnData returnData)
+        {
+            MyTimer myTimer = new MyTimer();
+            myTimer.StartTickTime(50000);
+            if (returnData == null) returnData = new returnData();
+            returnData.Method = "POST_list";
+            try
+            {
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"ServerName=調劑台名稱\",\"ServerType=調劑台\"]";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                string serverName = returnData.ValueAry.GetVal("ServerName");
+                string serverType = returnData.ValueAry.GetVal("ServerType");
+                if (serverName.StringIsEmpty() || serverType.StringIsEmpty())
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"ValueAry錯誤，應為[\"ServerName=調劑台名稱\",\"ServerType=調劑台\"]";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+                sys_serverSettingClasses = sys_serverSettingClasses.MyFind(serverName, serverType, "儲位資料");
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無伺服器資料";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                sys_serverSettingClass sys_serverSettingClass = sys_serverSettingClasses[0];
+                string IP = sys_serverSettingClass.Server;
+                int port = sys_serverSettingClass.Port.StringToInt32();
+                if (Basic.Net.Ping(IP, port, 300) == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"伺服器無回應,{IP}";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                List<DeviceBasic> deviceBasics = Function_Get_device(sys_serverSettingClass);
+                deviceBasics = (from temp in deviceBasics
+                                where temp.Code.StringIsEmpty() == false
+                                select temp).ToList();
+                returnData.Data = deviceBasics;
+                returnData.TimeTaken = myTimer.ToString();
+                returnData.Code = 200;
+                returnData.Result = $"取得儲位資訊成功";
+
+                return returnData.JsonSerializationt(true);
+
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = $"{e.Message}";
+                return returnData.JsonSerializationt(true);
+            }
+        }
+
         [Route("all")]
         [HttpGet]
         public string GET_all()
