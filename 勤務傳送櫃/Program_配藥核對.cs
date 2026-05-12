@@ -121,13 +121,26 @@ namespace 勤務傳送系統
                 PointF pointF = new PointF();
                 object[] value = this.sqL_DataGridView_配藥核對_全處方.GetRowsList()[e.RowIndex];
                 OrderClass order = value[1].ObjectToString().JsonDeserializet<OrderClass>();
+                if (order.orderConfig == null) order.orderConfig = new List<orderConfigClass>();
+                bool has大瓶藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "大瓶藥");
+                bool has不發藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "不發藥");
+                if (has不發藥) row_Forecolor = Color.LightGray;
+                if (has大瓶藥) row_Backcolor = Color.FromArgb(245, 218, 120);
+
+                using (Brush rowBrush = new SolidBrush(row_Backcolor))
+                {
+                    e.Graphics.FillRectangle(rowBrush, e.RowBounds);
+                }
+                e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White)), new Rectangle(x - 0, y - 0, width + 1, height + 1));
+
                 string 序號 = $"{e.RowIndex + 1}.";
                 double val = order.交易量.StringToDouble() * -1;
                 size = val.ToString("0.00").MeasureText(new Font("標楷體", 30, FontStyle.Bold));
 
                 DrawingClass.Draw.文字左上繪製(序號, new PointF(10, y + 15), new Font("標楷體", 20), row_Forecolor, e.Graphics);
                 DrawingClass.Draw.文字左上繪製(order.藥品碼, new PointF(50, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
-                DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
+                if (has不發藥 == false) DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), Color.Green, e.Graphics);
+                if (has不發藥 == true) DrawingClass.Draw.文字左上繪製(val.ToString("0.00"), new PointF(200, y + 8), new Font("標楷體", 32, FontStyle.Bold), row_Forecolor, e.Graphics);
 
                 DrawingClass.Draw.文字左上繪製(order.藥品名稱, new PointF(400, y + 15), new Font("標楷體", 20, FontStyle.Bold), row_Forecolor, e.Graphics);
                 string note = order.頻次;

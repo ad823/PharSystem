@@ -615,7 +615,7 @@ namespace 勤務傳送系統
             bool has大瓶藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "大瓶藥");
             bool has不發藥 = order.orderConfig.Any(m => m.狀態.StringToBool() && m.功能備註 == "不發藥");
             if (has不發藥) row_Forecolor = Color.LightGray;
-            if (has大瓶藥) row_Backcolor = Color.Yellow;
+            if (has大瓶藥) row_Backcolor = Color.FromArgb(245, 218, 120);
             using (Brush brush = new SolidBrush(row_Backcolor))
             {
                 int x = e.RowBounds.Left;

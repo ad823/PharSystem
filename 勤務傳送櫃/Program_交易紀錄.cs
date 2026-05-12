@@ -23,6 +23,9 @@ namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
     {
+        PLC_RJ_Button plC_RJ_Button_交易記錄查詢_選取資料設定為已領用;
+        PLC_RJ_Button plC_RJ_Button_交易記錄查詢_選取資料設定為未領用;
+
         public enum enum_交易記錄查詢資料_匯出
         {
             動作,
@@ -105,12 +108,83 @@ namespace 勤務傳送系統
             this.plC_RJ_Button_交易記錄查詢_病歷號_搜尋.MouseDownEvent += PlC_RJ_Button_交易記錄查詢_病歷號_搜尋_MouseDownEvent;
             this.plC_RJ_Button_交易記錄查詢_病房號_搜尋.MouseDownEvent += PlC_RJ_Button_交易記錄查詢_病房號_搜尋_MouseDownEvent;
             this.plC_RJ_Button_交易記錄查詢_匯出.MouseDownEvent += PlC_RJ_Button_交易記錄查詢_匯出_MouseDownEvent;
+            this.Program_交易紀錄_狀態操作按鈕_Init();
 
             this.plC_UI_Init.Add_Method(this.Program_交易紀錄);
 
         }
 
-  
+        private void Program_交易紀錄_狀態操作按鈕_Init()
+        {
+            plC_RJ_Button_交易記錄查詢_選取資料設定為已領用 = Program_交易紀錄_建立狀態操作按鈕("設為已領用", new Point(1335, 755), Color.SeaGreen);
+            plC_RJ_Button_交易記錄查詢_選取資料設定為未領用 = Program_交易紀錄_建立狀態操作按鈕("設為未領用", new Point(1497, 755), Color.DarkOrange);
+
+            plC_RJ_Button_交易記錄查詢_選取資料設定為已領用.Name = "plC_RJ_Button_交易記錄查詢_選取資料設定為已領用";
+            plC_RJ_Button_交易記錄查詢_選取資料設定為未領用.Name = "plC_RJ_Button_交易記錄查詢_選取資料設定為未領用";
+
+            plC_RJ_Button_交易記錄查詢_選取資料設定為已領用.MouseDownEvent += PlC_RJ_Button_交易記錄查詢_選取資料設定為已領用_MouseDownEvent;
+            plC_RJ_Button_交易記錄查詢_選取資料設定為未領用.MouseDownEvent += PlC_RJ_Button_交易記錄查詢_選取資料設定為未領用_MouseDownEvent;
+
+            this.交易紀錄.Controls.Add(plC_RJ_Button_交易記錄查詢_選取資料設定為已領用);
+            this.交易紀錄.Controls.Add(plC_RJ_Button_交易記錄查詢_選取資料設定為未領用);
+            plC_RJ_Button_交易記錄查詢_選取資料設定為已領用.BringToFront();
+            plC_RJ_Button_交易記錄查詢_選取資料設定為未領用.BringToFront();
+        }
+
+        private PLC_RJ_Button Program_交易紀錄_建立狀態操作按鈕(string text, Point location, Color backColor)
+        {
+            PLC_RJ_Button button = new PLC_RJ_Button();
+            button.AutoResetState = false;
+            button.BackgroundColor = backColor;
+            button.Bool = false;
+            button.BorderColor = Color.PaleVioletRed;
+            button.BorderRadius = 20;
+            button.BorderSize = 0;
+            button.buttonType = RJ_Button.ButtonType.Toggle;
+            button.DisenableColor = Color.Gray;
+            button.FlatAppearance.BorderSize = 0;
+            button.FlatStyle = FlatStyle.Flat;
+            button.Font = new Font("微軟正黑體", 14F);
+            button.GUID = "";
+            button.Icon = MessageBoxIcon.Warning;
+            button.Image_padding = new Padding(0);
+            button.Location = location;
+            button.OFF_文字內容 = text;
+            button.OFF_文字字體 = new Font("微軟正黑體", 14F);
+            button.OFF_文字顏色 = Color.White;
+            button.OFF_背景顏色 = backColor;
+            button.ON_BorderSize = 5;
+            button.ON_文字內容 = text;
+            button.ON_文字字體 = new Font("微軟正黑體", 14F);
+            button.ON_文字顏色 = Color.Black;
+            button.ON_背景顏色 = backColor;
+            button.ProhibitionBorderLineWidth = 1;
+            button.ProhibitionLineWidth = 4;
+            button.ProhibitionSymbolSize = 30;
+            button.ShadowColor = Color.DimGray;
+            button.ShadowSize = 3;
+            button.ShowLoadingForm = false;
+            button.Size = new Size(156, 69);
+            button.State = false;
+            button.Text = text;
+            button.TextColor = Color.White;
+            button.TextHeight = 0;
+            button.Texts = text;
+            button.UseVisualStyleBackColor = false;
+            button.字型鎖住 = false;
+            button.按鈕型態 = PLC_RJ_Button.StatusEnum.保持型;
+            button.按鍵方式 = PLC_RJ_Button.PressEnum.Mouse_左鍵;
+            button.文字鎖住 = false;
+            button.背景圖片 = null;
+            button.讀取位元反向 = false;
+            button.讀寫鎖住 = false;
+            button.音效 = true;
+            button.顯示 = false;
+            button.顯示狀態 = false;
+            button.顯示讀取位置 = "S4077";
+            return button;
+        }
+
 
         bool flag_交易紀錄_頁面更新_init = false;
         private void Program_交易紀錄() 
@@ -165,38 +239,54 @@ namespace 勤務傳送系統
                 {
                     if (dialog_ContextMenuStrip.Value == ContextMenuStrip_交易紀錄.選取資料設定為已領用.GetEnumName())
                     {
-                        List<object[]> list_value = this.sqL_DataGridView_交易記錄查詢.Get_All_Select_RowsValues();
-                        int index = 0;
-                        for (int i = 0; i < list_value.Count; i++)
-                        {
-                            if (list_value[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString() == new DateTime(1999, 1, 1, 0, 0, 0).ToDateTimeString()) continue;
-                            list_value[i][(int)enum_交易記錄查詢資料.領用人] = this.登入者名稱;
-                            list_value[i][(int)enum_交易記錄查詢資料.領用時間] = DateTime.Now.ToDateTimeString_6();
-                            list_value[i][(int)enum_交易記錄查詢資料.備註] = "[強制領用]";
-                            index++;
-                        }
-                        this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_value, false);
-                        this.sqL_DataGridView_交易記錄查詢.ReplaceExtra(list_value, true);
-                        MyMessageBox.ShowDialog($"已修正領用數量{index}筆!");
+                        Function_交易記錄查詢_選取資料設定為已領用();
                     }
                     if (dialog_ContextMenuStrip.Value == ContextMenuStrip_交易紀錄.選取資料設定為未領用.GetEnumName())
                     {
-                        List<object[]> list_value = this.sqL_DataGridView_交易記錄查詢.Get_All_Select_RowsValues();
-                        int index = 0;
-                        for (int i = 0; i < list_value.Count; i++)
-                        {
-                            if (list_value[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString() == new DateTime(1999, 1, 1, 0, 0, 0).ToDateTimeString()) continue;
-                            list_value[i][(int)enum_交易記錄查詢資料.領用人] = "未領用";
-                            list_value[i][(int)enum_交易記錄查詢資料.領用時間] = "1999-01-01 00:00:00";
-                            list_value[i][(int)enum_交易記錄查詢資料.備註] = "";
-                            index++;
-                        }
-                        this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_value, false);
-                        this.sqL_DataGridView_交易記錄查詢.ReplaceExtra(list_value, true);
-                        MyMessageBox.ShowDialog($"已修正領用數量{index}筆!");
+                        Function_交易記錄查詢_選取資料設定為未領用();
                     }
                 }
             }
+        }
+        private void PlC_RJ_Button_交易記錄查詢_選取資料設定為已領用_MouseDownEvent(MouseEventArgs mevent)
+        {
+            Function_交易記錄查詢_選取資料設定為已領用();
+        }
+        private void PlC_RJ_Button_交易記錄查詢_選取資料設定為未領用_MouseDownEvent(MouseEventArgs mevent)
+        {
+            Function_交易記錄查詢_選取資料設定為未領用();
+        }
+        private void Function_交易記錄查詢_選取資料設定為已領用()
+        {
+            List<object[]> list_value = this.sqL_DataGridView_交易記錄查詢.Get_All_Select_RowsValues();
+            int index = 0;
+            for (int i = 0; i < list_value.Count; i++)
+            {
+                if (list_value[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString() == new DateTime(1999, 1, 1, 0, 0, 0).ToDateTimeString()) continue;
+                list_value[i][(int)enum_交易記錄查詢資料.領用人] = this.登入者名稱;
+                list_value[i][(int)enum_交易記錄查詢資料.領用時間] = DateTime.Now.ToDateTimeString_6();
+                list_value[i][(int)enum_交易記錄查詢資料.備註] = "[強制領用]";
+                index++;
+            }
+            this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_value, false);
+            this.sqL_DataGridView_交易記錄查詢.ReplaceExtra(list_value, true);
+            MyMessageBox.ShowDialog($"已修正領用數量{index}筆!");
+        }
+        private void Function_交易記錄查詢_選取資料設定為未領用()
+        {
+            List<object[]> list_value = this.sqL_DataGridView_交易記錄查詢.Get_All_Select_RowsValues();
+            int index = 0;
+            for (int i = 0; i < list_value.Count; i++)
+            {
+                if (list_value[i][(int)enum_交易記錄查詢資料.領用時間].ToDateTimeString() == new DateTime(1999, 1, 1, 0, 0, 0).ToDateTimeString()) continue;
+                list_value[i][(int)enum_交易記錄查詢資料.領用人] = "未領用";
+                list_value[i][(int)enum_交易記錄查詢資料.領用時間] = "1999-01-01 00:00:00";
+                list_value[i][(int)enum_交易記錄查詢資料.備註] = "";
+                index++;
+            }
+            this.sqL_DataGridView_交易記錄查詢.SQL_ReplaceExtra(list_value, false);
+            this.sqL_DataGridView_交易記錄查詢.ReplaceExtra(list_value, true);
+            MyMessageBox.ShowDialog($"已修正領用數量{index}筆!");
         }
         private void SqL_DataGridView_交易記錄查詢_DataGridRowsChangeRefEvent(ref List<object[]> RowsList)
         {
@@ -262,7 +352,7 @@ namespace 勤務傳送系統
                 if(date.Replace("/","-") == "1999-01-01 00:00:00")
                 {
                     this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].Cells[enum_交易記錄查詢資料.領用時間.GetEnumName()].Value = "-";
-                    this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
+                    this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(245, 218, 120);
                     this.sqL_DataGridView_交易記錄查詢.dataGridView.Rows[i].DefaultCellStyle.ForeColor = Color.Black;
                 }
 
