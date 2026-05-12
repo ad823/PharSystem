@@ -72,7 +72,7 @@ namespace 勤務傳送系統
         private List<OrderClass> Function_醫令資料_API呼叫(string url, string barcode)
         {
             barcode = barcode.Replace("\r\n", "");
-            barcode = Uri.EscapeDataString(barcode);
+            //barcode = Uri.EscapeDataString(barcode);
             List<OrderClass> orderClasses = new List<OrderClass>();
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
