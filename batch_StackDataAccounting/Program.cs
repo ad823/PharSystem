@@ -793,6 +793,9 @@ namespace batch_StackDataAccounting
         static bool flag_系統取藥模式 = false;
         static bool flag_同藥碼全亮 = true;
         static MyThread MyThread_取藥堆疊資料_儲位亮燈;
+        private const int SQLRefreshTimeoutMilliseconds = 30000;
+        private static int flag_本地儲位資料刷新中 = 0;
+        private static int flag_雲端儲位資料刷新中 = 0;
         static public void Main(string[] args)
         {
 
@@ -906,26 +909,6 @@ namespace batch_StackDataAccounting
                     System.Threading.Thread.Sleep(1);
                 }
 
-            }));
-            Task.Run(new Action(delegate
-            {
-                while (true)
-                {
-                    var originalConsole = Console.Out;
-                    Console.SetOut(TextWriter.Null); // 關掉輸出
-
-                    try
-                    {
-                        Function_從SQL取得儲位到本地資料();
-                        Function_從SQL取得儲位到雲端資料();
-                    }
-                    finally
-                    {
-                        Console.SetOut(originalConsole); // 還原輸出
-                    }
-
-                    System.Threading.Thread.Sleep(60000);
-                }
             }));
             Task.Run(new Action(delegate
             {
@@ -1108,51 +1091,113 @@ namespace batch_StackDataAccounting
 
         static public void Function_從SQL取得儲位到本地資料()
         {
-
+            if (System.Threading.Interlocked.CompareExchange(ref flag_本地儲位資料刷新中, 1, 0) != 0)
+            {
+                Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到本地略過：上一輪尚未完成");
+                return;
+            }
+            bool releaseRefreshFlag = true;
             MyTimer myTimer = new MyTimer();
             myTimer.StartTickTime(50000);
             Console.WriteLine($"開始SQL讀取儲位資料到本地!");
             List<Task> taskList = new List<Task>();
+            List<KeyValuePair<string, Task>> taskNameList = new List<KeyValuePair<string, Task>>();
             taskList.Add(Task.Run(() =>
             {
-                MyTimer myTimer0 = new MyTimer();
-                myTimer0.StartTickTime(50000);
-                List_EPD583_本地資料 = drawerUI_EPD_583.SQL_GetAllDrawers();
-                Console.WriteLine($"讀取EPD583資料! 耗時 :{myTimer0.GetTickTime().ToString("0.000")} ");
+                try
+                {
+                    MyTimer myTimer0 = new MyTimer();
+                    myTimer0.StartTickTime(50000);
+                    List<Drawer> list_value = drawerUI_EPD_583.SQL_GetAllDrawers();
+                    List_EPD583_本地資料 = list_value;
+                    Console.WriteLine($"讀取本地EPD583資料! 耗時 :{myTimer0.GetTickTime().ToString("0.000")} ");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取本地EPD583資料失敗 : {ex}");
+                }
             }));
-
-            taskList.Add(Task.Run(() =>
-            {
-                MyTimer myTimer1 = new MyTimer();
-                myTimer1.StartTickTime(50000);
-                List_EPD266_本地資料 = storageUI_EPD_266.SQL_GetAllStorage();
-                Console.WriteLine($"讀取EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
-
-            }));
-            taskList.Add(Task.Run(() =>
-            {
-                MyTimer myTimer2 = new MyTimer();
-                myTimer2.StartTickTime(50000);
-                List_RowsLED_本地資料 = rowsLEDUI.SQL_GetAllRowsLED();
-                Console.WriteLine($"讀取RowsLED資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
-
-            }));
+            taskNameList.Add(new KeyValuePair<string, Task>("本地EPD583", taskList[taskList.Count - 1]));
 
             taskList.Add(Task.Run(() =>
             {
-                MyTimer myTimer2 = new MyTimer();
-                myTimer2.StartTickTime(50000);
-                List_Pannel35_本地資料 = storageUI_WT32.SQL_GetAllStorage();
-                Console.WriteLine($"讀取Pannel35資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                try
+                {
+                    MyTimer myTimer1 = new MyTimer();
+                    myTimer1.StartTickTime(50000);
+                    List<Storage> list_value = storageUI_EPD_266.SQL_GetAllStorage();
+                    List_EPD266_本地資料 = list_value;
+                    Console.WriteLine($"讀取本地EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取本地EPD266資料失敗 : {ex}");
+                }
 
             }));
+            taskNameList.Add(new KeyValuePair<string, Task>("本地EPD266", taskList[taskList.Count - 1]));
+            taskList.Add(Task.Run(() =>
+            {
+                try
+                {
+                    MyTimer myTimer2 = new MyTimer();
+                    myTimer2.StartTickTime(50000);
+                    List<RowsLED> list_value = rowsLEDUI.SQL_GetAllRowsLED();
+                    List_RowsLED_本地資料 = list_value;
+                    Console.WriteLine($"讀取本地RowsLED資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取本地RowsLED資料失敗 : {ex}");
+                }
+
+            }));
+            taskNameList.Add(new KeyValuePair<string, Task>("本地RowsLED", taskList[taskList.Count - 1]));
+
+            taskList.Add(Task.Run(() =>
+            {
+                try
+                {
+                    MyTimer myTimer2 = new MyTimer();
+                    myTimer2.StartTickTime(50000);
+                    List<Storage> list_value = storageUI_WT32.SQL_GetAllStorage();
+                    List_Pannel35_本地資料 = list_value;
+                    Console.WriteLine($"讀取本地Pannel35資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取本地Pannel35資料失敗 : {ex}");
+                }
+
+            }));
+            taskNameList.Add(new KeyValuePair<string, Task>("本地Pannel35", taskList[taskList.Count - 1]));
             List<Device> deviceBasics = new List<Device>();
 
-            Task allTask = Task.WhenAll(taskList);
-            allTask.Wait();
-
-
-            Console.WriteLine($"SQL讀取儲位資料到本地結束! 耗時 : {myTimer.GetTickTime().ToString("0.000")}");
+            try
+            {
+                Task allTask = Task.WhenAll(taskList);
+                if (!allTask.Wait(SQLRefreshTimeoutMilliseconds))
+                {
+                    releaseRefreshFlag = false;
+                    List<string> timeoutTasks = new List<string>();
+                    for (int i = 0; i < taskNameList.Count; i++)
+                    {
+                        if (!taskNameList[i].Value.IsCompleted) timeoutTasks.Add(taskNameList[i].Key);
+                    }
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到本地逾時({SQLRefreshTimeoutMilliseconds}ms), 未完成 : {string.Join(",", timeoutTasks)}");
+                    allTask.ContinueWith((task) =>
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到本地逾時後已結束, 狀態 : {task.Status}");
+                        System.Threading.Interlocked.Exchange(ref flag_本地儲位資料刷新中, 0);
+                    });
+                    return;
+                }
+                Console.WriteLine($"SQL讀取儲位資料到本地結束! 耗時 : {myTimer.GetTickTime().ToString("0.000")}");
+            }
+            finally
+            {
+                if (releaseRefreshFlag) System.Threading.Interlocked.Exchange(ref flag_本地儲位資料刷新中, 0);
+            }
         }
         static public List<object> Function_從本地資料取得儲位(string 藥品碼)
         {
@@ -1208,53 +1253,115 @@ namespace batch_StackDataAccounting
         }
         static public void Function_從SQL取得儲位到雲端資料()
         {
+            if (System.Threading.Interlocked.CompareExchange(ref flag_雲端儲位資料刷新中, 1, 0) != 0)
+            {
+                Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到雲端略過：上一輪尚未完成");
+                return;
+            }
+            bool releaseRefreshFlag = true;
             try
             {
                 MyTimer myTimer = new MyTimer();
                 myTimer.StartTickTime(50000);
                 Console.WriteLine($"開始SQL讀取儲位資料到雲端!");
                 List<Task> taskList = new List<Task>();
+                List<KeyValuePair<string, Task>> taskNameList = new List<KeyValuePair<string, Task>>();
                 taskList.Add(Task.Run(() =>
                 {
-                    MyTimer myTimer0 = new MyTimer();
-                    myTimer0.StartTickTime(50000);
-                    List_EPD583_雲端資料 = drawerUI_EPD_583.SQL_GetAllDrawers();
-                    Console.WriteLine($"讀取EPD583資料! 耗時 :{myTimer0.GetTickTime().ToString("0.000")} ");
+                    try
+                    {
+                        MyTimer myTimer0 = new MyTimer();
+                        myTimer0.StartTickTime(50000);
+                        List<Drawer> list_value = drawerUI_EPD_583.SQL_GetAllDrawers();
+                        List_EPD583_雲端資料 = list_value;
+                        Console.WriteLine($"讀取雲端EPD583資料! 耗時 :{myTimer0.GetTickTime().ToString("0.000")} ");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取雲端EPD583資料失敗 : {ex}");
+                    }
                 }));
+                taskNameList.Add(new KeyValuePair<string, Task>("雲端EPD583", taskList[taskList.Count - 1]));
 
                 taskList.Add(Task.Run(() =>
                 {
-                    MyTimer myTimer1 = new MyTimer();
-                    myTimer1.StartTickTime(50000);
-                    List_EPD266_雲端資料 = storageUI_EPD_266.SQL_GetAllStorage();
-                    Console.WriteLine($"讀取EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
+                    try
+                    {
+                        MyTimer myTimer1 = new MyTimer();
+                        myTimer1.StartTickTime(50000);
+                        List<Storage> list_value = storageUI_EPD_266.SQL_GetAllStorage();
+                        List_EPD266_雲端資料 = list_value;
+                        Console.WriteLine($"讀取雲端EPD266資料! 耗時 :{myTimer1.GetTickTime().ToString("0.000")} ");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取雲端EPD266資料失敗 : {ex}");
+                    }
 
                 }));
+                taskNameList.Add(new KeyValuePair<string, Task>("雲端EPD266", taskList[taskList.Count - 1]));
                 taskList.Add(Task.Run(() =>
                 {
-                    MyTimer myTimer2 = new MyTimer();
-                    myTimer2.StartTickTime(50000);
-                    List_RowsLED_雲端資料 = rowsLEDUI.SQL_GetAllRowsLED();
-                    Console.WriteLine($"讀取RowsLED資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                    try
+                    {
+                        MyTimer myTimer2 = new MyTimer();
+                        myTimer2.StartTickTime(50000);
+                        List<RowsLED> list_value = rowsLEDUI.SQL_GetAllRowsLED();
+                        List_RowsLED_雲端資料 = list_value;
+                        Console.WriteLine($"讀取雲端RowsLED資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取雲端RowsLED資料失敗 : {ex}");
+                    }
 
                 }));
+                taskNameList.Add(new KeyValuePair<string, Task>("雲端RowsLED", taskList[taskList.Count - 1]));
                 taskList.Add(Task.Run(() =>
                 {
-                    MyTimer myTimer2 = new MyTimer();
-                    myTimer2.StartTickTime(50000);
-                    List_Pannel35_雲端資料 = storageUI_WT32.SQL_GetAllStorage();
-                    Console.WriteLine($"讀取Pannel35資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                    try
+                    {
+                        MyTimer myTimer2 = new MyTimer();
+                        myTimer2.StartTickTime(50000);
+                        List<Storage> list_value = storageUI_WT32.SQL_GetAllStorage();
+                        List_Pannel35_雲端資料 = list_value;
+                        Console.WriteLine($"讀取雲端Pannel35資料! 耗時 :{myTimer2.GetTickTime().ToString("0.000")} ");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - 讀取雲端Pannel35資料失敗 : {ex}");
+                    }
 
                 }));
+                taskNameList.Add(new KeyValuePair<string, Task>("雲端Pannel35", taskList[taskList.Count - 1]));
 
 
                 Task allTask = Task.WhenAll(taskList);
-                allTask.Wait();
+                if (!allTask.Wait(SQLRefreshTimeoutMilliseconds))
+                {
+                    releaseRefreshFlag = false;
+                    List<string> timeoutTasks = new List<string>();
+                    for (int i = 0; i < taskNameList.Count; i++)
+                    {
+                        if (!taskNameList[i].Value.IsCompleted) timeoutTasks.Add(taskNameList[i].Key);
+                    }
+                    Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到雲端逾時({SQLRefreshTimeoutMilliseconds}ms), 未完成 : {string.Join(",", timeoutTasks)}");
+                    allTask.ContinueWith((task) =>
+                    {
+                        Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到雲端逾時後已結束, 狀態 : {task.Status}");
+                        System.Threading.Interlocked.Exchange(ref flag_雲端儲位資料刷新中, 0);
+                    });
+                    return;
+                }
                 Console.WriteLine($"SQL讀取儲位資料到雲端結束! 耗時 : {myTimer.GetTickTime().ToString("0.000")}");
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine($"{DateTime.Now.ToDateTimeString()} - SQL讀取儲位資料到雲端失敗 : {ex}");
+            }
+            finally
+            {
+                if (releaseRefreshFlag) System.Threading.Interlocked.Exchange(ref flag_雲端儲位資料刷新中, 0);
             }
 
         }

@@ -89,6 +89,7 @@ namespace 調劑台管理系統
             {
                 if (fingerModle == FingerModleType.fpMatchSoket)
                 {
+                    if (flag_指紋辨識_Init == false) return false;
                     if (Main_Form.fpMatchSoket.StateCode != stateCode.READY && Main_Form.fpMatchSoket.StateCode != stateCode.NONE || Main_Form.fpMatchSoket.IsOpen == false || openSoket == true)
                     {
                         if (Main_Form.fpMatchSoket.Open(true) == false)
