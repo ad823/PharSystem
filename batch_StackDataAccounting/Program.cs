@@ -902,12 +902,24 @@ namespace batch_StackDataAccounting
             {
                 while (true)
                 {
-                    sub_Program_取藥堆疊資料_檢查資料();
-                    sub_Program_取藥堆疊資料_狀態更新();
-                    sub_Program_取藥堆疊資料_流程作業檢查();
-                    sub_Program_取藥堆疊資料_入賬檢查();
-                    //Function_從SQL取得儲位到本地資料();
-                    System.Threading.Thread.Sleep(1);
+                    try
+                    {
+                        sub_Program_取藥堆疊資料_檢查資料();
+                        sub_Program_取藥堆疊資料_狀態更新();
+                        sub_Program_取藥堆疊資料_流程作業檢查();
+                        sub_Program_取藥堆疊資料_入賬檢查();
+                        //Function_從SQL取得儲位到本地資料();
+                        System.Threading.Thread.Sleep(1);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log($"Exception {ex.Message}");
+                    }
+                    finally
+                    {
+
+                    }
+             
                 }
 
             }));
@@ -915,9 +927,21 @@ namespace batch_StackDataAccounting
             {
                 while (true)
                 {
-                    Function_從SQL取得儲位到本地資料();
-                    Function_從SQL取得儲位到雲端資料();
-                    System.Threading.Thread.Sleep(60000);
+                    try
+                    {
+                        Function_從SQL取得儲位到本地資料();
+                        Function_從SQL取得儲位到雲端資料();
+                        System.Threading.Thread.Sleep(60000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log($"Exception {ex.Message}");
+                    }
+                    finally
+                    {
+
+                    }
+             
                 }
 
             }));
@@ -2335,6 +2359,7 @@ namespace batch_StackDataAccounting
                                 else
                                 {
                                     storageUI_EPD_266.Set_Stroage_LED_UDP(storage, color);
+                                    Console.WriteLine($"StorageEPD[{storage.IP}] : [Color{color.ToColorString()}]");
                                 }
                             }
                             else
@@ -2922,12 +2947,16 @@ namespace batch_StackDataAccounting
                 if (medClasses_cloud_buf.Count > 0)
                 {
                     string 料號 = medClasses_cloud_buf[0].料號;
-                    medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
-                    if (medClasses_cloud_buf.Count > 1)
+                    if(料號.StringIsEmpty() == false)
                     {
-                        藥品碼 = medClasses_cloud_buf[0].料號;
-                        takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                        medClasses_cloud_buf = medClasses_cloud_global.Where(x => x.料號 == 料號).ToList();
+                        if (medClasses_cloud_buf.Count > 1)
+                        {
+                            藥品碼 = medClasses_cloud_buf[0].料號;
+                            takeMedicineStackClasses[i].藥品碼 = 藥品碼;
+                        }
                     }
+                
                 }
 
                 list_堆疊母資料 = list_堆疊母資料_buf.GetRows((int)enum_取藥堆疊母資料.藥品碼, 藥品碼);
