@@ -47,6 +47,7 @@ namespace 調劑台管理系統
                 {
                     if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作].ObjectToString() == "系統領藥") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作] = "掃碼領藥";
                     if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == "已領用過") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態] = "儲位亮燈";
+
                     //Color color = list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.顏色].ObjectToString().ToColor();
                     //color = Color.FromArgb((int)(color.R * Lightness), (int)(color.G * Lightness), (int)(color.B * Lightness));
                     //list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.顏色] = color.ToColorString();

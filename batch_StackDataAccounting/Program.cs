@@ -49,6 +49,7 @@ namespace batch_StackDataAccounting
                 for (int k = 0; k < list_堆疊母資料_add.Count; k++)
                 {
                     if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作].ObjectToString() == "系統領藥") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.動作] = "掃碼領藥";
+                    if (list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態].ObjectToString() == "已領用過") list_堆疊母資料_add[k][(int)enum_取藥堆疊母資料.狀態] = "儲位亮燈";
                 }
                 sQLControl.AddRows(null, list_堆疊母資料_add);
                 Console.WriteLine($"{commonSapceClasses[i]} 新增共用台資料,共<{list_堆疊母資料_add.Count}>筆");
@@ -3952,6 +3953,7 @@ namespace batch_StackDataAccounting
 
                 list_取藥堆疊母資料 = (from value in list_取藥堆疊母資料
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.None.GetEnumName()
+                                where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.新增資料.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.入賬完成.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.等待入賬.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.新增效期.GetEnumName()
@@ -3959,7 +3961,10 @@ namespace batch_StackDataAccounting
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.選擇效期.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.雙人覆核.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.已領用過.GetEnumName()
+                                where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.DC處方.GetEnumName()
+                                where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.未授權.GetEnumName()
                                 where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.無儲位.GetEnumName()
+                                where value[(int)enum_取藥堆疊母資料.狀態].ObjectToString() != enum_取藥堆疊母資料_狀態.無可匹配數量.GetEnumName()
                                 select value).ToList();
 
                 for (int i = 0; i < list_取藥堆疊母資料.Count; i++)

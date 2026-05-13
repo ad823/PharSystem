@@ -1633,6 +1633,10 @@ namespace HIS_WebApi
                 {
                     takeMedicineStackClasses[i].狀態 = enum_取藥堆疊母資料_狀態.新增資料.GetEnumName();
                 }
+                else if (takeMedicineStackClasses[i].動作 == enum_交易記錄查詢動作.系統領藥.GetEnumName())
+                {
+                    takeMedicineStackClasses[i].狀態 = enum_取藥堆疊母資料_狀態.新增資料.GetEnumName();
+                }
                 else
                 {
                     takeMedicineStackClasses[i].狀態 = enum_取藥堆疊母資料_狀態.等待刷新.GetEnumName();
