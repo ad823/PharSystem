@@ -165,8 +165,7 @@ namespace HIS_WebApi
                                     pickupPersonId = idProp.GetString() ?? "";
                             }
 
-                            // 提取每個申請單的 cCreatBy
-                            if (item.TryGetProperty("cCreatBy", out var creatByProp) && creatByProp.ValueKind != System.Text.Json.JsonValueKind.Null)
+                            if (item.TryGetProperty("CreatBy", out var creatByProp) && creatByProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                             {
                                 string creatByValue = creatByProp.GetString() ?? "";
                                 if (!string.IsNullOrEmpty(creatByValue))
@@ -317,13 +316,14 @@ namespace HIS_WebApi
                                         // 更新領藥ID和領藥姓名
                                         int pickupIdColIndex = (int)HIS_DB_Lib.enum_醫囑資料.領藥ID;
                                         int pickupNameColIndex = (int)HIS_DB_Lib.enum_醫囑資料.領藥姓名;
+                                        int statusColIndex = (int)HIS_DB_Lib.enum_醫囑資料.狀態;
 
-
-                                        if (orderRows[0].Length > pickupIdColIndex && orderRows[0].Length > pickupNameColIndex)
+                                        if (orderRows[0].Length > pickupIdColIndex && orderRows[0].Length > pickupNameColIndex && orderRows[0].Length > statusColIndex)
                                         {
 
                                             orderRows[0][pickupIdColIndex] = pickupPersonId;      // 使用登入ID（如 HS001）
                                             orderRows[0][pickupNameColIndex] = pickupPersonName;  // 使用用戶姓名
+                                            orderRows[0][statusColIndex] = "換領中";  // 更新狀態為換領中
 
                                             // 使用 UpdateByDefulteExtra 更新記錄
                                             orderListSQLControl.UpdateByDefulteExtra(null, orderRows);
@@ -427,8 +427,8 @@ namespace HIS_WebApi
 
                             if (person.TryGetProperty("GUID", out JsonElement guidProp) && guidProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                                 guid = guidProp.GetString();
-                            else if (person.TryGetProperty("cGuid", out JsonElement cguidProp) && cguidProp.ValueKind != System.Text.Json.JsonValueKind.Null)
-                                guid = cguidProp.GetString();
+                            else if (person.TryGetProperty("Guid", out JsonElement guidProp2) && guidProp2.ValueKind != System.Text.Json.JsonValueKind.Null)
+                                guid = guidProp2.GetString();
 
                             if (person.TryGetProperty("name", out JsonElement nameProp) && nameProp.ValueKind != System.Text.Json.JsonValueKind.Null)
                                 name = nameProp.GetString();
@@ -558,6 +558,7 @@ namespace HIS_WebApi
                             var orderJson = System.Text.Json.JsonSerializer.Serialize(order);
                             var orderDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(orderJson);
                             orderDict["medrequestGuid"] = cGuid;
+                            orderDict["OrderlistGuid"] = order.GUID;
                             filteredOrders.Add(orderDict);
                         }
                     }
