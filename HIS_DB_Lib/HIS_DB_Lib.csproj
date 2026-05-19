@@ -55,6 +55,10 @@
     <Reference Include="Basic">
       <HintPath>..\0.DLL\Basic.dll</HintPath>
     </Reference>
+    <Reference Include="HIS_DB_Lib, Version=1.0.25.1101, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\DBVM\HIS_DB_Lib.dll</HintPath>
+    </Reference>
     <Reference Include="H_Pannel_lib">
       <HintPath>..\0.DLL\H_Pannel_lib.dll</HintPath>
     </Reference>
@@ -125,6 +129,7 @@
     <Compile Include="batch_inventory_exportClass.cs" />
     <Compile Include="batch_inventory_importClass.cs" />
     <Compile Include="HIS_DB_Lib.cs" />
+    <Compile Include="medRequestApplyClass.cs" />
     <Compile Include="藥品基本檔\medComboClass.cs" />
     <Compile Include="化療處方\chemotherapyOrderClass.cs" />
     <Compile Include="化療處方\chemotherapyOrderDayClass.cs" />

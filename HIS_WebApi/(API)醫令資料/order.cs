@@ -364,14 +364,21 @@ namespace HIS_WebApi
                     returnData.Result = $"returnData.ValueAry 無傳入資料";
                     return returnData.JsonSerializationt(true);
                 }
-                if (returnData.ValueAry.Count != 2)
+                if (returnData.ValueAry.Count < 2 || returnData.ValueAry.Count > 3)
                 {
                     returnData.Code = -200;
-                    returnData.Result = $"returnData.ValueAry 內容應為[起始時間][結束時間]";
+                    returnData.Result = $"returnData.ValueAry 內容應為[起始時間][結束時間][是否只撈已過帳，非必填]";
                     return returnData.JsonSerializationt(true);
                 }
                 string 起始時間 = returnData.ValueAry[0];
                 string 結束時間 = returnData.ValueAry[1];
+
+                bool postedOnly = false;
+
+                if (returnData.ValueAry.Count == 3)
+                {
+                    bool.TryParse(returnData.ValueAry[2], out postedOnly);
+                }
 
                 if (!起始時間.Check_Date_String() || !結束時間.Check_Date_String())
                 {
@@ -405,7 +412,20 @@ namespace HIS_WebApi
                 SQLControl sQLControl_醫令資料 = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
                 List<object[]> list_value_buf = sQLControl_醫令資料.GetRowsByBetween(null, (int)enum_醫囑資料.產出時間, date_st.ToDateTimeString(), date_end.ToDateTimeString());
                 List<OrderClass> OrderClasses = list_value_buf.SQLToClass<OrderClass, enum_醫囑資料>();
+                if (postedOnly)
+                {
+                    OrderClasses = OrderClasses.Where(x => x.狀態 == "已過帳").ToList();
+                }
                 OrderClasses.sort(OrderClassMethod.SortType.產出時間);
+
+                if (OrderClasses.Count == 0)
+                {
+                    returnData.Code = 200;
+                    returnData.Result = $"查無指定時間區間內的西藥醫令資料";
+                    returnData.TimeTaken = myTimerBasic.ToString();
+                    returnData.Data = OrderClasses;
+                    return returnData.JsonSerializationt();
+                }
 
                 string[] orderGUID = OrderClasses.Select(x => x.GUID).ToArray();
                 SQLControl sQLControl = new SQLControl(Server, DB, "orderConfig", UserName, Password, Port, SSLMode);
@@ -1424,6 +1444,108 @@ namespace HIS_WebApi
 
                 returnData.Code = 200;
                 returnData.Result = $"取得西藥醫令 {date} 藥袋類型: 批次領藥，共<{OrderClasses.Count}>筆資料";
+                returnData.TimeTaken = myTimerBasic.ToString();
+                returnData.Data = OrderClasses;
+
+                return returnData.JsonSerializationt();
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+        }
+
+        /// <summary>
+        /// 以病房、藥袋類型和日期取得西藥醫令
+        /// </summary>
+        /// <remarks>
+        /// 以下為範例JSON範例
+        /// <code>
+        /// {
+        ///   "Data": {},
+        ///   "ValueAry": [
+        ///     "護理站代碼",
+        ///     "藥袋類型",
+        ///     "日期"
+        ///   ]
+        /// }
+        /// </code>
+        /// </remarks>
+        /// <param name="returnData">共用傳遞資料結構</param>
+        /// <returns></returns>
+        [Route("get_by_ward_bagtype_day")]
+        [HttpPost]
+        public string get_by_ward_bagtype_day([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimerBasic = new MyTimerBasic();
+            returnData.Method = "get_by_ward_bagtype_day";
+            try
+            {
+                List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
+
+                if (returnData.ValueAry == null)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 無傳入資料";
+                    return returnData.JsonSerializationt(true);
+                }
+                if (returnData.ValueAry.Count != 3)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"returnData.ValueAry 內容應為 [護理站代碼, 藥袋類型, 日期]";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                string ward = returnData.ValueAry[0];
+                string bagType = returnData.ValueAry[1];
+                string date = returnData.ValueAry[2];
+
+                if (date.Check_Date_String() == false)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"輸入日期不合法";
+                    return returnData.JsonSerializationt(true);
+                }
+
+                if (returnData.ServerName.StringIsEmpty() || returnData.ServerType.StringIsEmpty())
+                {
+                    sys_serverSettingClasses = sys_serverSettingClasses.MyFind("Main", "網頁", "VM端");
+                }
+                else
+                {
+                    sys_serverSettingClasses = sys_serverSettingClasses.MyFind(returnData.ServerName, returnData.ServerType, "醫囑資料");
+                }
+
+                if (sys_serverSettingClasses.Count == 0)
+                {
+                    returnData.Code = -200;
+                    returnData.Result = $"找無Server資料!";
+                    return returnData.JsonSerializationt();
+                }
+
+                string Server = sys_serverSettingClasses[0].Server;
+                string DB = sys_serverSettingClasses[0].DBName;
+                string UserName = sys_serverSettingClasses[0].User;
+                string Password = sys_serverSettingClasses[0].Password;
+                uint Port = (uint)sys_serverSettingClasses[0].Port.StringToInt32();
+                string TableName = "order_list";
+
+                SQLControl sQLControl_醫令資料 = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
+                string cmd = $"SELECT * FROM dbvm.order_list WHERE DATE_FORMAT(產出時間, '%Y-%m-%d') = '{date}' AND 藥袋類型 = '{bagType}' AND 病房 = '{ward}';";
+
+                System.Data.DataTable dataTable = sQLControl_醫令資料.WtrteCommandAndExecuteReader(cmd);
+                List<object[]> list_value_buf = dataTable.DataTableToRowList();
+                List<OrderClass> OrderClasses = list_value_buf.SQLToClass<OrderClass, enum_醫囑資料>();
+
+                for (int i = 0; i < OrderClasses.Count; i++)
+                {
+                    if (OrderClasses[i].實際調劑量.StringIsInt32() == false) OrderClasses[i].實際調劑量 = "0";
+                }
+
+                returnData.Code = 200;
+                returnData.Result = $"取得西藥醫令 {date} 病房: {ward} 藥袋類型: {bagType}，共<{OrderClasses.Count}>筆資料";
                 returnData.TimeTaken = myTimerBasic.ToString();
                 returnData.Data = OrderClasses;
 
