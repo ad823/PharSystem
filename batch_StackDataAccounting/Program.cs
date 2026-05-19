@@ -945,60 +945,93 @@ namespace batch_StackDataAccounting
                 }
 
             }));
+            Task.Run(new Action(delegate
+            {
+                while (true)
+                {
+                    try
+                    {
+                        for (int i = 0; i < List_EPD583_本地資料.Count; i++)
+                        {
+                            Drawer drawer = List_EPD583_本地資料[i];
+                            string json = drawerUI_EPD_583.Get_JsonStrin(drawer.IP, myConfigClass.EPD583_Port);
+                            if (json.StringIsEmpty()) continue;
+                            DrawerUI_EPD_583.UDP_READ uDP_READ = json.JsonDeserializet<DrawerUI_EPD_583.UDP_READ>();
+                            if (uDP_READ == null) continue;
+                            bool flag_input = uDP_READ.Get_Input(0);
+                            if (drawer.input != flag_input)
+                            {
+                                if (flag_input)
+                                {
+                                    Console.WriteLine($"抽屜[{drawer.IP}]關閉");
+                                    drawer.LED_Bytes = DrawerUI_EPD_583.Get_Empty_LEDBytes();
+                                    Function_取藥堆疊子資料_設定配藥完成ByIP("None", drawer.IP, "-1");
+                                    drawer.ActionDone = true;
+                                    drawerUI_EPD_583.Set_LED_Clear_UDP(drawer);
+                                    string index_IP = Funcion_取得LCD114索引表_index_IP(drawer.IP);
+                                    if (index_IP.StringIsEmpty() == false)
+                                    {
+                                        Task.Run(new Action(delegate { storageUI_LCD_114.ClearCanvas(index_IP, myConfigClass.LCD114_Port); }));
+
+                                    }
+                                    drawer.SetAllBoxes_LightOff();
+                                    List_EPD583_本地資料.Add_NewDrawer(drawer);
+
+                                }
+
+                                drawer.input = flag_input;
+                            }
+                        }
+                      
+                        System.Threading.Thread.Sleep(10);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log($"Exception {ex.Message}");
+                    }
+                    finally
+                    {
+
+                    }
+
+                }
+
+            }));
             while (true)
             {
-
-                for (int i = 0; i < List_EPD583_本地資料.Count; i++)
+                try
                 {
-                    Drawer drawer = List_EPD583_本地資料[i];
-                    string json = drawerUI_EPD_583.Get_JsonStrin(drawer.IP , myConfigClass.EPD583_Port);
-                    if (json.StringIsEmpty()) continue;
-                    DrawerUI_EPD_583.UDP_READ uDP_READ = json.JsonDeserializet<DrawerUI_EPD_583.UDP_READ>();
-                    if (uDP_READ == null) continue;
-                    bool flag_input = uDP_READ.Get_Input(0);
-                    if (drawer.input != flag_input)
+                   
+                    List<object[]> list_locker_table_value = sQLControl_Locker_Index_Table.GetAllRows(null);
+                    List<object[]> list_locker_table_value_replace = new List<object[]>();
+                    for (int i = 0; i < list_locker_table_value.Count; i++)
                     {
-                        if (flag_input)
-                        {
-                            Console.WriteLine($"抽屜[{drawer.IP}]關閉");
-                            drawer.LED_Bytes = DrawerUI_EPD_583.Get_Empty_LEDBytes();
-                            Function_取藥堆疊子資料_設定配藥完成ByIP("None", drawer.IP, "-1");
-                            drawer.ActionDone = true;
-                            drawerUI_EPD_583.Set_LED_Clear_UDP(drawer);
-                            string index_IP = Funcion_取得LCD114索引表_index_IP(drawer.IP);
-                            if (index_IP.StringIsEmpty() == false)
-                            {
-                                Task.Run(new Action(delegate { storageUI_LCD_114.ClearCanvas(index_IP, myConfigClass.LCD114_Port); }));
+                        string IP = list_locker_table_value[i][(int)enum_lockerIndex.IP].ObjectToString();
 
-                            }
-                            drawer.SetAllBoxes_LightOff();
-                            List_EPD583_本地資料.Add_NewDrawer(drawer);
 
-                        }
+                        if (IP.Check_IP_Adress() == false) continue;
+                        if (list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態].ObjectToString() != true.ToString()) continue;
 
-                        drawer.input = flag_input;
+                        Drawer drawer = List_EPD583_本地資料.SortByIP(IP);
+                        if (drawer == null) continue;
+                        list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態] = false.ToString();
+                        list_locker_table_value_replace.Add(list_locker_table_value[i]);
+
+                        Console.WriteLine($"抽屜[{drawer.IP}] 【鎖控開啟】....");
+                        drawerUI_EPD_583.Set_LockOpen(drawer);
                     }
+                    if (list_locker_table_value_replace.Count > 0) sQLControl_Locker_Index_Table.UpdateByDefulteExtra(null, list_locker_table_value_replace);
+                    System.Threading.Thread.Sleep(10);
                 }
-                List<object[]> list_locker_table_value = sQLControl_Locker_Index_Table.GetAllRows(null);
-                List<object[]> list_locker_table_value_replace = new List<object[]>();
-                for (int i = 0; i < list_locker_table_value.Count; i++)
+                catch (Exception ex)
                 {
-                    string IP = list_locker_table_value[i][(int)enum_lockerIndex.IP].ObjectToString();
-
-
-                    if (IP.Check_IP_Adress() == false) continue;
-                    if (list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態].ObjectToString() != true.ToString()) continue;
-
-                    Drawer drawer = List_EPD583_本地資料.SortByIP(IP);
-                    if (drawer == null) continue;
-                    list_locker_table_value[i][(int)enum_lockerIndex.輸出狀態] = false.ToString();
-                    list_locker_table_value_replace.Add(list_locker_table_value[i]);
-
-                    Console.WriteLine($"抽屜[{drawer.IP}] 【鎖控開啟】....");
-                    drawerUI_EPD_583.Set_LockOpen(drawer);
+                    Logger.Log($"Exception {ex.Message}");
                 }
-                if (list_locker_table_value_replace.Count > 0) sQLControl_Locker_Index_Table.UpdateByDefulteExtra(null, list_locker_table_value_replace);
-                System.Threading.Thread.Sleep(10);
+                finally
+                {
+
+                }
+
             }
         }
 
@@ -2026,12 +2059,14 @@ namespace batch_StackDataAccounting
 
         static public void Function_儲位刷新(string 藥品碼)
         {
+            return;
             if (藥品碼.StringIsEmpty()) return;
             List<string> list_lock_IP = new List<string>();
             Function_儲位刷新(藥品碼, ref list_lock_IP);
         }
         static public void Function_儲位刷新(string 藥品碼, ref List<string> list_lock_IP)
         {
+            return;
             if (藥品碼.StringIsEmpty()) return;
             List<object> list_Device = Function_從本地資料取得儲位(藥品碼);
             List<Task> taskList = new List<Task>();
@@ -2235,11 +2270,13 @@ namespace batch_StackDataAccounting
 
         static public void Function_儲位刷新_byIP(string IP)
         {
+            return;
             List<string> list_lock_IP = new List<string>();
             Function_儲位刷新_byIP(IP, ref list_lock_IP);
         }
         static public void Function_儲位刷新_byIP(string IP, ref List<string> list_lock_IP)
         {
+            return;
             object device = Fucnction_從本地資料取得儲位(IP);
             List<Task> taskList = new List<Task>();
             List<string> list_IP = new List<string>();
