@@ -450,13 +450,13 @@ namespace HIS_WebApi
                 // 為申請單添加人員姓名字段
                 foreach (var app in applications)
                 {
-                    app.PrescribingDoctorNarcoticLicenseName = !string.IsNullOrEmpty(app.處方醫師麻管證號) && personNameMap.ContainsKey(app.處方醫師麻管證號) ? personNameMap[app.處方醫師麻管證號] : "";
-                    app.DrugReceiverName = !string.IsNullOrEmpty(app.領藥人) && personNameMap.ContainsKey(app.領藥人) ? personNameMap[app.領藥人] : "";
-                    app.DrugAdministratorName = !string.IsNullOrEmpty(app.施打者) && personNameMap.ContainsKey(app.施打者) ? personNameMap[app.施打者] : "";
-                    app.DrugDestroyerName = !string.IsNullOrEmpty(app.銷毀人) && personNameMap.ContainsKey(app.銷毀人) ? personNameMap[app.銷毀人] : "";
-                    app.WitnessName = !string.IsNullOrEmpty(app.見證人) && personNameMap.ContainsKey(app.見證人) ? personNameMap[app.見證人] : "";
-                    app.CheckingPharmacistName = !string.IsNullOrEmpty(app.核對藥師) && personNameMap.ContainsKey(app.核對藥師) ? personNameMap[app.核對藥師] : "";
-                    app.HandoverSignatureName = !string.IsNullOrEmpty(app.交班簽名) && personNameMap.ContainsKey(app.交班簽名) ? personNameMap[app.交班簽名] : "";
+                    app.處方醫師姓名 = !string.IsNullOrEmpty(app.處方醫師麻管證號) && personNameMap.ContainsKey(app.處方醫師麻管證號) ? personNameMap[app.處方醫師麻管證號] : "";
+                    app.領藥人姓名 = !string.IsNullOrEmpty(app.領藥人) && personNameMap.ContainsKey(app.領藥人) ? personNameMap[app.領藥人] : "";
+                    app.施打者姓名 = !string.IsNullOrEmpty(app.施打者) && personNameMap.ContainsKey(app.施打者) ? personNameMap[app.施打者] : "";
+                    app.銷毀人姓名 = !string.IsNullOrEmpty(app.銷毀人) && personNameMap.ContainsKey(app.銷毀人) ? personNameMap[app.銷毀人] : "";
+                    app.見證人姓名 = !string.IsNullOrEmpty(app.見證人) && personNameMap.ContainsKey(app.見證人) ? personNameMap[app.見證人] : "";
+                    app.核對藥師姓名 = !string.IsNullOrEmpty(app.核對藥師) && personNameMap.ContainsKey(app.核對藥師) ? personNameMap[app.核對藥師] : "";
+                    app.交班簽名人姓名 = !string.IsNullOrEmpty(app.交班簽名) && personNameMap.ContainsKey(app.交班簽名) ? personNameMap[app.交班簽名] : "";
                 }
 
                 returnData.Code = 200;
@@ -842,31 +842,31 @@ namespace HIS_WebApi
                         // 對應字段更新
                         switch (fieldName)
                         {
-                            case "cPrescribingDoctorNarcoticLicenseNo":
+                            case "PrescribingDoctorNarcoticLicenseNo":
                                 application.處方醫師麻管證號 = fieldValue;
                                 break;
-                            case "cDrugReceiver":
+                            case "DrugReceiver":
                                 application.領藥人 = fieldValue;
                                 break;
-                            case "cDrugAdministrator":
+                            case "DrugAdministrator":
                                 application.施打者 = fieldValue;
                                 break;
-                            case "cDrugDestroyer":
+                            case "DrugDestroyer":
                                 application.銷毀人 = fieldValue;
                                 break;
-                            case "cWitness":
+                            case "Witness":
                                 application.見證人 = fieldValue;
                                 break;
-                            case "cCheckingPharmacist":
+                            case "CheckingPharmacist":
                                 application.核對藥師 = fieldValue;
                                 break;
-                            case "cHandoverSignature":
+                            case "HandoverSignature":
                                 application.交班簽名 = fieldValue;
                                 break;
-                            case "cRequestNo":
+                            case "RequestNo":
                                 application.換領單編號 = fieldValue;
                                 break;
-                            case "cUDOGIVDOSE":
+                            case "UDOGIVDOSE":
                                 application.劑量使用單位 = fieldValue;
                                 break;
                         }

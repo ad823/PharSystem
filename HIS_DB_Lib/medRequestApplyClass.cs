@@ -68,128 +68,128 @@ namespace HIS_DB_Lib
         /// <summary>
         /// 訂單編號
         /// </summary>
-        [JsonPropertyName("cGuid")]
+        [JsonPropertyName("GUID")]
         public string 訂單編號 { get; set; }
 
         /// <summary>
         /// orderlist編號
         /// </summary>
-        [JsonPropertyName("cOrderlistGuid")]
+        [JsonPropertyName("OrderlistGUID")]
         public string orderlist編號 { get; set; }
 
         /// <summary>
         /// 換領單編號
         /// </summary>
-        [JsonPropertyName("cRequestNo")]
+        [JsonPropertyName("RequestNo")]
         public string 換領單編號 { get; set; }
 
         /// <summary>
         /// 處方醫師麻管證號
         /// </summary>
-        [JsonPropertyName("cPrescribingDoctorNarcoticLicenseNo")]
+        [JsonPropertyName("PrescribingDoctorNarcoticLicenseNo")]
         public string 處方醫師麻管證號 { get; set; }
 
         /// <summary>
         /// 領藥人
         /// </summary>
-        [JsonPropertyName("cDrugReceiver")]
+        [JsonPropertyName("DrugReceiver")]
         public string 領藥人 { get; set; }
 
         /// <summary>
         /// 施打者
         /// </summary>
-        [JsonPropertyName("cDrugAdministrator")]
+        [JsonPropertyName("DrugAdministrator")]
         public string 施打者 { get; set; }
 
         /// <summary>
         /// 銷毀人
         /// </summary>
-        [JsonPropertyName("cDrugDestroyer")]
+        [JsonPropertyName("DrugDestroyer")]
         public string 銷毀人 { get; set; }
 
         /// <summary>
         /// 見證人
         /// </summary>
-        [JsonPropertyName("cWitness")]
+        [JsonPropertyName("Witness")]
         public string 見證人 { get; set; }
 
         /// <summary>
         /// 核對藥師
         /// </summary>
-        [JsonPropertyName("cCheckingPharmacist")]
+        [JsonPropertyName("CheckingPharmacist")]
         public string 核對藥師 { get; set; }
 
         /// <summary>
         /// 交班簽名
         /// </summary>
-        [JsonPropertyName("cHandoverSignature")]
+        [JsonPropertyName("HandoverSignature")]
         public string 交班簽名 { get; set; }
 
         /// <summary>
         /// 建立人
         /// </summary>
-        [JsonPropertyName("cCreatBy")]
+        [JsonPropertyName("CreatBy")]
         public string 建立人 { get; set; }
 
         /// <summary>
         /// 劑量使用單位
         /// </summary>
-        [JsonPropertyName("cUDOGIVDOSE")]
+        [JsonPropertyName("UDOGIVDOSE")]
         public string 劑量使用單位 { get; set; }
 
         /// <summary>
         /// 最後修改時間
         /// </summary>
-        [JsonPropertyName("cUpdateTime")]
+        [JsonPropertyName("UpdateTime")]
         public string 最後修改時間 { get; set; }
 
         /// <summary>
         /// 建立時間
         /// </summary>
-        [JsonPropertyName("cCreatAt")]
+        [JsonPropertyName("CreatAt")]
         public string 建立時間 { get; set; }
 
         /// <summary>
         /// 處方醫師姓名
         /// </summary>
-        [JsonPropertyName("處方醫師姓名")]
-        public string PrescribingDoctorNarcoticLicenseName { get; set; }
+        [JsonPropertyName("PrescribingDoctorNarcoticLicenseName")]
+        public string 處方醫師姓名 { get; set; }
 
         /// <summary>
         /// 領藥人姓名
         /// </summary>
-        [JsonPropertyName("領藥人姓名")]
-        public string DrugReceiverName { get; set; }
+        [JsonPropertyName("DrugReceiverName")]
+        public string 領藥人姓名 { get; set; }
 
         /// <summary>
         /// 施打者姓名
         /// </summary>
-        [JsonPropertyName("施打者姓名")]
-        public string DrugAdministratorName { get; set; }
+        [JsonPropertyName("DrugAdministratorName")]
+        public string 施打者姓名 { get; set; }
 
         /// <summary>
         /// 銷毀人名稱
         /// </summary>
-        [JsonPropertyName("銷毀人姓名")]
-        public string DrugDestroyerName { get; set; }
+        [JsonPropertyName("DrugDestroyerName")]
+        public string 銷毀人姓名 { get; set; }
 
         /// <summary>
         /// 見證人名稱
         /// </summary>
-        [JsonPropertyName("見證人姓名")]
-        public string WitnessName { get; set; }
+        [JsonPropertyName("WitnessName")]
+        public string 見證人姓名 { get; set; }
 
         /// <summary>
         /// 核對藥師名稱
         /// </summary>
-        [JsonPropertyName("核對藥師姓名")]
-        public string CheckingPharmacistName { get; set; }
+        [JsonPropertyName("CheckingPharmacistName")]
+        public string 核對藥師姓名 { get; set; }
 
         /// <summary>
         /// 交班簽名人名稱
         /// </summary>
-        [JsonPropertyName("交班簽名人姓名")]
-        public string HandoverSignatureName { get; set; }
+        [JsonPropertyName("HandoverSignatureName")]
+        public string 交班簽名人姓名 { get; set; }
 
         static public SQLUI.Table init(string API_Server)
         {
@@ -325,7 +325,7 @@ namespace HIS_DB_Lib
         /// </summary>
         /// <param name="API_Server">API 伺服器地址</param>
         /// <param name="guid">申請單GUID</param>
-        /// <param name="updateFields">要更新的欄位字典，例如：new { cDrugAdministrator = "名稱", cWitness = "見證人" }</param>
+        /// <param name="updateFields">要更新的欄位字典，例如：new { DrugAdministrator = "名稱", Witness = "見證人" }</param>
         static public medRequestApply partial_update_by_guid(string API_Server, string guid, object updateFields)
         {
             string url = $"{API_Server}/api/medRequestApply/partial_update_by_guid";
