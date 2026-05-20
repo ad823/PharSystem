@@ -818,7 +818,7 @@ namespace HIS_WebApi
                 SQLControl sQLControl = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
 
                 // 按 cGuid（訂單編號）查詢
-                List<object[]> list_value_buf = sQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_申請換領報表資料.訂單編號, guid);
+                List<object[]> list_value_buf = sQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_申請換領報表資料.orderlist編號, guid);
 
                 List<HIS_DB_Lib.medRequestApply> applications = list_value_buf.SQLToClass<HIS_DB_Lib.medRequestApply, HIS_DB_Lib.enum_申請換領報表資料>();
 
