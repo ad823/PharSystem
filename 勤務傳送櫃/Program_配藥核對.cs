@@ -62,10 +62,12 @@ namespace 勤務傳送系統
         private void SqL_DataGridView_配藥核對_全處方_RowEnterEvent(object[] RowValue)
         {
             OrderClass order = RowValue[1].ObjectToString().JsonDeserializet<OrderClass>();
+            if (order == null) return;
+            order.orderConfig = orderConfigClass.get_by_orderGUID(API_Server, order.GUID).orderConfigs ?? new List<orderConfigClass>();
 
             Dialog_發藥狀態選擇 dialog_發藥狀態選擇 = new Dialog_發藥狀態選擇(order);
             dialog_發藥狀態選擇.ShowDialog();
-            List<orderConfigClass> orderConfigs = orderConfigClass.get_by_orderGUID(API_Server, order.GUID).orderConfigs;
+            List<orderConfigClass> orderConfigs = orderConfigClass.get_by_orderGUID(API_Server, order.GUID).orderConfigs ?? new List<orderConfigClass>();
             order.orderConfig = orderConfigs;
             RowValue[1]= order.JsonSerializationt();
             sqL_DataGridView_配藥核對_全處方.Replace(RowValue, false);

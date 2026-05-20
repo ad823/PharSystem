@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>調劑作業事審流程示意</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; overflow: hidden; }
+    body {
+      font-family: "Microsoft JhengHei", "Noto Sans TC", Arial, sans-serif;
+      color: #000;
+      background: #fff;
+    }
+    .app {
+      width: 1912px;
+      height: 1075px;
+      display: grid;
+      grid-template-columns: 212px 1fr;
+      background: #fff;
+    }
+    .side {
+      background: #82cbe0;
+      display: grid;
+      grid-template-rows: repeat(4, 60px) 1fr 84px;
+      border-right: 1px solid #548ba0;
+    }
+    .side-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 18px;
+      border-bottom: 1px solid #e6f6fa;
+      color: #fff;
+      font-size: 21px;
+      font-weight: 800;
+    }
+    .side-item.active { background: rgba(255,255,255,.22); }
+    .side-icon {
+      width: 28px;
+      text-align: center;
+      color: #111;
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .side-bottom {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 22px;
+      background: #4e91bd;
+      color: #fff;
+      font-size: 25px;
+      font-weight: 900;
+    }
+    .main {
+      display: grid;
+      grid-template-rows: 123px 1fr;
+      padding: 3px 3px 16px 36px;
+      background: #fff;
+      position: relative;
+    }
+    .top {
+      border: 2px solid #555;
+      border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.45);
+      display: grid;
+      grid-template-columns: 1fr 410px;
+      align-items: center;
+      padding: 10px;
+      background: #fff;
+    }
+    .toolbar {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .tool {
+      width: 99px;
+      height: 100px;
+      border: 2px solid #444;
+      border-radius: 7px;
+      box-shadow: inset 0 0 0 2px #fff, 2px 2px 4px rgba(0,0,0,.45);
+      background: linear-gradient(#f9f9f9, #d8d8d8);
+      display: grid;
+      grid-template-rows: 66px 1fr;
+      place-items: center;
+      font-size: 17px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tool.disabled { background: linear-gradient(#9b9b9b, #737373); color: #fff; }
+    .circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #5979bd;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      font-weight: 900;
+      margin-top: 6px;
+    }
+    .disabled .circle::after {
+      content: "";
+      width: 42px;
+      height: 42px;
+      border: 4px solid red;
+      border-radius: 50%;
+      position: absolute;
+      transform: rotate(-35deg);
+    }
+    .disabled .circle { position: relative; opacity: .9; }
+    .brand {
+      display: grid;
+      grid-template-columns: 1fr 70px 180px;
+      align-items: center;
+      gap: 12px;
+      font-family: "Times New Roman", serif;
+      font-style: italic;
+      font-size: 20px;
+      line-height: 1.25;
+      text-align: right;
+    }
+    .clock {
+      border: 1px solid #bbb;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 900;
+      font-style: normal;
+      letter-spacing: 1px;
+    }
+    .logo {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 8px;
+      font-family: "Microsoft JhengHei", sans-serif;
+      font-style: normal;
+      font-size: 17px;
+      font-weight: 900;
+      text-align: left;
+    }
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-left: 4px solid #5979bd;
+      border-bottom: 4px solid #d59a2a;
+      position: relative;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      padding-top: 8px;
+    }
+    .station {
+      border: 2px solid #333;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.45);
+      display: grid;
+      grid-template-rows: 78px 40px 1fr 60px;
+      background: #fff;
+      min-width: 0;
+    }
+    .station-head {
+      display: grid;
+      grid-template-columns: 1fr 108px 82px 74px 74px 74px;
+      gap: 6px;
+      padding: 8px;
+      align-items: center;
+    }
+    .user-title {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 25px;
+      font-weight: 900;
+      color: #fff;
+      background: #aaa;
+      border-radius: 7px;
+      box-shadow: 1px 2px 4px rgba(0,0,0,.45);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .user-title.logged {
+      color: #000;
+      background: #a6ff26;
+    }
+    .input-stack {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 4px;
+    }
+    .input {
+      height: 31px;
+      border: 1px solid #2b66d9;
+      border-radius: 4px;
+      padding-left: 9px;
+      color: #999;
+      font-family: "Times New Roman", serif;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+    }
+    .input.pink { border-color: #ff6fa0; }
+    .btn {
+      height: 65px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 1px 2px 4px rgba(0,0,0,.45);
+      border: 1px solid #b5b5b5;
+    }
+    .login { background: #000; color: #fff; }
+    .receive { background: #009018; color: #fff; }
+    .return { background: #bfbfbf; color: #fff; }
+    .close { background: #fff; color: #000; font-size: 64px; line-height: 1; }
+    .table-head, .rx-row {
+      display: grid;
+      grid-template-columns: 38px 100px 1fr 72px 72px 72px 72px;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .table-head {
+      background: #aaa;
+      height: 40px;
+      border-top: 1px solid #aaa;
+    }
+    .cell { padding: 0 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .table-body {
+      background: #ddd;
+      display: grid;
+      grid-auto-rows: 42px;
+      align-content: start;
+      border-bottom: 1px solid #ddd;
+      overflow: hidden;
+    }
+    .rx-row {
+      background: #fff36b;
+      border-bottom: 1px solid #aaa;
+      font-size: 21px;
+      font-weight: 500;
+    }
+    .rx-row.white { background: #f8f8f8; }
+    .patient {
+      height: 60px;
+      display: grid;
+      grid-template-columns: 64px 160px 58px 70px 82px 170px 80px 1fr;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 19px;
+      font-weight: 900;
+      background: #fff;
+    }
+    .patient span { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .muted { color: #777; }
+    .no-data .rx-row { display: none; }
+    .no-data .table-body::before {
+      content: "";
+      height: 100%;
+      background: #ddd;
+    }
+    .callout {
+      position: absolute;
+      right: 46px;
+      top: 88px;
+      width: 510px;
+      min-height: 94px;
+      padding: 16px 20px;
+      border: 3px solid #d99b00;
+      background: #fff8df;
+      box-shadow: 0 4px 10px rgba(0,0,0,.25);
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.35;
+      z-index: 4;
+    }
+    .modal-shade {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.28);
+      z-index: 8;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      width: 880px;
+      background: #fff;
+      border: 3px solid #333;
+      box-shadow: 0 10px 28px rgba(0,0,0,.45);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .modal-title {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      background: #a6ff26;
+      color: #000;
+      font-size: 28px;
+      font-weight: 900;
+      border-bottom: 2px solid #333;
+    }
+    .modal-body {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      background: #f2f2f2;
+    }
+    .modal-section {
+      background: #fff;
+      border: 1px solid #777;
+    }
+    .section-title {
+      background: #aaa;
+      padding: 7px 12px;
+      font-size: 22px;
+      font-weight: 900;
+      border-bottom: 1px solid #777;
+    }
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 12px;
+    }
+    .kv {
+      min-height: 70px;
+      border: 1px solid #bbb;
+      padding: 7px 10px;
+      background: #fafafa;
+    }
+    .label {
+      color: #555;
+      font-size: 17px;
+      font-weight: 900;
+    }
+    .value {
+      margin-top: 4px;
+      font-size: 27px;
+      font-weight: 900;
+    }
+    .red { color: #c40000; }
+    .modal-actions {
+      height: 82px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+      padding: 12px 18px;
+      background: #fff;
+      border-top: 2px solid #333;
+    }
+    .action {
+      min-width: 150px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      font-weight: 900;
+      border: 1px solid #333;
+      box-shadow: 1px 2px 4px rgba(0,0,0,.35);
+    }
+    .confirm { background: #009018; color: #fff; }
+    .cancel { background: #d0d0d0; color: #000; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="side-item active"><div class="side-icon">☝</div>調劑作業</div>
+      <div class="side-item"><div class="side-icon">▣</div>管制抽屜</div>
+      <div class="side-item"><div class="side-icon">↪</div>後台登入</div>
+      <div class="side-item"><div class="side-icon">♟</div>交班作業</div>
+      <div></div>
+      <div class="side-bottom"><div class="side-icon">↵</div>退出程式</div>
+    </aside>
+
+    <main class="main">
+      <section class="top">
+        <div class="toolbar">
+          <div class="tool disabled"><div class="circle">▦</div><div>手輸醫令</div></div>
+          <div class="tool disabled"><div class="circle">▥</div><div>藥單條碼輸入</div></div>
+          <div class="tool disabled"><div class="circle">☤</div><div>醫令檢索</div></div>
+          <div class="tool"><div class="circle">◌</div><div>全部滅燈</div></div>
+          <div class="tool"><div class="circle">☑</div><div>申領</div></div>
+          <div class="tool"><div class="circle">▣</div><div>交班對點</div></div>
+          <div class="tool disabled"><div class="circle">▤</div><div>藥品調入</div></div>
+          <div class="tool"><div class="circle">⌖</div><div>藥品搜索</div></div>
+        </div>
+        <div class="brand">
+          <div>Ver<br>1.0.26.05131<br>[A6]</div>
+          <div class="clock">2026/05/14 18:23:46</div>
+          <div class="logo"><div class="mark"></div><div>鴻森智能科技有限公司<br><small>Hongsen Intelligent Technology Co., Ltd</small></div></div>
+        </div>
+      </section>
+
+      <section class="content">
+        <article class="station left-station">
+          <div class="station-head">
+            <div class="user-title left-user">[未登入]</div>
+            <div class="input-stack"><div class="input">UserName</div><div class="input pink">Password</div></div>
+            <div class="btn login left-login">登入</div>
+            <div class="btn receive">領</div>
+            <div class="btn return">退</div>
+            <div class="btn close">×</div>
+          </div>
+          <div class="table-head">
+            <div class="cell">No</div><div class="cell">藥碼</div><div class="cell">藥名</div><div class="cell">單位</div><div class="cell">庫存</div><div class="cell">數量</div><div class="cell">結存</div>
+          </div>
+          <div class="table-body">
+            <div class="rx-row"><div class="cell">1</div><div class="cell">MED001</div><div class="cell">Tacrolimus 1mg Capsule</div><div class="cell">Cap</div><div class="cell">140</div><div class="cell">28</div><div class="cell">112</div></div>
+            <div class="rx-row"><div class="cell">2</div><div class="cell">MED118</div><div class="cell">Mycophenolate 250mg Capsule</div><div class="cell">Cap</div><div class="cell">280</div><div class="cell">56</div><div class="cell">224</div></div>
+            <div class="rx-row white"><div class="cell">3</div><div class="cell">MED220</div><div class="cell">Prednisolone 5mg Tablet</div><div class="cell">Tab</div><div class="cell">100</div><div class="cell">14</div><div class="cell">86</div></div>
+          </div>
+          <div class="patient left-patient"><b>姓名:</b><span>陳○華</span><b>年齡:</b><span>67</span><b>病歷號:</b><span>A123456789</span><b>領藥號:</b><span>RX202605140018</span></div>
+        </article>
+
+        <article class="station no-data">
+          <div class="station-head">
+            <div class="user-title">[未登入]</div>
+            <div class="input-stack"><div class="input">UserName</div><div class="input">Password</div></div>
+            <div class="btn login">登入</div>
+            <div class="btn return">領</div>
+            <div class="btn return">退</div>
+            <div class="btn close">×</div>
+          </div>
+          <div class="table-head">
+            <div class="cell">No</div><div class="cell">藥碼</div><div class="cell">藥名</div><div class="cell">單位</div><div class="cell">庫存</div><div class="cell">數量</div><div class="cell">結存</div>
+          </div>
+          <div class="table-body"></div>
+          <div class="patient muted"><b>姓名:</b><span>----------</span><b>年齡:</b><span>----</span><b>病歷號:</b><span>----------</span><b>領藥號:</b><span>-----</span></div>
+        </article>
+      </section>
+
+      <div class="callout"></div>
+      <div class="modal-shade">
+        <div class="modal">
+          <div class="modal-title">事審資料確認</div>
+          <div class="modal-body">
+            <div class="modal-section">
+              <div class="section-title">核准資訊</div>
+              <div class="kv-grid">
+                <div class="kv"><div class="label">核准期間</div><div class="value">2026/05/01 - 2026/06/30</div></div>
+                <div class="kv"><div class="label">剩餘天數</div><div class="value red">47 天</div></div>
+                <div class="kv"><div class="label">核准量</div><div class="value">168 Cap</div></div>
+                <div class="kv"><div class="label">已領用</div><div class="value">84 Cap</div></div>
+                <div class="kv"><div class="label">剩餘量</div><div class="value red">84 Cap</div></div>
+                <div class="kv"><div class="label">本次領用</div><div class="value">28 Cap</div></div>
+              </div>
+            </div>
+            <div class="modal-section">
+              <div class="section-title">前次處方資訊</div>
+              <div class="kv-grid">
+                <div class="kv"><div class="label">處方時間</div><div class="value">2026/04/16 09:32</div></div>
+                <div class="kv"><div class="label">處方天數</div><div class="value">28 天</div></div>
+                <div class="kv"><div class="label">前次領用量</div><div class="value">28 Cap</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <div class="action cancel">取消調劑</div>
+            <div class="action confirm">確認</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const state = new URLSearchParams(location.search).get("state") || "login";
+    const leftStation = document.querySelector(".left-station");
+    const leftUser = document.querySelector(".left-user");
+    const leftLogin = document.querySelector(".left-login");
+    const leftPatient = document.querySelector(".left-patient");
+    const callout = document.querySelector(".callout");
+    const modalShade = document.querySelector(".modal-shade");
+
+    if (state === "login") {
+      leftStation.classList.add("no-data");
+      leftUser.textContent = "[鴻森智能科技]【多醫令】";
+      leftUser.classList.add("logged");
+      leftLogin.textContent = "登出";
+      leftPatient.innerHTML = "<b>姓名:</b><span>----------</span><b>年齡:</b><span>----</span><b>病歷號:</b><span>----------</span><b>領藥號:</b><span>-----</span>";
+      callout.textContent = "步驟 1：藥師登入後，畫面只顯示 2 個領藥台，等待 COM Port 掃描處方條碼。";
+    }
+    if (state === "prescription") {
+      leftUser.textContent = "[鴻森智能科技]【多醫令】";
+      leftUser.classList.add("logged");
+      leftLogin.textContent = "登出";
+      callout.textContent = "步驟 2：掃描處方條碼後，左側領藥台列出本次處方藥品與病患資訊。";
+    }
+    if (state === "auth") {
+      leftUser.textContent = "[鴻森智能科技]【多醫令】";
+      leftUser.classList.add("logged");
+      leftLogin.textContent = "登出";
+      callout.textContent = "步驟 3：查到事審資料時，以彈窗顯示；使用者需點選「確認」或「取消調劑」。";
+      modalShade.style.display = "flex";
+    }
+  </script>
+</body>
+</html>

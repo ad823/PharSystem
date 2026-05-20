@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -42,6 +43,16 @@ namespace HIS_WebApi
         static public string API_Server = "http://127.0.0.1:4433/api/serversetting";
         
         static private MySqlSslMode SSLMode = MySqlSslMode.None;
+        private static readonly Lazy<Task<(string Server, string DB, string UserName, string Password, uint Port)>>
+         serverInfoTask = new Lazy<Task<(string, string, string, string, uint)>>(async () =>
+         {
+             var (Server, DB, UserName, Password, Port) = await Method.GetServerInfoAsync("Main", "網頁", "VM端");
+
+             if (string.IsNullOrWhiteSpace(Password))
+                 throw new SecurityException("Database password cannot be null or empty (medUnit).");
+
+             return (Server, DB, UserName, Password, Port);
+         });
 
         /// <summary>
         /// 初始化盤點單資料庫
@@ -548,6 +559,58 @@ namespace HIS_WebApi
                 returnData.TimeTaken = myTimer.ToString();
                 returnData.Result = $"更新盤點開始時間成功!";
                 returnData.Method = "creat_update_startime_by_CT_TIME";
+
+                return returnData.JsonSerializationt(true);
+            }
+            catch (Exception e)
+            {
+                returnData.Code = -200;
+                returnData.Result = e.Message;
+                return returnData.JsonSerializationt();
+            }
+
+
+        }
+        [HttpPost("creat_update")]
+        public async Task<string> creat_update([FromBody] returnData returnData)
+        {
+            MyTimerBasic myTimer = new MyTimerBasic();
+            try
+            { 
+                List<inventoryClass.creat> creats = returnData.Data.ObjToClass<List<inventoryClass.creat>>();
+                if (creats == null)
+                {
+                    creats = new List<inventoryClass.creat>() { returnData.Data.ObjToClass<inventoryClass.creat>() };
+                    if (creats == null)
+                    {
+                        returnData.Code = -200;
+                        returnData.Data = "returnData.Data資料錯誤";
+                    }
+                }
+                string[] creat_GUID_Array = creats.Select(c => c.GUID).ToArray();
+                (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
+                SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
+                List<object[]> objects = await sQLControl_inventory_creat.GetRowsByDefultAsync(null,(int)enum_盤點單號.GUID, creat_GUID_Array);
+                List<inventoryClass.creat> creats_sql = objects.SQLToClass<inventoryClass.creat, enum_盤點單號>();
+                List<inventoryClass.creat> creat_update = new List<inventoryClass.creat>();
+                foreach ( var item  in creats)
+                {
+                    inventoryClass.creat creat_buff = creats_sql.Where(c => c.GUID == item.GUID).FirstOrDefault();
+                    if (creat_buff == null) continue;
+                    if(item.盤點名稱 != creat_buff.盤點名稱) creat_buff.盤點名稱 = item.盤點名稱;
+                    creat_update.Add(creat_buff);
+                }
+
+
+              
+                List<object[]> value = creat_update.ClassToSQL<inventoryClass.creat, enum_盤點單號>();
+
+                await sQLControl_inventory_creat.UpdateRowsAsync(null, value);
+                returnData.Code = 200;
+                returnData.Data = creat_update;
+                returnData.TimeTaken = myTimer.ToString();
+                returnData.Result = $"更新盤點名稱成功!";
+                returnData.Method = "creat_update";
 
                 return returnData.JsonSerializationt(true);
             }

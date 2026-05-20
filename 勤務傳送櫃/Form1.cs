@@ -22,8 +22,8 @@ using HIS_DB_Lib;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 
-[assembly: AssemblyVersion("1.0.26.05081")]
-[assembly: AssemblyFileVersion("1.0.26.05081")]
+[assembly: AssemblyVersion("1.0.26.05181")]
+[assembly: AssemblyFileVersion("1.0.26.05181")]
 namespace 勤務傳送系統
 {
     public partial class Main_Form : Form
@@ -138,6 +138,7 @@ namespace 勤務傳送系統
             private string scanner02_COMPort = "COM3";
             private string resetIP = "192.168.32.240";
             private bool show_login = true;
+            private bool rFID卡號轉十進制 = false;
             private bool _配藥核對單處方模式 = true;
             private bool _勤務取藥單處方模式 = true;
 
@@ -145,6 +146,7 @@ namespace 勤務傳送系統
             public string Scanner01_COMPort { get => scanner01_COMPort; set => scanner01_COMPort = value; }
             public string Scanner02_COMPort { get => scanner02_COMPort; set => scanner02_COMPort = value; }
             public bool Show_login { get => show_login; set => show_login = value; }
+            public bool RFID卡號轉十進制 { get => rFID卡號轉十進制; set => rFID卡號轉十進制 = value; }
             public string ResetIP { get => resetIP; set => resetIP = value; }
             public bool 配藥核對單處方模式 { get => _配藥核對單處方模式; set => _配藥核對單處方模式 = value; }
             public bool 勤務取藥單處方模式 { get => _勤務取藥單處方模式; set => _勤務取藥單處方模式 = value; }
@@ -179,6 +181,26 @@ namespace 勤務傳送系統
             }
 
            // this.ftp_DounloadUI1.FTP_Server = myConfigClass.FTP_Server;
+        }
+        private string Function_RFID卡號轉換(string cardNo)
+        {
+            if (cardNo.StringIsEmpty()) return "";
+            cardNo = cardNo.Trim();
+            if (myConfigClass.RFID卡號轉十進制 == false) return cardNo;
+            if (cardNo.Length < 8) return cardNo;
+
+            string head = cardNo.Substring(0, 8);
+            if (head.Any(c => Uri.IsHexDigit(c) == false)) return cardNo;
+
+            try
+            {
+                long dec = Convert.ToInt64(head, 16);
+                return dec.ToString("D10");
+            }
+            catch
+            {
+                return cardNo;
+            }
         }
         #endregion
 
