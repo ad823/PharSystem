@@ -211,10 +211,11 @@ namespace 勤務傳送系統
             List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID_Devices = this.rfiD_FX600_UI.Get_RFID();
             if (list_RFID_Devices.Count > 0)
             {
+                string cardNo = Function_RFID卡號轉換(list_RFID_Devices[0].UID);
                 this.Invoke(new Action(delegate
                 {
-                    this.rJ_TextBox_人員資料_卡號.Text = list_RFID_Devices[0].UID;
-                    rJ_TextBox_人員資料_資料查詢_一維條碼.Text = list_RFID_Devices[0].UID;
+                    this.rJ_TextBox_人員資料_卡號.Text = cardNo;
+                    rJ_TextBox_人員資料_資料查詢_一維條碼.Text = cardNo;
                 }));
                 cnt++;
                 return;

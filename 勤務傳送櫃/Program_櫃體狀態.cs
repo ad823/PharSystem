@@ -32,6 +32,7 @@ namespace 勤務傳送系統
 
         private void Program_櫃體狀態()
         {
+            this.Program_櫃體狀態_更新櫃體格子尺寸();
             this.Program_櫃體狀態_更新病房資料();
             this.Program_櫃體狀態_讀取RFID();
         }
@@ -222,7 +223,7 @@ namespace 勤務傳送系統
             {
                 IP = list_RFID_UID_Class[i].IP;
                 RFID_Num = list_RFID_UID_Class[i].Num;
-                卡號 = list_RFID_UID_Class[i].UID;
+                卡號 = Function_RFID卡號轉換(list_RFID_UID_Class[i].UID);
                 List<object[]> list_人員資料 = this.sqL_DataGridView_人員資料.SQL_GetRows((int)enum_人員資料.卡號, 卡號, false);
                 list_人員資料_buf = list_人員資料;
 
@@ -370,6 +371,73 @@ namespace 勤務傳送系統
 
 
 
+        private const int PanelBox_MinCustomSize = 40;
+        private int Pannel_Box_LastRowNum = -1;
+        private int Pannel_Box_LastColNum = -1;
+        private int Pannel_Box_LastPanelWidth = -1;
+        private int Pannel_Box_LastPanelHeight = -1;
+        private int Pannel_Box_LastContainerWidth = -1;
+        private int Pannel_Box_LastContainerHeight = -1;
+
+        private List<FlowLayoutPanel> Program_櫃體狀態_GetFlowLayoutPanels()
+        {
+            return new List<FlowLayoutPanel>()
+            {
+                flowLayoutPanel_PannelBox01,
+                flowLayoutPanel_PannelBox02,
+                flowLayoutPanel_PannelBox03,
+                flowLayoutPanel_PannelBox04
+            };
+        }
+        private void Program_櫃體狀態_更新櫃體格子尺寸()
+        {
+            int row_num = PLC_Device_單層格數.Value;
+            int col_num = PLC_Device_單行格數.Value;
+            int panel_width = PLC_Device_格子X寬度.Value;
+            int panel_height = PLC_Device_格子Y寬度.Value;
+
+            if (row_num <= 0) row_num = 1;
+            if (col_num <= 0) col_num = 8;
+
+            List<FlowLayoutPanel> flowLayoutPanels = Program_櫃體狀態_GetFlowLayoutPanels();
+            if (flowLayoutPanels.Count == 0 || flowLayoutPanels[0].Width <= 0 || flowLayoutPanels[0].Height <= 0) return;
+
+            int container_width = flowLayoutPanels[0].Width;
+            int container_height = flowLayoutPanels[0].Height;
+
+            if (Pannel_Box_LastRowNum == row_num &&
+                Pannel_Box_LastColNum == col_num &&
+                Pannel_Box_LastPanelWidth == panel_width &&
+                Pannel_Box_LastPanelHeight == panel_height &&
+                Pannel_Box_LastContainerWidth == container_width &&
+                Pannel_Box_LastContainerHeight == container_height)
+            {
+                return;
+            }
+
+            int width = container_width / col_num - 10;
+            int height = container_height / row_num - 10;
+            if (panel_width >= PanelBox_MinCustomSize) width = panel_width;
+            if (panel_height >= PanelBox_MinCustomSize) height = panel_height;
+            if (width < PanelBox_MinCustomSize) width = PanelBox_MinCustomSize;
+            if (height < PanelBox_MinCustomSize) height = PanelBox_MinCustomSize;
+
+            this.SuspendLayout();
+            for (int i = 0; i < Pannel_Box.Panels.Count; i++)
+            {
+                Pannel_Box.Panels[i].Width = width;
+                Pannel_Box.Panels[i].Height = height;
+            }
+            this.ResumeLayout(false);
+
+            Pannel_Box_LastRowNum = row_num;
+            Pannel_Box_LastColNum = col_num;
+            Pannel_Box_LastPanelWidth = panel_width;
+            Pannel_Box_LastPanelHeight = panel_height;
+            Pannel_Box_LastContainerWidth = container_width;
+            Pannel_Box_LastContainerHeight = container_height;
+        }
+
         private void Pannel_Box_Init()
         {
             int row_num = PLC_Device_單層格數.Value;
@@ -382,11 +450,7 @@ namespace 勤務傳送系統
             if (col_num <= 0) col_num = 8;
             this.SuspendLayout();
 
-            List<FlowLayoutPanel> flowLayoutPanels = new List<FlowLayoutPanel>();
-            flowLayoutPanels.Add(flowLayoutPanel_PannelBox01);
-            flowLayoutPanels.Add(flowLayoutPanel_PannelBox02);
-            flowLayoutPanels.Add(flowLayoutPanel_PannelBox03);
-            flowLayoutPanels.Add(flowLayoutPanel_PannelBox04);
+            List<FlowLayoutPanel> flowLayoutPanels = Program_櫃體狀態_GetFlowLayoutPanels();
 
 
             for (int i = 0; i < panel_max * 4; i++)
@@ -398,8 +462,10 @@ namespace 勤務傳送系統
                 pannel_Box.Width = flowLayoutPanels[0].Width / col_num - 10;
                 pannel_Box.Height = flowLayoutPanels[0].Height / row_num - 10;
 
-                if (panel_width > 0) pannel_Box.Width = panel_width;
-                if (panel_height > 0) pannel_Box.Height = panel_height;
+                if (panel_width >= PanelBox_MinCustomSize) pannel_Box.Width = panel_width;
+                if (panel_height >= PanelBox_MinCustomSize) pannel_Box.Height = panel_height;
+                if (pannel_Box.Width < PanelBox_MinCustomSize) pannel_Box.Width = PanelBox_MinCustomSize;
+                if (pannel_Box.Height < PanelBox_MinCustomSize) pannel_Box.Height = PanelBox_MinCustomSize;
                 pannel_Box.Visible = false;
 
                 flowLayoutPanels[i / panel_max].Controls.Add(pannel_Box);
@@ -414,6 +480,12 @@ namespace 勤務傳送系統
                 this.plC_UI_Init.Add_Method(pannel_Box.Run);
             }
             this.ResumeLayout(false);
+            Pannel_Box_LastRowNum = row_num;
+            Pannel_Box_LastColNum = col_num;
+            Pannel_Box_LastPanelWidth = panel_width;
+            Pannel_Box_LastPanelHeight = panel_height;
+            Pannel_Box_LastContainerWidth = flowLayoutPanels[0].Width;
+            Pannel_Box_LastContainerHeight = flowLayoutPanels[0].Height;
 
 
 

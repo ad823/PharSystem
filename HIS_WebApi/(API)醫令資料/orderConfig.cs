@@ -132,7 +132,7 @@ namespace HIS_WebApi._API_醫令資料
                 string now = DateTime.Now.ToDateTimeString();
                 foreach (var item in orderConfigClasses)
                 {
-                    orderConfigClass orderConfig = db_orderConfig.FirstOrDefault(x => x.功能備註 == item.功能備註);
+                    orderConfigClass orderConfig = db_orderConfig.FirstOrDefault(x => x.功能備註 == item.功能備註 && x.Order_GUID == item.Order_GUID);
                     if (orderConfig == null)
                     {
                         item.GUID = Guid.NewGuid().ToString();
@@ -149,7 +149,7 @@ namespace HIS_WebApi._API_醫令資料
 
                 List<object[]> update = db_orderConfig_update.ClassToSQL<orderConfigClass>();
                 List<object[]> add = db_orderConfig_add.ClassToSQL<orderConfigClass>();
-                sQLControl.UpdateByDefulteExtra(null, update);
+                await sQLControl.UpdateRowsAsync(null, update);
                 await sQLControl.AddRowsAsync(null, add);
 
                 objects_ = await sQLControl.GetRowsByDefultAsync(null, (int)enum_orderConfig.Order_GUID, orderConfigClasses.Select(x => x.Order_GUID).ToArray());

@@ -171,9 +171,10 @@ namespace 勤務傳送系統
             List<RFID_FX600lib.RFID_FX600_UI.RFID_Device> list_RFID = this.rfiD_FX600_UI.Get_RFID();
             if (list_RFID.Count != 0)
             {
-                if (list_RFID[0].UID.StringToInt32() != 0)
+                string rfid = Function_RFID卡號轉換(list_RFID[0].UID);
+                if (rfid.StringToInt32() != 0)
                 {
-                    RFID = list_RFID[0].UID;
+                    RFID = rfid;
                 }
             }         
             else

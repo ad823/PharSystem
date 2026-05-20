@@ -29,11 +29,13 @@ namespace 勤務傳送系統
 
 
             this.orderClass = orderClass;
+            if (this.orderClass.orderConfig == null) this.orderClass.orderConfig = new List<orderConfigClass>();
             panel_不發藥.Click += Panel_不發藥_Click;
             panel_大瓶藥.Click += Panel_大瓶藥_Click;
 
             foreach (var orderConfig in orderClass.orderConfig)
             {
+                if (orderConfig == null) continue;
                 if (orderConfig.功能備註 == "不發藥" && orderConfig.狀態.StringToBool())
                 {
                     flag_不發藥 = true;
@@ -81,6 +83,8 @@ namespace 勤務傳送系統
             {
                 foreach (var transactionsClass in transactions)
                 {
+                    if (transactionsClass == null) continue;
+                    if (transactionsClass.備註 == null) transactionsClass.備註 = "";
                     if (flag_不發藥)
                     {
                         if (transactionsClass.備註.Contains("[不發藥]") == false) transactionsClass.備註 += "[不發藥]";
@@ -98,9 +102,8 @@ namespace 勤務傳送系統
                         transactionsClass.備註 = transactionsClass.備註.Replace("[大瓶藥]", "");
                     }
                 }
-                
+                transactionsClass.update_by_guid(Main_Form.API_Server, transactions, Main_Form.ServerName, Main_Form.ServerType);
             }
-            transactionsClass.update_by_guid(Main_Form.API_Server, transactions, Main_Form.ServerName, Main_Form.ServerType);
 
 
         }

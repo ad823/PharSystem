@@ -90,6 +90,18 @@ namespace 勤務傳送系統
 
             this.plC_RJ_Button_檢查病房有藥未過帳.MouseDownEvent += PlC_RJ_Button_檢查病房有藥未過帳_MouseDownEvent;
 
+            Button button_系統頁面_設定 = new Button();
+            button_系統頁面_設定.Dock = DockStyle.Left;
+            button_系統頁面_設定.Width = 166;
+            button_系統頁面_設定.FlatStyle = FlatStyle.Flat;
+            button_系統頁面_設定.FlatAppearance.BorderSize = 0;
+            button_系統頁面_設定.BackColor = Color.DarkCyan;
+            button_系統頁面_設定.ForeColor = Color.White;
+            button_系統頁面_設定.Font = new Font("微軟正黑體", 15.75F, FontStyle.Bold);
+            button_系統頁面_設定.Text = "設定";
+            button_系統頁面_設定.Click += (sender, e) => plC_ScreenPage_系統頁面.SelectedTab = tabPage22;
+            this.panel_系統頁面.Controls.Add(button_系統頁面_設定);
+
             this.plC_UI_Init.Add_Method(Program_系統頁面);
         }
 

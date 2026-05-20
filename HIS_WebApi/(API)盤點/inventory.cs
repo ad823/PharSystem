@@ -571,6 +571,7 @@ namespace HIS_WebApi
 
 
         }
+        [HttpPost("creat_update")]
         public async Task<string> creat_update([FromBody] returnData returnData)
         {
             MyTimerBasic myTimer = new MyTimerBasic();
@@ -586,7 +587,7 @@ namespace HIS_WebApi
                         returnData.Data = "returnData.Data資料錯誤";
                     }
                 }
-                string[] creat_GUID_Array = creats.Select(c => c.盤點單號).ToArray();
+                string[] creat_GUID_Array = creats.Select(c => c.GUID).ToArray();
                 (string Server, string DB, string UserName, string Password, uint Port) = await serverInfoTask.Value;
                 SQLControl sQLControl_inventory_creat = new SQLControl(Server, DB, "inventory_creat", UserName, Password, Port, SSLMode);
                 List<object[]> objects = await sQLControl_inventory_creat.GetRowsByDefultAsync(null,(int)enum_盤點單號.GUID, creat_GUID_Array);
