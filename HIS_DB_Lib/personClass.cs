@@ -26,8 +26,7 @@ namespace HIS_DB_Lib
         指紋辨識,
         指紋ID,
         開門權限,
-
-            
+        身分,
     }
     [EnumDescription("person_time_period")]
     public enum enum_personTimePeriod
@@ -289,7 +288,10 @@ namespace HIS_DB_Lib
         [JsonPropertyName("open_access")]
         public string 開門權限 { get; set; }
 
-        
+        [JsonPropertyName("identity")]
+        public string 身分 { get; set; }
+
+
         static public List<personTimePeriodClass> get_person_time_period(string API_Server, string serverName = "", string serverType = "")
         {
             string url = $"{API_Server}/api/person_page/get_person_time_period";
