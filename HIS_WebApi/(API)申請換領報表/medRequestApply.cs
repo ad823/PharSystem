@@ -1125,6 +1125,7 @@ namespace HIS_WebApi
         {
             MyTimerBasic myTimerBasic = new MyTimerBasic();
             returnData.Method = "get_by_creat_time_posted";
+
             try
             {
                 List<sys_serverSettingClass> sys_serverSettingClasses = ServerSettingController.GetAllServerSetting();
@@ -1140,12 +1141,16 @@ namespace HIS_WebApi
                 if (returnData.ValueAry == null || returnData.ValueAry.Count < 2)
                 {
                     returnData.Code = -200;
-                    returnData.Result = $"returnData.ValueAry 內容應為[起始時間][結束時間][選項：護理站名稱]";
+                    returnData.Result = $"returnData.ValueAry 內容應為[起始時間][結束時間][選填：護理站名稱/調劑台設備名稱]";
                     return returnData.JsonSerializationt(true);
                 }
 
                 string 起始時間 = returnData.ValueAry[0];
                 string 結束時間 = returnData.ValueAry[1];
+
+                // 這個值同時用於：
+                // 1. 比對 order_list.病房
+                // 2. 比對 ServerSetting.設備名稱，查該調劑台 trading 結存量
                 string 護理站名稱 = returnData.ValueAry.Count > 2 ? returnData.ValueAry[2] : "";
 
                 if (!起始時間.Check_Date_String() || !結束時間.Check_Date_String())
@@ -1166,9 +1171,11 @@ namespace HIS_WebApi
 
                 // 查詢 person_page 表並建立 GUID -> 姓名映射
                 Dictionary<string, string> personNameMap = new Dictionary<string, string>();
+
                 try
                 {
-                    SQLControl personPageSQLControl = new SQLControl(Server, DB, "person_page", UserName, Password, Port, SSLMode);
+                    SQLControl personPageSQLControl = new SQLControl( Server, DB, "person_page", UserName, Password, Port, SSLMode);
+
                     List<object[]> personRows = personPageSQLControl.GetAllRows(null);
 
                     if (personRows != null && personRows.Count > 0)
@@ -1198,122 +1205,127 @@ namespace HIS_WebApi
 
                 // 查詢 medRequestApply 表
                 SQLControl medRequestApplySQLControl = new SQLControl(Server, DB, "medRequestApply", UserName, Password, Port, SSLMode);
+
                 List<object[]> applyRows = medRequestApplySQLControl.GetRowsByBetween(null, (int)HIS_DB_Lib.enum_申請換領報表資料.建立時間, date_st.ToDateTimeString(), date_end.ToDateTimeString());
+
                 List<HIS_DB_Lib.medRequestApply> applications = applyRows.SQLToClass<HIS_DB_Lib.medRequestApply, HIS_DB_Lib.enum_申請換領報表資料>();
 
                 // 查詢 order_list 表以比對狀態
                 SQLControl orderListSQLControl = new SQLControl(Server, DB, "order_list", UserName, Password, Port, SSLMode);
 
-                // 初始化 trading 表的 SQLControl（從 dps01 數據庫查詢）
-                SQLControl tradingSQLControl = new SQLControl(Server, "dps01", "trading", UserName, Password, Port, SSLMode);
-
-                // 篩選：只保留有對應的 order_list 且狀態為已過帳的記錄
                 var filteredResults = new List<Dictionary<string, object>>();
+
                 foreach (var app in applications)
                 {
-                    if (!string.IsNullOrEmpty(app.orderlist編號))
+                    if (string.IsNullOrEmpty(app.orderlist編號))
                     {
-                        try
+                        continue;
+                    }
+
+                    try
+                    {
+                        List<object[]> orderRows = orderListSQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_醫囑資料.GUID, app.orderlist編號 );
+
+                        if (orderRows == null || orderRows.Count == 0)
                         {
-                            List<object[]> orderRows = orderListSQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_醫囑資料.GUID, app.orderlist編號);
-                            if (orderRows != null && orderRows.Count > 0)
+                            continue;
+                        }
+
+                        List<HIS_DB_Lib.OrderClass> orders = orderRows.SQLToClass< HIS_DB_Lib.OrderClass, HIS_DB_Lib.enum_醫囑資料>();
+
+                        if (orders == null || orders.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        var orderData = orders[0];
+
+                        // 只保留已過帳
+                        if (orderData.狀態 != "已過帳")
+                        {
+                            continue;
+                        }
+
+                        // 若有傳入護理站名稱，需比對 order_list.病房
+                        if (!string.IsNullOrEmpty(護理站名稱) && orderData.病房 != 護理站名稱)
+                        {
+                            continue;
+                        }
+
+                        // 計算使用量、殘餘量、扣帳量
+                        decimal singleDose = 0m;
+
+                        if (decimal.TryParse(orderData.單次劑量, out decimal parsedDose))
+                        {
+                            singleDose = parsedDose;
+                        }
+
+                        decimal ceiledDose = Math.Ceiling(singleDose);
+                        decimal residualQty = ceiledDose - singleDose;
+                        decimal deductedQty = ceiledDose;
+
+                        // GUID 轉姓名
+                        Func<string, string> GetPersonName = (guid) =>
+                        {
+                            if (string.IsNullOrEmpty(guid))
                             {
-                                List<HIS_DB_Lib.OrderClass> orders = orderRows.SQLToClass<HIS_DB_Lib.OrderClass, HIS_DB_Lib.enum_醫囑資料>();
-
-                                // 檢查狀態是否為已過帳，且若指定了護理站則檢查病房是否匹配
-                                if (orders.Count > 0 && orders[0].狀態 == "已過帳" &&
-                                    (string.IsNullOrEmpty(護理站名稱) || orders[0].病房 == 護理站名稱))
-                                {
-                                    var orderData = orders[0];
-
-                                    // 計算使用量、殘餘量、扣帳量（PDF資料）
-                                    decimal singleDose = 0m;
-                                    if (decimal.TryParse(orderData.單次劑量, out decimal parsedDose))
-                                    {
-                                        singleDose = parsedDose;
-                                    }
-
-                                    decimal ceiledDose = Math.Ceiling(singleDose);
-                                    decimal residualQty = ceiledDose - singleDose;
-                                    decimal deductedQty = ceiledDose;
-
-                                    // 轉換 GUID 為姓名
-                                    Func<string, string> GetPersonName = (guid) =>
-                                    {
-                                        if (string.IsNullOrEmpty(guid))
-                                            return "";
-                                        return personNameMap.ContainsKey(guid) ? personNameMap[guid] : guid;
-                                    };
-
-                                    // 組合完整資料
-                                    var appJson = System.Text.Json.JsonSerializer.Serialize(app);
-                                    var resultDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(appJson);
-
-                                    // 添加 order_list 資料
-                                    resultDict["order_GUID"] = orderData.GUID;
-                                    resultDict["order_藥品碼"] = orderData.藥品碼 ?? "";
-                                    resultDict["order_藥品名稱"] = orderData.藥品名稱 ?? "";
-                                    resultDict["order_劑量單位"] = orderData.劑量單位 ?? "";
-                                    resultDict["order_交易量"] = orderData.交易量 ?? "";
-                                    resultDict["order_病房"] = orderData.病房 ?? "";
-                                    resultDict["order_病歷號"] = orderData.病歷號 ?? "";
-                                    resultDict["order_病人姓名"] = orderData.病人姓名 ?? "";
-                                    resultDict["order_床號"] = orderData.床號 ?? "";
-                                    resultDict["order_單次劑量"] = orderData.單次劑量 ?? "";
-                                    resultDict["order_頻次"] = orderData.頻次 ?? "";
-                                    resultDict["order_途徑"] = orderData.途徑 ?? "";
-                                    resultDict["order_產出時間"] = orderData.產出時間 ?? "";
-
-                                    // 添加 PDF 預覽資料
-                                    resultDict["pdf_使用量"] = singleDose.ToString();
-                                    resultDict["pdf_殘餘量"] = residualQty.ToString();
-                                    resultDict["pdf_扣帳量"] = deductedQty.ToString();
-                                    resultDict["pdf_處方醫師麻管證號"] = GetPersonName(app.處方醫師麻管證號 ?? "");
-                                    resultDict["pdf_領藥人"] = GetPersonName(app.領藥人 ?? "");
-                                    resultDict["pdf_施打者"] = GetPersonName(app.施打者 ?? "");
-                                    resultDict["pdf_銷毀人"] = GetPersonName(app.銷毀人 ?? "");
-                                    resultDict["pdf_見證人"] = GetPersonName(app.見證人 ?? "");
-                                    resultDict["pdf_核對藥師"] = GetPersonName(app.核對藥師 ?? "");
-                                    resultDict["pdf_交班簽名"] = GetPersonName(app.交班簽名 ?? "");
-                                    resultDict["pdf_劑量使用單位"] = app.劑量使用單位 ?? "";
-                                    resultDict["pdf_領藥人簽名"] = orderData.領藥姓名 ?? "";
-
-                                    // 查詢 trading 表獲取結存量
-                                    try
-                                    {
-                                        List<object[]> tradingRows = tradingSQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_交易記錄查詢資料.Order_GUID, app.orderlist編號);
-                                        if (tradingRows != null && tradingRows.Count > 0)
-                                        {
-                                            int balanceColIndex = (int)HIS_DB_Lib.enum_交易記錄查詢資料.結存量;
-                                            if (tradingRows[0].Length > balanceColIndex)
-                                            {
-                                                string balanceQty = tradingRows[0][balanceColIndex]?.ToString() ?? "";
-                                                resultDict["pdf_結存量"] = balanceQty;
-                                            }
-                                            else
-                                            {
-                                                resultDict["pdf_結存量"] = "";
-                                            }
-                                        }
-                                        else
-                                        {
-                                            resultDict["pdf_結存量"] = "";
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Logger.Log($"查詢 trading 表結存量失敗: {ex.Message}");
-                                        resultDict["pdf_結存量"] = "";
-                                    }
-
-                                    filteredResults.Add(resultDict);
-                                }
+                                return "";
                             }
-                        }
-                        catch (Exception ex)
+
+                            return personNameMap.ContainsKey(guid) ? personNameMap[guid] : guid;
+                        };
+
+                        // 組合完整資料
+                        var appJson = System.Text.Json.JsonSerializer.Serialize(app);
+                        var resultDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(appJson);
+
+                        if (resultDict == null)
                         {
-                            Logger.Log($"查詢訂單 {app.orderlist編號} 失敗: {ex.Message}");
+                            resultDict = new Dictionary<string, object>();
                         }
+
+                        // 添加 order_list 資料
+                        resultDict["order_GUID"] = orderData.GUID;
+                        resultDict["order_藥品碼"] = orderData.藥品碼 ?? "";
+                        resultDict["order_藥品名稱"] = orderData.藥品名稱 ?? "";
+                        resultDict["order_劑量單位"] = orderData.劑量單位 ?? "";
+                        resultDict["order_交易量"] = orderData.交易量 ?? "";
+                        resultDict["order_病房"] = orderData.病房 ?? "";
+                        resultDict["order_病歷號"] = orderData.病歷號 ?? "";
+                        resultDict["order_病人姓名"] = orderData.病人姓名 ?? "";
+                        resultDict["order_床號"] = orderData.床號 ?? "";
+                        resultDict["order_單次劑量"] = orderData.單次劑量 ?? "";
+                        resultDict["order_頻次"] = orderData.頻次 ?? "";
+                        resultDict["order_途徑"] = orderData.途徑 ?? "";
+                        resultDict["order_產出時間"] = orderData.產出時間 ?? "";
+
+                        // 添加 PDF 預覽資料
+                        resultDict["pdf_使用量"] = singleDose.ToString();
+                        resultDict["pdf_殘餘量"] = residualQty.ToString();
+                        resultDict["pdf_扣帳量"] = deductedQty.ToString();
+
+                        resultDict["pdf_處方醫師麻管證號"] = GetPersonName(app.處方醫師麻管證號 ?? "");
+                        resultDict["pdf_領藥人"] = GetPersonName(app.領藥人 ?? "");
+                        resultDict["pdf_施打者"] = GetPersonName(app.施打者 ?? "");
+                        resultDict["pdf_銷毀人"] = GetPersonName(app.銷毀人 ?? "");
+                        resultDict["pdf_見證人"] = GetPersonName(app.見證人 ?? "");
+                        resultDict["pdf_核對藥師"] = GetPersonName(app.核對藥師 ?? "");
+                        resultDict["pdf_交班簽名"] = GetPersonName(app.交班簽名 ?? "");
+
+                        resultDict["pdf_劑量使用單位"] = app.劑量使用單位 ?? "";
+                        resultDict["pdf_領藥人簽名"] = orderData.領藥姓名 ?? "";
+
+                        // 新版：結存量不再固定查 dps01
+                        // 護理站名稱同時會對應 ServerSetting.設備名稱
+                        string balanceQty = GetBalanceQtyFromDispensingStations( app.orderlist編號, 護理站名稱);
+
+                        resultDict["pdf_結存量"] = balanceQty;
+
+                        filteredResults.Add(resultDict);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log($"查詢訂單 {app.orderlist編號} 失敗: {ex.Message}");
                     }
                 }
 
@@ -1330,6 +1342,59 @@ namespace HIS_WebApi
                 return returnData.JsonSerializationt();
             }
         }
+
+        #region 依據 orderlist GUID 與調劑台設備名稱，從對應調劑台的 trading 表查詢結存量
+        /// <param name="orderlistGuid">order_list 的 GUID，用於比對 trading.Order_GUID</param>
+        /// <param name="調劑台設備名稱">調劑台設備名稱，對應 ServerSetting.設備名稱；若未傳入則逐台查詢所有調劑台</param>
+        /// <returns>查詢到的結存量；若查無資料則回傳空字串</returns>
+        private string GetBalanceQtyFromDispensingStations(string orderlistGuid, string 設備名稱 = "")
+        {
+            if (string.IsNullOrEmpty(orderlistGuid))
+            {
+                return "";
+            }
+
+            List<sys_serverSettingClass> stations = ServerSettingController.GetAllServerSetting().Where(x => x.類別 == "調劑台").Where(x => x.內容 == "交易紀錄資料").ToList();
+
+            // 有傳設備名稱時，只查對應調劑台
+            if (!string.IsNullOrEmpty(設備名稱))
+            {
+                stations = stations.Where(x => x.設備名稱 == 設備名稱).ToList();
+            }
+
+            if (stations == null || stations.Count == 0)
+            {
+                Logger.Log($"查無調劑台交易紀錄資料 ServerSetting，設備名稱：{設備名稱}");
+                return "";
+            }
+
+            foreach (var station in stations)
+            {
+                try
+                {
+                    SQLControl tradingSQLControl = new SQLControl(station.Server, station.DBName, "trading", station.User, station.Password, (uint)station.Port.StringToInt32(), SSLMode);
+
+                    List<object[]> tradingRows = tradingSQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_交易記錄查詢資料.Order_GUID, orderlistGuid);
+
+                    if (tradingRows != null && tradingRows.Count > 0)
+                    {
+                        int balanceColIndex = (int)HIS_DB_Lib.enum_交易記錄查詢資料.結存量;
+
+                        if (tradingRows[0] != null && tradingRows[0].Length > balanceColIndex)
+                        {
+                            return tradingRows[0][balanceColIndex]?.ToString() ?? "";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"查詢調劑台 {station.單位}-{station.設備名稱} 結存量失敗: {ex.Message}");
+                }
+            }
+
+            return "";
+        }
+        #endregion
 
         private string CheckCreatTable(sys_serverSettingClass sys_serverSettingClass)
         {
