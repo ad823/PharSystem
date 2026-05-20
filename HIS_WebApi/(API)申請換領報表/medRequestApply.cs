@@ -1204,6 +1204,9 @@ namespace HIS_WebApi
                 // 查詢 order_list 表以比對狀態
                 SQLControl orderListSQLControl = new SQLControl(Server, DB, "order_list", UserName, Password, Port, SSLMode);
 
+                // 初始化 trading 表的 SQLControl（從 dps01 數據庫查詢）
+                SQLControl tradingSQLControl = new SQLControl(Server, "dps01", "trading", UserName, Password, Port, SSLMode);
+
                 // 篩選：只保留有對應的 order_list 且狀態為已過帳的記錄
                 var filteredResults = new List<Dictionary<string, object>>();
                 foreach (var app in applications)
@@ -1274,6 +1277,34 @@ namespace HIS_WebApi
                                     resultDict["pdf_交班簽名"] = GetPersonName(app.交班簽名 ?? "");
                                     resultDict["pdf_劑量使用單位"] = app.劑量使用單位 ?? "";
                                     resultDict["pdf_領藥人簽名"] = orderData.領藥姓名 ?? "";
+
+                                    // 查詢 trading 表獲取結存量
+                                    try
+                                    {
+                                        List<object[]> tradingRows = tradingSQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_交易記錄查詢資料.Order_GUID, app.orderlist編號);
+                                        if (tradingRows != null && tradingRows.Count > 0)
+                                        {
+                                            int balanceColIndex = (int)HIS_DB_Lib.enum_交易記錄查詢資料.結存量;
+                                            if (tradingRows[0].Length > balanceColIndex)
+                                            {
+                                                string balanceQty = tradingRows[0][balanceColIndex]?.ToString() ?? "";
+                                                resultDict["pdf_結存量"] = balanceQty;
+                                            }
+                                            else
+                                            {
+                                                resultDict["pdf_結存量"] = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            resultDict["pdf_結存量"] = "";
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logger.Log($"查詢 trading 表結存量失敗: {ex.Message}");
+                                        resultDict["pdf_結存量"] = "";
+                                    }
 
                                     filteredResults.Add(resultDict);
                                 }
