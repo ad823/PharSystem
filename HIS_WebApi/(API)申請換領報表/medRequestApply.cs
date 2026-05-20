@@ -817,8 +817,8 @@ namespace HIS_WebApi
 
                 SQLControl sQLControl = new SQLControl(Server, DB, TableName, UserName, Password, Port, SSLMode);
 
-                // 按 cGuid（訂單編號）查詢
-                List<object[]> list_value_buf = sQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_申請換領報表資料.orderlist編號, guid);
+                // 按 GUID（訂單編號）查詢
+                List<object[]> list_value_buf = sQLControl.GetRowsByDefult(null, (int)HIS_DB_Lib.enum_申請換領報表資料.訂單編號, guid);
 
                 List<HIS_DB_Lib.medRequestApply> applications = list_value_buf.SQLToClass<HIS_DB_Lib.medRequestApply, HIS_DB_Lib.enum_申請換領報表資料>();
 
@@ -835,6 +835,12 @@ namespace HIS_WebApi
                 if (updateFields.HasValue)
                 {
                     var jsonElement = updateFields.Value;
+
+                    // 記錄前端這次有傳哪些欄位
+                    var inputFields = jsonElement.EnumerateObject()
+                        .Select(x => x.Name)
+                        .ToHashSet();
+
                     foreach (var property in jsonElement.EnumerateObject())
                     {
                         string fieldName = property.Name;
@@ -846,32 +852,56 @@ namespace HIS_WebApi
                             case "PrescribingDoctorNarcoticLicenseNo":
                                 application.處方醫師麻管證號 = fieldValue;
                                 break;
-                            case "DrugReceiver":
-                                application.領藥人 = fieldValue;
-                                break;
+
                             case "DrugAdministrator":
                                 application.施打者 = fieldValue;
                                 break;
+
                             case "DrugDestroyer":
                                 application.銷毀人 = fieldValue;
                                 break;
+
                             case "Witness":
                                 application.見證人 = fieldValue;
                                 break;
+
                             case "CheckingPharmacist":
                                 application.核對藥師 = fieldValue;
                                 break;
+
                             case "HandoverSignature":
                                 application.交班簽名 = fieldValue;
                                 break;
+
                             case "RequestNo":
                                 application.換領單編號 = fieldValue;
                                 break;
+
                             case "UDOGIVDOSE":
                                 application.劑量使用單位 = fieldValue;
                                 break;
                         }
                     }
+
+                    // 只有「人員欄位」沒傳時才清空
+                    // DrugReceiver、RequestNo、UDOGIVDOSE 不清空
+                    if (!inputFields.Contains("PrescribingDoctorNarcoticLicenseNo"))
+                        application.處方醫師麻管證號 = "";
+
+                    if (!inputFields.Contains("DrugAdministrator"))
+                        application.施打者 = "";
+
+                    if (!inputFields.Contains("DrugDestroyer"))
+                        application.銷毀人 = "";
+
+                    if (!inputFields.Contains("Witness"))
+                        application.見證人 = "";
+
+                    if (!inputFields.Contains("CheckingPharmacist"))
+                        application.核對藥師 = "";
+
+                    if (!inputFields.Contains("HandoverSignature"))
+                        application.交班簽名 = "";
                 }
 
                 application.最後修改時間 = DateTime.Now.ToDateTimeString_6();
